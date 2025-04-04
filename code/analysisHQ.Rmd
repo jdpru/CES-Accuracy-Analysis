@@ -1,0 +1,249 @@
+---
+title: "analysisHQ"
+author: "JD Pruett"
+date: "2025-04-04"
+output: html_document
+---
+
+# Environment Setup --------------------------------------
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis')
+```
+
+```{r, echo=False, warnings=FALSE, message=FALSE}
+# create notin operator
+`%notin%` <- Negate(`%in%`)
+
+# Packages & working directory
+pckgs <- c("haven", "readxl", "ipumsr", "here", "dplyr", "cdlTools", "anesrake", "writexl", "tidyverse", "rlang", "tibble", "naniar", "weights", "lubridate", "openxlsx", "cpsR")
+
+#For now, this installation is not working
+#"zipcodeR"
+
+# This downloads any necessary packages
+if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
+install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
+
+invisible(sapply(pckgs, FUN = require, character.only = TRUE))
+
+# Set working directory.
+set_here()
+```
+
+# Read-in Data ----------------------------------------------
+## CES Datasets
+```{r, Read-in CES Data}
+CES_06_raw <- read_dta(here("data/CES Data/CES06/cces_2006_common.dta"))
+CES_08_raw <- read_dta(here("data/CES Data/CES08/cces_2008_common.dta"))
+CES_10_raw <- read_dta(here("data/CES Data/CES10/cces_2010_common_validated.dta"))
+CES_12_raw <- read_dta(here("data/CES Data/CES12/commoncontent2012.dta"))
+CES_14_raw <- read_dta(here("data/CES Data/CES14/CCES14_Common_Content_Validated.dta"))
+CES_16_raw <- read_dta(here("data/CES Data/CES16/CCES16_Common_OUTPUT_Feb2018_VV.dta"))
+CES_18_raw <- read_dta(here("data/CES Data/CES18/cces18_common_vv.dta"))
+CES_20_raw <- read_dta(here("data/CES Data/CES20/CES20_Common_OUTPUT_vv.dta"))
+CES_22_raw <- read_dta(here("data/CES Data/CES22/CES_2022_Common_Output.dta"))
+```
+
+
+## Election Validation Datasets
+### National Elections
+```{r}
+# Governor, U.S. Senate, President
+Governor_0622 <- read_excel("data/Election Validation/Final Sets - Clean Fixed/Governor_0622_clean_fixed.xlsx")
+Senate_0622 <- read_excel("data/Election Validation/Final Sets - Clean Fixed/Senate_0622_clean_fixed.xlsx")
+President_0820 <- read_excel("data/Election Validation/Final Sets - Clean Fixed/[FIN-FIX] President 2008-2020 clean fixed.xlsx")
+'/Users/jdpruett/Desktop/CES Accuracy Analysis/data/Election Validation/Final Sets - Clean Fixed/[FIN-FIX] Historical election results data (2006 - 2023) clean fixed.xlsx'
+
+# U.S. House
+house_data_path <- "data/Election Validation/Final Sets - Clean Fixed/[FIN-FIX] House 2006-2022 clean fixed.xlsx"
+house_sheet_names <- excel_sheets(house_data_path)
+house_sheet_names <- house_sheet_names[house_sheet_names != "Sources"]
+House_0622 <- house_sheet_names %>%
+  lapply(function(sheet) {
+    data <- read_excel(path = house_data_path, sheet = sheet)
+    data$state <- toupper(data$state)
+    return(data)
+  }) %>%
+  bind_rows()
+
+House_0622 <- House_0622 %>%
+  mutate(party_simplified = case_when(
+    party_detailed %in% c("DEM", "ADDITIONAL (D)", "ADDITIONAL(D)", "DNL", "DEMOCRATIC-FARMER-LABOR", "DEMOCRATIC") ~ "DEM",
+    party_detailed %in% c("ADDITIONAL (R)", "ADDITIONAL(R)") ~ "REP",
+    TRUE ~ party_simplified
+  ))
+```
+
+### State Elections
+```{r warning=FALSE}
+# State-level elections master file
+State_race_master_table <- read_excel("data/Election Validation/Final Sets - Clean Fixed/[FIN-FIX] Historical election results data (2006 - 2023) clean fixed.xlsx")
+State_race_master_table$`Election date` <- as.POSIXct(format(State_race_master_table$`Election date`, "%Y-%m-%d"))
+
+# Parsing state-level master file into individual elections
+## State senate
+State_senate_full <- State_race_master_table[grepl("\\b(senate|senator|SS|SD|KYSENATOR)\\b", State_race_master_table[["Office/district"]], ignore.case = TRUE), ]
+
+# State representative
+State_house_full <- State_race_master_table[grepl("\\b(house|assembly|representative|partyresentative|State Rep.|SR|HD|assemblymember|KYREPRESENTATIVE|StateRepresentative|HouseDistrict)\\b|State Rep\\.", State_race_master_table[["Office/district"]], ignore.case = TRUE), ]
+
+# Attorney general
+Attorney_general_full <- State_race_master_table[grepl("Attorney", State_race_master_table[["Office/district"]], ignore.case = TRUE), ]
+
+# Secretary of state
+Secretary_of_state_full <- State_race_master_table[grepl("Secretary|Secratary", State_race_master_table[["Office/district"]], ignore.case = TRUE), ]
+```
+
+### Misc.
+```{r}
+# CES assigned some respondents to incorrect congressional district in 2020
+NC_flag_df <- read.csv("data/misc/NC_responents_incorrect_CD.csv") %>%
+  filter(cd_change_flag_post == 1)
+```
+
+## CPS Datasets
+```{r}
+# Set IPUMS API Key (specific to user, free to acquire on IPUMS site)
+USER_IPUMS_API_KEY = "59cba10d8a5da536fc06b59dd33fd321a4eb480fa8fe8ad46c9d0d3e"
+set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = FALSE)
+```
+
+### Prep monthly sample codes and variables
+```{r}
+# All
+cps_vars_all <- c("WTFINL", "EARNWT", "VOSUPPWT", "STATEFIP", "SEX", "EDUC", "AGE", "CITIZEN", "HISPAN", "OCC", "VETSTAT", "REGION", "EMPSTAT", "CLASSWKR", "UNION", "FAMINC", "VOTERES", "VOREG", "VOTED", "VOWHYNOT", "VOTEHOW")
+
+# 2006
+cps_sample_2006 = c('cps2006_01s', 'cps2006_02b', 'cps2006_03b', 'cps2006_04b', 'cps2006_05s', 'cps2006_06s', 'cps2006_07b', 'cps2006_08s', 'cps2006_09s', 'cps2006_10s', 'cps2006_11s', 'cps2006_12s')
+# 2008
+cps_sample_2008 = c('cps2008_01s', 'cps2008_02b', 'cps2008_03b', 'cps2008_04b', 'cps2008_05s', 'cps2008_06s', 'cps2008_07b', 'cps2008_08s', 'cps2008_09s', 'cps2008_10s', 'cps2008_11s', 'cps2008_12s')
+# 2010
+cps_sample_2010 = c('cps2010_01s', 'cps2010_02b', 'cps2010_03b', 'cps2010_04b','cps2010_05s', 'cps2010_06s','cps2010_07s', 'cps2010_08s', 'cps2010_09s', 'cps2010_10s', 'cps2010_11s', 'cps2010_12s')
+# 2012
+cps_sample_2012 = c('cps2012_01s', 'cps2012_02b', 'cps2012_03b', 'cps2012_04b', 'cps2012_05s', 'cps2012_06s', 'cps2012_07s', 'cps2012_08s', 'cps2012_09s', 'cps2012_10s', 'cps2012_11s', 'cps2012_12s')
+# 2014
+cps_sample_2014 = c('cps2014_01s', 'cps2014_02s', 'cps2014_03b', 'cps2014_04b', 'cps2014_05b', 'cps2014_06s', 'cps2014_07s', 'cps2014_08s', 'cps2014_09s', 'cps2014_10s', 'cps2014_11s', 'cps2014_12s')
+# 2016
+cps_sample_2016 = c('cps2016_01s', 'cps2016_02s', 'cps2016_03b', 'cps2016_04b', 'cps2016_05b', 'cps2016_06s', 'cps2016_07b', 'cps2016_08s', 'cps2016_09s', 'cps2016_10s', 'cps2016_11s', 'cps2016_12s')
+# 2018
+cps_sample_2018 = c('cps2018_01s', 'cps2018_02s', 'cps2018_03b', 'cps2018_04b', 'cps2018_05s', 'cps2018_06s', 'cps2018_07s', 'cps2018_08s', 'cps2018_09s', 'cps2018_10s', 'cps2018_11s', 'cps2018_12s')
+# 2020
+cps_sample_2020 = c('cps2020_01s', 'cps2020_02s', 'cps2020_03b', 'cps2020_04b', 'cps2020_05b', 'cps2020_06s', 'cps2020_07b', 'cps2020_08s', 'cps2020_09b', 'cps2020_10s', 'cps2020_11s', 'cps2020_12s')
+# 2022
+cps_sample_2022 = c('cps2022_01s', 'cps2022_02s', 'cps2022_03b', 'cps2022_04s', 'cps2022_05s', 'cps2022_06s', 'cps2022_07s', 'cps2022_08s', 'cps2022_09s', 'cps2022_10s', 'cps2022_11s', 'cps2022_12s')
+
+```
+
+### Read in CPS datasets to global environment
+```{r}
+# All years
+extract_codes <- list()
+
+for (year in seq(2018, 2022, by = 2)) {
+  suffix <- substr(year, 3, 4)
+  extract_name <- paste("CPS Extract for", year)  # Dynamic extract name
+  cps_sample_var <- paste("cps_sample", year, sep = "_")  # Dynamic sample variable name
+  df_name <- paste("CPS", suffix, "raw", sep = "_")
+
+  
+  # Dynamically create the extraction code using the variables
+  extract_code <- paste0(
+    "  define_extract_cps(\n",
+    "    \"", extract_name, "\",\n",
+    "    ", cps_sample_var, ",\n",
+    "    cps_vars_all) %>%\n",
+    "  submit_extract() %>%\n",
+    "  wait_for_extract() %>%\n",
+    "  download_extract() %>%\n",
+    "  read_ipums_micro()"
+  )
+  
+  extract_codes[[df_name]] <- extract_code
+}
+
+# Evaluate the constructed extraction codes in the global environment
+for (df_name in names(extract_codes)) {
+  assign(df_name, eval(parse(text = extract_codes[[df_name]])), envir = .GlobalEnv)
+}
+```
+
+# Subset CES to only include relevant variables --------------
+## CES Subset
+```{r}
+CES_06_subset_vars <- c(
+  "v1000", "v1001", "v1002", "v1003", "v1004", "v2004", "v2018", "v2020", "v3081", "v3083", "v1006", "v2030", "v2073", "v2082", "v2033", "v2032", "v3004", "v4004", "v4006", "v4005", "v4014", "v4015", "v4013", "v4017", "v4018", "v4019", "v4020", "v4021", "v5009", "v5010", "v5011", "v5012", "v5005", "v5006", "v5007", "v5008", "v5001", "v5002", "v5003", "v5004")
+
+CES_08_subset_vars <- c(
+  "V100", "V201", "V206", "V207", "V208", "V250", "V251", "V202", "V205", "V204", "V213", "V252", "V253", "V258", "V257", "V247", "V259", "V264", "V501", "V502", "V553", "V555", "V601", "V602", "V603", "V612", "V653", "V655", "V657", "V672", "CC328_1", "CC328_3", "CC334", "CC410", "CC411", "CC411b", "CC412", "CC413", "CC414_2", "CC414_1", "V209", "CC329", "CC333", "V246", "V203", "CC403", "CC405", "CC404", "CC326b", "CC337", "CC337S2", "CC340", "CC338", "V618", "V619")
+
+
+CES_10_subset_vars <- c(
+  "V100", "V101", "V202_post", "V204_post", "V205_post", "V206", "V206_post", "V207", "V208", "V213", "V252", "V254", "V276", "V276_post", "V564_post", "V567_post", "V548_post", "V551_post", "V533_post", "V536_post", "V554_post", "V556_post", "V570_post", "V572_post","V574_post", "V576_post", "CC351", "V209", "V264", "V250", "V246", "V290", "CC401", "V203", "CC403", "CC402a", "CC410a", "CC410b", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d")
+
+CES_12_subset_vars <- c(
+  "V101", "V103", "inputzip", "votereg_f", "regzip", "inputstate", "inputstate_post", "cdid113", "cdid113_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC351", "votereg", "employ", "employercat", "union", "ownhome", "faminc",
+  "hispanic", "CC401", "CC402a", "CC403", "CC410a", "CC410b", "CC355", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post")
+
+CES_14_subset_vars <- c(
+  "V101", "weight", "inputzip_post", "votereg_f_post", "regzip_post", "inputstate", "inputstate_post", "cdid", "cdid_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC351", 
+  "votereg", "employ", "union", "ownhome", "faminc",
+  "hispanic", "CC401", "CC402a", "CC403", "CC410b", "CC355x", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post")
+
+CES_16_subset_vars <- c(
+  "V101", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight_vv", "commonweight_vv_post", "commonweight_vv_lgbt", "commonweight", "commonweight_post", "inputstate", "inputstate_post", "cdid115", "cdid115_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC16_361", "votereg", "employ", "union", "ownhome", "faminc", "hispanic", "CC16_401", "CC16_402a", "CC16_410a", "CC16_403", "CC16_410b", "CC16_412", "CC16_411", "CC16_413a", "CC16_413b", "CC16_413c", "CC16_413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "SenCand4Name_post", "SenCand4Party_post", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post", "HouseCand9Name_post", "HouseCand9Party_post", "HouseCand10Name_post", "HouseCand10Party_post", "HouseCand11Name_post", "HouseCand11Party_post")
+
+CES_18_subset_vars <- c(
+  "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "vvweight", "vvweight_post", "inputstate", "inputstate_post", "cdid116", "cdid116_post", "gender", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC18_401", "CC18_402a", "CC18_403", "CC18_410b", "CC18_410bx", "CC18_412", "CC18_353x", "CC18_411", "CC18_352x", "CC18_420a", "CC18_420b", "CC18_420c", "CC18_413c", "CC18_413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post")
+
+CES_20_subset_vars <- c(
+  "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "vvweight", "vvweight_post", "inputstate", "inputstate_post", "cdid116", "cdid116_post", "gender", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "CC20_361", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC20_401", "CC20_402a", "CC20_403", "CC20_410", "CC20_411", "CC20_365_voted", "CC20_411b", "CC20_365b_voted", "CC20_412", "CC20_413", "CC20_414a", "CC20_414b", "CC20_415c", "CC20_415d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "AttCand3Name", "AttCand3Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post", "HouseCand9Name_post", "HouseCand9Party_post")
+
+CES_22_subset_vars <- c(
+"caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "inputstate", "inputstate_post", "cdid118", "cdid118_post", "gender4", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "CC22_361", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC22_401", "CC22_402a", "CC22_403", "CC22_411", "CC22_365_voted", "CC22_411b", "CC22_365b_voted", "CC22_412", "CC22_413", "CC22_414a", "CC22_414b", "CC22_415c", "CC22_415d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "SenCand4Name_post", "SenCand4Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "AttCand3Name", "AttCand3Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "SecCand3Name", "SecCand3Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post")
+
+CES_06_raw_subset <- CES_06_raw[, CES_06_subset_vars]
+CES_08_raw_subset <- CES_08_raw[, CES_08_subset_vars]
+CES_10_raw_subset <- CES_10_raw[, CES_10_subset_vars]
+CES_12_raw_subset <- CES_12_raw[, CES_12_subset_vars]
+CES_14_raw_subset <- CES_14_raw[, CES_14_subset_vars]
+CES_16_raw_subset <- CES_16_raw[, CES_16_subset_vars]
+CES_18_raw_subset <- CES_18_raw[, CES_18_subset_vars]
+CES_20_raw_subset <- CES_20_raw[, CES_20_subset_vars]
+CES_22_raw_subset <- CES_22_raw[, CES_22_subset_vars]
+```
+
+## CPS Subset (>18, relevant vars)
+```{r}
+# Define the years range
+years <- seq(2006, 2022, by = 2)
+
+# Iterate over the years
+for (year in years) {
+  # Extract the last two digits of the year
+  year_short <- substr(year, 3, 4)
+  
+  # Define the variable names for the current year
+  raw_df_name <- paste0("CPS_", year_short, "_raw")
+  subset_vars <- intersect(colnames(get(raw_df_name)), cps_vars_all)
+
+  # Subset the raw dataframe using the filtered variable list
+  subset_df <- get(raw_df_name)[, subset_vars, drop = FALSE]
+  
+  # print any vars in cps_vars_all that are not in subset_vars
+  print(paste("Missing vars for CES", year_short))
+  print(setdiff(cps_vars_all, subset_vars))
+  
+  # Reorder the columns to match the order in cps_vars_all
+  subset_df <- subset_df[, match(cps_vars_all, colnames(subset_df))]
+  
+  # Filter under 18
+  subset_df <- subset_df %>%
+    filter(AGE >= 18)
+  
+  # Assign the subset dataframe back to the global environment
+  assign(paste0(raw_df_name, "_subset"), subset_df, envir = .GlobalEnv)
+}
+
+```
+
+
