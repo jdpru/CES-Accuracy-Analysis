@@ -8,6 +8,9 @@ output: html_document
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
 knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis')
+
+# Load functions from other utility scripts
+source("recoding_utilities.R")
 ```
 
 ```{r, echo=False, warnings=FALSE, message=FALSE}
@@ -21,8 +24,8 @@ pckgs <- c("haven", "readxl", "ipumsr", "here", "dplyr", "cdlTools", "anesrake",
 #"zipcodeR"
 
 # This downloads any necessary packages
-if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
-install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
+# if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
+# install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
 
 invisible(sapply(pckgs, FUN = require, character.only = TRUE))
 
@@ -139,7 +142,7 @@ cps_sample_2022 = c('cps2022_01s', 'cps2022_02s', 'cps2022_03b', 'cps2022_04s', 
 # All years
 extract_codes <- list()
 
-for (year in seq(2018, 2022, by = 2)) {
+for (year in seq(2006, 2022, by = 2)) {
   suffix <- substr(year, 3, 4)
   extract_name <- paste("CPS Extract for", year)  # Dynamic extract name
   cps_sample_var <- paste("cps_sample", year, sep = "_")  # Dynamic sample variable name
@@ -167,15 +170,14 @@ for (df_name in names(extract_codes)) {
 }
 ```
 
-# Subset CES to only include relevant variables --------------
-## CES Subset
+## Subset datasets --------------
+### Subset CES to only include relevant variables
 ```{r}
 CES_06_subset_vars <- c(
   "v1000", "v1001", "v1002", "v1003", "v1004", "v2004", "v2018", "v2020", "v3081", "v3083", "v1006", "v2030", "v2073", "v2082", "v2033", "v2032", "v3004", "v4004", "v4006", "v4005", "v4014", "v4015", "v4013", "v4017", "v4018", "v4019", "v4020", "v4021", "v5009", "v5010", "v5011", "v5012", "v5005", "v5006", "v5007", "v5008", "v5001", "v5002", "v5003", "v5004")
 
 CES_08_subset_vars <- c(
   "V100", "V201", "V206", "V207", "V208", "V250", "V251", "V202", "V205", "V204", "V213", "V252", "V253", "V258", "V257", "V247", "V259", "V264", "V501", "V502", "V553", "V555", "V601", "V602", "V603", "V612", "V653", "V655", "V657", "V672", "CC328_1", "CC328_3", "CC334", "CC410", "CC411", "CC411b", "CC412", "CC413", "CC414_2", "CC414_1", "V209", "CC329", "CC333", "V246", "V203", "CC403", "CC405", "CC404", "CC326b", "CC337", "CC337S2", "CC340", "CC338", "V618", "V619")
-
 
 CES_10_subset_vars <- c(
   "V100", "V101", "V202_post", "V204_post", "V205_post", "V206", "V206_post", "V207", "V208", "V213", "V252", "V254", "V276", "V276_post", "V564_post", "V567_post", "V548_post", "V551_post", "V533_post", "V536_post", "V554_post", "V556_post", "V570_post", "V572_post","V574_post", "V576_post", "CC351", "V209", "V264", "V250", "V246", "V290", "CC401", "V203", "CC403", "CC402a", "CC410a", "CC410b", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d")
@@ -212,7 +214,7 @@ CES_20_raw_subset <- CES_20_raw[, CES_20_subset_vars]
 CES_22_raw_subset <- CES_22_raw[, CES_22_subset_vars]
 ```
 
-## CPS Subset (>18, relevant vars)
+### Subset CPS to exclude respondents below 18 (CES is limited to 18+)
 ```{r}
 # Define the years range
 years <- seq(2006, 2022, by = 2)
@@ -246,4 +248,254 @@ for (year in years) {
 
 ```
 
+### Update CES/CPS data structures
+```{r}
+# list_all_years contains a list of all CES and CPS datasets, organized by year. As changes are made to these datasets, update_list_all_years is called throughout the script, ensuring that subsequent analysis is working on the most updated versions
+update_list_all_years <- function() {
+  list_all_years <- list(
+  list(CPS = CPS_06_rc_clean, CES = CES_06_rc_clean, year = 2006),
+  list(CPS = CPS_08_rc_clean, CES = CES_08_rc_clean, year = 2008),
+  list(CPS = CPS_10_rc_clean, CES = CES_10_rc_clean, year = 2010),
+  list(CPS = CPS_12_rc_clean, CES = CES_12_rc_clean, year = 2012),
+  list(CPS = CPS_14_rc_clean, CES = CES_14_rc_clean, year = 2014),
+  list(CPS = CPS_16_rc_clean, CES = CES_16_rc_clean, year = 2016),
+  list(CPS = CPS_18_rc_clean, CES = CES_18_rc_clean, year = 2018),
+  list(CPS = CPS_20_rc_clean, CES = CES_20_rc_clean, year = 2020),
+  list(CPS = CPS_22_rc_clean, CES = CES_22_rc_clean, year = 2022)
+  )
+  
+  assign("list_all_years", list_all_years, envir = .GlobalEnv)
+}
+
+update_ces_rc_datasets <- function() {
+  ces_rc_datasets <- setNames(
+  list(CES_06_rc, CES_08_rc, CES_10_rc, CES_12_rc, CES_14_rc, CES_16_rc, CES_18_rc, CES_20_rc, CES_22_rc),
+  c("2006", "2008", "2010", "2012", "2014", "2016", "2018", "2020", "2022")
+)
+  assign("ces_rc_datasets", ces_rc_datasets, envir = .GlobalEnv)
+}
+```
+
+# Recoding CES and CPS
+## Primary recoding
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE, results='hide'}
+# CES and CPS are recoded to have corresponding levels for comparable variables. Ensure that CODEBOOK.xlsm is in the code directory.
+apply_codebook_and_recode(6)
+apply_codebook_and_recode(8)
+apply_codebook_and_recode(10)
+apply_codebook_and_recode(12)
+apply_codebook_and_recode(14)
+apply_codebook_and_recode(16)
+apply_codebook_and_recode(18)
+apply_codebook_and_recode(20)
+apply_codebook_and_recode(22)
+```
+
+## Additional recoding
+### Location structures
+```{r}
+pre_post_location_vars <- list(
+  # Pre and Post same because non provided
+  "2006" = list(
+    pre_state = "v1002",
+    post_state = "v1002"
+  ),
+  "2008" = list(
+    pre_state = "V206",
+    post_state = "V259"
+  ),
+  "2010" = list(
+    pre_state = "V206",
+    post_state = "V206_post"
+  ),
+  "2012" = list(
+    pre_state = "inputstate",
+    post_state = "inputstate_post"
+  ),
+  "2014" = list(
+    pre_state = "inputstate",
+    post_state = "inputstate_post"
+  ),
+  "2016" = list(
+    pre_state = "inputstate",
+    post_state = "inputstate_post"
+  ),
+  "2018" = list(
+    pre_state = "inputstate",
+    post_state = "inputstate_post"
+  ),
+  "2020" = list(
+    pre_state = "inputstate",
+    post_state = "inputstate_post"
+  ),
+  "2022" = list(
+    pre_state = "inputstate",
+    post_state = "inputstate_post"
+  )
+)
+
+make_state_to_region <- function() {
+  region_mapping <- list(
+    "Northeast" = c("CT", "ME", "MA", "NH", "RI", "VT", "NJ", "NY", "PA"),
+    "Midwest" = c("IL", "IN", "MI", "OH", "WI", "IA", "KS", "MN", "MO", "NE", "ND", "SD"),
+    "South" = c("DE", "DC", "FL", "GA", "MD", "NC", "SC", "VA", "WV", "AL", "KY", "MS", "TN", "AR", "LA", "OK", "TX"),
+    "West" = c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY", "AK", "CA", "HI", "OR", "WA"))
+
+  # Flatten the mapping into a named vector
+  state_abbr <- unlist(region_mapping)
+  regions <- rep(names(region_mapping), times = lengths(region_mapping))
+  setNames(regions, state_abbr)
+}
+
+state_to_region <- make_state_to_region()
+```
+
+### Manual recodes
+```{r warning=FALSE}
+year_mapping <- c("2006" = 1, "2008" = 2, "2010" = 3, "2012" = 4, "2014" = 5, "2016" = 6, "2018" = 7, "2020" = 8, "2022" = 9)
+
+# Apply age groups to CES data frames
+CES_06_rc$AGE_GROUP_rc <- calculate_age_groups(2006 - CES_06_rc$v2020)
+CES_08_rc$AGE_GROUP_rc <- calculate_age_groups(2008 - CES_08_rc$V207)
+CES_10_rc$AGE_GROUP_rc <- calculate_age_groups(2010 - CES_10_rc$V207)
+CES_12_rc$AGE_GROUP_rc <- calculate_age_groups(2012 - CES_12_rc$birthyr)
+CES_14_rc$AGE_GROUP_rc <- calculate_age_groups(2014 - CES_14_rc$birthyr)
+CES_16_rc$AGE_GROUP_rc <- calculate_age_groups(2016 - CES_16_rc$birthyr)
+CES_18_rc$AGE_GROUP_rc <- calculate_age_groups(2018 - CES_18_rc$birthyr)
+CES_20_rc$AGE_GROUP_rc <- calculate_age_groups(2020 - CES_20_rc$birthyr)
+CES_22_rc$AGE_GROUP_rc <- calculate_age_groups(2022 - CES_22_rc$birthyr)
+
+# Apply age groups to CPS data frames
+CPS_06_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_06_rc$AGE)
+CPS_08_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_08_rc$AGE)
+CPS_10_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_10_rc$AGE)
+CPS_12_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_12_rc$AGE)
+CPS_14_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_14_rc$AGE)
+CPS_16_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_16_rc$AGE)
+CPS_18_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_18_rc$AGE)
+CPS_20_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_20_rc$AGE)
+CPS_22_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_22_rc$AGE)
+
+
+# Region
+CES_06_rc$REGION_rc <- as.factor(state_to_region[CES_06_rc$v1002])
+CES_08_rc$REGION_rc <- as.factor(state_to_region[fips(CES_08_rc$V206, to = "abbreviation")])
+CES_10_rc$REGION_rc <- as.factor(state_to_region[fips(CES_10_rc$V206, to = "abbreviation")])
+CES_12_rc$REGION_rc <- as.factor(state_to_region[fips(CES_12_rc$inputstate, to = "abbreviation")])
+CES_14_rc$REGION_rc <- as.factor(state_to_region[fips(CES_14_rc$inputstate, to = "abbreviation")])
+CES_16_rc$REGION_rc <- as.factor(state_to_region[fips(CES_16_rc$inputstate, to = "abbreviation")])
+CES_18_rc$REGION_rc <- as.factor(state_to_region[fips(CES_18_rc$inputstate, to = "abbreviation")])
+CES_20_rc$REGION_rc <- as.factor(state_to_region[fips(CES_20_rc$inputstate, to = "abbreviation")])
+CES_22_rc$REGION_rc <- as.factor(state_to_region[fips(CES_22_rc$inputstate, to = "abbreviation")])
+
+# Add pre and post state
+update_ces_rc_datasets()
+add_location_vars(list_all_years, pre_post_location_vars)
+update_ces_rc_datasets()
+
+
+# Military Status in CPS
+cps_rc_datasets <- list(CPS_06_rc, CPS_08_rc, CPS_10_rc, CPS_12_rc, CPS_14_rc, CPS_16_rc, CPS_18_rc, CPS_20_rc, CPS_22_rc)
+
+for (i in seq_along(cps_rc_datasets)) {
+  cps_rc_datasets[[i]]$CUR_MIL_rc <- as.factor(ifelse(
+    cps_rc_datasets[[i]]$EMPSTAT == 1,
+    "Serving",
+    ifelse(cps_rc_datasets[[i]]$EMPSTAT == 0, NA, "Not serving")
+  ))
+  print(paste("CPS Current Military Done", names(year_mapping)[i]))
+}
+
+list2env(setNames(cps_rc_datasets, c("CPS_06_rc", "CPS_08_rc", "CPS_10_rc", "CPS_12_rc", "CPS_14_rc", "CPS_16_rc", "CPS_18_rc", "CPS_20_rc", "CPS_22_rc")), envir = .GlobalEnv)
+
+party_mapping <- c("1" = "Democratic", "2" = "Republican", "3" = "Independent")
+
+#In 2006, it always defaulted that first candidate was Democrat and second was Republican
+CES_06_rc <- CES_06_rc %>%
+  mutate(
+    # Governor
+    v5010 = party_mapping[as.character(v5010)],
+    v5012 = party_mapping[as.character(v5012)],
+    # US Senate
+    v5006 = party_mapping[as.character(v5006)],
+    v5008 = party_mapping[as.character(v5008)]
+  )
+
+
+
+## START HERE
+# Adding House_rc 
+update_ces_rc_datasets()
+# Loop through each year and recode HOUSE_rc based on the candidate names available for that year
+for (year in names(ces_rc_datasets)) {
+  if (year %in% c("2006", "2008", "2010")) next
+  
+  # Recode the data
+  recoded_data <- recode_house_rc(ces_rc_datasets[[year]], yrly_ces_house_candidate_names[[year]])
+  
+  # Assign the recoded data to its original name in the global environment
+  assign(ces_rc_df_name_mapping[year], recoded_data, envir = .GlobalEnv)
+}
+
+# Add President names and party columns
+CES_08_rc$PRES_DEM_CAND <- "OBAMA"
+CES_08_rc$PRES_DEM_PARTY <- "Democratic"
+CES_08_rc$PRES_REP_CAND <- "MCCAIN"
+CES_08_rc$PRES_REP_PARTY <- "Republican"
+
+CES_12_rc$PRES_DEM_CAND <- "OBAMA"
+CES_12_rc$PRES_DEM_PARTY <- "Democratic"
+CES_12_rc$PRES_REP_CAND <- "ROMNEY"
+CES_12_rc$PRES_REP_PARTY <- "Republican"
+
+CES_16_rc$PRES_DEM_CAND <- "CLINTON"
+CES_16_rc$PRES_DEM_PARTY <- "Democratic"
+CES_16_rc$PRES_REP_CAND <- "TRUMP"
+CES_16_rc$PRES_REP_PARTY <- "Republican"
+
+CES_20_rc$PRES_DEM_CAND <- "BIDEN"
+CES_20_rc$PRES_DEM_PARTY <- "Democratic"
+CES_20_rc$PRES_REP_CAND <- "TRUMP"
+CES_20_rc$PRES_REP_PARTY <- "Republican"
+
+# Clean up NAs
+CES_06_rc_clean <- clean_NAs(CES_06_rc)
+CPS_06_rc_clean <- clean_NAs(CPS_06_rc)
+
+CES_08_rc_clean <- clean_NAs(CES_08_rc)
+CPS_08_rc_clean <- clean_NAs(CPS_08_rc)
+
+CES_10_rc_clean <- clean_NAs(CES_10_rc)
+CPS_10_rc_clean <- clean_NAs(CPS_10_rc)
+
+CES_12_rc_clean <- clean_NAs(CES_12_rc)
+CPS_12_rc_clean <- clean_NAs(CPS_12_rc)
+
+CES_14_rc_clean <- clean_NAs(CES_14_rc)
+CPS_14_rc_clean <- clean_NAs(CPS_14_rc)
+
+CES_16_rc_clean <- clean_NAs(CES_16_rc)
+CPS_16_rc_clean <- clean_NAs(CPS_16_rc)
+
+CES_18_rc_clean <- clean_NAs(CES_18_rc)
+CPS_18_rc_clean <- clean_NAs(CPS_18_rc)
+
+CES_20_rc_clean <- clean_NAs(CES_20_rc)
+CPS_20_rc_clean <- clean_NAs(CPS_20_rc)
+
+CES_22_rc_clean <- clean_NAs(CES_22_rc)
+CPS_22_rc_clean <- clean_NAs(CPS_22_rc)
+
+CES_06_rc_clean <- as.data.frame(CES_06_rc_clean)
+CES_08_rc_clean <- as.data.frame(CES_08_rc_clean)
+CES_10_rc_clean <- as.data.frame(CES_10_rc_clean)
+CES_12_rc_clean <- as.data.frame(CES_12_rc_clean)
+CES_14_rc_clean <- as.data.frame(CES_14_rc_clean)
+CES_16_rc_clean <- as.data.frame(CES_16_rc_clean)
+CES_18_rc_clean <- as.data.frame(CES_18_rc_clean)
+CES_20_rc_clean <- as.data.frame(CES_20_rc_clean)
+CES_22_rc_clean <- as.data.frame(CES_22_rc_clean)
+
+update_list_all_years()
+```
 
