@@ -129,45 +129,6 @@ clean_NAs <- function(df) {
   return(df)
 }
 
-### Recode HOUSE_rc
-recode_house_rc <- function(data, candidate_names) {
-  # Iterate over each known candidate in the current year
-  for (cand_num in seq_along(candidate_names)) {
-    # Extract candidate name and party columns for this candidate
-    cand_name_key <- paste0("US House Cand ", cand_num, " Name")
-    cand_party_key <- paste0("US House Cand ", cand_num, " Party")
-    
-    # Check if this candidate exists in the current year's candidate_names
-    if (!is.null(candidate_names[[cand_party_key]])) {
-      party_column <- candidate_names[[cand_party_key]]
-      
-      # Recode HOUSE_rc based on the party
-      data <- data %>%
-        mutate(
-          HOUSE_rc = case_when(
-            # If party contains "democrat", recode as "Democrat"
-            HOUSE_rc == paste0("Cand", cand_num) & 
-              str_detect(!!sym(party_column), regex("dem|democrat|democratic", ignore_case = TRUE)) ~ "Democrat",
-            
-            # If party contains "republican", recode as "Republican"
-            HOUSE_rc == paste0("Cand", cand_num) & 
-              str_detect(!!sym(party_column), regex("rep|republican", ignore_case = TRUE)) ~ "Republican",
-            
-            # If party is neither "democrat" nor "republican" but is not NA or "Other", recode as "Other"
-            HOUSE_rc == paste0("Cand", cand_num) & 
-              !str_detect(!!sym(party_column), regex("dem|democrat|democratic|rep|republican", ignore_case = TRUE)) &
-              !is.na(!!sym(party_column)) & !!sym(party_column) != "Other" ~ "Other",
-            
-            # Leave "Other" and NA as they are
-            TRUE ~ HOUSE_rc
-          )
-        )
-    }
-  }
-  
-  return(data)
-}
-
 ces_rc_df_name_mapping <- c(
   "2012" = "CES_12_rc",
   "2014" = "CES_14_rc",
@@ -217,7 +178,6 @@ add_location_vars <- function(ces_rc_datasets, pre_post_location_vars) {
   state_abbreviations <- c(state.abb, "DC")
   # Create a vector of state names including "District of Columbia"
   state_names <- c(state.name, "DISTRICT OF COLUMBIA")
-  
   for (year in names(ces_rc_datasets)) {
     dataset <- ces_rc_datasets[[year]]
     vars <- pre_post_location_vars[[year]]
@@ -243,3 +203,6 @@ add_location_vars <- function(ces_rc_datasets, pre_post_location_vars) {
     print(paste("CES", year, "location variables created"))
   }
 }
+
+# Recode vote-choice variables from just saying "Cand1" or "Cand2" to the corresponding party of those candidates
+

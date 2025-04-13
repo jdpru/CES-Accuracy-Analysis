@@ -9,8 +9,10 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis')
 
-# Load functions from other utility scripts
+# Load functions and structures from other utility scripts
 source("recoding_utilities.R")
+source("data_structures.R")
+source("election_return_utilities.R")
 ```
 
 ```{r, echo=False, warnings=FALSE, message=FALSE}
@@ -55,7 +57,6 @@ CES_22_raw <- read_dta(here("data/CES Data/CES22/CES_2022_Common_Output.dta"))
 Governor_0622 <- read_excel("data/Election Validation/Final Sets - Clean Fixed/Governor_0622_clean_fixed.xlsx")
 Senate_0622 <- read_excel("data/Election Validation/Final Sets - Clean Fixed/Senate_0622_clean_fixed.xlsx")
 President_0820 <- read_excel("data/Election Validation/Final Sets - Clean Fixed/[FIN-FIX] President 2008-2020 clean fixed.xlsx")
-'/Users/jdpruett/Desktop/CES Accuracy Analysis/data/Election Validation/Final Sets - Clean Fixed/[FIN-FIX] Historical election results data (2006 - 2023) clean fixed.xlsx'
 
 # U.S. House
 house_data_path <- "data/Election Validation/Final Sets - Clean Fixed/[FIN-FIX] House 2006-2022 clean fixed.xlsx"
@@ -112,6 +113,7 @@ set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = FALSE)
 ```
 
 ### Prep monthly sample codes and variables
+This is necessary to use the IPUMS API to download CPS data.
 ```{r}
 # All
 cps_vars_all <- c("WTFINL", "EARNWT", "VOSUPPWT", "STATEFIP", "SEX", "EDUC", "AGE", "CITIZEN", "HISPAN", "OCC", "VETSTAT", "REGION", "EMPSTAT", "CLASSWKR", "UNION", "FAMINC", "VOTERES", "VOREG", "VOTED", "VOWHYNOT", "VOTEHOW")
@@ -171,7 +173,7 @@ for (df_name in names(extract_codes)) {
 ```
 
 ## Subset datasets --------------
-### Subset CES to only include relevant variables
+Subset CES to only include relevant variables
 ```{r}
 CES_06_subset_vars <- c(
   "v1000", "v1001", "v1002", "v1003", "v1004", "v2004", "v2018", "v2020", "v3081", "v3083", "v1006", "v2030", "v2073", "v2082", "v2033", "v2032", "v3004", "v4004", "v4006", "v4005", "v4014", "v4015", "v4013", "v4017", "v4018", "v4019", "v4020", "v4021", "v5009", "v5010", "v5011", "v5012", "v5005", "v5006", "v5007", "v5008", "v5001", "v5002", "v5003", "v5004")
@@ -214,7 +216,7 @@ CES_20_raw_subset <- CES_20_raw[, CES_20_subset_vars]
 CES_22_raw_subset <- CES_22_raw[, CES_22_subset_vars]
 ```
 
-### Subset CPS to exclude respondents below 18 (CES is limited to 18+)
+Subset CPS to exclude respondents below 18 because the CES is limited to 18+
 ```{r}
 # Define the years range
 years <- seq(2006, 2022, by = 2)
@@ -249,8 +251,10 @@ for (year in years) {
 ```
 
 ### Update CES/CPS data structures
+Sometimes I make changes to one year individually, and other times I make changes to all years simultaneously. To keep things clean, below are a series of functions to make sure that each individual year in the global environment is synced with each year in the "list_all_years" object, which groups all years together for easier processing.
 ```{r}
-# list_all_years contains a list of all CES and CPS datasets, organized by year. As changes are made to these datasets, update_list_all_years is called throughout the script, ensuring that subsequent analysis is working on the most updated versions
+# list_all_years contains a list of all CES and CPS datasets, organized by year. As changes are made to these datasets, update_list_all_years updates
+# list_all_years with the current versions of each df in the global environment.
 update_list_all_years <- function() {
   list_all_years <- list(
   list(CPS = CPS_06_rc_clean, CES = CES_06_rc_clean, year = 2006),
@@ -267,6 +271,23 @@ update_list_all_years <- function() {
   assign("list_all_years", list_all_years, envir = .GlobalEnv)
 }
 
+# This does the inverse: If I make changes to each df inside of list_all_years, this function pushes those changes to the global environment, so each individual
+# year reflects any changes made inside of list_all_years.
+push_list_all_years_to_env <- function() {
+  for (entry in list_all_years) {
+    year <- entry$year
+    
+    # Construct object names
+    cps_name <- paste0("CPS_", substr(year, 3, 4), "_rc_clean")
+    ces_name <- paste0("CES_", substr(year, 3, 4), "_rc_clean")
+    
+    # Assign to global environment
+    assign(cps_name, entry$CPS, envir = .GlobalEnv)
+    assign(ces_name, entry$CES, envir = .GlobalEnv)
+  }
+}
+
+
 update_ces_rc_datasets <- function() {
   ces_rc_datasets <- setNames(
   list(CES_06_rc, CES_08_rc, CES_10_rc, CES_12_rc, CES_14_rc, CES_16_rc, CES_18_rc, CES_20_rc, CES_22_rc),
@@ -277,9 +298,9 @@ update_ces_rc_datasets <- function() {
 ```
 
 # Recoding CES and CPS
-## Primary recoding
+## Codebook recodings
+Recode CES and CPS to have corresponding levels for comparable variables. Ensure that CODEBOOK.xlsm is in the code directory (same directory level as analysisHQ.Rmd)
 ```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE, results='hide'}
-# CES and CPS are recoded to have corresponding levels for comparable variables. Ensure that CODEBOOK.xlsm is in the code directory.
 apply_codebook_and_recode(6)
 apply_codebook_and_recode(8)
 apply_codebook_and_recode(10)
@@ -291,49 +312,8 @@ apply_codebook_and_recode(20)
 apply_codebook_and_recode(22)
 ```
 
-## Additional recoding
-### Location structures
+## Manual recodings
 ```{r}
-pre_post_location_vars <- list(
-  # Pre and Post same because non provided
-  "2006" = list(
-    pre_state = "v1002",
-    post_state = "v1002"
-  ),
-  "2008" = list(
-    pre_state = "V206",
-    post_state = "V259"
-  ),
-  "2010" = list(
-    pre_state = "V206",
-    post_state = "V206_post"
-  ),
-  "2012" = list(
-    pre_state = "inputstate",
-    post_state = "inputstate_post"
-  ),
-  "2014" = list(
-    pre_state = "inputstate",
-    post_state = "inputstate_post"
-  ),
-  "2016" = list(
-    pre_state = "inputstate",
-    post_state = "inputstate_post"
-  ),
-  "2018" = list(
-    pre_state = "inputstate",
-    post_state = "inputstate_post"
-  ),
-  "2020" = list(
-    pre_state = "inputstate",
-    post_state = "inputstate_post"
-  ),
-  "2022" = list(
-    pre_state = "inputstate",
-    post_state = "inputstate_post"
-  )
-)
-
 make_state_to_region <- function() {
   region_mapping <- list(
     "Northeast" = c("CT", "ME", "MA", "NH", "RI", "VT", "NJ", "NY", "PA"),
@@ -350,7 +330,7 @@ make_state_to_region <- function() {
 state_to_region <- make_state_to_region()
 ```
 
-### Manual recodes
+
 ```{r warning=FALSE}
 year_mapping <- c("2006" = 1, "2008" = 2, "2010" = 3, "2012" = 4, "2014" = 5, "2016" = 6, "2018" = 7, "2020" = 8, "2022" = 9)
 
@@ -388,9 +368,9 @@ CES_18_rc$REGION_rc <- as.factor(state_to_region[fips(CES_18_rc$inputstate, to =
 CES_20_rc$REGION_rc <- as.factor(state_to_region[fips(CES_20_rc$inputstate, to = "abbreviation")])
 CES_22_rc$REGION_rc <- as.factor(state_to_region[fips(CES_22_rc$inputstate, to = "abbreviation")])
 
-# Add pre and post state
+# Add pre- and post- questionnaire state
 update_ces_rc_datasets()
-add_location_vars(list_all_years, pre_post_location_vars)
+add_location_vars(ces_rc_datasets, pre_post_location_vars)
 update_ces_rc_datasets()
 
 
@@ -421,10 +401,7 @@ CES_06_rc <- CES_06_rc %>%
     v5008 = party_mapping[as.character(v5008)]
   )
 
-
-
-## START HERE
-# Adding House_rc 
+# Recoding HOUSE_rc to be the corresponding party that each respondent voted for
 update_ces_rc_datasets()
 # Loop through each year and recode HOUSE_rc based on the candidate names available for that year
 for (year in names(ces_rc_datasets)) {
@@ -458,7 +435,7 @@ CES_20_rc$PRES_DEM_PARTY <- "Democratic"
 CES_20_rc$PRES_REP_CAND <- "TRUMP"
 CES_20_rc$PRES_REP_PARTY <- "Republican"
 
-# Clean up NAs
+# Clean up NAs (ie. make sure "NA", __NA__, "NA_char" are all treated as data type NA)
 CES_06_rc_clean <- clean_NAs(CES_06_rc)
 CPS_06_rc_clean <- clean_NAs(CPS_06_rc)
 
@@ -498,4 +475,440 @@ CES_22_rc_clean <- as.data.frame(CES_22_rc_clean)
 
 update_list_all_years()
 ```
+
+# Recode Party Vote
+The codebook creates new columns called SENATOR_rc, GOV_rc, HOUSE_rc, etc., to reflect a respondent's vote for a candidate. From 2006 to 2010, the vote choices could be directly mapped to a party because the options were "Democrat," "Republican," and "Other." However, from 2012 - 2022, the CES changed the way it recorded candidate votes. Instead of using party names, votes were recorded for a particular candidate like "Cand1", "Cand2", etc. So now, each respondent's vote must be dynamically assigned a party based on the party of whichever candidate they voted for. The CES included additional variables for each candidate's party affiliation, such as "SenCand1Party", "GovCand2Party", etc. 
+```{r}
+#' Recode Candidate Vote Variables to Party Labels
+#'
+#' This function recodes candidate vote variables (e.g., `SENATOR_rc`, `GOV_rc`, `PRES_rc`, `HOUSE_rc`)
+#' from codes like "Cand1", "Cand2", etc., into party labels ("Democrat", "Republican", or "Other")
+#' based on candidate party mappings. It updates each CES dataframe in the global environment 
+#' rather than modifying the `list_all_years` structure directly. Note that it skips 2006 - 2010
+#' because these years were directly recoded using the CODBEOOK - they did not use the same Cand1, Cand2
+#' structure that started in 2012. 
+#' After running this function, use `push_list_all_years_to_env()` to reflect changes in global env.
+#'
+#' @param list_all_years A list of lists, where each inner list contains `CPS`, `CES`, and `year` elements.
+#' @param yrly_ces_candidate_names A named list containing party variable mappings for each year and race 
+#'                                 (Governor, Senate, President).
+#' @param yrly_ces_house_candidate_names A named list containing party variable mappings specifically 
+#'                                       for House races.
+#'
+#' @return Returns a list in same structure as list_all_years, with modified columns for CES in each year
+#'
+recode_cand_to_party <- function(list_all_years, yrly_ces_candidate_names, yrly_ces_house_candidate_names) {
+  for (i in seq_along(list_all_years)) {
+    year_entry <- list_all_years[[i]]
+    year <- as.character(year_entry$year)
+
+    # Skip early years
+    if (as.numeric(year) < 2012) {
+      cat("Skipping year:", year, "\n")
+      next
+    }
+
+    cat("Processing year:", year, "\n")
+    ces_data <- year_entry$CES
+
+    # Candidate mappings
+    general_map <- yrly_ces_candidate_names[[year]]
+    house_map <- yrly_ces_house_candidate_names[[year]]
+
+    # Race-to-variable mapping
+    race_var_map <- list(
+      "US Senate" = "SENATOR_rc",
+      "Governor" = "GOV_rc",
+      "US House" = "HOUSE_rc"
+    )
+
+    for (race_name in names(race_var_map)) {
+      vote_var <- race_var_map[[race_name]]
+
+      # Skip if the variable is not in the data
+      if (!vote_var %in% names(ces_data)) next
+
+      # Select correct party variable mapping
+      if (race_name == "US House") {
+        party_vars <- house_map
+      } else {
+        if (!race_name %in% names(general_map)) {
+          stop(paste("No mapping for race", race_name, "in year", year))
+        }
+        party_vars <- general_map[[race_name]]
+      }
+
+      # Extract only party variable names
+      party_lookup <- party_vars[grepl("Party", names(party_vars), ignore.case = TRUE)]
+      cand_names <- sub(".*Cand ([0-9]+) Party.*", "Cand\\1", names(party_lookup))
+      names(party_lookup) <- cand_names
+
+      # Identify invalid candidate codes (excluding "Other")
+      vote_codes <- na.omit(unique(ces_data[[vote_var]]))
+      invalid_codes <- setdiff(vote_codes, c(names(party_lookup), "Other"))
+      if (length(invalid_codes) > 0) {
+        stop(paste("Year", year, "race", race_name, 
+                   "contains unmapped candidate codes:", paste(invalid_codes, collapse = ", ")))
+      }
+
+      # Recode values using dplyr + case_when
+      for (cand in names(party_lookup)) {
+        party_col <- party_lookup[[cand]]
+
+        if (!party_col %in% names(ces_data)) {
+          stop(paste("Missing expected party column", party_col, "in year", year))
+        }
+
+        ces_data <- ces_data %>%
+          mutate(
+            !!vote_var := case_when(
+              !!sym(vote_var) == cand &
+                str_detect(!!sym(party_col), regex("democrat", ignore_case = TRUE)) ~ "Democrat",
+
+              !!sym(vote_var) == cand &
+                str_detect(!!sym(party_col), regex("republican", ignore_case = TRUE)) ~ "Republican",
+
+              !!sym(vote_var) == cand &
+                !is.na(!!sym(party_col)) &
+                !str_detect(!!sym(party_col), regex("democrat|republican", ignore_case = TRUE)) ~ "Other",
+
+              TRUE ~ !!sym(vote_var)
+            )
+          )
+      }
+    }
+
+    # Update list with recoded CES data
+    list_all_years[[i]]$CES <- ces_data
+
+  }
+
+  return(list_all_years)
+}
+```
+
+Update list_all_years, run the recoding, then push changes from list_all_years back to global environment to keep list_all_years synced with each individual CES year in the global environment.
+```{r}
+update_list_all_years()
+list_all_years <- recode_cand_to_party(
+  list_all_years, 
+  yrly_ces_candidate_names, 
+  yrly_ces_house_candidate_names
+)
+push_list_all_years_to_env()
+```
+
+# Create Election Return Prop Tables
+The raw election return files are loaded in the "election validation" section. The following code creates a series of "prop" tables for each election, which says what share of votes each candidate received in each election. 
+```{r}
+# US House
+House_0622_clean_fixed <- recalculate_total_votes(House_0622, "statewide")
+house_prop_table <- calculate_state_level_party_proportions(House_0622_clean_fixed) 
+
+# US Senate
+Senate_0622_clean_fixed <- recalculate_total_votes(Senate_0622, "statewide")
+senate_cand_prop_table <- calculate_candidate_proportions(Senate_0622_clean_fixed) %>%
+  mutate(office = "US Senate") %>%
+  rename(
+    Office = office,
+    State = state,
+    District = district,
+    Year = year,
+    Candidate = candidate_name,
+    Cand_Num = cand_num,
+    Party_Detailed = party_detailed,
+    Party_Simplified = party_simplified,
+    `Total Votes` = totalvotes,
+    Proportion = proportion
+  )
+
+# Governor
+Governor_0622_clean_fixed <- recalculate_total_votes(Governor_0622, "statewide")
+governor_cand_prop_table <- calculate_candidate_proportions(Governor_0622_clean_fixed) %>%
+  mutate(office = "Governor") %>%
+  rename(
+    Office = office,
+    State = state,
+    District = district,
+    Year = year,
+    Candidate = candidate_name,
+    Cand_Num = cand_num,
+    Party_Detailed = party_detailed,
+    Party_Simplified = party_simplified,
+    `Total Votes` = totalvotes,
+    Proportion = proportion
+  )
+
+# President
+President_0820_nums <- assign_president_candidate_numbers(President_0820) %>%
+  filter(candidate %notin% c("OVER VOTE", "OVERVOTE", "OVERVOTES", "OVER VOTES"))
+president_candid_prop_table <- calculate_candidate_proportions(President_0820_nums) %>%
+  mutate(office = "President") %>%
+  rename(
+    Office = office,
+    State = state,
+    District = district,
+    Year = year,
+    Candidate = candidate_name,
+    Cand_Num = cand_num,
+    Party_Detailed = party_detailed,
+    Party_Simplified = party_simplified,
+    `Total Votes` = totalvotes,
+    Proportion = proportion
+  )
+
+# State Senate
+state_upper_prop_table <- make_bp_prop_table(State_senate_full) %>%
+  mutate(Office = "State Senator") %>%   
+  select(Office, everything())    
+
+# State House
+state_lower_prop_table <- make_bp_prop_table(State_house_full) %>%
+  mutate(Office = "State Representative") %>%   
+  select(Office, everything())    
+
+# Attorney General
+attorney_general_prop_table <- make_bp_prop_table(Attorney_general_full) %>%
+  mutate(Office = "Attorney General") %>%   
+  select(Office, everything()) 
+
+# Secretary of State
+secretary_of_state_prop_table <- make_bp_prop_table(Secretary_of_state_full) %>%
+  mutate(Office = "Secretary of State") %>%   
+  select(Office, everything()) 
+
+# Merge all results
+merged_prop_tables <- rbind(governor_cand_prop_table, senate_cand_prop_table, state_upper_prop_table, state_lower_prop_table, attorney_general_prop_table, secretary_of_state_prop_table, president_candid_prop_table)
+```
+
+# Create ANESRake Targets
+ANESRake requires that "targets" are created for each variable, which specify the expected distribution of that variable in the population for each level of that variable.
+```{r}
+# Some variables require special weighting variables. This dictionary specifies which weighting variable should be used for those special variables, otherwise
+# the common weighting var is used. 
+create_targets <- function(year_data_list) {
+  cps_wtvar_dict <- c(
+  "UNION_rc" = "EARNWT",
+  "VOTED_rc" = "VOSUPPWT",
+  "VOTEHOW_rc" = "VOSUPPWT",
+  "VOTERES_rc" = "VOSUPPWT",
+  "VOTEREG_rc" = "VOSUPPWT"
+)
+  
+  # Create a list to store targets for each year
+  all_targets <- list()
+  
+  # Loop through each year's data
+  for (year_data in year_data_list) {
+    cps_df <- year_data$CPS
+    ces_df <- year_data$CES
+    current_year <- year_data$year
+    
+    # Create a list of all recoded variables for CES data
+    variables <- intersect(names(ces_df), names(cps_df))
+    variables <- variables[!grepl("DUM|OVERTIME", variables)]
+  
+    # Create population (cps) numeric values list with level names
+    targets <- list()
+    for (var in variables) {
+      # Determine the appropriate weight variable
+      weight_var <- if (var %in% names(cps_wtvar_dict)) cps_wtvar_dict[var] else "WTFINL"
+      
+      # Calculate weighted proportions for each level using wpct
+      weighted_proportions <- wpct(cps_df[[var]], weight = cps_df[[weight_var]], na.rm=TRUE)
+      
+      # Convert proportions to numeric values with level names
+      numeric_values <- as.numeric(weighted_proportions)
+      names(numeric_values) <- names(weighted_proportions)
+      
+      # Store numeric values in the list
+      targets[[var]] <- numeric_values
+    }
+    
+    # Append targets for the current year to the list of all targets
+    target_name <- paste0(current_year)
+    all_targets[[target_name]] <- targets
+  }
+  
+  return(all_targets)
+}
+```
+
+Update list_all_years, then create targets for each year for all variables that are present in both CES and CPS.
+```{r}
+update_list_all_years()
+all_targets <- create_targets(list_all_years)
+
+# This screw up the anesrake algo, because there are so few ppl in military that it rounds to 0 which throws an error. 
+noMILorWKR_all_targets <- lapply(all_targets, function(sublist) {
+  # Check if CUR_MIL_rc exists in the sublist, and if so, remove it
+  sublist$CUR_MIL_rc <- NULL
+  sublist$CLASSWKR_rc <- NULL
+  sublist$VOTEREG_rc <- NULL
+  return(sublist)
+})
+```
+
+
+Function to run ANESRake weighting for each year
+```{r}
+# Function to convert user-input year to list index number
+convert_year_to_index <- function(input_year) {
+  return(year_mapping[as.character(input_year)])
+}
+
+run_weighting <- function(year_list, targets) {
+  #browser()
+  results_list <- list()
+  for (year in year_list) {
+    print(year)
+    list_index_number <- convert_year_to_index(year)
+    
+    # Extract the required data for the specified year
+    target_data <- targets[[as.character(year)]]
+    # Excludes weighting on dummy variables and overtime variables
+    target_data <- target_data[!grepl("_DUM|OVERTIME", names(target_data))]
+    CES_data <- list_all_years[[list_index_number]]$CES
+    caseid_col <- CES_data[, 1]
+    
+    outsave <-
+      anesrake(target_data,
+               CES_data,
+               caseid = caseid_col,
+               verbose = FALSE)
+            
+    # Store results in the list
+    caseweights <-
+      data.frame(cases = outsave$caseid, weights = outsave$weightvec)
+    results_list[[paste0(year)]] <- list(caseweights = caseweights,
+                                         outsave_summary = summary(outsave))
+  }
+   
+  return(results_list)
+}
+```
+
+
+```{r}
+noMILorWKR_weighting_results <- run_weighting(c(2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022), noMILorWKR_all_targets)
+```
+
+
+Add the new weight column to each year's df
+```{r}
+add_weights_to_df <- function(df, year, weighting_results) {
+  # Extract weights and case IDs from the results for the specified year
+  weights <- weighting_results[[as.character(year)]]$caseweights
+  weights <- weights[order(weights$cases), ]  # Sort by case IDs
+  
+  # Merge weights with the dataframe
+  merged_df <- merge(df, weights, by.x = 1, by.y = "cases", all.x = TRUE)  # Assuming case ID column is the first column
+  
+  # Rename the weights column
+  colnames(merged_df)[ncol(merged_df)] <- "anesrake_weight"
+  
+  return(merged_df)
+}
+```
+
+
+```{r}
+CES_06_rc_clean <- add_weights_to_df(CES_06_rc_clean, 2006, noMILorWKR_weighting_results)
+CES_08_rc_clean <- add_weights_to_df(CES_08_rc_clean, 2008, noMILorWKR_weighting_results)
+CES_10_rc_clean <- add_weights_to_df(CES_10_rc_clean, 2010, noMILorWKR_weighting_results)
+CES_12_rc_clean <- add_weights_to_df(CES_12_rc_clean, 2012, noMILorWKR_weighting_results)
+CES_14_rc_clean <- add_weights_to_df(CES_14_rc_clean, 2014, noMILorWKR_weighting_results)
+CES_16_rc_clean <- add_weights_to_df(CES_16_rc_clean, 2016, noMILorWKR_weighting_results)
+CES_18_rc_clean <- add_weights_to_df(CES_18_rc_clean, 2018, noMILorWKR_weighting_results)
+CES_20_rc_clean <- add_weights_to_df(CES_20_rc_clean, 2020, noMILorWKR_weighting_results)
+CES_22_rc_clean <- add_weights_to_df(CES_22_rc_clean, 2022, noMILorWKR_weighting_results)
+update_list_all_years()
+```
+
+## START WITH ELECTION ACCURACIES.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+# Extract the recoded and original data
+ces_after <- list_all_years[[which(sapply(list_all_years, function(x) x$year == 2022))]]$CES
+ces_before <- CES_22_rc  # assuming this is your original (unrecoded) version
+
+# Identify all party columns
+house_party_cols <- grep("^SenCand[0-9]+Party_post$", names(ces_before), value = TRUE)
+
+# Build inspection dataframe
+inspect_df <- data.frame(
+  Var_rc_after = ces_after$SENATOR_rc,
+  Var_rc_before = ces_before$SENATOR_rc
+)
+
+# Add all HouseCandXParty_post columns from original data
+inspect_df <- cbind(inspect_df, ces_before[, house_party_cols])
+
+```
+
+
+```{r}
+search_variable_labels <- function(df, pattern) {
+  matches <- lapply(names(df), function(varname) {
+    label <- attr(df[[varname]], "label")
+    if (!is.null(label) && grepl(pattern, label, ignore.case = TRUE)) {
+      return(data.frame(
+        Variable = varname,
+        Label = label,
+        stringsAsFactors = FALSE
+      ))
+    } else {
+      return(NULL)
+    }
+  })
+  # Combine results into a single data frame
+  result <- do.call(rbind, matches)
+  return(result)
+}
+
+search_variable_labels(CES_14_raw, "SenCand4")
+
+```
+
 
