@@ -103,6 +103,9 @@ Secretary_of_state_full <- State_race_master_table[grepl("Secretary|Secratary", 
 # CES assigned some respondents to incorrect congressional district in 2020
 NC_flag_df <- read.csv("data/misc/NC_responents_incorrect_CD.csv") %>%
   filter(cd_change_flag_post == 1)
+
+# This is a list of all the races that should be skipped because they were asked about in the CES but did not actually occur
+skip_conditions <- read.xlsx("data/misc/skip_conditions_final.xlsx")
 ```
 
 ## CPS Datasets
@@ -604,6 +607,7 @@ The raw election return files are loaded in the "election validation" section. T
 # US House
 House_0622_clean_fixed <- recalculate_total_votes(House_0622, "statewide")
 house_prop_table <- calculate_state_level_party_proportions(House_0622_clean_fixed) 
+house_prop_table$Office <- "US House"
 
 # US Senate
 Senate_0622_clean_fixed <- recalculate_total_votes(Senate_0622, "statewide")
@@ -679,6 +683,30 @@ secretary_of_state_prop_table <- make_bp_prop_table(Secretary_of_state_full) %>%
 
 # Merge all results
 merged_prop_tables <- rbind(governor_cand_prop_table, senate_cand_prop_table, state_upper_prop_table, state_lower_prop_table, attorney_general_prop_table, secretary_of_state_prop_table, president_candid_prop_table)
+```
+
+Collapsed prop table version
+```{r}
+collapse_proportion_table <- function(df) {
+  df %>%
+    group_by(State, Year = as.numeric(Year), Office, Party_Simplified) %>%
+    summarise(Proportion = sum(Proportion, na.rm = TRUE), .groups = "drop") %>%
+    pivot_wider(
+      names_from = Party_Simplified,
+      values_from = Proportion,
+      names_prefix = "",
+      values_fill = 0
+    ) %>%
+    rename(
+      DEM_Proportion = DEM,
+      REP_Proportion = REP,
+      OTHER_Proportion = OTHER
+    ) %>%
+    select(State, Year, Office, DEM_Proportion, OTHER_Proportion, REP_Proportion)
+}
+
+collapsed_merged_prop_table <- collapse_proportion_table(merged_prop_tables)
+merged_prop_tables_combined <- rbind(collapsed_merged_prop_table, house_prop_table)
 ```
 
 # Create ANESRake Targets
@@ -825,11 +853,176 @@ CES_22_rc_clean <- add_weights_to_df(CES_22_rc_clean, 2022, noMILorWKR_weighting
 update_list_all_years()
 ```
 
-## START WITH ELECTION ACCURACIES.
+# Election Accuracies
+```{r}
+# Create template accuracy df
+create_empty_result_df <- function() {
+  data.frame(
+    Year = numeric(),
+    Race = character(),
+    State = character(),
+    CES_Candidate = character(),
+    True_Candidate = character(),
+    CES_Party = character(),
+    True_Party = character(),
+    Actual_Percent = numeric(),
+    CES_Unweighted_Percent = numeric(),
+    CES_Weighted_Percent = numeric(),
+    ANESRake_Weighted_Percent = numeric(),
+    Diff_Unweighted_CES_Actual = numeric(),
+    Diff_Weighted_CES_Actual = numeric(),
+    Diff_ANESRake_Actual = numeric(),
+    n_respondents = numeric(),
+    stringsAsFactors = FALSE
+  )
+}
+
+# Weighting vars for each year
+yearly_ces_wt_vars <- list(
+  "2006" = c("v1001", "anesrake_weight"),
+  "2008" = c("V201", "anesrake_weight"),
+  "2010" = c("V101", "anesrake_weight"),
+  "2012" = c("V103", "anesrake_weight"),
+  "2014" = c("weight", "anesrake_weight"),
+  "2016" = c("commonweight_post", "commonweight_vv", "commonweight", "anesrake_weight"),
+  "2018" = c("commonpostweight", "commonweight","anesrake_weight"),
+  "2020" = c("commonpostweight", "commonweight",  "anesrake_weight"),
+  "2022" = c("commonpostweight", "commonweight", "anesrake_weight"))
+```
+
+Compute Election Accuracy Function
+```{r}
+create_election_accuracy_tbl <- function(yearly_ces_wt_vars,
+                                         election_results_df,
+                                         year_data_list,
+                                         NC_flag_df) {
+  browser()
+  
+  # map CES column names to the exact Office labels in election_results_df$Office
+  race_map <- c(
+    HOUSE_rc                 = "US House",
+    SENATE_rc                = "US Senate",
+    PRES_rc                  = "President",
+    GOV_rc                   = "Governor",
+    SECSTATE_rc              = "Secretary of State",
+    AG_rc                    = "Attorney General",
+    ST_REP_rc                = "State Representative",
+    ST_SENATOR_rc            = "State Senator"
+  )
+  
+  result_list <- list()
+  
+  for (year_data in year_data_list) {
+    current_year <- year_data$year
+    ces_df <- year_data$CES
+    
+    # drop NC cases in 2020 if flagged
+    if (current_year == 2020) {
+      ces_df <- ces_df %>%
+        filter(!(caseid %in% NC_flag_df$caseid))
+    }
+    
+    # restrict to results for this year
+    year_elec <- election_results_df %>% filter(Year == current_year)
+    
+    # figure out which CES columns we actually have this year
+    available_races <- intersect(names(ces_df), names(race_map))
+    result_df <- create_empty_result_df()
+    
+    for (race_col in available_races) {
+      office_label <- race_map[[race_col]]
+      
+      for (state in unique(na.omit(ces_df$POST_STATE_rc))) {
+            # SKIP‐LOGIC: bail if this year/race/state is flagged
+        skip_row <- skip_conditions %>%
+          filter(State == state,
+                 Year  == current_year,
+                 Race  == race_col,       # or use office_label if your skip_conditions$Race is the full Office name
+                 `Skip?` == TRUE)
+        if (nrow(skip_row) > 0) next
+  
+        state_survey <- ces_df %>% filter(POST_STATE_rc == state)
+        n_resp <- sum(!is.na(state_survey[[race_col]]))
+        if (n_resp == 0) next
+        
+        # find the matching election returns
+        state_returns <- year_elec %>%
+          filter(State == state, Office == office_label)
+        if (nrow(state_returns) == 0) {
+          stop(glue::glue("No election results for {office_label}, {state}, {current_year}"))
+        }
+        
+        # compute weighted proportions
+        wt_var <- yearly_ces_wt_vars[[ as.character(current_year) ]][1]
+        ces_wt   <- wpct(state_survey[[race_col]], weight = state_survey[[wt_var]], na.rm = TRUE)
+        ces_unwt <- wpct(state_survey[[race_col]], na.rm = TRUE)
+        anes_wt  <- wpct(state_survey[[race_col]], weight = state_survey$anesrake_weight, na.rm = TRUE)
+        
+        # ensure all three parties
+        for (lvl in c("Democrat","Republican","Other")) {
+          if (lvl %notin% names(ces_wt))   ces_wt[lvl]   <- 0
+          if (lvl %notin% names(ces_unwt)) ces_unwt[lvl] <- 0
+          if (lvl %notin% names(anes_wt))  anes_wt[lvl]  <- 0
+        }
+        ces_wt   <- ces_wt[c("Democrat","Republican","Other")]
+        ces_unwt <- ces_unwt[c("Democrat","Republican","Other")]
+        anes_wt  <- anes_wt[c("Democrat","Republican","Other")]
+        
+        # true proportions
+        true_vec <- c(
+          Democrat  = state_returns$DEM_Proportion,
+          Republican= state_returns$REP_Proportion,
+          Other     = state_returns$OTHER_Proportion
+        )
+        
+        # compute diffs
+        diff_ces   <- ces_wt   - true_vec
+        diff_unwt  <- ces_unwt - true_vec
+        diff_anes  <- anes_wt  - true_vec
+        
+        # stack into rows
+        for (party in names(true_vec)) {
+          result_df <- bind_rows(
+            result_df,
+            tibble(
+              Year                         = current_year,
+              Race                         = office_label,
+              State                        = state,
+              CES_Candidate                = "Grouped Candidates",
+              True_Candidate               = "Grouped Candidates",
+              CES_Party                    = party,
+              True_Party                   = party,
+              Actual_Percent               = true_vec[party] * 100,
+              CES_Unweighted_Percent       = ces_unwt[party] * 100,
+              CES_Weighted_Percent         = ces_wt[party]   * 100,
+              ANESRake_Weighted_Percent    = anes_wt[party]  * 100,
+              Diff_Unweighted_CES_Actual   = diff_unwt[party] * 100,
+              Diff_Weighted_CES_Actual     = diff_ces[party]   * 100,
+              Diff_ANESRake_Actual         = diff_anes[party]  * 100,
+              n_respondents                = n_resp
+            )
+          )
+        }
+      }
+    }
+    
+    result_list[[as.character(current_year)]] <- result_df
+  }
+  
+  bind_rows(result_list)
+}
+
+```
 
 
-
-
+```{r}
+accuracy_tables <- create_election_accuracy_tbl(
+  yearly_ces_wt_vars,
+  merged_prop_tables_combined,
+  list_all_years,
+  NC_flag_df
+)
+```
 
 
 
