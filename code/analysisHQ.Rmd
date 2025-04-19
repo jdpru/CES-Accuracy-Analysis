@@ -946,12 +946,6 @@ create_election_accuracy_tbl <- function(yearly_ces_wt_vars,
     current_year <- year_data$year
     ces_df <- year_data$CES
     
-    # drop NC cases in 2020 if flagged
-    if (current_year == 2020) {
-      ces_df <- ces_df %>%
-        filter(!(caseid %in% NC_flag_df$caseid))
-    }
-    
     # restrict to results for this year
     year_elec <- election_results_df %>% filter(Year == current_year)
     
@@ -960,6 +954,12 @@ create_election_accuracy_tbl <- function(yearly_ces_wt_vars,
     result_df <- create_empty_result_df()
     
     for (race_col in available_races) {
+      # drop NC cases in 2020 if flagged
+      if (current_year == 2020 & race_col == "HOUSE_rc") {
+        ces_df <- ces_df %>%
+          filter(!(caseid %in% NC_flag_df$caseid))
+      }
+      
       office_label <- race_map[[race_col]]
       
       for (state in unique(na.omit(ces_df$POST_STATE_rc))) {
