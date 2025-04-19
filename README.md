@@ -83,22 +83,22 @@ After cloning the repo (instructions below), you will see a top-level directory 
    ```
 ### Download CES data
 2. CES data should be downloaded from the CES Dataverse. The Dataverse can be accesed [directly](https://dataverse.harvard.edu/dataverse/cces), though I've found the search functionality to be a bit finnicky. I'd recommend using [these links](https://tischcollege.tufts.edu/research-faculty/research-centers/cooperative-election-study/data-downloads-and-tools-scholars) to each year's release from Tufts, which can be found under "Download CES Datasets and Documentation".
-3. Each year's file should be placed in CES Accuracy Analysis/data/CES Data. The CES occasionally releases updates, so just ensure that the name of each file matches whatever is being called in the "CES Datasets" chunk.
+3. Each year's file should be placed in CES Accuracy Analysis/data/CES Data. The CES occasionally releases updates, so just ensure that the name of each file matches whatever is being loaded in the "CES Datasets" chunk of analysisHQ.Rmd.
 
 
 ### Get an IPUMS API Key
-4. I use the IPUMS API to download the relevant CPS data. A free key can be aquired at [https://developer.ipums.org/docs/v2/get-started/](https://developer.ipums.org/docs/v2/get-started/).
+4. I use the IPUMS API to download the relevant CPS data. A free key can be acquired at [https://developer.ipums.org/docs/v2/get-started/](https://developer.ipums.org/docs/v2/get-started/).
 5. Place this key as a string into the variable `USER_IPUMS_API_KEY` in analysisHQ. The CPS data can also be downloaded manually off the IPUMS site [https://cps.ipums.org/cps-action/variables/group](here), if this is preferred. 
 
 ### Optional: Recreate R Environment 
-I use [renv](https://rstudio.github.io/renv/), which is R's equivalent to venv and helps wth recreating a reproducible environment. This isn't strictly necessary, and the user should likely be fine just installing the latest version of the necessary packages. If this is preferred, uncomment the following lines in the top of analysisHQ, which will install any missing packages. 
+I use [renv](https://rstudio.github.io/renv/), which is R's equivalent to venv and recreates a reproducible environment. This isn't strictly necessary, and the user should likely be fine just installing the latest version of the necessary packages. If this is preferred, uncomment the following lines in the top of analysisHQ, which will install any missing packages. 
 ```sh
 # This downloads any necessary packages
 # if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
 # install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
 ```
 
-As a precaustion, I use [renv](https://rstudio.github.io/renv/), which is R's equivalent to venv and helps wth recreating a reproducible environment. So should one run into any package-related issued, Open RStudio and call
+Should one run into any package-related issued, use renv to recreate the original package environment. Open RStudio and call
 ```sh
 renv::restore()
 ```

@@ -298,7 +298,9 @@ update_ces_rc_datasets <- function() {
 
 # Recoding CES and CPS
 ## Codebook recodings
-Recode CES and CPS to have corresponding levels for comparable variables. Ensure that CODEBOOK.xlsm is in the code directory (same directory level as analysisHQ.Rmd)
+Recode CES and CPS to have corresponding levels for comparable variables. Ensure that CODEBOOK.xlsm is in the code directory at the same directory level as analysisHQ.Rmd. This function will output a recoded df in the form CES_YY_rc to the global environment. 
+
+If alternate recodings are desired, make the change in the CODEBOOK, save it, and re-run the code below.
 ```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE, results='hide'}
 apply_codebook_and_recode(6)
 apply_codebook_and_recode(8)
@@ -370,7 +372,6 @@ CES_22_rc$REGION_rc <- as.factor(state_to_region[fips(CES_22_rc$inputstate, to =
 
 # Add pre- and post- questionnaire state
 update_ces_rc_datasets()
-#FIX THIS
 add_location_vars(ces_rc_datasets, pre_post_location_vars)
 update_ces_rc_datasets()
 
@@ -389,31 +390,6 @@ for (i in seq_along(cps_rc_datasets)) {
 
 list2env(setNames(cps_rc_datasets, c("CPS_06_rc", "CPS_08_rc", "CPS_10_rc", "CPS_12_rc", "CPS_14_rc", "CPS_16_rc", "CPS_18_rc", "CPS_20_rc", "CPS_22_rc")), envir = .GlobalEnv)
 
-party_mapping <- c("1" = "Democratic", "2" = "Republican", "3" = "Independent")
-
-#In 2006, it always defaulted that first candidate was Democrat and second was Republican
-CES_06_rc <- CES_06_rc %>%
-  mutate(
-    # Governor
-    v5010 = party_mapping[as.character(v5010)],
-    v5012 = party_mapping[as.character(v5012)],
-    # US Senate
-    v5006 = party_mapping[as.character(v5006)],
-    v5008 = party_mapping[as.character(v5008)]
-  )
-
-# Recoding HOUSE_rc to be the corresponding party that each respondent voted for
-update_ces_rc_datasets()
-# Loop through each year and recode HOUSE_rc based on the candidate names available for that year
-# for (year in names(ces_rc_datasets)) {
-#   if (year %in% c("2006", "2008", "2010")) next
-#   
-#   # Recode the data
-#   recoded_data <- recode_house_rc(ces_rc_datasets[[year]], yrly_ces_house_candidate_names[[year]])
-#   
-#   # Assign the recoded data to its original name in the global environment
-#   assign(ces_rc_df_name_mapping[year], recoded_data, envir = .GlobalEnv)
-# }
 
 # Clean up NAs (ie. make sure "NA", __NA__, "NA_char" are all treated as data type NA)
 CES_06_rc_clean <- clean_NAs(CES_06_rc)
@@ -579,7 +555,7 @@ push_list_all_years_to_env()
 ```
 
 # Create Election Return Prop Tables
-The raw election return files are loaded in the "election validation" section. The following code creates a series of "prop" tables for each election, which says what share of votes each candidate received in each election. 
+The raw election return files are loaded in the "election validation" section. The following code creates a series of "prop" (proportion) tables for each election, which says what share of votes each candidate received in each election. 
 ```{r}
 # US House
 House_0622_clean_fixed <- recalculate_total_votes(House_0622, "statewide")
@@ -662,7 +638,7 @@ secretary_of_state_prop_table <- make_bp_prop_table(Secretary_of_state_full) %>%
 merged_prop_tables <- rbind(governor_cand_prop_table, senate_cand_prop_table, state_upper_prop_table, state_lower_prop_table, attorney_general_prop_table, secretary_of_state_prop_table, president_candid_prop_table)
 ```
 
-Collapsed prop table version
+Collapsing prop table across party
 ```{r}
 collapse_proportion_table <- function(df) {
   df %>%
@@ -868,7 +844,7 @@ yearly_ces_wt_vars <- list(
   "2022" = c("commonpostweight", "commonweight", "anesrake_weight"))
 ```
 
-This will be used to prettify the accuracy tables at the end and split one big table into a list of yearly tables
+This will be used to prettify the accuracy tables at the end and split one big accuracy table into a list of yearly accuracy tables
 ```{r}
 make_tables_pretty <- function(df) {
   # 1. split into a list of data‑frames, one per Year
@@ -1049,7 +1025,7 @@ create_election_accuracy_tbl <- function(yearly_ces_wt_vars,
 
 ```
 
-
+Create accuracy table, then clean it up and split it into a list of yearly accuracy tables with make_tables_pretty
 ```{r}
 accuracy_table <- create_election_accuracy_tbl(
   yearly_ces_wt_vars,
@@ -1062,7 +1038,7 @@ accuracy_tables_pretty <- make_tables_pretty(accuracy_table)
 ```
 
 # Results
-Now that accuracy_tables_pretty is created, we compute different accuracy metrics in different ranges for each major party.
+Now that accuracy_tables_pretty is created, compute different accuracy metrics in different vote ranges for each major party.
 ```{r}
 create_overall_summary_table <- function(data_list) {
 #' @description
@@ -1146,7 +1122,7 @@ create_overall_summary_table <- function(data_list) {
 ```
 
 
-We wanted to check if race accuracies differ based on whether race was federal or state level 
+For checking if race accuracies differ based on whether race was federal or state level 
 ```{r}
 federal_vs_state_summary_table <- function(data_list) {
   # Initialize an empty data frame for the results
@@ -1211,7 +1187,8 @@ federal_vs_state_summary_table <- function(data_list) {
 ```
 
 
-This overall_hist_table will serve as the input to the figuresHQ notebook used for creating figures.
+Create final list of accuracy tables. 
+partitioned_accuracy_results serves as the input to the figuresHQ notebook used for creating figures.
 ```{r}
 partitioned_accuracy_results <- create_overall_summary_table(accuracy_tables_pretty)
 write_xlsx(partitioned_accuracy_results, "tables_and_figures/partitioned_accuracy_results.xlsx")
@@ -1219,20 +1196,7 @@ federal_vs_state_hist_table <- federal_vs_state_summary_table(accuracy_tables_pr
 ```
 
 
-
-
-## TEMPORARY -- For Investigating high errors
-```{r}
-high_error <- CES_10_rc_clean %>%
-  filter(POST_STATE_rc == "NEBRASKA") %>%
-  select(V100, POST_STATE_rc, ST_SENATOR_rc)
-
-high_error$CC413c <- CES_06_rc_clean$CC413c[CES_06_rc_clean$caseid == high_error$v1000]
-```
-
-
-
-# Tables
+# Table creation
 Number of States and Average Number of State Respondents by Office and Year
 ```{r}
 col_order <- c(
@@ -1291,8 +1255,10 @@ num_states_table <- accuracy_table %>%
   select(Year, all_of(col_order))
 ```
 
+
+
 Modal category population estimates in CPS and CES
-The output of this code chunk is an excel sheet called demographic_modal_summary.xlsx which serves as the input for the modal category population estimates table in the figuresHQ jupyter notebook.
+The output of this code chunk is an excel sheet called demographic_modal_summary.xlsx which serves as the input for the modal category population estimates table in the figuresHQ notebook.
 ```{r}
 yearly_ces_wtvar_names_shortened <- list(
   "2006" = c("v1001", "anesrake_weight"),
