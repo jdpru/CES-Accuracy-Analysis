@@ -122,6 +122,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contact
 
 Jefferson (JD) Pruett - [https://www.linkedin.com/in/jd-pruett-4033b8194/](https://www.linkedin.com/in/jd-pruett-4033b8194/)
+
 Project Link: [https://github.com/jdpru/CES-Accuracy-Analysis](https://github.com/jdpru/CES-Accuracy-Analysis)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
