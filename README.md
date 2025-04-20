@@ -98,7 +98,7 @@ I use [renv](https://rstudio.github.io/renv/), which is R's equivalent to venv a
 # install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
 ```
 
-Should one run into any package-related issued, use renv to recreate the original package environment. Open RStudio and call
+Should one run into any package-related issues, use renv to recreate the original package environment. Open RStudio and call
 ```sh
 renv::restore()
 ```
