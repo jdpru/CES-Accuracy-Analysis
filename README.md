@@ -105,7 +105,7 @@ renv::restore()
 
 ### Adjust Root Directory in Setup Chunk
 ```sh
-knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis')
+knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 ```
 
 With that, the entirety of **analysisHQ.Rmd** can be run top-to-bottom. The output, `partitioned_accuracy_results.xlsx`, gets saved into the tables_and_figures sub-directory.
