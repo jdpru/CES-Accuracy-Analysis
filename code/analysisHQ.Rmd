@@ -7,7 +7,7 @@ output: html_document
 
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
-knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis')
+knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 
 # Load functions and structures from other utility scripts
 source("utilities/recoding_utilities.R")
@@ -108,8 +108,8 @@ skip_conditions <- read.xlsx("data/misc/skip_conditions_final.xlsx")
 ## CPS Datasets
 ```{r}
 # Set IPUMS API Key (specific to user, free to acquire on IPUMS site)
-USER_IPUMS_API_KEY = "59cba10d8a5da536fc06b59dd33fd321a4eb480fa8fe8ad46c9d0d3e"
-set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = FALSE)
+USER_IPUMS_API_KEY = ""
+set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
 ```
 
 ### Prep monthly sample codes and variables
@@ -140,37 +140,36 @@ cps_sample_2022 = c('cps2022_01s', 'cps2022_02s', 'cps2022_03b', 'cps2022_04s', 
 ```
 
 ### Read in CPS datasets to global environment
+Note this creates xml (metadata) and .dat.giz (compressed raw data) files in the data/IPUMS CPS Artifacts subdirectory
 ```{r}
-# All years
 extract_codes <- list()
 
 for (year in seq(2006, 2022, by = 2)) {
   suffix <- substr(year, 3, 4)
-  extract_name <- paste("CPS Extract for", year)  # Dynamic extract name
-  cps_sample_var <- paste("cps_sample", year, sep = "_")  # Dynamic sample variable name
+  extract_name <- paste("CPS Extract for", year)
+  cps_sample_var <- paste("cps_sample", year, sep = "_")
   df_name <- paste("CPS", suffix, "raw", sep = "_")
 
-  
-  # Dynamically create the extraction code using the variables
   extract_code <- paste0(
-    "  define_extract_cps(\n",
-    "    \"", extract_name, "\",\n",
-    "    ", cps_sample_var, ",\n",
-    "    cps_vars_all) %>%\n",
+    "  define_extract_micro(\n",
+    "    collection = \"cps\",\n",
+    "    description = \"", extract_name, "\",\n",
+    "    samples = ", cps_sample_var, ",\n",
+    "    variables = cps_vars_all) %>%\n",
     "  submit_extract() %>%\n",
     "  wait_for_extract() %>%\n",
-    "  download_extract() %>%\n",
+    "  download_extract(download_dir = \"data/IPUMS CPS Artifacts\") %>%\n",
     "  read_ipums_micro()"
   )
-  
+
   extract_codes[[df_name]] <- extract_code
 }
 
-# Evaluate the constructed extraction codes in the global environment
 for (df_name in names(extract_codes)) {
   assign(df_name, eval(parse(text = extract_codes[[df_name]])), envir = .GlobalEnv)
 }
 ```
+
 
 ## Subset datasets --------------
 Subset CES to only include relevant variables
@@ -1341,7 +1340,7 @@ process_year <- function(year_data, year) {
     )
     
     all_results <- rbind(all_results, demo_results)
-    print(paste("Results combined for variable", demo_var))
+    #print(paste("Results combined for variable", demo_var))
   }
   
   return(all_results)
@@ -1408,6 +1407,6 @@ average_modal_summary <- selected_modal_categories %>%
   )
 
 # export average_modal to excel
-write.xlsx(average_modal_summary, "figures/demographic_modal_summary.xlsx")
+write.xlsx(average_modal_summary, "tables_and_figures/demographic_modal_summary.xlsx")
 ```
 
