@@ -8,11 +8,13 @@ output: html_document
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
 knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
+setwd('/path/to/your/CES Accuracy Analysis')
 
 # Load functions and structures from other utility scripts
 source("utilities/recoding_utilities.R")
 source("utilities/data_structures.R")
 source("utilities/election_return_utilities.R")
+source("utilities/accuracy_utilities.R")
 ```
 
 ```{r, echo=False, warnings=FALSE, message=FALSE}
@@ -20,15 +22,15 @@ source("utilities/election_return_utilities.R")
 `%notin%` <- Negate(`%in%`)
 
 # Packages & working directory
-pckgs <- c("haven", "readxl", "ipumsr", "here", "dplyr", "cdlTools", "anesrake", "writexl", "tidyverse", "rlang", "tibble", "naniar", "weights", "lubridate", "openxlsx", "cpsR")
+pckgs <- c("haven", "readxl", "ipumsr", "here", "dplyr", "cdlTools", "anesrake", "writexl", "tidyverse", "rlang", "tibble", "naniar", "weights", "lubridate", "openxlsx", "cpsR", "purrr", "progress")
 
-# This downloads any necessary packages
+## Uncomment this to download all necessary packages
 # if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
 # install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
 
 invisible(sapply(pckgs, FUN = require, character.only = TRUE))
 
-# Set working directory.
+# current project root as identified by {here}
 set_here()
 ```
 
@@ -332,7 +334,6 @@ state_to_region <- make_state_to_region()
 
 
 ```{r warning=FALSE}
-
 year_mapping <- c("2006" = 1, "2008" = 2, "2010" = 3, "2012" = 4, "2014" = 5, "2016" = 6, "2018" = 7, "2020" = 8, "2022" = 9)
 
 # Apply age groups to CES data frames
@@ -357,6 +358,27 @@ CPS_18_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_18_rc$AGE)
 CPS_20_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_20_rc$AGE)
 CPS_22_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_22_rc$AGE)
 
+# Add STATE_rc to CPS data frames
+# NOTE THIS CAN TAKE AWHILE (10 min) - the fips package is very slow
+CPS_06_rc_clean$STATEFIP <- as.numeric(CPS_06_rc_clean$STATEFIP)
+CPS_08_rc_clean$STATEFIP <- as.numeric(CPS_08_rc_clean$STATEFIP)
+CPS_10_rc_clean$STATEFIP <- as.numeric(CPS_10_rc_clean$STATEFIP)
+CPS_12_rc_clean$STATEFIP <- as.numeric(CPS_12_rc_clean$STATEFIP)
+CPS_14_rc_clean$STATEFIP <- as.numeric(CPS_14_rc_clean$STATEFIP)
+CPS_16_rc_clean$STATEFIP <- as.numeric(CPS_16_rc_clean$STATEFIP)
+CPS_18_rc_clean$STATEFIP <- as.numeric(CPS_18_rc_clean$STATEFIP)
+CPS_20_rc_clean$STATEFIP <- as.numeric(CPS_20_rc_clean$STATEFIP)
+CPS_22_rc_clean$STATEFIP <- as.numeric(CPS_22_rc_clean$STATEFIP)
+
+CPS_06_rc_clean$STATE_rc <- toupper(fips(CPS_06_rc_clean$STATEFIP, to="Name"))
+CPS_08_rc_clean$STATE_rc <- toupper(fips(CPS_08_rc_clean$STATEFIP, to="Name"))
+CPS_10_rc_clean$STATE_rc <- toupper(fips(CPS_10_rc_clean$STATEFIP, to="Name"))
+CPS_12_rc_clean$STATE_rc <- toupper(fips(CPS_12_rc_clean$STATEFIP, to="Name"))
+CPS_14_rc_clean$STATE_rc <- toupper(fips(CPS_14_rc_clean$STATEFIP, to="Name"))
+CPS_16_rc_clean$STATE_rc <- toupper(fips(CPS_16_rc_clean$STATEFIP, to="Name"))
+CPS_18_rc_clean$STATE_rc <- toupper(fips(CPS_18_rc_clean$STATEFIP, to="Name"))
+CPS_20_rc_clean$STATE_rc <- toupper(fips(CPS_20_rc_clean$STATEFIP, to="Name"))
+CPS_22_rc_clean$STATE_rc <- toupper(fips(CPS_22_rc_clean$STATEFIP, to="Name"))
 
 # Region
 CES_06_rc$REGION_rc <- as.factor(state_to_region[CES_06_rc$v1002])
@@ -805,31 +827,9 @@ CES_22_rc_clean <- add_weights_to_df(CES_22_rc_clean, 2022, noMILorWKR_weighting
 update_list_all_years()
 ```
 
-# Election Accuracies
-Compute election accuracies in each state/race by comparing vote proportions for each major party in the CES to vote proportions in the true election returns
+# Compute Election Candidate Choice Errors
+Compute election candidate choice errors in each state/race by comparing vote proportions for each major party in the CES to vote proportions in the true election returns
 ```{r}
-# Create template accuracy df
-create_empty_result_df <- function() {
-  data.frame(
-    Year = numeric(),
-    Race = character(),
-    State = character(),
-    CES_Candidate = character(),
-    True_Candidate = character(),
-    CES_Party = character(),
-    True_Party = character(),
-    Actual_Percent = numeric(),
-    CES_Unweighted_Percent = numeric(),
-    CES_Weighted_Percent = numeric(),
-    ANESRake_Weighted_Percent = numeric(),
-    Diff_Unweighted_CES_Actual = numeric(),
-    Diff_Weighted_CES_Actual = numeric(),
-    Diff_ANESRake_Actual = numeric(),
-    n_respondents = numeric(),
-    stringsAsFactors = FALSE
-  )
-}
-
 # Weighting vars for each year
 yearly_ces_wt_vars <- list(
   "2006" = c("v1001", "anesrake_weight"),
@@ -837,67 +837,17 @@ yearly_ces_wt_vars <- list(
   "2010" = c("V101", "anesrake_weight"),
   "2012" = c("V103", "anesrake_weight"),
   "2014" = c("weight", "anesrake_weight"),
-  "2016" = c("commonweight_post", "commonweight_vv", "commonweight", "anesrake_weight"),
+  "2016" = c("commonweight_post", "commonweight", "anesrake_weight"),
   "2018" = c("commonpostweight", "commonweight","anesrake_weight"),
   "2020" = c("commonpostweight", "commonweight",  "anesrake_weight"),
   "2022" = c("commonpostweight", "commonweight", "anesrake_weight"))
-```
-
-This will be used to prettify the accuracy tables at the end and split one big accuracy table into a list of yearly accuracy tables
-```{r}
-make_tables_pretty <- function(df) {
-  # 1. split into a list of data‑frames, one per Year
-  tables_by_year <- split(df, df$Year)
-  
-  # 2. apply rounding + renaming to each element
-  tables_pretty <- lapply(tables_by_year, function(tab) {
-    tab %>%
-      # round numeric columns to 1 decimal
-      mutate(across(
-        c(
-          Actual_Percent,
-          CES_Unweighted_Percent,
-          CES_Weighted_Percent,
-          ANESRake_Weighted_Percent,
-          Diff_Unweighted_CES_Actual,
-          Diff_Weighted_CES_Actual,
-          Diff_ANESRake_Actual
-        ),
-        ~ round(.x, 1)
-      )) %>%
-      # rename for prettiness
-      rename(
-        "CES Candidate"         = CES_Candidate,
-        "True Candidate"        = True_Candidate,
-        "CES Unweighted %"      = CES_Unweighted_Percent,
-        "CES Weighted %"        = CES_Weighted_Percent,
-        "ANESRake Weighted %"   = ANESRake_Weighted_Percent,
-        "Unweighted CES - Actual %" = Diff_Unweighted_CES_Actual,
-        "Weighted CES - Actual %"   = Diff_Weighted_CES_Actual,
-        "ANESRake - Actual %"       = Diff_ANESRake_Actual
-      ) %>%
-      
-      mutate(
-        #Race          = capitalize_each_word(Race),
-        State         = toupper(State)            # if you want all-caps states
-        #`CES Candidate`  = capitalize_each_word(`CES Candidate`),
-        #`True Candidate` = capitalize_each_word(`True Candidate`),
-        #CES_Party     = capitalize_each_word(CES_Party),
-        #True_Party    = capitalize_each_word(True_Party)
-      )
-  })
-  
-  
-  names(tables_pretty) <- names(tables_by_year)
-  return(tables_pretty)
-}
 
 ```
 
 
-Compute Election Accuracy Function
+## Define workhouse election error function
 ```{r}
-create_election_accuracy_tbl <- function(yearly_ces_wt_vars,
+create_election_error_table <- function(yearly_ces_wt_vars,
                                          election_results_df,
                                          year_data_list,
                                          NC_flag_df) {
@@ -906,7 +856,7 @@ create_election_accuracy_tbl <- function(yearly_ces_wt_vars,
   # map CES column names to the exact Office labels in election_results_df$Office
   race_map <- c(
     HOUSE_rc                 = "US House",
-    SENATOR_rc                = "US Senate",
+    SENATOR_rc               = "US Senate",
     PRES_rc                  = "President",
     GOV_rc                   = "Governor",
     SECSTATE_rc              = "Secretary of State",
@@ -917,7 +867,15 @@ create_election_accuracy_tbl <- function(yearly_ces_wt_vars,
   
   result_list <- list()
   
+    pb <- progress_bar$new(
+    format = "Processing :year [:bar] :percent eta: :eta",
+    total = length(year_data_list),
+    clear = FALSE,
+    width = 60
+  )
+  
   for (year_data in year_data_list) {
+    pb$tick(tokens = list(year = year_data$year))
     current_year <- year_data$year
     ces_df <- year_data$CES
     
@@ -950,7 +908,6 @@ create_election_accuracy_tbl <- function(yearly_ces_wt_vars,
                  Race  == race_col,       # or use office_label if your skip_conditions$Race is the full Office name
                  `Skip?` == TRUE)
         if (nrow(skip_row) > 0) next
-  
         state_survey <- ces_df %>% filter(POST_STATE_rc == state)
         n_resp <- sum(!is.na(state_survey[[race_col]]))
         if (n_resp == 0) next
@@ -1006,9 +963,9 @@ create_election_accuracy_tbl <- function(yearly_ces_wt_vars,
               CES_Unweighted_Percent       = ces_unwt[party] * 100,
               CES_Weighted_Percent         = ces_wt[party]   * 100,
               ANESRake_Weighted_Percent    = anes_wt[party]  * 100,
-              Diff_Unweighted_CES_Actual   = diff_unwt[party] * 100,
-              Diff_Weighted_CES_Actual     = diff_ces[party]   * 100,
-              Diff_ANESRake_Actual         = diff_anes[party]  * 100,
+              Error_CES_Unweighted         = diff_unwt[party] * 100,
+              Error_CES_Weighted           = diff_ces[party]   * 100,
+              Error_CES_ANESRake_Weighted  = diff_anes[party]  * 100,
               n_respondents                = n_resp
             )
           )
@@ -1024,241 +981,24 @@ create_election_accuracy_tbl <- function(yearly_ces_wt_vars,
 
 ```
 
-Create accuracy table, then clean it up and split it into a list of yearly accuracy tables with make_tables_pretty
+## Call workhorse function
+Create election error table, then clean it up and split it into a list of yearly error tables with make_tables_pretty
 ```{r}
-accuracy_table <- create_election_accuracy_tbl(
+election_error_table <- create_election_error_table(
   yearly_ces_wt_vars,
   merged_prop_tables_combined,
   list_all_years,
   NC_flag_df
 )
 
-accuracy_tables_pretty <- make_tables_pretty(accuracy_table)
+election_error_tables_pretty <- make_tables_pretty(election_error_table)
 ```
 
-# Results
-Now that accuracy_tables_pretty is created, compute different accuracy metrics in different vote ranges for each major party.
+# Compute "Demoplus" Errors
+Calculate error for demographics plus a few other variables ("demoplus") like turnout and voting method. 
 ```{r}
-create_overall_summary_table <- function(data_list) {
-#' @description
-#' Takes a named list of accuracy tables (one data frame per year), and for each combination of year, race, and party,
-#' computes the average absolute error and RMSE for three weighting methods (CES‑Provided Weights, CES‑Unweighted, ANESRake)
-#' across different vote‑share ranges. These vote-share ranges correspond to different levels of race competetiveness. For example, 
-#' if the vote shares were between 45 and 55%, this would suggest a close race, while a vote share of 80% - 100% is a blowout.
+demoplus_comparison_vars <- c("SEX_rc", "EDUC_rc", "VETSTAT_rc", "EMPSTAT_rc", "UNION_rc", "REGION_rc", "AGE_GROUP_rc", "VOTED_rc", "VOTEHOW_rc", "CITIZEN_rc", "HISPAN_rc", "FAMINC_rc")
 
-  #browser()
-  # Initialize an empty data frame for the results
-  result <- data.frame(Year = integer(), Party = character(), `Weighting Method` = character(), Metric = character(), Value = numeric(), Race = character(), Num_States = integer(), stringsAsFactors = FALSE)
-  
-  # Define the ranges for filtering candidates
-  ranges <- list(
-    "0-100%" = c(0, 100),
-    "30-70%" = c(30, 70),
-    "40-60%" = c(40, 60),
-    "45-55%" = c(45, 55),
-    "80-100%" = c(80, 100)
-  )
-  
-  # Loop over each year in the data list
-  for (year_name in names(data_list)) {
-    year_data <- data_list[[year_name]]
-    
-    # Loop over each race
-    for (race in unique(year_data$Race)) {
-      race_data <- subset(year_data, Race == race)
-      
-      # Loop over each party
-      for (party in c("Democrat", "Republican")) {
-        # Filter data for the current party
-         party_data <- subset(race_data, grepl(party, True_Party, fixed = TRUE))
-         
-        # Loop over each range
-        for (range_name in names(ranges)) {
-          range <- ranges[[range_name]]
- 
-          # Filter candidates based on the vote share range
-          filtered_data <- subset(party_data, Actual_Percent >= range[1] & Actual_Percent <= range[2])
-          
-          # Count the number of unique states
-          num_states <- length(unique(filtered_data$State))
-          
-          # count number of states with more than one row
-          num_states_more_than_one <- length(unique(filtered_data$State[duplicated(filtered_data$State)]))
-          if (num_states_more_than_one > 0) {
-            stop(sprintf(
-              "✖ Data error for %s – %s: %d state(s) have more than one row. Aborting.",
-              current_year, race, num_states_more_than_one
-            ))
-          }
-
-          # Calculate metrics for CES Weighted
-          ces_avg_abs_error <- mean(abs(filtered_data$`Weighted CES - Actual %`), na.rm = TRUE)
-          ces_rmse <- sqrt(mean(filtered_data$`Weighted CES - Actual %`^2, na.rm = TRUE))
-          
-          # Calculate metrics for CES Unweighted
-          ces_unweighted_avg_abs_error <- mean(abs(filtered_data$`Unweighted CES - Actual %`), na.rm = TRUE)
-          ces_unweighted_rmse <- sqrt(mean(filtered_data$`Unweighted CES - Actual %`^2, na.rm = TRUE))
-          
-          # Calculate metrics for ANESRake
-          anes_avg_abs_error <- mean(abs(filtered_data$`ANESRake - Actual %`), na.rm = TRUE)
-          anes_rmse <- sqrt(mean(filtered_data$`ANESRake - Actual %`^2, na.rm = TRUE))
-          
-          # Append the results to the result data frame
-          result <- rbind(result, 
-                          data.frame(Year = year_name, Party = party, `Weighting Method` = "CES-Provided Weights", Metric = paste0("Avg_Abs_Error_", range_name), Value = ces_avg_abs_error, Race = race, Num_States = num_states),
-                          data.frame(Year = year_name, Party = party, `Weighting Method` = "CES-Provided Weights", Metric = paste0("RMSE_", range_name), Value = ces_rmse, Race = race, Num_States = num_states),
-                          data.frame(Year = year_name, Party = party, `Weighting Method` = "CES-Unweighted", Metric = paste0("Avg_Abs_Error_", range_name), Value = ces_unweighted_avg_abs_error, Race = race, Num_States = num_states),
-                          data.frame(Year = year_name, Party = party, `Weighting Method` = "CES-Unweighted", Metric = paste0("RMSE_", range_name), Value = ces_unweighted_rmse, Race = race, Num_States = num_states),
-                          data.frame(Year = year_name, Party = party, `Weighting Method` = "ANESRake", Metric = paste0("Avg_Abs_Error_", range_name), Value = anes_avg_abs_error, Race = race, Num_States = num_states),
-                          data.frame(Year = year_name, Party = party, `Weighting Method` = "ANESRake", Metric = paste0("RMSE_", range_name), Value = anes_rmse, Race = race, Num_States = num_states))
-        }
-      }
-    }
-  }
-  
-  return(result)
-}
-```
-
-
-For checking if race accuracies differ based on whether race was federal or state level 
-```{r}
-federal_vs_state_summary_table <- function(data_list) {
-  # Initialize an empty data frame for the results
-  result <- data.frame(Year = integer(), Party = character(), Method = character(), Metric = character(), Value = numeric(), Race = character(), Level = character(), stringsAsFactors = FALSE)
-  
-  # Define the ranges for filtering candidates
-  ranges <- list(
-    "30-70%" = c(30, 70),
-    "40-60%" = c(40, 60),
-    "45-55%" = c(45, 55)
-  )
-  
-  # Define Federal and State-Level elections
-  federal_races <- c("President", "US Senate", "US House")
-  state_level_races <- c("Governor", "Attorney General", "Secretary of State", "State Senator", "State Representative")
-  
-  # Loop over each year in the data list
-  for (year_name in names(data_list)) {
-    year_data <- data_list[[year_name]]
-    
-    # Loop over each race
-    for (race in unique(year_data$Race)) {
-      race_data <- subset(year_data, Race == race)
-      
-      # Determine if the race is Federal or State-Level
-      race_level <- ifelse(race %in% federal_races, "Federal", ifelse(race %in% state_level_races, "State-Level", "Unknown"))
-      
-      # Loop over each party
-      for (party in c("Democrat", "Republican")) {
-        # Filter data for the current party
-        party_data <- subset(race_data, True_Party == party)
-        
-        # Loop over each range
-        for (range_name in names(ranges)) {
-          
-          range <- ranges[[range_name]]
-          
-          # Filter candidates based on the vote share range
-          filtered_data <- subset(party_data, Actual_Percent >= range[1] & Actual_Percent <= range[2])
-          
-          # Calculate metrics for CES
-          ces_avg_abs_error <- mean(abs(filtered_data$`Weighted CES - Actual %`), na.rm = TRUE)
-          ces_rmse <- sqrt(mean(filtered_data$`CES - Actual %`^2, na.rm = TRUE))
-          
-          # Calculate metrics for ANESRake
-          anes_avg_abs_error <- mean(abs(filtered_data$`ANESRake - Actual %`), na.rm = TRUE)
-          anes_rmse <- sqrt(mean(filtered_data$`ANESRake - Actual %`^2, na.rm = TRUE))
-          
-          # Append the results to the result data frame
-          result <- rbind(result, 
-                          data.frame(Year = year_name, Party = party, Method = "CES", Metric = paste0("Avg_Abs_Error_", range_name), Value = ces_avg_abs_error, Race = race, Level = race_level),
-                          data.frame(Year = year_name, Party = party, Method = "CES", Metric = paste0("RMSE_", range_name), Value = ces_rmse, Race = race, Level = race_level),
-                          data.frame(Year = year_name, Party = party, Method = "ANESRake", Metric = paste0("Avg_Abs_Error_", range_name), Value = anes_avg_abs_error, Race = race, Level = race_level),
-                          data.frame(Year = year_name, Party = party, Method = "ANESRake", Metric = paste0("RMSE_", range_name), Value = anes_rmse, Race = race, Level = race_level))
-        }
-      }
-    }
-  }
-  
-  return(result)
-}
-```
-
-
-Create final list of accuracy tables. 
-partitioned_accuracy_results serves as the input to the figuresHQ notebook used for creating figures.
-```{r}
-partitioned_accuracy_results <- create_overall_summary_table(accuracy_tables_pretty)
-write_xlsx(partitioned_accuracy_results, "tables_and_figures/partitioned_accuracy_results.xlsx")
-federal_vs_state_hist_table <- federal_vs_state_summary_table(accuracy_tables_pretty)
-```
-
-
-# Table creation
-Number of States and Average Number of State Respondents by Office and Year
-```{r}
-col_order <- c(
-  "President",
-  "U.S. Senate",
-  "U.S. House",
-  "Governor",
-  "Attorney General",
-  "Secretary of State",
-  "State Senate",
-  "State Rep."
-)
-
-# 1) avg respondents
-avg_respondents_table <- accuracy_table %>%
-  mutate(Year = as.numeric(Year)) %>%
-  distinct(Year, Race, State, n_respondents) %>%
-  group_by(Year, Race) %>%
-  summarise(Average_n_respondents = round(mean(n_respondents)), .groups = "drop") %>%
-  pivot_wider(
-    names_from  = Race,
-    values_from = Average_n_respondents
-  ) %>%
-  rename(
-    President             = President,
-    `U.S. Senate`         = `US Senate`,
-    `U.S. House`          = `US House`,
-    Governor              = Governor,
-    `Attorney General`    = `Attorney General`,
-    `Secretary of State`  = `Secretary of State`,
-    `State Senate`        = `State Senator`,
-    `State Rep.`          = `State Representative`
-  ) %>%
-  select(Year, all_of(col_order))
-
-# 2) num states in each race/year
-num_states_table <- accuracy_table %>%
-  mutate(Year = as.numeric(Year)) %>%
-  distinct(Year, Race, State) %>%
-  group_by(Year, Race) %>%
-  summarise(Number_of_States = n(), .groups = "drop") %>%
-  pivot_wider(
-    names_from  = Race,
-    values_from = Number_of_States
-  ) %>%
-  rename(
-    President             = President,
-    `U.S. Senate`         = `US Senate`,
-    `U.S. House`          = `US House`,
-    Governor              = Governor,
-    `Attorney General`    = `Attorney General`,
-    `Secretary of State`  = `Secretary of State`,
-    `State Senate`        = `State Senator`,
-    `State Rep.`          = `State Representative`
-  ) %>%
-  select(Year, all_of(col_order))
-```
-
-
-
-Modal category population estimates in CPS and CES
-The output of this code chunk is an excel sheet called demographic_modal_summary.xlsx which serves as the input for the modal category population estimates table in the figuresHQ notebook.
-```{r}
 yearly_ces_wtvar_names_shortened <- list(
   "2006" = c("v1001", "anesrake_weight"),
   "2008" = c("V201", "anesrake_weight"),
@@ -1269,144 +1009,342 @@ yearly_ces_wtvar_names_shortened <- list(
   "2018" = c("commonpostweight", "anesrake_weight"),
   "2020" = c("commonpostweight","anesrake_weight"),
   "2022" = c("commonpostweight", "anesrake_weight"))
+```
 
-
-common_demo_vars <- c("SEX_rc", "EDUC_rc", "VETSTAT_rc", "EMPSTAT_rc", "UNION_rc", "REGION_rc", "AGE_GROUP_rc", "VOTED_rc", "VOTEHOW_rc", "CITIZEN_rc", "HISPAN_rc", "FAMINC_rc")
-
-
-# Function to calculate weighted proportions
-calculate_proportions <- function(df, var, weight_col = NULL) {
-  if (is.null(weight_col)) {
-    # Unweighted proportions
-    props <- prop.table(table(df[[var]]))
-  } else {
-    # Weighted proportions
-    props <- weighted.mean(df[[var]] == levels(df[[var]]), df[[weight_col]], na.rm = TRUE)
-  }
-  return(props * 100)  # Convert to percentages
-}
-
-
-process_year <- function(year_data, year) {
-  #browser()  # Optional: Remove or comment out this line if not needed for debugging
+## Define workhorse demoplus error function
+```{r}
+calculate_demoplus_error <- function(year_data, year) {
   ces_df <- year_data$CES
   cps_df <- year_data$CPS
   weight_vars <- yearly_ces_wtvar_names_shortened[[as.character(year)]]
-  
-  all_results <- data.frame()
-  
-  # Process each demographic variable
-  for (demo_var in common_demo_vars) {
-    print(paste("Processing variable:", demo_var))
-    
-    # Skip if variable doesn't exist in either dataset
-    if (!(demo_var %in% names(ces_df)) || !(demo_var %in% names(cps_df))) {
-      print(paste("Variable not found in datasets:", demo_var))
-      next
+
+  all_results <- list()
+
+  for (state in unique(na.omit(ces_df$POST_STATE_rc))) {
+    # message("Processing state: ", state)
+
+    ces_state <- filter(ces_df, POST_STATE_rc == state)
+    cps_state <- filter(cps_df, STATE_rc == state)
+
+    for (demo_var in demoplus_comparison_vars) {
+      # message("  Variable: ", demo_var)
+
+      # Skip if missing in either
+      if (!(demo_var %in% names(ces_state)) || !(demo_var %in% names(cps_state))) {
+        message("  ✖ Skipped (missing in dataset): ", demo_var)
+        next
+      }
+
+      # Harmonize levels
+      categories <- sort(unique(c(ces_state[[demo_var]], cps_state[[demo_var]])))
+      categories <- categories[!is.na(categories)]
+
+      # Compute proportions
+      cps_props <- prop.table(table(factor(cps_state[[demo_var]], levels = categories))) * 100
+      ces_unweighted_props <- prop.table(table(factor(ces_state[[demo_var]], levels = categories))) * 100
+      ces_weighted_props <- weighted_prop_zero(ces_state[[demo_var]], ces_state[[weight_vars[1]]], levels = categories) * 100
+      ces_anesrake_weighted_props <- weighted_prop_zero(ces_state[[demo_var]], ces_state[[weight_vars[2]]], levels = categories) * 100
+
+      # Combine results
+      demo_results <- data.frame(
+        Year = year,
+        State = state,
+        Variable = demo_var,
+        Category = names(cps_props),
+        CPS = as.numeric(cps_props),
+        CES_Unweighted = as.numeric(ces_unweighted_props),
+        CES_Weighted = as.numeric(ces_weighted_props),
+        CES_ANESRake_Weighted = as.numeric(ces_anesrake_weighted_props),
+        stringsAsFactors = FALSE
+      )
+      
+      demo_results <- data.frame(
+        Year = year,
+        State = state,
+        Variable = demo_var,
+        Category = names(cps_props),
+        CPS = as.numeric(cps_props),
+        CES_Unweighted = as.numeric(ces_unweighted_props),
+        CES_Weighted = as.numeric(ces_weighted_props),
+        CES_ANESRake_Weighted = as.numeric(ces_anesrake_weighted_props),
+        stringsAsFactors = FALSE
+      ) %>%
+        mutate(
+          Error_CES_Weighted = CPS - CES_Weighted,
+          Error_CES_Unweighted = CPS - CES_Unweighted,
+          Error_CES_ANESRake_Weighted = CPS - CES_ANESRake_Weighted
+        )
+      
+      all_results[[length(all_results) + 1]] <- demo_results
     }
-    
-    # Get all categories for this variable
-    categories <- unique(c(ces_df[[demo_var]], cps_df[[demo_var]]))
-    categories <- categories[!is.na(categories)]
-    categories <- sort(categories)  # Ensure categories are sorted for consistency
-    
-    #print(paste("Categories for variable", demo_var, ":", paste(categories, collapse = ", ")))
-    
-    # Calculate proportions for CPS
-    cps_props <- prop.table(table(factor(cps_df[[demo_var]], levels = categories))) * 100
-    #print(paste("CPS proportions calculated for variable", demo_var))
-    
-    # Calculate unweighted proportions for CES
-    ces_unweighted_props <- prop.table(table(factor(ces_df[[demo_var]], levels = categories))) * 100
-    #print(paste("CES unweighted proportions calculated for variable", demo_var))
-    
-    # Calculate weighted proportions for CES using wpct from the weights package
-    ces_weighted1_props <- wpct(factor(ces_df[[demo_var]], levels = categories), weight = ces_df[[weight_vars[1]]]) * 100
-    #print(paste("CES weighted 1 proportions calculated for variable", demo_var))
-    
-    ces_weighted2_props <- wpct(factor(ces_df[[demo_var]], levels = categories), weight = ces_df[[weight_vars[2]]]) * 100
-    #print(paste("CES weighted 2 proportions calculated for variable", demo_var))
-    
-    
-    # Combine results
-    demo_results <- data.frame(
-      Year = year,
-      Variable = demo_var,
-      Category = names(cps_props),
-      CPS = as.numeric(cps_props),
-      CES_Unweighted = as.numeric(ces_unweighted_props),
-      CES_Weighted1 = as.numeric(ces_weighted1_props),
-      CES_Weighted2 = as.numeric(ces_weighted2_props)
-    )
-    
-    all_results <- rbind(all_results, demo_results)
-    #print(paste("Results combined for variable", demo_var))
   }
+
+  bind_rows(all_results)
+}
+```
+
+## Call workhorse function
+```{r}
+# Computes error for non candidate choice variables across all years
+demoplus_error_table <- map2_dfr(
+  .x = list_all_years,
+  .y = map_chr(list_all_years, ~ as.character(.x$year)),
+  .f = calculate_demoplus_error
+)
+```
+
+# Reshaping and Combining Errors
+Errors for candidate choice and demographic-plus variables have been computed and stored in separate tables. These tables now need to be filtered to retain only modal categories, reshaped to a long format, and combined into a unified table of all accuracy variables.
+
+## Reshaping and modalizing candidate choice
+```{r}
+# Bind all years of candidate choice error into one big df
+election_error_table <- bind_rows(election_error_tables_pretty)
+
+# pivot_longer on the three error‐columns
+election_error_table_long <- election_error_table %>%
+  pivot_longer(
+    cols = starts_with("Error"),
+    names_to  = "Weighting_Method",
+    values_to = "Value"
+  ) %>%
   
-  return(all_results)
-}
-
-all_processed_years <- list()  # Initialize an empty list to store results
-
-for (i in 1:9) {
-  all_processed_years[[i]] <- process_year(list_all_years[[i]], list_all_years[[i]]$year)
-}
-
-# Combine the results into one data frame
-full_demo_table <- do.call(rbind, all_processed_years)
-
-# Rename the columns
-full_demo_table <- full_demo_table %>%
-  rename(
-    ANESRake_Weighted = CES_Weighted2,
-    CES_Weighted = CES_Weighted1
-  )
-
-# Add difference columns
-full_demo_table <- full_demo_table %>%
+  # map the ugly column names to clean method labels
   mutate(
-    Difference_CPS_CES_Weighted = CPS - CES_Weighted,
-    Difference_CPS_CES_Unweighted = CPS - CES_Unweighted,
-    Difference_CPS_ANESRake_Weighted = CPS - ANESRake_Weighted
+    Weighting_Method = case_when(
+      grepl("CES_Unweighted", Weighting_Method) ~ "CES-Unweighted",
+      grepl("CES_Weighted", Weighting_Method) ~ "CES-Provided Weights",
+      grepl("ANESRake", Weighting_Method) ~ "ANESRake",
+     TRUE ~ "ERROR"
+    ),
+    Category = CES_Party,
+  ) %>%
+  
+  select(
+    Year, Race, State,
+    Weighting_Method, Value,
+    everything()
   )
 
-# Find the modal category for each Variable across all years
-# 1. Identify modal categories for each variable for each year
-modal_category_summary <- full_demo_table %>%
-  group_by(Year, Variable) %>%
-  filter(CPS == max(CPS)) %>%
+# 6/25 find out why this is different
+test_modal_election_error_table_long <- election_error_table_long %>%
+  group_by(Year, Race, State) %>%
+  filter(Actual_Percent == max(Actual_Percent, na.rm = TRUE)) %>%
   ungroup()
 
-# 2. Determine the most common modal category for each variable
-most_common_modal_categories <- modal_category_summary %>%
-  group_by(Variable, Category) %>%
-  summarise(count = n()) %>%
-  arrange(Variable, desc(count)) %>%
-  group_by(Variable) %>%
-  slice(1) %>%  # Take the most common category (there might be a tie)
+modal_party_rows <- election_error_table_long %>%
+  group_by(Year, State, Race) %>%
+  slice_max(order_by = Actual_Percent, n = 1, with_ties = FALSE) %>%
+  ungroup()
+
+modal_election_error_table_long <- election_error_table_long %>%
+  semi_join(modal_party_rows, by = c("Year", "State", "Race", "CES_Party")) %>%
+  mutate(Metric = "Modal Error")
+```
+
+## Reshaping and modalizing demoplus variables
+```{r}
+# For each demographic variable within each state and year, retain only the modal category based on CPS proportions
+modal_demoplus_error_table <- demoplus_error_table %>%
+  group_by(Year, State, Variable) %>%
+  slice_max(order_by = CPS, n = 1, with_ties = FALSE) %>%
   ungroup() %>%
-  select(Variable, Category)
+  mutate(Year = as.numeric(Year))
 
-# 3. Join back to the full_demo_table to filter for these categories and take abs value
-selected_modal_categories <- full_demo_table %>%
-  semi_join(most_common_modal_categories, by = c("Variable", "Category")) %>%
-  mutate(across(starts_with("Difference"), ~abs(.)))
+# Turn modal summary table into "long" table
+modal_demoplus_error_table_long <- modal_demoplus_error_table %>%
+  pivot_longer(
+    cols = starts_with("Error"),
+    names_to = "Weighting_Method",
+    values_to = "Value"
+  ) %>%
+  mutate(
+    Weighting_Method = case_when(
+      grepl("CES_Unweighted", Weighting_Method) ~ "CES-Unweighted",
+      grepl("CES_Weighted", Weighting_Method) ~ "CES-Provided Weights",
+      grepl("ANESRake", Weighting_Method) ~ "ANESRake",
+      TRUE ~ NA
+    ),
+    Metric = "Modal Error",
+    Variable = Variable,
+    Category = Category,
+  ) %>%
+  select(Year, State, Weighting_Method, Metric, Value, Variable, Category, everything())
 
-# 4. Compute the averages for these fixed modal categories across all years
-average_modal_summary <- selected_modal_categories %>%
-  group_by(Variable, Category) %>%
-  summarise(
-    Average_CPS = round(mean(CPS), 1),
-    Average_CES_Unweighted = round(mean(CES_Unweighted), 1),
-    Average_CES_Weighted = round(mean(CES_Weighted), 1),
-    Average_ANESRake_Weighted = round(mean(ANESRake_Weighted), 1),
-    Average_Difference_CPS_CES_Unweighted = round(mean(Difference_CPS_CES_Unweighted), 1),
-    Average_Difference_CPS_CES_Weighted = round(mean(Difference_CPS_CES_Weighted), 1),
-    Average_Difference_CPS_ANESRake_Weighted = round(mean(Difference_CPS_ANESRake_Weighted), 1),
-    .groups = 'drop'  # This suppresses the warning
+```
+
+## Combine candidate choice and demoplus tables
+```{r}
+modal_election_harmonized <- modal_election_error_table_long %>%
+  mutate(
+    Variable = Race,
+    Category = CES_Party,
+    Benchmark = Actual_Percent,
+    Class = "Candidate Choice"
+  ) %>%
+  select(
+    Year, State, Class, Variable, Category,
+    Weighting_Method, Metric, Value, Benchmark,
+    CES_Unweighted, CES_Weighted, CES_ANESRake_Weighted,
+    n_respondents
   )
 
-# export average_modal to excel
-write.xlsx(average_modal_summary, "tables_and_figures/demographic_modal_summary.xlsx")
+modal_demoplus_harmonized <- modal_demoplus_error_table_long %>%
+  mutate(
+    n_respondents = NA_integer_,
+    Benchmark = CPS,
+    Class = "Demoplus"
+  ) %>%
+  select(
+    Year, State, Class, Variable, Category, Weighting_Method,
+    Metric, Value, Benchmark,
+    CES_Unweighted, CES_Weighted, CES_ANESRake_Weighted,
+    n_respondents
+  )
+
+modal_error_table_all <- bind_rows(
+  modal_election_harmonized,
+  modal_demoplus_harmonized) %>%
+    mutate(
+    Variable = recode(Variable,
+      "US Senate"            = "U.S. Senate",
+      "US House"             = "U.S. House",
+      "Governor"             = "Governor",
+      "AGE_GROUP_rc"         = "Age Group",
+      "EDUC_rc"              = "Education",
+      "EMPSTAT_rc"           = "Employment Status",
+      "FAMINC_rc"            = "Family Income",
+      "REGION_rc"            = "Region",
+      "SEX_rc"               = "Sex",
+      "UNION_rc"             = "Union Membership",
+      "VETSTAT_rc"           = "Veteran Status",
+      "VOTED_rc"             = "Voting Turnout",
+      "VOTEHOW_rc"           = "Voting Method",
+      "HISPAN_rc"            = "Hispanic Origin",
+      "CITIZEN_rc"           = "Citizenship Status"
+    ))
 ```
+
+
+# Results
+Now that an error table has been created, subset that table to compute RMSE and report various other breakdowns of error. Outputs are excel sheets that serve as inputs to 
+figuresHQ.ipynb
+
+
+Big overall summary table, rows are years, columns are variables, values are RMSE
+```{r}
+secondary_variables <- c(
+  #These are the variables that can be used for assessing accuracy, since they
+  # were not used in any post-stratification process (excludes president, governor, us senate, age, sex, race, education)
+  "U.S. House",
+  "Attorney General",
+  "Secretary of State",
+  "State Senator",
+  "State Representative",
+  "Employment Status",
+  "Family Income",
+  "Region",
+  "Union Membership",
+  "Hispanic Origin",
+  "Citizenship Status",
+  "Veteran Status",
+  "Voting Turnout",
+  "Voting Method"
+)
+
+ces_wtd_rmse_summary_table <- modal_error_table_all %>%
+  filter(Weighting_Method == "CES-Provided Weights",
+         Variable %in% secondary_variables) %>%
+  group_by(Year, Variable) %>%
+  summarise(RMSE = sqrt(mean(Value^2, na.rm = TRUE)), .groups = "drop") %>%
+  pivot_wider(
+    names_from = Variable,
+    values_from = RMSE
+  ) %>%
+  select(Year, all_of(secondary_variables)) %>%
+  mutate(Year = as.character(Year)) %>%
+  mutate(`Year Average` = rowMeans(across(all_of(secondary_variables)), na.rm = TRUE)) %>%
+  bind_rows(
+    summarise(
+      .,
+      Year = "Variable Average",
+      across(all_of(secondary_variables), ~ mean(.x, na.rm = TRUE)),
+      `Year Average` = mean(`Year Average`, na.rm = TRUE)
+    )
+  )
+
+write_xlsx(
+  ces_wtd_rmse_summary_table,
+  here("tables_and_figures", "ces_wtd_rmse_summary_table.xlsx")
+)
+
+```
+
+Distribution of errors
+```{r}
+dist_errors_bucket_table <- modal_error_table_all %>%
+  mutate(
+    Abs_Error = abs(Value),
+    Error_Bucket = cut(
+      Abs_Error,
+      breaks = seq(0, ceiling(max(Abs_Error, na.rm = TRUE)), by = 1),
+      right = FALSE,
+      include.lowest = TRUE
+    )
+  ) %>%
+  group_by(Weighting_Method, Error_Bucket) %>%
+  summarise(
+    Count = n(),
+    .groups = "drop"
+  )
+
+write_xlsx(
+  dist_errors_bucket_table,
+  here("tables_and_figures", "dist_errors_bucket_table.xlsx")
+)
+```
+
+Yearly RMSE by Weighting Method
+```{r}
+rmse_by_weighting_method <- modal_error_table_all %>%
+  filter(Variable %in% secondary_variables) %>% 
+  group_by(Year, Variable, Weighting_Method) %>%
+  summarise(RMSE = sqrt(mean(Value^2, na.rm = TRUE)), .groups = "drop") %>%
+  group_by(Year, Weighting_Method) %>%
+  summarise(Avg_RMSE = mean(RMSE, na.rm = TRUE), .groups = "drop")
+
+write_xlsx(
+  rmse_by_weighting_method,
+  here("tables_and_figures", "rmse_by_weighting_method.xlsx")
+)
+```
+
+Candidate choice accuracy by race competitiveness
+```{r}
+competitiveness_bins <- tribble(
+  ~Range_Label, ~Lower, ~Upper,
+  "0-100%",      0,      100,
+  "30-70%",     30,       70,
+  "40-60%",     40,       60,
+  "45-55%",     45,       55,
+  "80-100%",    80,      100
+)
+
+election_rmse_by_competitiveness_range <- modal_error_table_all %>%
+  filter(Class == "Candidate Choice") %>%
+  crossing(competitiveness_bins) %>%
+  filter(Benchmark >= Lower, Benchmark <= Upper) %>%
+  group_by(Year, Party = Category, Weighting_Method, Range_Label) %>%
+  summarise(
+    RMSE = sqrt(mean(Value^2, na.rm = TRUE)),
+    Avg_Abs_Error = mean(abs(Value), na.rm = TRUE),
+    .groups = "drop"
+  )
+
+write_xlsx(
+  election_rmse_by_competitiveness_range,
+  here("tables_and_figures", "election_rmse_by_competitiveness_range.xlsx")
+)
+```
+
 
