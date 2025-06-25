@@ -1,5 +1,8 @@
 ## Recoding Utility functions
 
+## Negate for simple syntax
+`%notin%` <- Negate(`%in%`)
+
 ### Apply codebook and recode
 apply_codebook_and_recode <- function(year) {
   # Construct variable names and codebook file name
