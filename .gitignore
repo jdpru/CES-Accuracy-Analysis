@@ -47,3 +47,13 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Keep input and output folder locations
+tables_and_figures/input tables/*
+!tables_and_figures/input tables/.gitkeep
+
+tables_and_figures/output figures/*
+!tables_and_figures/output figures/.gitkeep
+
+#Mac OS temp finder files
+.DS_Store
