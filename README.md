@@ -40,7 +40,7 @@
 
 
 <!-- TABLE OF CONTENTS -->
-<details>
+<details open>
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#overview">Overview</a></li>
@@ -50,8 +50,10 @@
         <li><a href="#clone-the-repo">Clone the repo</a></li>
         <li><a href="#download-ces-data">Download CES data</a></li>
         <li><a href="#get-an-ipums-api-key">Get an IPUMS API Key</a></li>
-        <li><a href="#optional-recreate-r-environment">Optional: Recreate R Environment</a></li>
+        <li><a href="#open-the-ces-accuracy-analysisrproj-file">Open the CES Accuracy Analysis.Rproj file</a></li>
+        <li><a href="#install-necessary-packages">Install Necessary Packages</a></li>
         <li><a href="#adjust-root-directory-in-setup-chunk">Adjust Root Directory in Setup Chunk</a></li>
+        <li><a href="#run">Run</a></li>
       </ul>
     </li>
     <li><a href="#license">License</a></li>
@@ -102,17 +104,18 @@ Note that Rproj should use [renv](https://rstudio.github.io/renv/) to recreate t
 # install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
 ```
 
-### Adjust Root Directory in Setup Chunk at the top of AnalysisHQ.Rmd
+### Adjust Root Directory in Setup Chunk
+8. At the top of AnalysisHQ.Rmd, replace the following with your root directory
 ```sh
 knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 ```
 
 ### Run
 Once the environment is set up, you can run the entire analysis as follows:
-8. **`analysisHQ.Rmd`** (located in the `code/` directory) can be run from top to bottom.
+9. **`analysisHQ.Rmd`** (located in the `code/` directory) can be run from top to bottom.
    * This script generates all necessary summary tables and saves them to `tables_and_figures/input tables/`.
 
-9. **`figuresHQ.ipynb`** (located in `tables_and_figures/`) can then be run from top to bottom.
+10. **`figuresHQ.ipynb`** (located in `tables_and_figures/`) can then be run from top to bottom.
    * It reads in the input tables and produces all final figures, which are saved to `tables_and_figures/output figures/`.
 
 <!-- LICENSE -->
