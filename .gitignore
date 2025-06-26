@@ -61,3 +61,7 @@ tables_and_figures/output figures/*
 # IPUMS CPS Files
 .xml
 .dat.gz
+
+# Figures
+.png
+
