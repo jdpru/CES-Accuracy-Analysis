@@ -88,27 +88,32 @@ After cloning the repo (instructions below), you will see a top-level directory 
 
 ### Get an IPUMS API Key
 4. I use the IPUMS API to download the relevant CPS data. A free key can be acquired at [https://developer.ipums.org/docs/v2/get-started/](https://developer.ipums.org/docs/v2/get-started/).
-5. Place this key as a string into the variable `USER_IPUMS_API_KEY` in analysisHQ. The CPS data can also be downloaded manually off the IPUMS site [https://cps.ipums.org/cps-action/variables/group](here), if this is preferred. 
+5. Place this key as a string into the variable `USER_IPUMS_API_KEY` in analysisHQ. The CPS data can also be downloaded manually off the IPUMS site [https://cps.ipums.org/cps-action/variables/group](here), if this is preferred.
 
-### Optional: Recreate R Environment 
-I use [renv](https://rstudio.github.io/renv/), which is R's equivalent to venv and recreates a reproducible environment. This isn't strictly necessary, and the user should likely be fine just installing the latest version of the necessary packages. If this is preferred, uncomment the following lines in the top of analysisHQ, which will install any missing packages. 
+### Open the CES Accuracy Analysis.Rproj file
+6. This should recreate the R environment and set up your working directory properly
+Note that Rproj should use [renv](https://rstudio.github.io/renv/) to recreate the package environmemnt. See their documentation if you have any environment issues.
+
+### Install necessary packages
+7. If you don't already have any of the required packages, uncomment the following lines in the top of analysisHQ, which will install any missing packages. 
 ```sh
 # This downloads any necessary packages
 # if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
 # install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
 ```
 
-Should one run into any package-related issues, use renv to recreate the original package environment. Open RStudio and call
-```sh
-renv::restore()
-```
-
-### Adjust Root Directory in Setup Chunk
+### Adjust Root Directory in Setup Chunk at the top of AnalysisHQ.Rmd
 ```sh
 knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 ```
 
-With that, the entirety of **analysisHQ.Rmd** can be run top-to-bottom. The output, `partitioned_accuracy_results.xlsx`, gets saved into the tables_and_figures sub-directory.
+### Run
+Once the environment is set up, you can run the entire analysis as follows:
+8. **`analysisHQ.Rmd`** (located in the `code/` directory) can be run from top to bottom.
+   * This script generates all necessary summary tables and saves them to `tables_and_figures/input tables/`.
+
+9. **`figuresHQ.ipynb`** (located in `tables_and_figures/`) can then be run from top to bottom.
+   * It reads in the input tables and produces all final figures, which are saved to `tables_and_figures/output figures/`.
 
 <!-- LICENSE -->
 ## License
