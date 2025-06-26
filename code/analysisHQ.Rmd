@@ -10,9 +10,6 @@ output: html_document
 # knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 # setwd('/path/to/your/CES Accuracy Analysis')
 
-knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis')
-setwd('/Users/jdpruett/Desktop/CES Accuracy Analysis')
-
 # current project root as identified by {here}
 set_here()
 ```
