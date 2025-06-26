@@ -7,11 +7,7 @@ output: html_document
 
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
-# knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
-# setwd('/path/to/your/CES Accuracy Analysis')
-
-# current project root as identified by {here}
-set_here()
+knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 ```
 
 ```{r}
@@ -34,6 +30,9 @@ pckgs <- c("haven", "readxl", "ipumsr", "here", "dplyr", "cdlTools", "anesrake",
 # install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
 
 invisible(sapply(pckgs, FUN = require, character.only = TRUE))
+
+# current project root as identified by {here}
+set_here()
 ```
 
 # Read-in Data ----------------------------------------------
