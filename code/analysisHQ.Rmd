@@ -10,11 +10,16 @@ output: html_document
 knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 setwd('/path/to/your/CES Accuracy Analysis')
 
+# current project root as identified by {here}
+set_here()
+```
+
+```{r}
 # Load functions and structures from other utility scripts
-source("utilities/recoding_utilities.R")
-source("utilities/data_structures.R")
-source("utilities/election_return_utilities.R")
-source("utilities/accuracy_utilities.R")
+source("code/utilities/recoding_utilities.R")
+source("code/utilities/data_structures.R")
+source("code/utilities/election_return_utilities.R")
+source("code/utilities/accuracy_utilities.R")
 ```
 
 ```{r, echo=False, warnings=FALSE, message=FALSE}
@@ -22,16 +27,13 @@ source("utilities/accuracy_utilities.R")
 `%notin%` <- Negate(`%in%`)
 
 # Packages & working directory
-pckgs <- c("haven", "readxl", "ipumsr", "here", "dplyr", "cdlTools", "anesrake", "writexl", "tidyverse", "rlang", "tibble", "naniar", "weights", "lubridate", "openxlsx", "cpsR", "purrr", "progress")
+pckgs <- c("haven", "readxl", "ipumsr", "here", "dplyr", "cdlTools", "anesrake", "writexl", "tidyverse", "rlang", "tibble", "naniar", "weights", "lubridate", "openxlsx", "cpsR", "purrr", "progress", "tidycensus")
 
 ## Uncomment this to download all necessary packages
 # if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
 # install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
 
 invisible(sapply(pckgs, FUN = require, character.only = TRUE))
-
-# current project root as identified by {here}
-set_here()
 ```
 
 # Read-in Data ----------------------------------------------
@@ -359,26 +361,28 @@ CPS_20_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_20_rc$AGE)
 CPS_22_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_22_rc$AGE)
 
 # Add STATE_rc to CPS data frames
-# NOTE THIS CAN TAKE AWHILE (10 min) - the fips package is very slow
-CPS_06_rc_clean$STATEFIP <- as.numeric(CPS_06_rc_clean$STATEFIP)
-CPS_08_rc_clean$STATEFIP <- as.numeric(CPS_08_rc_clean$STATEFIP)
-CPS_10_rc_clean$STATEFIP <- as.numeric(CPS_10_rc_clean$STATEFIP)
-CPS_12_rc_clean$STATEFIP <- as.numeric(CPS_12_rc_clean$STATEFIP)
-CPS_14_rc_clean$STATEFIP <- as.numeric(CPS_14_rc_clean$STATEFIP)
-CPS_16_rc_clean$STATEFIP <- as.numeric(CPS_16_rc_clean$STATEFIP)
-CPS_18_rc_clean$STATEFIP <- as.numeric(CPS_18_rc_clean$STATEFIP)
-CPS_20_rc_clean$STATEFIP <- as.numeric(CPS_20_rc_clean$STATEFIP)
-CPS_22_rc_clean$STATEFIP <- as.numeric(CPS_22_rc_clean$STATEFIP)
+data("fips_codes")
+state_lookup <- fips_codes %>%
+  select(state_code, state_name) %>%
+  distinct() %>%
+  mutate(
+    state_code = as.integer(state_code),
+    state_name = toupper(state_name)
+  )
 
-CPS_06_rc_clean$STATE_rc <- toupper(fips(CPS_06_rc_clean$STATEFIP, to="Name"))
-CPS_08_rc_clean$STATE_rc <- toupper(fips(CPS_08_rc_clean$STATEFIP, to="Name"))
-CPS_10_rc_clean$STATE_rc <- toupper(fips(CPS_10_rc_clean$STATEFIP, to="Name"))
-CPS_12_rc_clean$STATE_rc <- toupper(fips(CPS_12_rc_clean$STATEFIP, to="Name"))
-CPS_14_rc_clean$STATE_rc <- toupper(fips(CPS_14_rc_clean$STATEFIP, to="Name"))
-CPS_16_rc_clean$STATE_rc <- toupper(fips(CPS_16_rc_clean$STATEFIP, to="Name"))
-CPS_18_rc_clean$STATE_rc <- toupper(fips(CPS_18_rc_clean$STATEFIP, to="Name"))
-CPS_20_rc_clean$STATE_rc <- toupper(fips(CPS_20_rc_clean$STATEFIP, to="Name"))
-CPS_22_rc_clean$STATE_rc <- toupper(fips(CPS_22_rc_clean$STATEFIP, to="Name"))
+for (yr in c("06", "08", "10", "12", "14", "16", "18", "20", "22")) {
+  df_name <- paste0("CPS_", yr, "_rc")
+  df <- get(df_name)
+
+  df <- df %>%
+    mutate(STATEFIP = as.integer(STATEFIP)) %>%
+    left_join(state_lookup, by = c("STATEFIP" = "state_code")) %>%
+    rename(STATE_rc = state_name)
+
+  assign(df_name, df, envir = .GlobalEnv)
+}
+
+update_list_all_years()
 
 # Region
 CES_06_rc$REGION_rc <- as.factor(state_to_region[CES_06_rc$v1002])
@@ -1193,8 +1197,10 @@ modal_demoplus_harmonized <- modal_demoplus_error_table_long %>%
   mutate(
     n_respondents = NA_integer_,
     Benchmark = CPS,
-    Class = "Demoplus"
-  ) %>%
+    Class = case_when(
+      Variable %in% c("VOTED_rc", "VOTEHOW_rc") ~ "Voting",
+      TRUE ~ "Demographic"
+    )) %>%
   select(
     Year, State, Class, Variable, Category, Weighting_Method,
     Metric, Value, Benchmark,
@@ -1292,7 +1298,7 @@ dist_errors_bucket_table <- modal_error_table_all %>%
       include.lowest = TRUE
     )
   ) %>%
-  group_by(Weighting_Method, Error_Bucket) %>%
+  group_by(Class, Weighting_Method, Error_Bucket) %>%
   summarise(
     Count = n(),
     .groups = "drop"
