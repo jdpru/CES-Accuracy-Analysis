@@ -57,3 +57,7 @@ tables_and_figures/output figures/*
 
 #Mac OS temp finder files
 .DS_Store
+
+# IPUMS CPS Files
+.xml
+.dat.gz
