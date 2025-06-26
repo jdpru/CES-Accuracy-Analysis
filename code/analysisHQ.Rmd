@@ -7,8 +7,11 @@ output: html_document
 
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
-knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
-setwd('/path/to/your/CES Accuracy Analysis')
+# knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
+# setwd('/path/to/your/CES Accuracy Analysis')
+
+knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis')
+setwd('/Users/jdpruett/Desktop/CES Accuracy Analysis')
 
 # current project root as identified by {here}
 set_here()
@@ -1281,7 +1284,7 @@ ces_wtd_rmse_summary_table <- modal_error_table_all %>%
 
 write_xlsx(
   ces_wtd_rmse_summary_table,
-  here("tables_and_figures", "ces_wtd_rmse_summary_table.xlsx")
+  here("tables_and_figures/input tables", "ces_wtd_rmse_summary_table.xlsx")
 )
 
 ```
@@ -1306,7 +1309,7 @@ dist_errors_bucket_table <- modal_error_table_all %>%
 
 write_xlsx(
   dist_errors_bucket_table,
-  here("tables_and_figures", "dist_errors_bucket_table.xlsx")
+  here("tables_and_figures/input tables", "dist_errors_bucket_table.xlsx")
 )
 ```
 
@@ -1321,7 +1324,7 @@ rmse_by_weighting_method <- modal_error_table_all %>%
 
 write_xlsx(
   rmse_by_weighting_method,
-  here("tables_and_figures", "rmse_by_weighting_method.xlsx")
+  here("tables_and_figures/input tables", "rmse_by_weighting_method.xlsx")
 )
 ```
 
@@ -1349,7 +1352,7 @@ election_rmse_by_competitiveness_range <- modal_error_table_all %>%
 
 write_xlsx(
   election_rmse_by_competitiveness_range,
-  here("tables_and_figures", "election_rmse_by_competitiveness_range.xlsx")
+  here("tables_and_figures/input tables", "election_rmse_by_competitiveness_range.xlsx")
 )
 ```
 
