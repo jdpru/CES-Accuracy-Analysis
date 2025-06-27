@@ -70,7 +70,9 @@
 
 This project calculated the accuracy of the Cooperative Election Study (CES) from 2006 to 2022 using election returns. It did so under various weighting scenarios: unweighted, using the CES-provided weights, and using a custom set of weights generated with ANESRake according to marginal demographic distributions from the Current Population Survey (CPS). 
 
-After cloning the repo (instructions below), you will see a top-level directory with the following sub-directories: data, code, tables_and_figures, and renv. The recoding and analysis is done in R Markdown, while most of the tables and all of the figures are done in Python with a jupyter notebook. **analysisHQ.Rmd** can be run straight through to recreate all the analysis. The primary output is an excel file called **partitioned_accuracy_results.xlsx** which serves as the primary input for **figuresHQ.ipynb**. 
+After cloning the repo (instructions below), you will see a top-level directory with the following sub-directories: data, code, tables_and_figures, and renv. The recoding and analysis is done in R Markdown, while most of the tables and all of the figures are done in Python with a jupyter notebook. **analysisHQ.Rmd** can be run straight through to recreate all the analysis. The primary output is an excel file called **partitioned_accuracy_results.xlsx** which serves as the primary input for **figuresHQ.ipynb**.
+
+NOTE: To clarify a question I've received on a few occasions -- while this project uses ANESRake, it does not use ANES *data*. So no, you have not missed the part where you were supposed to download ANES data.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
