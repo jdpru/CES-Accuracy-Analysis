@@ -381,8 +381,6 @@ for (yr in c("06", "08", "10", "12", "14", "16", "18", "20", "22")) {
   assign(df_name, df, envir = .GlobalEnv)
 }
 
-update_list_all_years()
-
 # Region
 CES_06_rc$REGION_rc <- as.factor(state_to_region[CES_06_rc$v1002])
 CES_08_rc$REGION_rc <- as.factor(state_to_region[fips(CES_08_rc$V206, to = "abbreviation")])
@@ -567,7 +565,7 @@ recode_cand_to_party <- function(list_all_years, yrly_ces_candidate_names, yrly_
 }
 ```
 
-Update list_all_years, run the recoding, then push changes from list_all_years back to global environment to keep list_all_years synced with each individual CES year in the global environment.
+Update list_all_years, run the recoding, then push changes from list_all_years back to global environment to keep list_all_years synced with each individual CES year in the global environment. Note: This will produce a message that 2006, 2008, and 2010 were skipped. This is by design since the CES changed how they reported candidate parties starting in 2012.
 ```{r}
 update_list_all_years()
 list_all_years <- recode_cand_to_party(
@@ -1087,6 +1085,7 @@ calculate_demoplus_error <- function(year_data, year) {
 ```
 
 ## Call workhorse function
+Note: This will tell you that a lot of variables are skipped because they're missing in the dataset. That's ok - it's just because the CES didn't collect some variables in certain years (but did in others).
 ```{r}
 # Computes error for non candidate choice variables across all years
 demoplus_error_table <- map2_dfr(
