@@ -45,7 +45,7 @@ make_tables_pretty <- function(df) {
           Error_CES_Weighted,
           Error_CES_ANESRake_Weighted,
         ),
-        ~ round(.x, 1)
+        ~ round(.x, 4)
       )) %>%
       # rename
       rename(
