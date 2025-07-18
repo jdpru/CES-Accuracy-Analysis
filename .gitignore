@@ -62,6 +62,9 @@ tables_and_figures/output figures/*
 .xml
 .dat.gz
 
+# CES raw data
+*.dat
+
 # Figures
 .png
 
