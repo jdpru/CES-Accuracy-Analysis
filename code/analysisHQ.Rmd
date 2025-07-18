@@ -7,7 +7,9 @@ output: html_document
 
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
-knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
+# knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
+knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis')
+
 ```
 
 ```{r}
@@ -98,6 +100,25 @@ Attorney_general_full <- State_race_master_table[grepl("Attorney", State_race_ma
 Secretary_of_state_full <- State_race_master_table[grepl("Secretary|Secratary", State_race_master_table[["Office/district"]], ignore.case = TRUE), ]
 ```
 
+7/17 investigating 0s and NAs for total votes in master sheet State_race_master_table
+```{r}
+investigation <- State_race_master_table %>%
+  filter(`Votes  candidate` == 0 | is.na(`Votes  candidate`))
+
+# randomly select 15 rows from investigation
+investigation_sample <- investigation %>%
+  sample_n(15)
+
+investigation_all_zero <- State_race_master_table %>%
+  group_by(`State (full name)`, `Election date`, `Office/district`) %>%
+  dplyr::summarize(all_zero_or_na = all(is.na(`Votes  candidate`) | `Votes  candidate` == 0), .groups = "drop") %>%
+  filter(all_zero_or_na)
+
+# View results
+print(zero_or_na_races)
+```
+
+
 ### Misc.
 ```{r}
 # CES assigned some respondents to incorrect congressional district in 2020
@@ -111,7 +132,7 @@ skip_conditions <- read.xlsx("data/misc/skip_conditions_final.xlsx")
 ## CPS Datasets
 ```{r}
 # Set IPUMS API Key (specific to user, free to acquire on IPUMS site)
-USER_IPUMS_API_KEY = ""
+USER_IPUMS_API_KEY = "59cba10d8a5da536fc06b59dd33fd321a4eb480fa8fe8ad46c9d0d3e"
 set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
 ```
 
@@ -172,6 +193,7 @@ for (df_name in names(extract_codes)) {
   assign(df_name, eval(parse(text = extract_codes[[df_name]])), envir = .GlobalEnv)
 }
 ```
+
 
 
 ## Subset datasets --------------
@@ -482,7 +504,7 @@ recode_cand_to_party <- function(list_all_years, yrly_ces_candidate_names, yrly_
 
     # Skip early years
     if (as.numeric(year) < 2012) {
-      cat("Skipping year:", year, "\n")
+      cat("Skipping year (because does not require recode):", year, "\n")
       next
     }
 
@@ -800,6 +822,12 @@ noMILorWKR_weighting_results <- run_weighting(c(2006, 2008, 2010, 2012, 2014, 20
 Add the new weight column to each year's df
 ```{r}
 add_weights_to_df <- function(df, year, weighting_results) {
+  # Check if the weight is already present
+  if ("anesrake_weight" %in% colnames(df)) {
+    message(paste0("anesrake_weight already present in ", year))
+    return(df)
+  }
+  
   # Extract weights and case IDs from the results for the specified year
   weights <- weighting_results[[as.character(year)]]$caseweights
   weights <- weights[order(weights$cases), ]  # Sort by case IDs
@@ -812,6 +840,7 @@ add_weights_to_df <- function(df, year, weighting_results) {
   
   return(merged_df)
 }
+
 ```
 
 Add new weighting column to each CES df
@@ -897,10 +926,10 @@ create_election_error_table <- function(yearly_ces_wt_vars,
       office_label <- race_map[[race_col]]
       
       for (state in unique(na.omit(ces_df$POST_STATE_rc))) {
-        # This just for debugging purposes
-        # if (state == "NEW HAMPSHIRE" & race_col == "GOV_rc") {
-        #   browser()
-        # }
+        # This can be uncommented to debug specific states and races
+        if (state == "NEBRASKA" & race_col == "ST_SENATOR_rc") {
+          browser()
+        }
         
         # SKIP‐LOGIC: bail if this year/race/state is flagged
         skip_row <- skip_conditions %>%
@@ -994,6 +1023,7 @@ election_error_table <- create_election_error_table(
 
 election_error_tables_pretty <- make_tables_pretty(election_error_table)
 ```
+
 
 # Compute "Demoplus" Errors
 Calculate error for demographics plus a few other variables ("demoplus") like turnout and voting method. 
@@ -1127,12 +1157,6 @@ election_error_table_long <- election_error_table %>%
     Weighting_Method, Value,
     everything()
   )
-
-# 6/25 find out why this is different
-test_modal_election_error_table_long <- election_error_table_long %>%
-  group_by(Year, Race, State) %>%
-  filter(Actual_Percent == max(Actual_Percent, na.rm = TRUE)) %>%
-  ungroup()
 
 modal_party_rows <- election_error_table_long %>%
   group_by(Year, State, Race) %>%
