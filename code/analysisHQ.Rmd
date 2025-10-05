@@ -9,7 +9,6 @@ output: html_document
 ```{r setup, include=FALSE}
 # knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis')
-
 ```
 
 ```{r}
@@ -25,7 +24,7 @@ source("code/utilities/accuracy_utilities.R")
 `%notin%` <- Negate(`%in%`)
 
 # Packages & working directory
-pckgs <- c("haven", "readxl", "ipumsr", "here", "dplyr", "cdlTools", "anesrake", "writexl", "tidyverse", "rlang", "tibble", "naniar", "weights", "lubridate", "openxlsx", "cpsR", "purrr", "progress", "tidycensus")
+pckgs <- c("haven", "readxl", "ipumsr", "here", "dplyr", "cdlTools", "anesrake", "writexl", "tidyverse", "rlang", "tibble", "naniar", "weights", "lubridate", "openxlsx", "cpsR", "purrr", "progress", "tidycensus", "humaniformat", "stringdist", "glue", "stringi")
 
 ## Uncomment this to download all necessary packages
 # if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
@@ -52,16 +51,16 @@ CES_22_raw <- read_dta(here("data/CES Data/CES_2022_Common_Output.dta"))
 ```
 
 
-## Election Validation Datasets
+## Election Return Datasets
 ### National Elections
 ```{r}
 # Governor, U.S. Senate, President
-Governor_0622 <- read_excel("data/Election Validation/Final Sets - Clean Fixed/Governor_0622_clean_fixed.xlsx")
-Senate_0622 <- read_excel("data/Election Validation/Final Sets - Clean Fixed/Senate_0622_clean_fixed.xlsx")
-President_0820 <- read_excel("data/Election Validation/Final Sets - Clean Fixed/[FIN-FIX] President 2008-2020 clean fixed.xlsx")
+Governor_0622 <- read_excel("data/Benchmarks/Election Returns/Governor_0622_clean_fixed.xlsx")
+Senate_0622 <- read_excel("data/Benchmarks/Election Returns/Senate_0622_clean_fixed.xlsx")
+President_0820 <- read_excel("data/Benchmarks/Election Returns/[FIN-FIX] President 2008-2020 clean fixed.xlsx")
 
 # U.S. House
-house_data_path <- "data/Election Validation/Final Sets - Clean Fixed/[FIN-FIX] House 2006-2022 clean fixed.xlsx"
+house_data_path <- "data/Benchmarks/Election Returns/[FIN-FIX] House 2006-2022 clean fixed.xlsx"
 house_sheet_names <- excel_sheets(house_data_path)
 house_sheet_names <- house_sheet_names[house_sheet_names != "Sources"]
 House_0622 <- house_sheet_names %>%
@@ -83,7 +82,8 @@ House_0622 <- House_0622 %>%
 ### State Elections
 ```{r warning=FALSE}
 # State-level elections master file
-State_race_master_table <- read_excel("data/Election Validation/Final Sets - Clean Fixed/[FIN-FIX] Historical election results data (2006 - 2023) clean fixed.xlsx")
+State_race_master_table <- read_excel("data/Benchmarks/Election Returns/[FIN-FIX] Historical election results data (2006 - 2023) clean fixed.xlsx")
+
 State_race_master_table$`Election date` <- as.POSIXct(format(State_race_master_table$`Election date`, "%Y-%m-%d"))
 
 # Parsing state-level master file into individual elections
@@ -100,24 +100,11 @@ Attorney_general_full <- State_race_master_table[grepl("Attorney", State_race_ma
 Secretary_of_state_full <- State_race_master_table[grepl("Secretary|Secratary", State_race_master_table[["Office/district"]], ignore.case = TRUE), ]
 ```
 
-7/17 investigating 0s and NAs for total votes in master sheet State_race_master_table
+### Turnout
 ```{r}
-investigation <- State_race_master_table %>%
-  filter(`Votes  candidate` == 0 | is.na(`Votes  candidate`))
-
-# randomly select 15 rows from investigation
-investigation_sample <- investigation %>%
-  sample_n(15)
-
-investigation_all_zero <- State_race_master_table %>%
-  group_by(`State (full name)`, `Election date`, `Office/district`) %>%
-  dplyr::summarize(all_zero_or_na = all(is.na(`Votes  candidate`) | `Votes  candidate` == 0), .groups = "drop") %>%
-  filter(all_zero_or_na)
-
-# View results
-print(zero_or_na_races)
+turnout_national <- read_excel("data/Benchmarks/VAP_Turnout_Rates.xlsx", sheet="National")
+turnout_statewide <- read_excel("data/Benchmarks/VAP_Turnout_Rates.xlsx", sheet="Statewide")
 ```
-
 
 ### Misc.
 ```{r}
@@ -206,11 +193,12 @@ CES_08_subset_vars <- c(
   "V100", "V201", "V206", "V207", "V208", "V250", "V251", "V202", "V205", "V204", "V213", "V252", "V253", "V258", "V257", "V247", "V259", "V264", "V501", "V502", "V553", "V555", "V601", "V602", "V603", "V612", "V653", "V655", "V657", "V672", "CC328_1", "CC328_3", "CC334", "CC410", "CC411", "CC411b", "CC412", "CC413", "CC414_2", "CC414_1", "V209", "CC329", "CC333", "V246", "V203", "CC403", "CC405", "CC404", "CC326b", "CC337", "CC337S2", "CC340", "CC338", "V618", "V619")
 
 CES_10_subset_vars <- c(
-  "V100", "V101", "V202_post", "V204_post", "V205_post", "V206", "V206_post", "V207", "V208", "V213", "V252", "V254", "V276", "V276_post", "V564_post", "V567_post", "V548_post", "V551_post", "V533_post", "V536_post", "V554_post", "V556_post", "V570_post", "V572_post","V574_post", "V576_post", "CC351", "V209", "V264", "V250", "V246", "V290", "CC401", "V203", "CC403", "CC402a", "CC410a", "CC410b", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d")
+  "V100", "V101", "V202_post", "V204_post", "V205_post", "V206", "V206_post", "V207", "V208", "V213", "V252", "V254", "V276", "V276_post", "V539_post", "V564_post", "V567_post", "V548_post", "V551_post", "V533_post", "V536_post", "V545_post", "V554_post", "V556_post", "V570_post", "V572_post","V574_post", "V576_post", "CC351", "V209", "V264", "V250", "V246", "V290", "CC401", "V203", "CC403", "CC402a", "CC410a", "CC410b", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d")
 
 CES_12_subset_vars <- c(
   "V101", "V103", "inputzip", "votereg_f", "regzip", "inputstate", "inputstate_post", "cdid113", "cdid113_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC351", "votereg", "employ", "employercat", "union", "ownhome", "faminc",
   "hispanic", "CC401", "CC402a", "CC403", "CC410a", "CC410b", "CC355", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post")
+
 
 CES_14_subset_vars <- c(
   "V101", "weight", "inputzip_post", "votereg_f_post", "regzip_post", "inputstate", "inputstate_post", "cdid", "cdid_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC351", 
@@ -221,10 +209,11 @@ CES_16_subset_vars <- c(
   "V101", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight_vv", "commonweight_vv_post", "commonweight_vv_lgbt", "commonweight", "commonweight_post", "inputstate", "inputstate_post", "cdid115", "cdid115_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC16_361", "votereg", "employ", "union", "ownhome", "faminc", "hispanic", "CC16_401", "CC16_402a", "CC16_410a", "CC16_403", "CC16_410b", "CC16_412", "CC16_411", "CC16_413a", "CC16_413b", "CC16_413c", "CC16_413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "SenCand4Name_post", "SenCand4Party_post", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post", "HouseCand9Name_post", "HouseCand9Party_post", "HouseCand10Name_post", "HouseCand10Party_post", "HouseCand11Name_post", "HouseCand11Party_post")
 
 CES_18_subset_vars <- c(
-  "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "vvweight", "vvweight_post", "inputstate", "inputstate_post", "cdid116", "cdid116_post", "gender", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC18_401", "CC18_402a", "CC18_403", "CC18_410b", "CC18_410bx", "CC18_412", "CC18_353x", "CC18_411", "CC18_352x", "CC18_420a", "CC18_420b", "CC18_420c", "CC18_413c", "CC18_413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post")
+  "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "vvweight", "vvweight_post", "inputstate", "inputstate_post", "cdid116", "cdid116_post", "gender", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC18_401", "CC18_402a", "CC18_403", "CC18_410b", "CC18_410bx", "CC18_412", "CC18_353x", "CC18_411", "CC18_352x", "CC18_420a", "CC18_420b", "CC18_420c", "CC18_413c", "CC18_413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post")
+
 
 CES_20_subset_vars <- c(
-  "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "vvweight", "vvweight_post", "inputstate", "inputstate_post", "cdid116", "cdid116_post", "gender", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "CC20_361", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC20_401", "CC20_402a", "CC20_403", "CC20_410", "CC20_411", "CC20_365_voted", "CC20_411b", "CC20_365b_voted", "CC20_412", "CC20_413", "CC20_414a", "CC20_414b", "CC20_415c", "CC20_415d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "AttCand3Name", "AttCand3Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post", "HouseCand9Name_post", "HouseCand9Party_post")
+  "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "vvweight", "vvweight_post", "inputstate", "inputstate_post", "cdid116", "cdid116_post", "gender", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "CC20_361", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC20_401", "CC20_402a", "CC20_403", "CC20_410", "CC20_411", "CC20_365_voted", "CC20_411b", "CC20_365b_voted", "CC20_412", "CC20_413", "CC20_414a", "CC20_414b", "CC20_415c", "CC20_415d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "AttCand3Name", "AttCand3Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "SecCand3Name", "SecCand3Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post", "HouseCand9Name_post", "HouseCand9Party_post")
 
 CES_22_subset_vars <- c(
 "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "inputstate", "inputstate_post", "cdid118", "cdid118_post", "gender4", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "CC22_361", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC22_401", "CC22_402a", "CC22_403", "CC22_411", "CC22_365_voted", "CC22_411b", "CC22_365b_voted", "CC22_412", "CC22_413", "CC22_414a", "CC22_414b", "CC22_415c", "CC22_415d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "SenCand4Name_post", "SenCand4Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "AttCand3Name", "AttCand3Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "SecCand3Name", "SecCand3Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post")
@@ -258,7 +247,7 @@ for (year in years) {
   subset_df <- get(raw_df_name)[, subset_vars, drop = FALSE]
   
   # print any vars in cps_vars_all that are not in subset_vars
-  print(paste("Missing vars for CES", year_short))
+  print(paste("Missing vars for CES (0 expected)", year_short))
   print(setdiff(cps_vars_all, subset_vars))
   
   # Reorder the columns to match the order in cps_vars_all
@@ -381,7 +370,7 @@ CPS_18_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_18_rc$AGE)
 CPS_20_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_20_rc$AGE)
 CPS_22_rc$AGE_GROUP_rc <- calculate_age_groups(CPS_22_rc$AGE)
 
-# Add STATE_rc to CPS data frames
+# Add POST_STATE_rc to CPS data frames (have to include the 'post' so it aligns with CES)
 data("fips_codes")
 state_lookup <- fips_codes %>%
   select(state_code, state_name) %>%
@@ -398,7 +387,7 @@ for (yr in c("06", "08", "10", "12", "14", "16", "18", "20", "22")) {
   df <- df %>%
     mutate(STATEFIP = as.integer(STATEFIP)) %>%
     left_join(state_lookup, by = c("STATEFIP" = "state_code")) %>%
-    rename(STATE_rc = state_name)
+    rename(POST_STATE_rc = state_name)
 
   assign(df_name, df, envir = .GlobalEnv)
 }
@@ -414,23 +403,21 @@ CES_18_rc$REGION_rc <- as.factor(state_to_region[fips(CES_18_rc$inputstate, to =
 CES_20_rc$REGION_rc <- as.factor(state_to_region[fips(CES_20_rc$inputstate, to = "abbreviation")])
 CES_22_rc$REGION_rc <- as.factor(state_to_region[fips(CES_22_rc$inputstate, to = "abbreviation")])
 
+# Rename congressional district column
+CES_06_rc$CDID_post_rc <- CES_06_rc$v1003
+CES_08_rc$CDID_post_rc <- CES_08_rc$V264
+CES_10_rc$CDID_post_rc <- CES_10_rc$V276_post
+CES_12_rc$CDID_post_rc <- CES_12_rc$cdid113_post
+CES_14_rc$CDID_post_rc <- CES_14_rc$cdid_post
+CES_16_rc$CDID_post_rc <- CES_16_rc$cdid115_post
+CES_18_rc$CDID_post_rc <- CES_18_rc$cdid116_post
+CES_20_rc$CDID_post_rc <- CES_20_rc$cdid116_post
+CES_22_rc$CDID_post_rc <- CES_22_rc$cdid118_post
+
 # Add pre- and post- questionnaire state
 update_ces_rc_datasets()
 add_location_vars(ces_rc_datasets, pre_post_location_vars)
 update_ces_rc_datasets()
-
-
-# Military Status in CPS
-cps_rc_datasets <- list(CPS_06_rc, CPS_08_rc, CPS_10_rc, CPS_12_rc, CPS_14_rc, CPS_16_rc, CPS_18_rc, CPS_20_rc, CPS_22_rc)
-
-for (i in seq_along(cps_rc_datasets)) {
-  cps_rc_datasets[[i]]$CUR_MIL_rc <- as.factor(ifelse(
-    cps_rc_datasets[[i]]$EMPSTAT == 1,
-    "Serving",
-    ifelse(cps_rc_datasets[[i]]$EMPSTAT == 0, NA, "Not serving")
-  ))
-  print(paste("CPS Current Military Done", names(year_mapping)[i]))
-}
 
 list2env(setNames(cps_rc_datasets, c("CPS_06_rc", "CPS_08_rc", "CPS_10_rc", "CPS_12_rc", "CPS_14_rc", "CPS_16_rc", "CPS_18_rc", "CPS_20_rc", "CPS_22_rc")), envir = .GlobalEnv)
 
@@ -476,130 +463,170 @@ CES_22_rc_clean <- as.data.frame(CES_22_rc_clean)
 update_list_all_years()
 ```
 
-# Recode Party Vote
-The codebook creates new columns called SENATOR_rc, GOV_rc, HOUSE_rc, etc., to reflect a respondent's vote for a candidate. From 2006 to 2010, the vote choices could be directly mapped to a party because the options were "Democrat," "Republican," and "Other." However, from 2012 - 2022, the CES changed the way it recorded candidate votes. Instead of using party names, votes were recorded for a particular candidate like "Cand1", "Cand2", etc. So now, each respondent's vote must be dynamically assigned a party based on the party of whichever candidate they voted for. The CES included additional variables for each candidate's party affiliation, such as "SenCand1Party", "GovCand2Party", etc. 
+# Recode Party and Candidate Vote
+For 2006 and 2008, respondent vote choices could be directly mapped to a party because the response options were simply "Democrat," "Republican," and "Other". However, from 2010 - 2022, the CES changed the response options. Instead of using party names, respondents were provided candidate names. These names were inputted dynamically based on other "contextual" variables that recorded candidate names for a particular respondent based on their state of residence.
+
+This means that error can be calculated in two ways: at the party level (by aggregating across all candidates of a particular party), and at the candidate level (by comparing CES votes for a particular candidate to actual votes received by that specific candidate).
+
+Thus, I create two variables for each CES respondent. The first will be named [RACE]_PARTY_rc and will contain indicate the Party that the respondent voted for. In the cases when a respondent was presented a candidate name, the party will be filled in based on the provided contextual variables. The second will be [RACE]_CANDIDATE_rc and will contain the name of the candidate that the respondent voted for.
+
+Note: Once you have run the two functions below once, you cannot run them again on the same dfs. You would need to go back and re-run everything from "Codebook recodings."
 ```{r}
-#' Recode Candidate Vote Variables to Party Labels
+#' Recode Party and Candidate Vote Variables from Dynamic References
 #'
-#' This function recodes candidate vote variables (e.g., `SENATOR_rc`, `GOV_rc`, `PRES_rc`, `HOUSE_rc`)
-#' from codes like "Cand1", "Cand2", etc., into party labels ("Democrat", "Republican", or "Other")
-#' based on candidate party mappings. It updates each CES dataframe in the global environment 
-#' rather than modifying the `list_all_years` structure directly. Note that it skips 2006 - 2010
-#' because these years were directly recoded using the CODBEOOK - they did not use the same Cand1, Cand2
-#' structure that started in 2012. 
-#' After running this function, use `push_list_all_years_to_env()` to reflect changes in global env.
+#' For each year in a list of CES data entries, this function scans all
+#' `*_PARTY_rc` and `*_CANDIDATE_rc` columns and replaces any cell whose
+#' value is the name of another `_post` column with the actual `_post`
+#' value from the same row.  Values `"Democrat"`, `"Republican"`, `"Other"`,
+#' and `NA` are left unchanged.  Candidate columns in years 2006 and 2008
+#' are skipped entirely.
+
+#' @return A list of the same structure, with each `CES` data.frame updated
+#'   in-place so that dynamic references (column names stored in cells)
+#'   have been replaced by their actual values.
 #'
-#' @param list_all_years A list of lists, where each inner list contains `CPS`, `CES`, and `year` elements.
-#' @param yrly_ces_candidate_names A named list containing party variable mappings for each year and race 
-#'                                 (Governor, Senate, President).
-#' @param yrly_ces_house_candidate_names A named list containing party variable mappings specifically 
-#'                                       for House races.
+#' @details  
+#' - Progress is displayed via a console progress bar (`txtProgressBar`).  
+#' - Columns matching `"_PARTY_rc$"` (except those containing `"SENATOR2"` or
+#'   `"SENATOREARLY"`) are always recoded.  
+#' - Columns matching `"_CANDIDATE_rc$"` (same exclusions) are recoded for
+#'   years **other than** 2006 and 2008.  
+#' - Factor columns in each `CES` frame are coerced to character prior to
+#'   recoding, and the recoded party columns are converted back to factors.
 #'
-#' @return Returns a list in same structure as list_all_years, with modified columns for CES in each year
-#'
-recode_cand_to_party <- function(list_all_years, yrly_ces_candidate_names, yrly_ces_house_candidate_names) {
+recode_party_and_candidate_votes <- function(list_all_years) {
+  no_recode <- c("Democrat", "Republican", "Other")  # values to be left alone
+  
+  n_years <- length(list_all_years)
+  pb <- txtProgressBar(min = 0, max = n_years, style = 3)
+
   for (i in seq_along(list_all_years)) {
+    year <- list_all_years[[i]]$year
+    setTxtProgressBar(pb, i)
+    cat(sprintf("  Processing year: %s\r", year))
+    flush.console()
+
     year_entry <- list_all_years[[i]]
-    year <- as.character(year_entry$year)
+    year_chr   <- as.character(year_entry$year)
+    df         <- year_entry$CES
 
-    # Skip early years
-    if (as.numeric(year) < 2012) {
-      cat("Skipping year (because does not require recode):", year, "\n")
-      next
-    }
+    # identify the columns to fix
+    party_cols     <- grep("_PARTY_rc$", names(df), value = TRUE)
+    party_cols     <- party_cols[!grepl("SENATOR2|SENATOREARLY", party_cols)]
+    candidate_cols <- grep("_CANDIDATE_rc$", names(df), value = TRUE)
+    candidate_cols     <- candidate_cols[!grepl("SENATOR2|SENATOREARLY", candidate_cols)]
+    
+    cols_to_edit <- unique(c(party_cols, candidate_cols))
+    df[cols_to_edit] <- lapply(df[cols_to_edit], as.character)
 
-    cat("Processing year:", year, "\n")
-    ces_data <- year_entry$CES
 
-    # Candidate mappings
-    general_map <- yrly_ces_candidate_names[[year]]
-    house_map <- yrly_ces_house_candidate_names[[year]]
-
-    # Race-to-variable mapping
-    race_var_map <- list(
-      "US Senate" = "SENATOR_rc",
-      "Governor" = "GOV_rc",
-      "US House" = "HOUSE_rc"
-    )
-
-    for (race_name in names(race_var_map)) {
-      vote_var <- race_var_map[[race_name]]
-
-      # Skip if the variable is not in the data
-      if (!vote_var %in% names(ces_data)) next
-
-      # Select correct party variable mapping
-      if (race_name == "US House") {
-        party_vars <- house_map
-      } else {
-        if (!race_name %in% names(general_map)) {
-          stop(paste("No mapping for race", race_name, "in year", year))
+    # --- PARTY columns ---
+    for (col in party_cols) {
+      for (r in seq_len(nrow(df))) {
+        val <- df[[col]][r]
+        if (!(val %in% no_recode) && !is.na(val)) {
+          # val should be the name of a contextual variable column
+          if (! val %in% names(df)) {
+            stop(sprintf(
+              "Year %s: column '%s', row %d: reference '%s' not found",
+              year_chr, col, r, val
+            ))
+          }
+          df[[col]][r] <- as.character(df[[ val ]][r])
         }
-        party_vars <- general_map[[race_name]]
-      }
-
-      # Extract only party variable names
-      party_lookup <- party_vars[grepl("Party", names(party_vars), ignore.case = TRUE)]
-      cand_names <- sub(".*Cand ([0-9]+) Party.*", "Cand\\1", names(party_lookup))
-      names(party_lookup) <- cand_names
-
-      # Identify invalid candidate codes (excluding "Other")
-      vote_codes <- na.omit(unique(ces_data[[vote_var]]))
-      invalid_codes <- setdiff(vote_codes, c(names(party_lookup), "Other"))
-      if (length(invalid_codes) > 0) {
-        stop(paste("Year", year, "race", race_name, 
-                   "contains unmapped candidate codes:", paste(invalid_codes, collapse = ", ")))
-      }
-
-      # Recode values using dplyr + case_when
-      for (cand in names(party_lookup)) {
-        party_col <- party_lookup[[cand]]
-
-        if (!party_col %in% names(ces_data)) {
-          stop(paste("Missing expected party column", party_col, "in year", year))
-        }
-
-        ces_data <- ces_data %>%
-          mutate(
-            !!vote_var := case_when(
-              !!sym(vote_var) == cand &
-                str_detect(!!sym(party_col), regex("democrat", ignore_case = TRUE)) ~ "Democrat",
-
-              !!sym(vote_var) == cand &
-                str_detect(!!sym(party_col), regex("republican", ignore_case = TRUE)) ~ "Republican",
-
-              !!sym(vote_var) == cand &
-                !is.na(!!sym(party_col)) &
-                !str_detect(!!sym(party_col), regex("democrat|republican", ignore_case = TRUE)) ~ "Other",
-
-              TRUE ~ !!sym(vote_var)
-            )
-          )
       }
     }
 
-    # Update list with recoded CES data
-    list_all_years[[i]]$CES <- ces_data
+    # --- CANDIDATE columns (skip 2006 & 2008) ---
+    if (! year_chr %in% c("2006", "2008")) {
+      for (col in candidate_cols) {
+        for (r in seq_len(nrow(df))) {
+          val <- df[[col]][r]
+          if (!(val %in% no_recode) && !is.na(val)) {
+            if (! val %in% names(df)) {
+              stop(sprintf(
+                "Year %s: column '%s', row %d: reference '%s' not found",
+                year_chr, col, r, val
+              ))
+            }
+            df[[col]][r] <- as.character(df[[ val ]][r])
+          }
+        }
+      }
+    }
+    
+    df[party_cols]     <- lapply(df[party_cols],     factor)
 
+    # put the modified CES DF back
+    list_all_years[[i]]$CES <- df
+  }
+
+  close(pb)
+  list_all_years
+}
+
+
+```
+
+Function to clean all the PARTY columns, to ensure consistent naming
+```{r}
+#' Standardize Party Labels in CES Data
+#'
+#' This function iterates over each year's CES data in a list and standardizes the values
+#' in all `*_PARTY_rc` columns according to a set of cleaning rules:
+#'
+#' - `"Democrat"` and `"Republican"` are kept as-is.
+#' - `"Democratic-Republican"` is recoded as `"Other"`.
+#' - Any other value containing `"Democratic"` is recoded to `"Democrat"`.
+#' - All other values (e.g., `"Green"`, `"Libertarian"`, NA) are recoded to `"Other"`.
+#'
+#' After recoding, all `*_PARTY_rc` columns are re-cast as factors with levels
+#' `c("Democrat", "Republican", "Other")`.
+#'
+#' @param list_all_years A named list of lists, each containing a CES data frame under `$CES`.
+#' @return The same list with party names cleaned in all `_PARTY_rc` columns.
+#' @export
+clean_party_names <- function(list_all_years) {
+  for (i in seq_along(list_all_years)) {
+    entry <- list_all_years[[i]]
+    df    <- entry$CES
+
+    party_cols <- grep("_PARTY_rc$", names(df), value = TRUE)
+
+    for (col in party_cols) {
+      original <- as.character(df[[col]])
+      cleaned <- case_when(
+        is.na(original) ~ NA,
+        original == "Democrat" ~ "Democrat",
+        original == "Republican" ~ "Republican",
+        original == "Democratic-Republican" ~ "Other",
+        grepl("Democratic", original, ignore.case = FALSE) ~ "Democrat",
+        TRUE ~ "Other"
+      )
+      df[[col]] <- factor(cleaned, levels = c("Democrat", "Republican", "Other"))
+    }
+
+    list_all_years[[i]]$CES <- df
   }
 
   return(list_all_years)
 }
 ```
 
-Update list_all_years, run the recoding, then push changes from list_all_years back to global environment to keep list_all_years synced with each individual CES year in the global environment. Note: This will produce a message that 2006, 2008, and 2010 were skipped. This is by design since the CES changed how they reported candidate parties starting in 2012.
+
+
+Update list_all_years, run the recoding, clean party names, then push changes from list_all_years back to global environment to keep list_all_years synced with each individual CES year in the global environment.
 ```{r}
 update_list_all_years()
-list_all_years <- recode_cand_to_party(
-  list_all_years, 
-  yrly_ces_candidate_names, 
-  yrly_ces_house_candidate_names
-)
+recoded_party_candidate_list_all_years <- recode_party_and_candidate_votes(list_all_years)
+recoded_party_candidate_list_all_years_cleaned <- clean_party_names(recoded_party_candidate_list_all_years)
+list_all_years <- recoded_party_candidate_list_all_years_cleaned
 push_list_all_years_to_env()
 ```
 
-# Create Election Return Prop Tables
-The raw election return files are loaded in the "election validation" section. The following code creates a series of "prop" (proportion) tables for each election, which says what share of votes each candidate received in each election. 
+
+# Create Party-level Election Return Prop Tables
+The raw election return files are loaded in the "Election Return Datasets" section. The following code creates a series of "prop" (proportion) tables for each election, then collapses across party to indicate what share of votes each party received in each election. 
 ```{r}
 # US House
 House_0622_clean_fixed <- recalculate_total_votes(House_0622, "statewide")
@@ -608,7 +635,7 @@ house_prop_table$Office <- "US House"
 
 # US Senate
 Senate_0622_clean_fixed <- recalculate_total_votes(Senate_0622, "statewide")
-senate_cand_prop_table <- calculate_candidate_proportions(Senate_0622_clean_fixed) %>%
+senate_cand_prop_table <- calculate_cand_num_proportions(Senate_0622_clean_fixed) %>%
   mutate(office = "US Senate") %>%
   rename(
     Office = office,
@@ -619,13 +646,14 @@ senate_cand_prop_table <- calculate_candidate_proportions(Senate_0622_clean_fixe
     Cand_Num = cand_num,
     Party_Detailed = party_detailed,
     Party_Simplified = party_simplified,
-    `Total Votes` = totalvotes,
+    Candidate_Votes = candidatevotes,
+    Total_Votes = totalvotes,
     Proportion = proportion
   )
 
 # Governor
 Governor_0622_clean_fixed <- recalculate_total_votes(Governor_0622, "statewide")
-governor_cand_prop_table <- calculate_candidate_proportions(Governor_0622_clean_fixed) %>%
+governor_cand_prop_table <- calculate_cand_num_proportions(Governor_0622_clean_fixed) %>%
   mutate(office = "Governor") %>%
   rename(
     Office = office,
@@ -636,14 +664,15 @@ governor_cand_prop_table <- calculate_candidate_proportions(Governor_0622_clean_
     Cand_Num = cand_num,
     Party_Detailed = party_detailed,
     Party_Simplified = party_simplified,
-    `Total Votes` = totalvotes,
+    Candidate_Votes = candidatevotes,
+    Total_Votes = totalvotes,
     Proportion = proportion
   )
 
 # President
 President_0820_nums <- assign_president_candidate_numbers(President_0820) %>%
   filter(candidate %notin% c("OVER VOTE", "OVERVOTE", "OVERVOTES", "OVER VOTES"))
-president_candid_prop_table <- calculate_candidate_proportions(President_0820_nums) %>%
+president_candid_prop_table <- calculate_cand_num_proportions(President_0820_nums) %>%
   mutate(office = "President") %>%
   rename(
     Office = office,
@@ -654,7 +683,8 @@ president_candid_prop_table <- calculate_candidate_proportions(President_0820_nu
     Cand_Num = cand_num,
     Party_Detailed = party_detailed,
     Party_Simplified = party_simplified,
-    `Total Votes` = totalvotes,
+    Candidate_Votes = candidatevotes,
+    Total_Votes = totalvotes,
     Proportion = proportion
   )
 
@@ -678,8 +708,25 @@ secretary_of_state_prop_table <- make_bp_prop_table(Secretary_of_state_full) %>%
   mutate(Office = "Secretary of State") %>%   
   select(Office, everything()) 
 
+merge_list <- list(
+  governor_cand_prop_table,
+  senate_cand_prop_table,
+  state_upper_prop_table,
+  state_lower_prop_table,
+  attorney_general_prop_table,
+  secretary_of_state_prop_table,
+  president_candid_prop_table
+)
+
+merged_prop_tables <- merge_list %>%
+  map(~ .x %>%
+        mutate(Year = as.integer(parse_number(as.character(Year)))) %>%
+        select(-any_of("Candidate_Votes"))
+      ) %>%
+  bind_rows()
+
 # Merge all results
-merged_prop_tables <- rbind(governor_cand_prop_table, senate_cand_prop_table, state_upper_prop_table, state_lower_prop_table, attorney_general_prop_table, secretary_of_state_prop_table, president_candid_prop_table)
+# merged_prop_tables <- rbind(governor_cand_prop_table, senate_cand_prop_table, state_upper_prop_table, state_lower_prop_table, attorney_general_prop_table, secretary_of_state_prop_table, president_candid_prop_table)
 ```
 
 Collapsing prop table across party
@@ -706,6 +753,109 @@ collapsed_merged_prop_table <- collapse_proportion_table(merged_prop_tables)
 merged_prop_tables_combined <- rbind(collapsed_merged_prop_table, house_prop_table)
 ```
 
+
+# Create Candidate-Level Election Return Prop Tables
+Now I create a candidate-level prop table, which will be used to compare the CES vote to the actual votes received by each candidate in each election. This is done by creating a table that contains the proportion of votes received by each candidate in each state, for each year, and not grouping by party. 
+```{r}
+candidate_level_proportions <- function(df) {
+
+  # summarize votes per candidate per race in case same candidate appears multiple times under different parties
+  summed_votes <- df %>%
+    group_by(year, state, office, district, candidate) %>%
+    summarise(
+      Candidate_Votes = sum(candidatevotes, na.rm = TRUE),
+      Total_Votes = first(totalvotes),
+      .groups = "drop"
+    )
+
+  # get party info from row with max candidate votes per group
+  top_party <- df %>%
+    group_by(year, state, office, district, candidate) %>%
+    slice_max(candidatevotes, n = 1, with_ties = FALSE) %>%
+    select(
+      year, state, office, district, candidate,
+      Party_Detailed = party_detailed,
+      Party_Simplified = party_simplified
+    )
+
+  # combine and compute proportion
+  cleaned <- summed_votes %>%
+    left_join(top_party, by = c("year", "state", "office", "district", "candidate")) %>%
+    mutate(Proportion = Candidate_Votes / Total_Votes) %>%
+    select(
+      Office = office,
+      State = state,
+      District = district,
+      Year = year,
+      Candidate = candidate,
+      Party_Detailed,
+      Party_Simplified,
+      Candidate_Votes,
+      Total_Votes,
+      Proportion
+    )
+
+  return(cleaned)
+}
+```
+
+```{r}
+# US House
+House_0622_district <- recalculate_total_votes(House_0622, "district")
+house_candidate_level_props <- candidate_level_proportions(House_0622_district)
+house_candidate_level_props$Office <- "US House"
+
+# US Senate
+senate_candidate_level_props  <- candidate_level_proportions(Senate_0622_clean_fixed)
+senate_candidate_level_props$Office <- "US Senate"
+
+# Governor
+governor_candidate_level_props  <- candidate_level_proportions(Governor_0622_clean_fixed)
+governor_candidate_level_props$Office <- "Governor"
+
+# President
+President_0820_candidate_level_props <- assign_president_candidate_numbers(President_0820) %>%
+  filter(candidate %notin% c("OVER VOTE", "OVERVOTE", "OVERVOTES", "OVER VOTES"))
+
+president_candidate_level_props <- calculate_cand_num_proportions(President_0820_candidate_level_props) %>%
+  mutate(office = "President") %>%
+  rename(
+    Office = office,
+    State = state,
+    District = district,
+    Year = year,
+    Candidate = candidate_name,
+    Party_Detailed = party_detailed,
+    Party_Simplified = party_simplified,
+    Candidate_Votes = candidatevotes,
+    Total_Votes = totalvotes,
+    Proportion = proportion
+  ) %>%
+  select(Office, State, District, Year, Candidate, Party_Detailed, Party_Simplified, Candidate_Votes, Total_Votes, Proportion)
+
+# Attorney General
+attorney_general_candidate_level_props <- candidate_level_BP_statewide_offices(Attorney_general_full) %>%
+  mutate(Office = "Attorney General") %>%   
+  select(Office, everything()) 
+
+# Secretary of State
+secretary_of_state_candidate_level_props <- candidate_level_BP_statewide_offices(Secretary_of_state_full) %>%
+  mutate(Office = "Secretary of State") %>%   
+  select(Office, everything()) 
+
+
+# Merge all results
+merged_candidate_level_props <- rbind(president_candidate_level_props, senate_candidate_level_props, house_candidate_level_props, governor_candidate_level_props, attorney_general_candidate_level_props, secretary_of_state_candidate_level_props)
+
+merged_candidate_level_props <- merged_candidate_level_props %>%
+  mutate(
+    Candidate = format_reverse(Candidate),
+    State = toupper(State)
+  )
+
+```
+
+
 # Create ANESRake Targets
 ANESRake requires that "targets" are created for each variable, which specify the expected distribution of that variable in the population for each level of that variable.
 ```{r}
@@ -731,11 +881,23 @@ create_targets <- function(year_data_list) {
     
     # Create a list of all recoded variables for CES data
     variables <- intersect(names(ces_df), names(cps_df))
-    variables <- variables[!grepl("DUM|OVERTIME", variables)]
+    variables <- variables[!grepl("DUM|OVERTIME|REGION_rc|CUR_MIL_rc|CLASSWKR_rc", variables)]
   
     # Create population (cps) numeric values list with level names
     targets <- list()
     for (var in variables) {
+      #browser()
+      if (var == "VOTED_rc") {
+        rate <- turnout_national %>%
+          filter(Year == current_year) %>%
+          pull(Rate)
+        
+        numeric_values <- c(rate, 1 - rate)
+        names(numeric_values) <- c("Voted", "Did not vote")
+        
+      }
+      
+      else {
       # Determine the appropriate weight variable
       weight_var <- if (var %in% names(cps_wtvar_dict)) cps_wtvar_dict[var] else "WTFINL"
       
@@ -745,7 +907,8 @@ create_targets <- function(year_data_list) {
       # Convert proportions to numeric values with level names
       numeric_values <- as.numeric(weighted_proportions)
       names(numeric_values) <- names(weighted_proportions)
-      
+      }
+
       # Store numeric values in the list
       targets[[var]] <- numeric_values
     }
@@ -763,15 +926,6 @@ Update list_all_years, then create targets for each year for all variables that 
 ```{r}
 update_list_all_years()
 all_targets <- create_targets(list_all_years)
-
-# This screw up the anesrake algo, because there are so few ppl in military that it rounds to 0 which throws an error. 
-noMILorWKR_all_targets <- lapply(all_targets, function(sublist) {
-  # Check if CUR_MIL_rc exists in the sublist, and if so, remove it
-  sublist$CUR_MIL_rc <- NULL
-  sublist$CLASSWKR_rc <- NULL
-  sublist$VOTEREG_rc <- NULL
-  return(sublist)
-})
 ```
 
 
@@ -783,7 +937,6 @@ convert_year_to_index <- function(input_year) {
 }
 
 run_weighting <- function(year_list, targets) {
-  #browser()
   results_list <- list()
   for (year in year_list) {
     print(year)
@@ -792,7 +945,6 @@ run_weighting <- function(year_list, targets) {
     # Extract the required data for the specified year
     target_data <- targets[[as.character(year)]]
     # Excludes weighting on dummy variables and overtime variables
-    target_data <- target_data[!grepl("_DUM|OVERTIME", names(target_data))]
     CES_data <- list_all_years[[list_index_number]]$CES
     caseid_col <- CES_data[, 1]
     
@@ -813,9 +965,9 @@ run_weighting <- function(year_list, targets) {
 }
 ```
 
-
+Create weights for all years
 ```{r}
-noMILorWKR_weighting_results <- run_weighting(c(2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022), noMILorWKR_all_targets)
+weighting_results <- run_weighting(c(2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022), all_targets)
 ```
 
 
@@ -845,20 +997,20 @@ add_weights_to_df <- function(df, year, weighting_results) {
 
 Add new weighting column to each CES df
 ```{r}
-CES_06_rc_clean <- add_weights_to_df(CES_06_rc_clean, 2006, noMILorWKR_weighting_results)
-CES_08_rc_clean <- add_weights_to_df(CES_08_rc_clean, 2008, noMILorWKR_weighting_results)
-CES_10_rc_clean <- add_weights_to_df(CES_10_rc_clean, 2010, noMILorWKR_weighting_results)
-CES_12_rc_clean <- add_weights_to_df(CES_12_rc_clean, 2012, noMILorWKR_weighting_results)
-CES_14_rc_clean <- add_weights_to_df(CES_14_rc_clean, 2014, noMILorWKR_weighting_results)
-CES_16_rc_clean <- add_weights_to_df(CES_16_rc_clean, 2016, noMILorWKR_weighting_results)
-CES_18_rc_clean <- add_weights_to_df(CES_18_rc_clean, 2018, noMILorWKR_weighting_results)
-CES_20_rc_clean <- add_weights_to_df(CES_20_rc_clean, 2020, noMILorWKR_weighting_results)
-CES_22_rc_clean <- add_weights_to_df(CES_22_rc_clean, 2022, noMILorWKR_weighting_results)
+CES_06_rc_clean <- add_weights_to_df(CES_06_rc_clean, 2006, weighting_results)
+CES_08_rc_clean <- add_weights_to_df(CES_08_rc_clean, 2008, weighting_results)
+CES_10_rc_clean <- add_weights_to_df(CES_10_rc_clean, 2010, weighting_results)
+CES_12_rc_clean <- add_weights_to_df(CES_12_rc_clean, 2012, weighting_results)
+CES_14_rc_clean <- add_weights_to_df(CES_14_rc_clean, 2014, weighting_results)
+CES_16_rc_clean <- add_weights_to_df(CES_16_rc_clean, 2016, weighting_results)
+CES_18_rc_clean <- add_weights_to_df(CES_18_rc_clean, 2018, weighting_results)
+CES_20_rc_clean <- add_weights_to_df(CES_20_rc_clean, 2020, weighting_results)
+CES_22_rc_clean <- add_weights_to_df(CES_22_rc_clean, 2022, weighting_results)
 update_list_all_years()
 ```
 
 # Compute Election Candidate Choice Errors
-Compute election candidate choice errors in each state/race by comparing vote proportions for each major party in the CES to vote proportions in the true election returns
+There are 2 ways to compute error in candidate choice: at the party level and at the candidate level. Both are done using the modal category, so actual unit (candidate or party) that received the most votes in the actual election returns. 
 ```{r}
 # Weighting vars for each year
 yearly_ces_wt_vars <- list(
@@ -871,13 +1023,12 @@ yearly_ces_wt_vars <- list(
   "2018" = c("commonpostweight", "commonweight","anesrake_weight"),
   "2020" = c("commonpostweight", "commonweight",  "anesrake_weight"),
   "2022" = c("commonpostweight", "commonweight", "anesrake_weight"))
-
 ```
 
 
-## Define workhouse election error function
+## Define PARTY-LEVEL election error workhorse function
 ```{r}
-create_election_error_table <- function(yearly_ces_wt_vars,
+create_party_error_table <- function(yearly_ces_wt_vars,
                                          election_results_df,
                                          year_data_list,
                                          NC_flag_df) {
@@ -885,14 +1036,14 @@ create_election_error_table <- function(yearly_ces_wt_vars,
   
   # map CES column names to the exact Office labels in election_results_df$Office
   race_map <- c(
-    HOUSE_rc                 = "US House",
-    SENATOR_rc               = "US Senate",
-    PRES_rc                  = "President",
-    GOV_rc                   = "Governor",
-    SECSTATE_rc              = "Secretary of State",
-    AG_rc                    = "Attorney General",
-    ST_REP_rc                = "State Representative",
-    ST_SENATOR_rc            = "State Senator"
+    HOUSE_PARTY_rc                 = "US House",
+    SENATOR_PARTY_rc               = "US Senate",
+    PRES_PARTY_rc                  = "President",
+    GOV_PARTY_rc                   = "Governor",
+    SECSTATE_PARTY_rc              = "Secretary of State",
+    AG_PARTY_rc                    = "Attorney General",
+    ST_REP_PARTY_rc                = "State Representative",
+    ST_SENATOR_PARTY_rc            = "State Senator"
   )
   
   result_list <- list()
@@ -918,7 +1069,7 @@ create_election_error_table <- function(yearly_ces_wt_vars,
     
     for (race_col in available_races) {
       # drop NC cases in 2020 if flagged
-      if (current_year == 2020 & race_col == "HOUSE_rc") {
+      if (current_year == 2020 & race_col == "HOUSE_PARTY_rc") {
         ces_df <- ces_df %>%
           filter(!(caseid %in% NC_flag_df$caseid))
       }
@@ -927,9 +1078,9 @@ create_election_error_table <- function(yearly_ces_wt_vars,
       
       for (state in unique(na.omit(ces_df$POST_STATE_rc))) {
         # This can be uncommented to debug specific states and races
-        if (state == "NEBRASKA" & race_col == "ST_SENATOR_rc") {
-          browser()
-        }
+        # if (state == "NEBRASKA" & race_col == "ST_SENATOR_rc") {
+        #   browser()
+        # }
         
         # SKIP‐LOGIC: bail if this year/race/state is flagged
         skip_row <- skip_conditions %>%
@@ -946,7 +1097,7 @@ create_election_error_table <- function(yearly_ces_wt_vars,
         state_returns <- year_elec %>%
           filter(State == state, Office == office_label)
         if (nrow(state_returns) == 0) {
-          stop(glue::glue("No election results for {office_label}, {state}, {current_year}"))
+          stop(glue::glue("No election results for {office_label}, {state}, {current_year}, {race_col}"))
         }
         
         # compute weighted proportions
@@ -1011,22 +1162,238 @@ create_election_error_table <- function(yearly_ces_wt_vars,
 
 ```
 
-## Call workhorse function
+## Call PARTY-LEVEL workhorse function
 Create election error table, then clean it up and split it into a list of yearly error tables with make_tables_pretty
 ```{r}
-election_error_table <- create_election_error_table(
+party_level_election_error_table <- create_party_error_table(
   yearly_ces_wt_vars,
   merged_prop_tables_combined,
   list_all_years,
   NC_flag_df
 )
 
-election_error_tables_pretty <- make_tables_pretty(election_error_table)
+party_level_election_error_table_pretty <- make_tables_pretty(party_level_election_error_table)
+```
+
+## Define modal CANDIDATE-LEVEL election error workhorse function
+While the party-level workhorse function computes error for all parties and then modalizes later, for candidate-level, the primary workhorse function only calculates error for the modal candidate. Name-matching is error prone, so it's better to try to match just one name per election.
+```{r}
+create_modal_candidate_error_table <- function(yearly_ces_wt_vars,
+                                               merged_candidate_level_props,
+                                               year_data_list,
+                                               NC_flag_df) {
+  
+  race_map <- c(
+    PRES_CANDIDATE_rc    = "President",
+    SENATOR_CANDIDATE_rc = "US Senate",
+    HOUSE_CANDIDATE_rc   = "US House",
+    GOV_CANDIDATE_rc     = "Governor",
+    SECSTATE_CANDIDATE_rc= "Secretary of State",
+    AG_CANDIDATE_rc      = "Attorney General"
+  )
+  #browser()
+
+  result_list <- list()
+
+  pb <- progress_bar$new(
+    format = "Measuring error in :year [:bar] :percent eta: :eta",
+    total = length(year_data_list),
+    clear = FALSE,
+    width = 60
+  )
+
+  for (year_data in year_data_list) {
+    pb$tick(tokens = list(year = year_data$year))
+    current_year <- year_data$year
+    if (current_year %in% c("2006", "2008")) {
+      # Skip 2006 and 2008 because they don't have candidate-level data
+      next
+    }
+
+    ces_df <- year_data$CES
+
+    ces_cols <- intersect(names(ces_df), names(race_map))
+    result_df <- tibble()
+
+    for (race_col in ces_cols) {
+      if (current_year == 2020 & race_col == "HOUSE_CANDIDATE_rc") {
+        ces_df <- ces_df %>% filter(!(caseid %in% NC_flag_df$caseid))
+      }
+
+      office_label <- race_map[[race_col]]
+
+      for (state in unique(na.omit(ces_df$POST_STATE_rc))) {
+        skip_row <- skip_conditions %>%
+          filter(State == state, Year == current_year, Race == race_col, `Skip?` == TRUE)
+        if (nrow(skip_row) > 0) next
+
+        # Subset state survey
+        state_df <- ces_df %>% filter(POST_STATE_rc == state)
+        
+        ## For debugging
+        #print(glue::glue("Processing {current_year}, {office_label}, {state}"))
+        # if (current_year == 2010 & office_label == "US Senate" & state == "ALASKA") {
+        #   browser()
+        # }
+
+        # If US House, loop over districts; otherwise, just one iteration
+        districts <- if (office_label == "US House") {
+          unique(na.omit(state_df$CDID_post_rc))
+        } else if (office_label == "President") {
+          "nationwide"
+        } else {
+          "statewide"
+        }
+        
+        # If the office is not US House, we only have one district
+        for (district in districts) {
+          
+          if (district %notin% c("statewide", "nationwide")) {
+            state_district_survey <- state_df %>% filter(CDID_post_rc == district)
+          } else {
+            state_district_survey <- state_df
+          }
+
+          n_resp <- sum(!is.na(state_district_survey[[race_col]]))
+          if (n_resp == 0) next
+
+          # Select election returns
+          state_district_returns <- merged_candidate_level_props %>%
+            filter(
+              Year == current_year,
+              State == state,
+              Office == office_label,
+              District == district
+            )
+          if (nrow(state_district_returns) == 0) next
+          
+          
+          # Make special case for 2010 U.S. Senate race for Alaska, where 
+          # Lisa Murkowski won as a write-in
+          if (current_year == 2010 & office_label == "US Senate" & state == "ALASKA") {
+          top_cand <- state_district_returns %>%
+            filter(Candidate == "JOE MILLER")
+          }
+          else {
+            top_cand <- state_district_returns %>%
+              slice_max(Proportion, n = 1, with_ties = FALSE)
+          }
+
+          # Find the top candidate in the election returns
+          true_cand <- (top_cand$Candidate)
+          true_prop <- top_cand$Proportion * 100
+
+          ces_vals_raw  <- unique(na.omit(state_district_survey[[race_col]]))
+          ces_vals <- (ces_vals_raw)
+         
+          # Fuzzy Candidate Name Matching
+          # Case-insensitive exact match check
+          exact_match_found <- any(stri_trans_tolower(true_cand) == stri_trans_tolower(ces_vals))
+          
+          if (!exact_match_found) {
+            # Fuzzy match using case-insensitive inputs
+            match_scores <- stringdist::stringdist(stri_trans_tolower(true_cand),
+                                                   stri_trans_tolower(ces_vals),
+                                                   method = "jw")
+            matched_ces <- ces_vals[which.min(match_scores)]  # Return original-cased name
+            matched_score <- min(match_scores)
+          } else {
+            # Exact match (case-insensitive) — get the original-cased name from ces_vals
+            matched_ces <- ces_vals[stri_trans_tolower(ces_vals) == stri_trans_tolower(true_cand)][1]
+            matched_score <- 0
+          }
+          
+          # Find corresponding party with matches CES candidate
+          if (race_col != "PRES_CANDIDATE_rc") {
+              party_col <- sub("_CANDIDATE_rc$", "_PARTY_rc", race_col)
+          }
+          else{
+              party_col <- "PRES_CANDIDATE_rc"
+          }
+          
+          if (!party_col %in% names(state_district_survey)) {
+            stop(glue::glue("Missing expected party column {party_col} in CES data for {state}, {current_year}, {race_col}"))
+          }
+          
+          # Find the party associated with the matched CES candidate
+          party_val <- state_district_survey %>%
+            transmute(
+              .cand  = .data[[race_col]],
+              .party = .data[[party_col]]
+            ) %>%
+            filter(stri_trans_casefold(.cand) == stri_trans_casefold(matched_ces)) %>%
+            distinct(.party) %>%
+            pull(.party)
+          
+          if (length(party_val) != 1) {
+            stop(glue::glue("Matched CES candidate {matched_ces} in {state}, {current_year}, {race_col} has {length(party_val)} unique party values: {toString(party_val)} when it should be just 1"))
+          }
+          
+          ces_party <- party_val
+
+          wt_var <- yearly_ces_wt_vars[[as.character(current_year)]][1]
+
+          ces_wt   <- wpct(state_district_survey[[race_col]], weight = state_district_survey[[wt_var]], na.rm = TRUE)
+          ces_unwt <- wpct(state_district_survey[[race_col]], na.rm = TRUE)
+          anes_wt  <- wpct(state_district_survey[[race_col]], weight = state_district_survey$anesrake_weight, na.rm = TRUE)
+
+          wt_val   <- ces_wt[matched_ces]   * 100
+          unwt_val <- ces_unwt[matched_ces] * 100
+          anes_val <- anes_wt[matched_ces]  * 100
+          
+          # For debugging
+          other_cands <- setdiff(ces_vals, matched_ces)
+          other_cands <- str_to_title(other_cands)
+
+          result_df <- bind_rows(
+            result_df,
+            tibble(
+              Year                         = current_year,
+              Race                         = office_label,
+              State                        = state,
+              District                     = district,
+              CES_Candidate                = str_to_title(matched_ces),
+              True_Candidate               = str_to_title(true_cand),
+              Other_CES_Candidate_Options  = list(other_cands),
+              Matching_Distance_Score      = matched_score,
+              CES_Party                    = ces_party,
+              True_Party                   = top_cand$Party_Detailed,
+              Actual_Percent               = true_prop,
+              CES_Unweighted_Percent       = unwt_val,
+              CES_Weighted_Percent         = wt_val,
+              ANESRake_Weighted_Percent    = anes_val,
+              Error_CES_Unweighted         = unwt_val - true_prop,
+              Error_CES_Weighted           = wt_val   - true_prop,
+              Error_CES_ANESRake_Weighted  = anes_val - true_prop,
+              n_respondents                = n_resp
+            )
+          )
+        }
+      }
+    }
+
+    result_list[[as.character(current_year)]] <- result_df
+  }
+
+  bind_rows(result_list)
+}
+
+```
+
+
+## Call CANDIDATE-LEVEL workhorse function
+```{r}
+modal_candidate_error_table <- create_modal_candidate_error_table(
+  yearly_ces_wt_vars,
+  merged_candidate_level_props,
+  list_all_years,
+  NC_flag_df
+)
 ```
 
 
 # Compute "Demoplus" Errors
-Calculate error for demographics plus a few other variables ("demoplus") like turnout and voting method. 
+Calculate error for demographics plus a few other variables ("demoplus") like turnout and voting method.
 ```{r}
 demoplus_comparison_vars <- c("SEX_rc", "EDUC_rc", "VETSTAT_rc", "EMPSTAT_rc", "UNION_rc", "REGION_rc", "AGE_GROUP_rc", "VOTED_rc", "VOTEHOW_rc", "CITIZEN_rc", "HISPAN_rc", "FAMINC_rc")
 
@@ -1055,14 +1422,14 @@ calculate_demoplus_error <- function(year_data, year) {
     # message("Processing state: ", state)
 
     ces_state <- filter(ces_df, POST_STATE_rc == state)
-    cps_state <- filter(cps_df, STATE_rc == state)
+    cps_state <- filter(cps_df, POST_STATE_rc == state)
 
     for (demo_var in demoplus_comparison_vars) {
       # message("  Variable: ", demo_var)
 
       # Skip if missing in either
       if (!(demo_var %in% names(ces_state)) || !(demo_var %in% names(cps_state))) {
-        message("  ✖ Skipped (missing in dataset): ", demo_var)
+        # message("  ✖ Skipped (missing in dataset): ", demo_var)
         next
       }
 
@@ -1126,15 +1493,16 @@ demoplus_error_table <- map2_dfr(
 ```
 
 # Reshaping and Combining Errors
-Errors for candidate choice and demographic-plus variables have been computed and stored in separate tables. These tables now need to be filtered to retain only modal categories, reshaped to a long format, and combined into a unified table of all accuracy variables.
+At this point, there's 3 sets of errors: candidate choice at the party level, candidate level, and then demographic-plus vars. Errors for candidate choice at the party level and demographic-plus variables have been computed and stored in separate tables. These tables now need to be filtered to retain only modal categories, reshaped to a long format, and combined into a unified table of all accuracy variables.
 
-## Reshaping and modalizing candidate choice
+## Reshaping and modalizing party-level candidate choice
 ```{r}
 # Bind all years of candidate choice error into one big df
-election_error_table <- bind_rows(election_error_tables_pretty)
+party_level_election_error_table_pretty_binded <- bind_rows(party_level_election_error_table_pretty)
 
 # pivot_longer on the three error‐columns
-election_error_table_long <- election_error_table %>%
+# (takes error columns and turns them into rows)
+party_level_election_error_table_pretty_binded_long <- party_level_election_error_table_pretty_binded %>%
   pivot_longer(
     cols = starts_with("Error"),
     names_to  = "Weighting_Method",
@@ -1158,12 +1526,12 @@ election_error_table_long <- election_error_table %>%
     everything()
   )
 
-modal_party_rows <- election_error_table_long %>%
+modal_party_rows <- party_level_election_error_table_pretty_binded_long %>%
   group_by(Year, State, Race) %>%
   slice_max(order_by = Actual_Percent, n = 1, with_ties = FALSE) %>%
   ungroup()
 
-modal_election_error_table_long <- election_error_table_long %>%
+modal_party_level_election_error_table_pretty_binded_long <- party_level_election_error_table_pretty_binded_long %>%
   semi_join(modal_party_rows, by = c("Year", "State", "Race", "CES_Party")) %>%
   mutate(Metric = "Modal Error")
 ```
@@ -1199,21 +1567,46 @@ modal_demoplus_error_table_long <- modal_demoplus_error_table %>%
 
 ```
 
-## Combine candidate choice and demoplus tables
+## Combine party level candidate choice and demoplus tables
 ```{r}
-modal_election_harmonized <- modal_election_error_table_long %>%
+var_map <- c(
+  "US Senate"        = "U.S. Senate",
+  "US House"         = "U.S. House",
+  "President"        = "President",
+  "Governor"         = "Governor",
+  "AGE_GROUP_rc"     = "Age Group",
+  "EDUC_rc"          = "Education",
+  "EMPSTAT_rc"       = "Employment Status",
+  "FAMINC_rc"        = "Family Income",
+  "REGION_rc"        = "Region",
+  "SEX_rc"           = "Sex",
+  "UNION_rc"         = "Union Membership",
+  "VETSTAT_rc"       = "Veteran Status",
+  "VOTED_rc"         = "Voting Turnout",
+  "VOTEHOW_rc"       = "Voting Method",
+  "HISPAN_rc"        = "Hispanic Origin",
+  "CITIZEN_rc"       = "Citizenship Status"
+)
+
+standardize_variable_names <- function(df) {
+  df %>% dplyr::mutate(Variable = dplyr::recode(Variable, !!!var_map, .default = Variable))
+}
+
+# Build harmonized tables and standardize variable names inside each
+modal_party_level_harmonized <- modal_party_level_election_error_table_pretty_binded_long %>%
   mutate(
-    Variable = Race,
-    Category = CES_Party,
+    Variable  = Race,
+    Category  = CES_Party,
     Benchmark = Actual_Percent,
-    Class = "Candidate Choice"
+    Class     = "Candidate Choice"
   ) %>%
   select(
     Year, State, Class, Variable, Category,
     Weighting_Method, Metric, Value, Benchmark,
     CES_Unweighted, CES_Weighted, CES_ANESRake_Weighted,
     n_respondents
-  )
+  ) %>%
+  standardize_variable_names()
 
 modal_demoplus_harmonized <- modal_demoplus_error_table_long %>%
   mutate(
@@ -1222,44 +1615,151 @@ modal_demoplus_harmonized <- modal_demoplus_error_table_long %>%
     Class = case_when(
       Variable %in% c("VOTED_rc", "VOTEHOW_rc") ~ "Voting",
       TRUE ~ "Demographic"
-    )) %>%
+    )
+  ) %>%
   select(
     Year, State, Class, Variable, Category, Weighting_Method,
     Metric, Value, Benchmark,
     CES_Unweighted, CES_Weighted, CES_ANESRake_Weighted,
     n_respondents
+  ) %>%
+  standardize_variable_names()
+
+# combine
+modal_party_level_demoplus_error_table_all <- bind_rows(
+  modal_party_level_harmonized,
+  modal_demoplus_harmonized
+)
+```
+
+## Combine candidate level candidate choice and demoplus tables
+```{r}
+modal_candidate_harmonized <- modal_candidate_error_table %>%
+  mutate(
+    Variable = Race,                       # start from Race
+    Category  = CES_Party,
+    Benchmark = Actual_Percent,
+    Class     = "Candidate Choice",
+    CES_Unweighted        = CES_Unweighted_Percent,
+    CES_Weighted          = CES_Weighted_Percent,
+    CES_ANESRake_Weighted = ANESRake_Weighted_Percent
+  ) %>%
+  # standardize names
+  standardize_variable_names() %>%
+  # append district for House (after standardization so base matches exactly "U.S. House")
+  mutate(
+    Variable = dplyr::if_else(
+      Variable == "U.S. House" & !is.na(District) &
+        District != "statewide" & District != "nationwide",
+      paste0("U.S. House (", District, ")"),
+      Variable
+    )
+  ) %>%
+  select(
+    Year, State, Class, Variable, Category, CES_Candidate,
+    Benchmark,
+    CES_Unweighted, CES_Weighted, CES_ANESRake_Weighted,
+    n_respondents,
+    dplyr::starts_with("Error_")
+  ) %>%
+  tidyr::pivot_longer(
+    cols = dplyr::starts_with("Error_"),
+    names_to  = "Weighting_Method",
+    values_to = "Value"
+  ) %>%
+  mutate(
+    Weighting_Method = dplyr::case_when(
+      grepl("Unweighted", Weighting_Method) ~ "CES-Unweighted",
+      grepl("ANESRake",   Weighting_Method) ~ "ANESRake",
+      grepl("Weighted",   Weighting_Method) ~ "CES-Provided Weights",
+      TRUE ~ Weighting_Method
+    ),
+    Metric = "Modal Error"
+  ) %>%
+  select(
+    Year, State, Class, Variable, Category, CES_Candidate,
+    Weighting_Method, Metric, Value, Benchmark,
+    CES_Unweighted, CES_Weighted, CES_ANESRake_Weighted,
+    n_respondents
   )
 
-modal_error_table_all <- bind_rows(
-  modal_election_harmonized,
-  modal_demoplus_harmonized) %>%
-    mutate(
-    Variable = recode(Variable,
-      "US Senate"            = "U.S. Senate",
-      "US House"             = "U.S. House",
-      "Governor"             = "Governor",
-      "AGE_GROUP_rc"         = "Age Group",
-      "EDUC_rc"              = "Education",
-      "EMPSTAT_rc"           = "Employment Status",
-      "FAMINC_rc"            = "Family Income",
-      "REGION_rc"            = "Region",
-      "SEX_rc"               = "Sex",
-      "UNION_rc"             = "Union Membership",
-      "VETSTAT_rc"           = "Veteran Status",
-      "VOTED_rc"             = "Voting Turnout",
-      "VOTEHOW_rc"           = "Voting Method",
-      "HISPAN_rc"            = "Hispanic Origin",
-      "CITIZEN_rc"           = "Citizenship Status"
-    ))
+# Combine
+modal_candidate_level_demoplus_error_table_all <- dplyr::bind_rows(
+  standardize_variable_names(modal_demoplus_harmonized),
+  modal_candidate_harmonized
+)
+
 ```
 
 
+## Create "most specific available" error table
+Importantly, candidate-level data was not available in all years, so the candidate-level + demoplus combined table is actually missing some years of AG, and all years of state house and state senate. So, I construct a table that is "the most specific data available" for each variable, which might mean candidate-level for some variables and party-level for others.
+
+```{r}
+# Ensure party-level+demoplus table has CES_Candidate for schema parity
+modal_party_level_demoplus_error_table_all_pad <- modal_party_level_demoplus_error_table_all %>%
+  mutate(CES_Candidate = NA_character_)
+
+# One copy of Demo/Voting rows
+demo_keep <- modal_demoplus_harmonized %>%
+  mutate(CES_Candidate = NA_character_)
+
+# Candidate-choice variables universe
+final_cand_choice_vars <- c(
+  "President","U.S. Senate","U.S. House","Governor",
+  "Secretary of State","Attorney General","State Senator","State Representative"
+)
+
+# Candidate-level keepers by year rules
+cand_keep <- bind_rows(
+  # 2010–2016: candidate-level for Pres/Sen/House/Gov
+  modal_candidate_level_demoplus_error_table_all %>%
+    filter(Class == "Candidate Choice",
+           Year >= 2010, Year <= 2016,
+           Variable %in% c("President","U.S. Senate","U.S. House","Governor")),
+  # 2018–2022: candidate-level adds SecState + AG
+  modal_candidate_level_demoplus_error_table_all %>%
+    filter(Class == "Candidate Choice",
+           Year >= 2018, Year <= 2022,
+           Variable %in% c("President","U.S. Senate","U.S. House","Governor",
+                           "Secretary of State","Attorney General"))
+)
+
+# Party-level fallback by year rules
+party_keep <- bind_rows(
+  # 2006 & 2008: all candidate-choice from party-level
+  modal_party_level_demoplus_error_table_all_pad %>%
+    filter(Class == "Candidate Choice",
+           Year %in% c(2006, 2008),
+           Variable %in% final_cand_choice_vars),
+  # 2010–2016: party-level for SecState, AG, State Leg
+  modal_party_level_demoplus_error_table_all_pad %>%
+    filter(Class == "Candidate Choice",
+           Year >= 2010, Year <= 2016,
+           Variable %in% c("Secretary of State","Attorney General",
+                           "State Senator","State Representative")),
+  # 2018–2022: party-level only for State Leg
+  modal_party_level_demoplus_error_table_all_pad %>%
+    filter(Class == "Candidate Choice",
+           Year >= 2018, Year <= 2022,
+           Variable %in% c("State Senator","State Representative"))
+)
+
+# Final: most-specific-available modal table
+most_specific_modal_error_table_all <- bind_rows(
+  demo_keep,
+  cand_keep,
+  party_keep
+) %>%
+  arrange(Year, State, Class, Variable, Category, Weighting_Method)
+```
+
 # Results
-Now that an error table has been created, subset that table to compute RMSE and report various other breakdowns of error. Outputs are excel sheets that serve as inputs to 
-figuresHQ.ipynb
+Now that an error table has been created, subset that table to compute RMSE and report various other breakdowns of error. Outputs are excel sheets that serve as inputs to figuresHQ.ipynb
 
 
 Big overall summary table, rows are years, columns are variables, values are RMSE
+-- For candidate level + demoplus vars
 ```{r}
 secondary_variables <- c(
   #These are the variables that can be used for assessing accuracy, since they
@@ -1280,7 +1780,7 @@ secondary_variables <- c(
   "Voting Method"
 )
 
-ces_wtd_rmse_summary_table <- modal_error_table_all %>%
+ces_wtd_rmse_summary_table <- most_specific_modal_error_table_all %>%
   filter(Weighting_Method == "CES-Provided Weights",
          Variable %in% secondary_variables) %>%
   group_by(Year, Variable) %>%
@@ -1310,7 +1810,7 @@ write_xlsx(
 
 Distribution of errors
 ```{r}
-dist_errors_bucket_table <- modal_error_table_all %>%
+dist_errors_bucket_table <- most_specific_modal_error_table_all %>%
   mutate(
     Abs_Error = abs(Value),
     Error_Bucket = cut(
@@ -1334,7 +1834,7 @@ write_xlsx(
 
 Yearly RMSE by Weighting Method
 ```{r}
-rmse_by_weighting_method <- modal_error_table_all %>%
+rmse_by_weighting_method <- most_specific_modal_error_table_all %>%
   filter(Variable %in% secondary_variables) %>% 
   group_by(Year, Variable, Weighting_Method) %>%
   summarise(RMSE = sqrt(mean(Value^2, na.rm = TRUE)), .groups = "drop") %>%
@@ -1347,6 +1847,38 @@ write_xlsx(
 )
 ```
 
+Yearly RMSE by Weighting Method and Class
+```{r}
+rmse_by_weighting_method_and_class <- most_specific_modal_error_table_all %>%
+  filter(Variable %in% secondary_variables)
+
+# RMSE by Class
+rmse_by_class <- rmse_by_weighting_method_and_class %>%
+  group_by(Year, Variable, Weighting_Method, Class) %>%
+  summarise(RMSE = sqrt(mean(Value^2, na.rm = TRUE)), .groups = "drop") %>%
+  group_by(Year, Weighting_Method, Class) %>%
+  summarise(Avg_RMSE = mean(RMSE, na.rm = TRUE), .groups = "drop")
+
+# RMSE over all classes (rollup)
+rmse_all <- rmse_by_weighting_method_and_class %>%
+  group_by(Year, Variable, Weighting_Method) %>%
+  summarise(RMSE = sqrt(mean(Value^2, na.rm = TRUE)), .groups = "drop") %>%
+  group_by(Year, Weighting_Method) %>%
+  summarise(Avg_RMSE = mean(RMSE, na.rm = TRUE), .groups = "drop") %>%
+  mutate(Class = "All")
+
+# Combine and save
+rmse_by_weighting_method <- bind_rows(rmse_by_class, rmse_all) %>%
+  arrange(Year, Weighting_Method, Class)
+
+write_xlsx(
+  rmse_by_weighting_method,
+  here("tables_and_figures/input tables", "rmse_by_weighting_method_and_class.xlsx")
+)
+
+```
+
+
 Candidate choice accuracy by race competitiveness
 ```{r}
 competitiveness_bins <- tribble(
@@ -1355,10 +1887,10 @@ competitiveness_bins <- tribble(
   "30-70%",     30,       70,
   "40-60%",     40,       60,
   "45-55%",     45,       55,
-  "80-100%",    80,      100
+  "80-100%",    95,      100
 )
 
-election_rmse_by_competitiveness_range <- modal_error_table_all %>%
+election_rmse_by_competitiveness_range <- most_specific_modal_error_table_all %>%
   filter(Class == "Candidate Choice") %>%
   crossing(competitiveness_bins) %>%
   filter(Benchmark >= Lower, Benchmark <= Upper) %>%
@@ -1374,5 +1906,6 @@ write_xlsx(
   here("tables_and_figures/input tables", "election_rmse_by_competitiveness_range.xlsx")
 )
 ```
+
 
 

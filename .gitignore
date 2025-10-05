@@ -55,12 +55,19 @@ tables_and_figures/input tables/*
 tables_and_figures/output figures/*
 !tables_and_figures/output figures/.gitkeep
 
+# Keep data folders but ignore contents
+/data/CES Data/**
+!/data/CES Data/.gitkeep
+
+/data/IPUMS CPS Artifacts/**
+!/data/IPUMS CPS Artifacts/.gitkeep
+
 #Mac OS temp finder files
 .DS_Store
 
 # IPUMS CPS Files
-.xml
-.dat.gz
+*.xml
+*.dat.gz
 
 # CES raw data
 *.dat
