@@ -17,6 +17,7 @@ source("code/utilities/recoding_utilities.R")
 source("code/utilities/data_structures.R")
 source("code/utilities/election_return_utilities.R")
 source("code/utilities/accuracy_utilities.R")
+source("code/utilities/accuracy_utilities_refactored.R")
 ```
 
 ```{r, echo=False, warnings=FALSE, message=FALSE}
@@ -103,7 +104,18 @@ Secretary_of_state_full <- State_race_master_table[grepl("Secretary|Secratary", 
 ### Turnout
 ```{r}
 turnout_national <- read_excel("data/Benchmarks/VAP_Turnout_Rates.xlsx", sheet="National")
-turnout_statewide <- read_excel("data/Benchmarks/VAP_Turnout_Rates.xlsx", sheet="Statewide")
+turnout_statewide <- read_excel("data/Benchmarks/VAP_Turnout_Rates.xlsx", 
+                                sheet = "Statewide", 
+                                skip = 1, 
+                                .name_repair = "unique_quiet") %>% 
+  select(1:11) %>%
+  slice(-n()) %>%
+  mutate(State = toupper(State))
+```
+
+### State Populations
+```{r}
+state_populations <- read_excel("data/Benchmarks/Historical_State_Population_by_Year.xlsx")
 ```
 
 ### Misc.
@@ -419,6 +431,20 @@ update_ces_rc_datasets()
 add_location_vars(ces_rc_datasets, pre_post_location_vars)
 update_ces_rc_datasets()
 
+# Ensure POST_STATE_rc is a factor
+CES_06_rc$POST_STATE_rc <- as.factor(CES_06_rc$POST_STATE_rc)
+CES_08_rc$POST_STATE_rc <- as.factor(CES_08_rc$POST_STATE_rc)
+CES_10_rc$POST_STATE_rc <- as.factor(CES_10_rc$POST_STATE_rc)
+CES_12_rc$POST_STATE_rc <- as.factor(CES_12_rc$POST_STATE_rc)
+CES_14_rc$POST_STATE_rc <- as.factor(CES_14_rc$POST_STATE_rc)
+CES_16_rc$POST_STATE_rc <- as.factor(CES_16_rc$POST_STATE_rc)
+CES_18_rc$POST_STATE_rc <- as.factor(CES_18_rc$POST_STATE_rc)
+CES_20_rc$POST_STATE_rc <- as.factor(CES_20_rc$POST_STATE_rc)
+CES_22_rc$POST_STATE_rc <- as.factor(CES_22_rc$POST_STATE_rc)
+                                     
+                                     
+cps_rc_datasets <- list(CPS_06_rc, CPS_08_rc, CPS_10_rc, CPS_12_rc, CPS_14_rc, CPS_16_rc, CPS_18_rc, CPS_20_rc, CPS_22_rc)
+
 list2env(setNames(cps_rc_datasets, c("CPS_06_rc", "CPS_08_rc", "CPS_10_rc", "CPS_12_rc", "CPS_14_rc", "CPS_16_rc", "CPS_18_rc", "CPS_20_rc", "CPS_22_rc")), envir = .GlobalEnv)
 
 
@@ -474,19 +500,15 @@ Note: Once you have run the two functions below once, you cannot run them again 
 ```{r}
 #' Recode Party and Candidate Vote Variables from Dynamic References
 #'
-#' For each year in a list of CES data entries, this function scans all
-#' `*_PARTY_rc` and `*_CANDIDATE_rc` columns and replaces any cell whose
-#' value is the name of another `_post` column with the actual `_post`
-#' value from the same row.  Values `"Democrat"`, `"Republican"`, `"Other"`,
-#' and `NA` are left unchanged.  Candidate columns in years 2006 and 2008
-#' are skipped entirely.
+#' If a cell is "Democrat", "Republican", "Other", or NA, it’s left alone. Otherwise, the cell’s 
+#' value is treated as a column name (e.g., "PRES_PARTY_post"). If that column exists, the cell is 
+#' replaced with the value from that referenced column on the same row.
 
 #' @return A list of the same structure, with each `CES` data.frame updated
 #'   in-place so that dynamic references (column names stored in cells)
 #'   have been replaced by their actual values.
 #'
 #' @details  
-#' - Progress is displayed via a console progress bar (`txtProgressBar`).  
 #' - Columns matching `"_PARTY_rc$"` (except those containing `"SENATOR2"` or
 #'   `"SENATOREARLY"`) are always recoded.  
 #' - Columns matching `"_CANDIDATE_rc$"` (same exclusions) are recoded for
@@ -514,7 +536,7 @@ recode_party_and_candidate_votes <- function(list_all_years) {
     party_cols     <- grep("_PARTY_rc$", names(df), value = TRUE)
     party_cols     <- party_cols[!grepl("SENATOR2|SENATOREARLY", party_cols)]
     candidate_cols <- grep("_CANDIDATE_rc$", names(df), value = TRUE)
-    candidate_cols     <- candidate_cols[!grepl("SENATOR2|SENATOREARLY", candidate_cols)]
+    candidate_cols     <- candidate_cols[!grepl("PRES|SENATOR2|SENATOREARLY", candidate_cols)]
     
     cols_to_edit <- unique(c(party_cols, candidate_cols))
     df[cols_to_edit] <- lapply(df[cols_to_edit], as.character)
@@ -622,6 +644,12 @@ recoded_party_candidate_list_all_years <- recode_party_and_candidate_votes(list_
 recoded_party_candidate_list_all_years_cleaned <- clean_party_names(recoded_party_candidate_list_all_years)
 list_all_years <- recoded_party_candidate_list_all_years_cleaned
 push_list_all_years_to_env()
+```
+
+# Temp workspace 10.17.25
+```{r}
+
+
 ```
 
 
@@ -856,7 +884,7 @@ merged_candidate_level_props <- merged_candidate_level_props %>%
 ```
 
 
-# Create ANESRake Targets
+# Create Weighting Targets
 ANESRake requires that "targets" are created for each variable, which specify the expected distribution of that variable in the population for each level of that variable.
 ```{r}
 # Some variables require special weighting variables. This dictionary specifies which weighting variable should be used for those special variables, otherwise
@@ -881,6 +909,7 @@ create_targets <- function(year_data_list) {
     
     # Create a list of all recoded variables for CES data
     variables <- intersect(names(ces_df), names(cps_df))
+    # Exclude variables I don't want to use in weighting
     variables <- variables[!grepl("DUM|OVERTIME|REGION_rc|CUR_MIL_rc|CLASSWKR_rc", variables)]
   
     # Create population (cps) numeric values list with level names
@@ -928,41 +957,103 @@ update_list_all_years()
 all_targets <- create_targets(list_all_years)
 ```
 
-
+# Create ANESRake Weights
 Function to run ANESRake weighting for each year
 ```{r}
-# Function to convert user-input year to list index number
-convert_year_to_index <- function(input_year) {
-  return(year_mapping[as.character(input_year)])
-}
-
-run_weighting <- function(year_list, targets) {
+run_weighting <- function(year_list,
+                          targets,
+                          year_data_list = list_all_years,
+                          type = "pctlim",        # "pctlim", "nlim", "nmin", "nmax", or "nolim"
+                          pctlim = 5,             # % threshold for "pctlim"
+                          nlim = 5,               # n for "nlim"/"nmax"
+                          choosemethod = "total", # how anesrakefinder scores discrepancy
+                          verbose = FALSE) {
   results_list <- list()
+
   for (year in year_list) {
-    print(year)
-    list_index_number <- convert_year_to_index(year)
-    
-    # Extract the required data for the specified year
+    message("Year: ", year)
+
+    # Find the matching year data directly
+    year_data <- year_data_list[[which(sapply(year_data_list, function(x) x$year == year))]]
+
+    if (is.null(year_data)) {
+      stop(glue::glue("Year {year} not found in year_data_list"))
+    }
+
     target_data <- targets[[as.character(year)]]
-    # Excludes weighting on dummy variables and overtime variables
-    CES_data <- list_all_years[[list_index_number]]$CES
-    caseid_col <- CES_data[, 1]
-    
-    outsave <-
-      anesrake(target_data,
-               CES_data,
-               caseid = caseid_col,
-               verbose = FALSE)
-            
-    # Store results in the list
-    caseweights <-
-      data.frame(cases = outsave$caseid, weights = outsave$weightvec)
-    results_list[[paste0(year)]] <- list(caseweights = caseweights,
-                                         outsave_summary = summary(outsave))
+    CES_data    <- year_data$CES
+    caseid_col  <- CES_data[, 1]
+
+    outsave <- anesrake(
+      inputter     = target_data,
+      dataframe    = CES_data,
+      caseid       = caseid_col,
+      verbose      = verbose,
+      type         = type,
+      pctlim       = pctlim,
+      nlim         = nlim,
+      choosemethod = choosemethod
+    )
+
+    caseweights <- data.frame(cases = outsave$caseid, weights = outsave$weightvec)
+
+    # Which variables were actually used
+    vars_used <- outsave$varsused
+
+    # Make a tidy record of targets used (only those actually raked on)
+    targets_used <- lapply(vars_used, function(v) {
+      tv <- outsave$targets[[v]]
+      data.frame(Variable = v,
+                 Level    = names(tv),
+                 Target   = as.numeric(tv),
+                 row.names = NULL,
+                 check.names = FALSE)
+    })
+    targets_used <- do.call(rbind, targets_used)
+
+    # Store results
+    results_list[[as.character(year)]] <- list(
+      caseweights      = caseweights,
+      vars_used        = vars_used,
+      weighting_meta   = list(
+        type          = outsave$type,
+        choosemethod  = outsave$choosemethod,
+        iterations    = outsave$iterations,
+        converged     = outsave$converge,
+        nonconvergence= outsave$nonconvergence
+      ),
+      targets_used     = targets_used,
+      outsave_summary  = summary(outsave)  # pretty console summary
+    )
   }
-   
+
   return(results_list)
 }
+
+weighting_results <- run_weighting(c(2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022), 
+                                   all_targets)
+
+# Cross-reference proposed vs used variables, by year
+vars_used_vs_all <- do.call(rbind, lapply(names(weighting_results), function(y_chr) {
+  # keys might be numeric or character; normalize
+  y <- as.character(y_chr)
+
+  proposed <- names(all_targets[[y]])
+  used     <- weighting_results[[y]]$vars_used
+
+  # Build row per proposed variable
+  data.frame(
+    Year     = y,
+    Variable = proposed,
+    Used     = proposed %in% used,
+    stringsAsFactors = FALSE
+  )
+}))
+
+# Just the excluded ones (not used)
+vars_excluded_by_year <- subset(vars_used_vs_all, !Used)
+
+
 ```
 
 Create weights for all years
@@ -1009,8 +1100,12 @@ CES_22_rc_clean <- add_weights_to_df(CES_22_rc_clean, 2022, weighting_results)
 update_list_all_years()
 ```
 
-# Compute Election Candidate Choice Errors
-There are 2 ways to compute error in candidate choice: at the party level and at the candidate level. Both are done using the modal category, so actual unit (candidate or party) that received the most votes in the actual election returns. 
+# Compute CES Errors
+CES error is measured in the following ways:
+  - Candidate choice at the Party-level: compare vote share for the leading party (e.g., Democrats 55%).
+  - Candidate choice at the Candidate-level: compare vote share for the leading candidate (e.g., Obama 55%).
+  - Demographic and voting variables ("demoplus"): compare true population proportions to CES proportions for demographic and voting behavior variables (e.g., union membership, voter turnout, etc.).
+
 ```{r}
 # Weighting vars for each year
 yearly_ces_wt_vars <- list(
@@ -1023,9 +1118,475 @@ yearly_ces_wt_vars <- list(
   "2018" = c("commonpostweight", "commonweight","anesrake_weight"),
   "2020" = c("commonpostweight", "commonweight",  "anesrake_weight"),
   "2022" = c("commonpostweight", "commonweight", "anesrake_weight"))
+
+# Variables used by the CES for post-stratification in each year
+# This is necessary for classifying variables as "primary" or "secondary"
+vars_used_ces_weights <- list(
+  `2006` = character(0),
+  `2008` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTED_rc"),
+  `2010` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTED_rc"),
+  `2012` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTED_rc"),
+  `2014` = c(
+    "AGE_GROUP_rc", "SEX_rc", "EDUC_rc", "VOTEREG_rc",
+    "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc",
+    "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"
+  ),
+  `2016` = c(
+    "AGE_GROUP_rc", "SEX_rc", "EDUC_rc", "VOTEREG_rc",
+    "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc",
+    "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"
+  ),
+  `2018` = c(
+    "SEX_rc", "AGE_GROUP_rc", "HISPANIC_rc", "EDUC_rc",
+    "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", 
+    "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"
+  ),
+  `2020` = c(
+    "SEX_rc", "AGE_GROUP_rc", "HISPANIC_rc", "EDUC_rc",
+    "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc",
+    "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"
+  ),
+  `2022` = c(
+    "SEX_rc", "AGE_GROUP_rc", "HISPANIC_rc", "EDUC_rc",
+    "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc",
+    "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"
+  )
+)
 ```
 
+```{r}
+# Create accuracy configuration object
+config <- create_accuracy_config(
+  yearly_ces_wt_vars = yearly_ces_wt_vars,
+  skip_conditions = skip_conditions,
+  NC_flag_df = NC_flag_df,
+  vars_used_ces_weights = vars_used_ces_weights,
+  anesrake_results = weighting_results  # From ANESRake weighting step
+)
+```
 
+## Calculate party-level election errors
+```{r}
+party_errors <- calculate_party_errors(
+  year_data_list = list_all_years,
+  election_results_df = merged_prop_tables_combined,
+  config = config
+) %>%
+  standardize_variable_names()
+```
+
+## Calculate candidate-level election errors
+```{r}
+# Candidate-level is only calculated at modal level to begin with
+candidate_errors_modal <- calculate_candidate_errors(
+  year_data_list = list_all_years,
+  candidate_returns_df = merged_candidate_level_props,
+  config = config
+) %>%
+  standardize_variable_names()
+```
+
+## Calculate demovote errors (demographics + voting)
+```{r}
+# Automatically extracts all comparison variables from all_targets
+# VOTED_rc (turnout) uses actual state turnout rates as benchmark
+# POST_STATE_rc (state residence) uses actual state populations as benchmark
+# All other variables use CPS as benchmark
+
+demovote_errors <- calculate_demovote_errors(
+  year_data_list = list_all_years,
+  all_targets = all_targets,  # Automatically extracts all comparable variables
+  config = config,
+  turnout_statewide = turnout_statewide,  # For accurate turnout benchmarks
+  state_populations = state_populations    # For accurate state sampling benchmarks
+) %>%
+  standardize_variable_names()
+```
+
+## Keep modal category only
+```{r}
+# Candidate is already modal
+party_errors_modal <- keep_modal_only(party_errors)
+demovote_errors_modal <- keep_modal_only(demovote_errors)
+```
+
+## Combining Errors
+```{r}
+# ===============================
+# Party-level + Demovote
+# ===============================
+party_demovote_wide <- bind_rows(
+  party_errors_modal,
+  demovote_errors_modal
+)
+
+# ===============================
+# Candidate-level + Demovote
+# ===============================
+candidate_demovote_wide <- bind_rows(
+  candidate_errors_modal,  # Not modalized - already modal
+  demovote_errors_modal
+)
+
+# ===============================
+# Most-specific-available table
+# ===============================
+# Use candidate-level when available, fall back to party-level otherwise
+
+# Define candidate-choice variables
+final_cand_choice_vars <- c(
+  "President", "U.S. Senate", "U.S. House", "Governor",
+  "Secretary of State", "Attorney General", "State Senator", "State Representative"
+)
+
+# Candidate-level keepers by year rules
+cand_keep <- bind_rows(
+  # 2010–2016: candidate-level for Pres/Sen/House/Gov
+  candidate_errors_modal %>%
+    filter(Class == "Candidate Choice",
+           Year >= 2010, Year <= 2016,
+           Variable %in% c("President", "U.S. Senate", "U.S. House", "Governor")),
+
+  # 2018–2022: candidate-level adds SecState + AG
+  candidate_errors_modal %>%
+    filter(Class == "Candidate Choice",
+           Year >= 2018, Year <= 2022,
+           Variable %in% c("President", "U.S. Senate", "U.S. House", "Governor",
+                          "Secretary of State", "Attorney General"))
+)
+
+# Party-level fallback by year rules
+party_keep <- bind_rows(
+  # 2006 & 2008: all candidate-choice from party-level
+  party_errors_modal %>%
+    filter(Class == "Candidate Choice",
+           Year %in% c(2006, 2008),
+           Variable %in% final_cand_choice_vars),
+
+  # 2010–2016: party-level for SecState, AG, State Leg
+  party_errors_modal %>%
+    filter(Class == "Candidate Choice",
+           Year >= 2010, Year <= 2016,
+           Variable %in% c("Secretary of State", "Attorney General",
+                          "State Senator", "State Representative")),
+
+  # 2018–2022: party-level only for State Leg
+  party_errors_modal %>%
+    filter(Class == "Candidate Choice",
+           Year >= 2018, Year <= 2022,
+           Variable %in% c("State Senator", "State Representative"))
+)
+
+# Most-specific-available: demographics + best available candidate choice
+most_specific_wide <- bind_rows(
+  demovote_errors_modal,
+  cand_keep,
+  party_keep
+) %>%
+  arrange(Year, State, Class, Variable, Category)
+
+```
+
+# temp test testing for comparison between old and new
+```{r}
+
+  # ==============================================================================
+  # STEP 1: Prepare both tables for comparison
+  # ==============================================================================
+
+  # New table: Convert wide to long (variable names already standardized!)
+  most_specific_long_new <- most_specific_wide %>%
+    pivot_longer(
+      cols = c(Error_Unweighted, Error_CES_Weighted, Error_ANESRake),
+      names_to = "Weighting_Method",
+      values_to = "Value"
+    ) %>%
+    mutate(
+      Year = as.numeric(Year),
+      Weighting_Method = case_when(
+        Weighting_Method == "Error_Unweighted"   ~ "CES-Unweighted",
+        Weighting_Method == "Error_CES_Weighted" ~ "CES-Provided Weights",
+        Weighting_Method == "Error_ANESRake"     ~ "ANESRake",
+        TRUE ~ Weighting_Method
+      ),
+      Metric = "Modal Error"
+    )
+
+  # Old table: Just ensure Year is numeric
+  most_specific_long_old <- most_specific_modal_error_table_all %>%
+    mutate(Year = as.numeric(Year))
+
+  cat("=== TABLE SIZES ===\n")
+  cat("Old table rows:", nrow(most_specific_long_old), "\n")
+  cat("New table rows:", nrow(most_specific_long_new), "\n")
+  cat("Expected new rows (wide × 3 weighting methods):", nrow(most_specific_wide) * 3, "\n\n")
+
+  # Check what Classes are in each
+  cat("=== CLASS VALUES ===\n")
+  cat("Classes in OLD table:\n")
+  print(table(most_specific_long_old$Class))
+  cat("\nClasses in NEW table:\n")
+  print(table(most_specific_long_new$Class))
+  cat("\n")
+
+  # ==============================================================================
+  # STEP 2: Get unique identifiers from each
+  # ==============================================================================
+
+  old_keys <- most_specific_long_old %>%
+    distinct(Year, State, Class, Variable, Category, Weighting_Method) %>%
+    arrange(Year, State, Class, Variable, Category, Weighting_Method)
+
+  new_keys <- most_specific_long_new %>%
+    distinct(Year, State, Class, Variable, Category, Weighting_Method) %>%
+    arrange(Year, State, Class, Variable, Category, Weighting_Method)
+
+  cat("=== COMPARISON SUMMARY ===\n")
+  cat("Old table unique observations:", nrow(old_keys), "\n")
+  cat("New table unique observations:", nrow(new_keys), "\n")
+  cat("Difference:", nrow(new_keys) - nrow(old_keys), "\n\n")
+
+  # ==============================================================================
+  # STEP 3: Find missing observations
+  # ==============================================================================
+
+  missing_in_new <- anti_join(
+    old_keys,
+    new_keys,
+    by = c("Year", "State", "Class", "Variable", "Category", "Weighting_Method")
+  )
+
+  cat("=== OBSERVATIONS IN OLD BUT NOT IN NEW ===\n")
+  cat("Count:", nrow(missing_in_new), "\n")
+  if (nrow(missing_in_new) > 0) {
+    cat("\nFirst 20 rows:\n")
+    print(head(missing_in_new, 20))
+
+    cat("\nBreakdown by Variable:\n")
+    print(missing_in_new %>% count(Variable, sort = TRUE))
+
+    cat("\nBreakdown by Year:\n")
+    print(missing_in_new %>% count(Year, sort = TRUE))
+
+    cat("\nBreakdown by Class:\n")
+    print(missing_in_new %>% count(Class, sort = TRUE))
+  } else {
+    cat("✅ None - all old observations present in new!\n")
+  }
+
+  cat("\n\n")
+
+  extra_in_new <- anti_join(
+    new_keys,
+    old_keys,
+    by = c("Year", "State", "Class", "Variable", "Category", "Weighting_Method")
+  )
+
+  cat("=== OBSERVATIONS IN NEW BUT NOT IN OLD ===\n")
+  cat("Count:", nrow(extra_in_new), "\n")
+  if (nrow(extra_in_new) > 0) {
+    cat("\nFirst 20 rows:\n")
+    print(head(extra_in_new, 20))
+
+    cat("\nBreakdown by Variable:\n")
+    print(extra_in_new %>% count(Variable, sort = TRUE))
+
+    cat("\nBreakdown by Year:\n")
+    print(extra_in_new %>% count(Year, sort = TRUE))
+
+    cat("\nBreakdown by Class:\n")
+    print(extra_in_new %>% count(Class, sort = TRUE))
+  } else {
+    cat("✅ None - no extra observations in new!\n")
+  }
+
+  cat("\n\n")
+
+  # ==============================================================================
+  # STEP 4: Compare error values for matching observations
+  # ==============================================================================
+
+  comparison <- inner_join(
+    most_specific_long_old %>%
+      select(Year, State, Class, Variable, Category, Weighting_Method, Value_Old = Value),
+    most_specific_long_new %>%
+      select(Year, State, Class, Variable, Category, Weighting_Method, Value_New = Value),
+    by = c("Year", "State", "Class", "Variable", "Category", "Weighting_Method")
+  ) %>%
+    mutate(
+      Difference = Value_New - Value_Old,
+      Abs_Difference = abs(Difference),
+      Pct_Difference = if_else(abs(Value_Old) < 0.0001, NA_real_,
+                                abs(Difference / Value_Old) * 100)
+    )
+
+  cat("=== ERROR VALUE COMPARISON (MATCHING OBSERVATIONS) ===\n")
+  cat("Total matching observations:", nrow(comparison), "\n")
+
+  if (nrow(comparison) > 0) {
+    cat("Identical values (diff < 0.0001):", sum(comparison$Abs_Difference < 0.0001, na.rm = TRUE), "\n")
+    cat("Different values (diff >= 0.0001):", sum(comparison$Abs_Difference >= 0.0001, na.rm = TRUE), "\n\n")
+
+    discrepancies <- comparison %>%
+      filter(Abs_Difference >= 0.0001) %>%
+      arrange(desc(Abs_Difference))
+
+    if (nrow(discrepancies) > 0) {
+      cat("=== DISCREPANCIES (>= 0.0001) ===\n")
+      cat("Number of discrepancies:", nrow(discrepancies), "\n\n")
+      print(discrepancies %>%
+              select(Year, State, Class, Variable, Category, Weighting_Method,
+                     Value_Old, Value_New, Difference, Abs_Difference) %>%
+              head(20))
+
+      cat("\n\nSummary Statistics:\n")
+      cat("Mean absolute difference:", mean(discrepancies$Abs_Difference, na.rm = TRUE), "\n")
+      cat("Median absolute difference:", median(discrepancies$Abs_Difference, na.rm = TRUE), "\n")
+      cat("Max absolute difference:", max(discrepancies$Abs_Difference, na.rm = TRUE), "\n")
+
+      cat("\nDiscrepancies by Variable:\n")
+      print(discrepancies %>% count(Variable, sort = TRUE))
+
+      cat("\nDiscrepancies by Year:\n")
+      print(discrepancies %>% count(Year, sort = TRUE))
+
+      cat("\nDiscrepancies by Class:\n")
+      print(discrepancies %>% count(Class, sort = TRUE))
+    } else {
+      cat("✅ ALL MATCHING ERROR VALUES ARE IDENTICAL!\n")
+    }
+  } else {
+    cat("❌ NO MATCHING OBSERVATIONS FOUND!\n")
+    cat("\nThis suggests structural differences. Check:\n")
+    cat("- Are Class values the same? (should be 'Candidate Choice', 'Demographic', 'Voting')\n")
+    cat("- Are Variable names standardized in both?\n")
+    cat("- Are you comparing the right tables?\n")
+  }
+
+  # ==============================================================================
+  # STEP 5: Create output dataframes for inspection
+  # ==============================================================================
+
+  missing_from_new_df <- most_specific_long_old %>%
+    semi_join(missing_in_new, by = c("Year", "State", "Class", "Variable", "Category", "Weighting_Method")) %>%
+    arrange(Year, State, Class, Variable, Category, Weighting_Method)
+
+  extra_in_new_df <- most_specific_long_new %>%
+    semi_join(extra_in_new, by = c("Year", "State", "Class", "Variable", "Category", "Weighting_Method")) %>%
+    arrange(Year, State, Class, Variable, Category, Weighting_Method)
+
+  discrepancies_df <- if(exists("discrepancies") && nrow(discrepancies) > 0) {
+    discrepancies
+  } else {
+    tibble()
+  }
+
+  cat("\n\n=== OUTPUT DATAFRAMES CREATED ===\n")
+  cat("View detailed results with:\n")
+  cat("- missing_from_new_df:", nrow(missing_from_new_df), "rows (in old but not new)\n")
+  cat("- extra_in_new_df:", nrow(extra_in_new_df), "rows (in new but not old)\n")
+  cat("- discrepancies_df:", nrow(discrepancies_df), "rows (different error values)\n")
+
+  # ==============================================================================
+  # STEP 6: Overall assessment
+  # ==============================================================================
+
+  cat("\n\n=== OVERALL ASSESSMENT ===\n")
+  if (nrow(missing_in_new) == 0 && nrow(extra_in_new) == 0 && nrow(discrepancies_df) == 0) {
+    cat("✅ PERFECT MATCH! New refactored code produces identical results to original.\n")
+    cat("   - Same observations (", nrow(old_keys), " each)\n")
+    cat("   - Same error values (", nrow(comparison), " compared)\n")
+    cat("   - Refactoring successful!\n")
+  } else {
+    cat("⚠️  DIFFERENCES DETECTED:\n")
+    if (nrow(missing_in_new) > 0) {
+      cat("   -", nrow(missing_in_new), "observations missing from new code\n")
+    }
+    if (nrow(extra_in_new) > 0) {
+      cat("   -", nrow(extra_in_new), "extra observations in new code\n")
+    }
+    if (nrow(discrepancies_df) > 0) {
+      cat("   -", nrow(discrepancies_df), "observations with different error values\n")
+    }
+    cat("\nInvestigate using the output dataframes listed above.\n")
+  }
+
+  # Return summary for programmatic access
+  list(
+    summary = tibble(
+      old_count = nrow(old_keys),
+      new_count = nrow(new_keys),
+      missing_from_new = nrow(missing_in_new),
+      extra_in_new = nrow(extra_in_new),
+      matching = nrow(comparison),
+      discrepancies = nrow(discrepancies_df)
+    ),
+    missing_from_new = missing_from_new_df,
+    extra_in_new = extra_in_new_df,
+    discrepancies = discrepancies_df
+  )
+
+
+```
+## Convert to Long Format (optional)
+```{r}
+```
+
+## Calculate Summary Statistics
+```{r}
+# Use most_specific_long for summary statistics (avoids double-counting)
+
+# Calculate RMSE by year and variable
+rmse_summary <- most_specific_long %>%
+  group_by(Year, Variable, Weighting_Method) %>%
+  summarise(
+    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
+    n = n(),
+    .groups = "drop"
+  )
+
+# Calculate RMSE by class
+rmse_by_class <- most_specific_long %>%
+  group_by(Year, Class, Weighting_Method) %>%
+  summarise(
+    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
+    n = n(),
+    .groups = "drop"
+  )
+
+# Calculate RMSE by variable type (Primary vs Secondary)
+rmse_by_variable_type <- most_specific_long %>%
+  group_by(Year, Variable_Type, Weighting_Method) %>%
+  summarise(
+    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
+    n = n(),
+    .groups = "drop"
+  )
+
+# Filter to only Secondary variables (not used in CES weighting)
+secondary_only_rmse <- most_specific_long %>%
+  filter(Variable_Type == "Secondary") %>%
+  group_by(Year, Variable, Weighting_Method) %>%
+  summarise(
+    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
+    n = n(),
+    .groups = "drop"
+  )
+
+```
+# ==============
+#   OLD CODE
+# ===============
+# Combine into all errors
+```{r}
+all_errors_wide <- bind_rows(
+  party_modal,
+  candidate_modal,
+  demographic_modal
+)
+```
+
+--------------------------
 ## Define PARTY-LEVEL election error workhorse function
 ```{r}
 create_party_error_table <- function(yearly_ces_wt_vars,
@@ -1492,6 +2053,67 @@ demoplus_error_table <- map2_dfr(
 )
 ```
 
+
+
+```{r}
+  # Diagnostic script to find differences in Variables between demoplus_error_table and demovote_errors
+
+  # Get unique State/Year/Variable combinations from each
+  # Convert Year to character for consistent comparison
+  table_combos <- demoplus_error_table %>%
+    mutate(Year = as.character(Year)) %>%
+    distinct(Year, State, Variable) %>%
+    arrange(Year, State, Variable)
+
+  errors_combos <- demovote_errors %>%
+    mutate(Year = as.character(Year)) %>%
+    distinct(Year, State, Variable) %>%
+    arrange(Year, State, Variable)
+
+  # Find what's in demoplus_error_table but NOT in demovote_errors
+  in_table_not_errors <- anti_join(
+    table_combos,
+    errors_combos,
+    by = c("Year", "State", "Variable")
+  )
+
+  # Find what's in demovote_errors but NOT in demoplus_error_table
+  in_errors_not_table <- anti_join(
+    errors_combos,
+    table_combos,
+    by = c("Year", "State", "Variable")
+  )
+
+  # Compare counts
+  cat("Total unique Year/State/Variable combos in demoplus_error_table:", nrow(table_combos), "\n")
+  cat("Total unique Year/State/Variable combos in demovote_errors:", nrow(errors_combos), "\n")
+  cat("Difference:", abs(nrow(table_combos) - nrow(errors_combos)), "\n\n")
+
+  cat("Combos in demoplus_error_table but NOT in demovote_errors:\n")
+  print(in_table_not_errors)
+
+  cat("\n\nCombos in demovote_errors but NOT in demoplus_error_table:\n")
+  print(in_errors_not_table)
+
+  # Also check if there are differences in row counts per combo
+  rowcount_comparison <- full_join(
+    demoplus_error_table %>% mutate(Year = as.character(Year)) %>% count(Year, State, Variable, name =
+  "n_table"),
+    demovote_errors %>% mutate(Year = as.character(Year)) %>% count(Year, State, Variable, name = "n_errors"),
+    by = c("Year", "State", "Variable")
+  ) %>%
+    mutate(
+      n_table = replace_na(n_table, 0),
+      n_errors = replace_na(n_errors, 0),
+      difference = n_table - n_errors
+    ) %>%
+    filter(difference != 0)
+
+  cat("\n\nYear/State/Variable combos with different row counts:\n")
+  print(rowcount_comparison)
+```
+
+ˆ
 # Reshaping and Combining Errors
 At this point, there's 3 sets of errors: candidate choice at the party level, candidate level, and then demographic-plus vars. Errors for candidate choice at the party level and demographic-plus variables have been computed and stored in separate tables. These tables now need to be filtered to retain only modal categories, reshaped to a long format, and combined into a unified table of all accuracy variables.
 
@@ -1907,5 +2529,213 @@ write_xlsx(
 )
 ```
 
+```{r}
+calculate_turnout_comparison <- function(year_data, year) {
+  ces_df <- year_data$CES
+  cps_df <- year_data$CPS
+  weight_vars <- yearly_ces_wtvar_names_shortened[[as.character(year)]]
+  
+  all_results <- list()
+  
+  for (state in unique(na.omit(ces_df$POST_STATE_rc))) {
+    ces_state <- filter(ces_df, POST_STATE_rc == state)
+    cps_state <- filter(cps_df, POST_STATE_rc == state)
+    
+    # Check if VOTED_rc exists in both datasets
+    if (!("VOTED_rc" %in% names(ces_state)) || !("VOTED_rc" %in% names(cps_state))) {
+      next
+    }
 
+    # Get state turnout from turnout_statewide
+    state_turnout <- turnout_statewide %>%
+      filter(State == state) %>%
+      pull(as.character(year))
+    
+    # Convert to numeric and handle if missing
+    state_turnout <- ifelse(length(state_turnout) > 0, 
+                           as.numeric(state_turnout) * 100, 
+                           NA_real_)
+    
+    # Calculate turnout proportions (proportion who "Voted")
+    cps_turnout <- mean(cps_state$VOTED_rc == "Voted", na.rm = TRUE) * 100
+    ces_unweighted_turnout <- mean(ces_state$VOTED_rc == "Voted", na.rm = TRUE) * 100
+    ces_weighted_turnout <- weighted.mean(ces_state$VOTED_rc == "Voted", 
+                                          ces_state[[weight_vars[1]]], 
+                                          na.rm = TRUE) * 100
+    ces_anesrake_weighted_turnout <- weighted.mean(ces_state$VOTED_rc == "Voted", 
+                                                   ces_state[[weight_vars[2]]], 
+                                                   na.rm = TRUE) * 100
+    
+    # Combine results
+    turnout_results <- data.frame(
+      Year = year,
+      State = state,
+      State_Turnout = state_turnout,
+      CPS = cps_turnout,
+      CES_Unweighted = ces_unweighted_turnout,
+      CES_Weighted = ces_weighted_turnout,
+      CES_ANESRake_Weighted = ces_anesrake_weighted_turnout,
+      stringsAsFactors = FALSE
+    )
+    
+    all_results[[length(all_results) + 1]] <- turnout_results
+  }
+  
+  bind_rows(all_results)
+}
+
+# Call the function
+turnout_comparison_table <- map2_dfr(
+  .x = list_all_years,
+  .y = map_chr(list_all_years, ~ as.character(.x$year)),
+  .f = calculate_turnout_comparison
+)
+
+# export to excel
+write_xlsx(
+  turnout_comparison_table,
+  here("tables_and_figures/input tables", "turnout_comparison_table.xlsx")
+)
+```
+
+```{r}
+# Load required libraries
+library(tidyverse)
+library(ggplot2)
+
+# 1. Average turnout by source across all years
+turnout_summary <- turnout_comparison_table %>%
+  group_by(Year) %>%
+  summarise(
+    State_Turnout = mean(State_Turnout, na.rm = TRUE),
+    CPS = mean(CPS, na.rm = TRUE),
+    CES_Unweighted = mean(CES_Unweighted, na.rm = TRUE),
+    CES_Weighted = mean(CES_Weighted, na.rm = TRUE),
+    CES_ANESRake_Weighted = mean(CES_ANESRake_Weighted, na.rm = TRUE)
+  ) %>%
+  pivot_longer(
+    cols = -Year,
+    names_to = "Source",
+    values_to = "Turnout"
+  )
+
+# Plot 1: Line plot showing turnout trends over time
+p1 <- ggplot(turnout_summary, aes(x = Year, y = Turnout, color = Source, group = Source)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 3) +
+  labs(
+    title = "Average Turnout Across All States by Source",
+    subtitle = "Comparison of State Records, CPS, and CES Estimates",
+    x = "Year",
+    y = "Turnout (%)",
+    color = "Source"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+print(p1)
+
+# Plot 3: Error/bias visualization (difference from state official records)
+error_summary <- turnout_comparison_table %>%
+  mutate(
+    Error_CPS = CPS - State_Turnout,
+    Error_CES_Unweighted = CES_Unweighted - State_Turnout,
+    Error_CES_Weighted = CES_Weighted - State_Turnout,
+    Error_CES_ANESRake = CES_ANESRake_Weighted - State_Turnout
+  ) %>%
+  group_by(Year) %>%
+  summarise(
+    CPS = mean(Error_CPS, na.rm = TRUE),
+    CES_Unweighted = mean(Error_CES_Unweighted, na.rm = TRUE),
+    CES_Weighted = mean(Error_CES_Weighted, na.rm = TRUE),
+    CES_ANESRake_Weighted = mean(Error_CES_ANESRake, na.rm = TRUE)
+  ) %>%
+  pivot_longer(
+    cols = -Year,
+    names_to = "Source",
+    values_to = "Bias"
+  )
+
+p3 <- ggplot(error_summary, aes(x = Year, y = Bias, color = Source, group = Source)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 3) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+  labs(
+    title = "Survey Bias Relative to Official State Turnout",
+    subtitle = "Positive values = overestimate, Negative values = underestimate",
+    x = "Year",
+    y = "Bias (percentage points)",
+    color = "Source"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+print(p3)
+
+# Plot 4: Scatterplot comparing CPS vs CES weighted
+p4 <- ggplot(turnout_comparison_table, 
+             aes(x = CPS, y = CES_Weighted)) +
+  geom_point(alpha = 0.5, size = 2) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +
+  facet_wrap(~Year) +
+  labs(
+    title = "CPS vs CES Weighted Turnout Estimates",
+    subtitle = "Each point is a state; dashed line shows perfect agreement",
+    x = "CPS Turnout (%)",
+    y = "CES Weighted Turnout (%)"
+  ) +
+  theme_minimal()
+
+print(p4)
+
+# Plot 5: Summary statistics table
+summary_stats <- turnout_comparison_table %>%
+  summarise(
+    across(
+      c(State_Turnout, CPS, CES_Unweighted, CES_Weighted, CES_ANESRake_Weighted),
+      list(
+        Mean = ~mean(., na.rm = TRUE),
+        SD = ~sd(., na.rm = TRUE),
+        Min = ~min(., na.rm = TRUE),
+        Max = ~max(., na.rm = TRUE)
+      ),
+      .names = "{.col}_{.fn}"
+    )
+  ) %>%
+  pivot_longer(
+    everything(),
+    names_to = c("Source", "Statistic"),
+    names_sep = "_(?=[^_]+$)",
+    values_to = "Value"
+  ) %>%
+  pivot_wider(
+    names_from = Statistic,
+    values_from = Value
+  )
+
+print(summary_stats)
+
+# Plot 6: Heatmap of correlations
+cor_data <- turnout_comparison_table %>%
+  select(State_Turnout, CPS, CES_Unweighted, CES_Weighted, CES_ANESRake_Weighted) %>%
+  cor(use = "pairwise.complete.obs")
+
+cor_long <- as.data.frame(cor_data) %>%
+  rownames_to_column("Source1") %>%
+  pivot_longer(-Source1, names_to = "Source2", values_to = "Correlation")
+
+p6 <- ggplot(cor_long, aes(x = Source1, y = Source2, fill = Correlation)) +
+  geom_tile() +
+  geom_text(aes(label = round(Correlation, 2)), color = "white", size = 4) +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0.5) +
+  labs(
+    title = "Correlation Matrix of Turnout Sources",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p6)
+```
 
