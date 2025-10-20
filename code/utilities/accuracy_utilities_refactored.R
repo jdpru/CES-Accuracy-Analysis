@@ -136,6 +136,11 @@ calculate_party_errors <- function(year_data_list, election_results_df, config) 
       
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
         
+        # Debug helper line
+        if (current_year == 2018 && state == "NORTH DAKOTA" && office_label == "Secretary of State") {
+          browser()
+        }
+        
         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
           next
         }
@@ -248,6 +253,11 @@ calculate_candidate_errors <- function(year_data_list, candidate_returns_df, con
       
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
         
+        # Debug helper line
+        # if (current_year == 2018 && state == "NEW JERSEY" && office_label == "US Senate") {
+        #   browser()
+        # }
+
         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
           next
         }
@@ -287,14 +297,21 @@ calculate_candidate_errors <- function(year_data_list, candidate_returns_df, con
           # Determine variable metadata (using raw variable name)
           var_metadata <- determine_variable_metadata(race_col, current_year, config)
           
+          # Format district for display
+          district_display <- if (district %in% c("statewide", "nationwide")) {
+            district
+          } else {
+            paste0("District ", district)
+          }
+          
           year_results <- bind_rows(
             year_results,
             tibble(
               Year          = current_year,
               State         = state,
-              District      = district,
               Class         = "Candidate Choice",
               Variable      = office_label,
+              District      = district_display,
               Category      = ces_party,
               
               # Variable type tracking
@@ -360,7 +377,8 @@ calculate_demovote_errors <- function(year_data_list,
   
   # Auto-extract comparison_vars from all_targets
   comparison_vars <- extract_comparison_vars(all_targets)
-  message("Auto-extracted ", length(comparison_vars), " comparison variables from all_targets")
+  message("Auto-extracted ", length(comparison_vars), " comparison variables from all_targets:")
+  message(paste(" -", comparison_vars, collapse = "\n"))
   
   all_results <- list()
   
@@ -473,19 +491,18 @@ calculate_demovote_errors <- function(year_data_list,
             stop(glue::glue("No state turnout data found for {state} in {year}. Check turnout_statewide data."))
           }
           
-          # Calculate CES turnout proportions (proportion who "Voted")
-          ces_unwt_turnout <- mean(ces_state$VOTED_rc == "Voted", na.rm = TRUE)
-          ces_wt_turnout   <- weighted.mean(ces_state$VOTED_rc == "Voted",
-                                            ces_state[[wt_vars[1]]],
-                                            na.rm = TRUE)
-          anes_wt_turnout  <- weighted.mean(ces_state$VOTED_rc == "Voted",
-                                            ces_state$anesrake_weight,
-                                            na.rm = TRUE)
+          # VOTED_rc has exactly two categories: "Voted" and "Did not vote"
+          categories <- c("Voted", "Did not vote")
+          
+          # CES proportions for both categories
+          ces_unwt <- prop.table(table(factor(ces_state[[demo_var]], levels = categories)))
+          ces_wt   <- weighted_prop_zero(ces_state[[demo_var]], ces_state[[wt_vars[1]]], levels = categories)
+          anes_wt  <- weighted_prop_zero(ces_state[[demo_var]], ces_state$anesrake_weight, levels = categories)
           
           # Determine variable metadata
           var_metadata <- determine_variable_metadata(demo_var, year, config)
           
-          # Create single row for "Voted" category using state turnout as benchmark
+          # Row for "Voted" category (benchmark = state turnout rate)
           all_results[[length(all_results) + 1]] <- tibble(
             Year          = year,
             State         = state,
@@ -493,22 +510,44 @@ calculate_demovote_errors <- function(year_data_list,
             Variable      = demo_var,
             Category      = "Voted",
             
-            # Variable type tracking
             Variable_Type = var_metadata$variable_type,
             Used_in_ANESRake_Weighting = var_metadata$used_in_anesrake_weighting,
             
             Benchmark     = state_turnout_prop * 100,
             
-            CES_Unweighted        = ces_unwt_turnout * 100,
-            CES_Weighted          = ces_wt_turnout * 100,
-            CES_ANESRake_Weighted = anes_wt_turnout * 100,
+            CES_Unweighted        = as.numeric(ces_unwt["Voted"]) * 100,
+            CES_Weighted          = as.numeric(ces_wt["Voted"]) * 100,
+            CES_ANESRake_Weighted = as.numeric(anes_wt["Voted"]) * 100,
             
-            # Consistent convention: CES - Benchmark (CES - State Turnout)
-            Error_Unweighted   = (ces_unwt_turnout - state_turnout_prop) * 100,
-            Error_CES_Weighted = (ces_wt_turnout - state_turnout_prop) * 100,
-            Error_ANESRake     = (anes_wt_turnout - state_turnout_prop) * 100,
+            Error_Unweighted   = (as.numeric(ces_unwt["Voted"]) * 100) - (state_turnout_prop * 100),
+            Error_CES_Weighted = (as.numeric(ces_wt["Voted"]) * 100) - (state_turnout_prop * 100),
+            Error_ANESRake     = (as.numeric(anes_wt["Voted"]) * 100) - (state_turnout_prop * 100),
             
-            n_respondents = NA_integer_
+            n_respondents = sum(!is.na(ces_state[[demo_var]]))
+          )
+          
+          # Row for "Did not vote" category (benchmark = 1 - turnout rate)
+          all_results[[length(all_results) + 1]] <- tibble(
+            Year          = year,
+            State         = state,
+            Class         = "Voting",
+            Variable      = demo_var,
+            Category      = "Did not vote",
+            
+            Variable_Type = var_metadata$variable_type,
+            Used_in_ANESRake_Weighting = var_metadata$used_in_anesrake_weighting,
+            
+            Benchmark     = (1 - state_turnout_prop) * 100,
+            
+            CES_Unweighted        = as.numeric(ces_unwt["Did not vote"]) * 100,
+            CES_Weighted          = as.numeric(ces_wt["Did not vote"]) * 100,
+            CES_ANESRake_Weighted = as.numeric(anes_wt["Did not vote"]) * 100,
+            
+            Error_Unweighted   = (as.numeric(ces_unwt["Did not vote"]) * 100) - ((1 - state_turnout_prop) * 100),
+            Error_CES_Weighted = (as.numeric(ces_wt["Did not vote"]) * 100) - ((1 - state_turnout_prop) * 100),
+            Error_ANESRake     = (as.numeric(anes_wt["Did not vote"]) * 100) - ((1 - state_turnout_prop) * 100),
+            
+            n_respondents = sum(!is.na(ces_state[[demo_var]]))
           )
           
         } else {
@@ -553,7 +592,7 @@ calculate_demovote_errors <- function(year_data_list,
               Error_CES_Weighted = (as.numeric(ces_wt[cat]) - as.numeric(cps_props[cat])) * 100,
               Error_ANESRake     = (as.numeric(anes_wt[cat]) - as.numeric(cps_props[cat])) * 100,
               
-              n_respondents = NA_integer_
+              n_respondents = sum(!is.na(ces_state[[demo_var]]))
             )
           }
         }
@@ -647,6 +686,7 @@ standardize_variable_names <- function(df, var_map = NULL) {
       "VOTED_rc"         = "Voting Turnout",
       "VOTEHOW_rc"       = "Voting Method",
       "VOTEREG_rc"       = "Voter Registration",
+      "VOTERES_rc"       = "Residence Duration",
       "HISPAN_rc"        = "Hispanic Origin",
       "CITIZEN_rc"       = "Citizenship Status",
       "POST_STATE_rc"    = "State of Residence"
@@ -707,7 +747,18 @@ determine_variable_metadata <- function(var_name, year, config) {
 #' @keywords internal
 filter_nc_if_needed <- function(ces_df, year, race_col, NC_flag_df) {
   if (year == 2020 && race_col %in% c("HOUSE_PARTY_rc", "HOUSE_CANDIDATE_rc")) {
-    ces_df %>% filter(!(caseid %in% NC_flag_df$caseid))
+    n_before <- nrow(ces_df)
+    ces_filtered <- ces_df %>% filter(!(caseid %in% NC_flag_df$caseid))
+    n_after <- nrow(ces_filtered)
+    n_removed <- n_before - n_after
+    
+    # Ensure we actually filtered out respondents
+    if (n_removed == 0) {
+      stop(glue::glue("NC filter should have removed respondents for {race_col} in 2020, but removed 0. Check NC_flag_df."))
+    }
+    
+    message(glue::glue("Filtered {n_removed} NC respondents with incorrect districts for {race_col}"))
+    return(ces_filtered)
   } else {
     ces_df
   }
@@ -784,6 +835,14 @@ get_top_candidate <- function(candidate_returns, year, state, office, district) 
   # Special case: 2010 Alaska Senate (write-in winner not in CES)
   if (year == 2010 && office == "US Senate" && state == "ALASKA") {
     returns %>% filter(Candidate == "JOE MILLER")
+    # Special case: 2016 Louisiana Senate (John Kennedy not listed in CES)
+  } else if (year == 2016 && office == "US Senate" && state == "LOUISIANA") {
+    returns %>% filter(Candidate == "FOSTER CAMPBELL")
+    # Special case: 2018 North Dakota Secretary of State
+    # Al Jaeger (Republican incumbent) dropped out and ran as an independent
+    # Joshua Boschee was the Democratic candidate who received the most votes among major party candidates
+  } else if (year == 2018 && office == "Secretary of State" && state == "NORTH DAKOTA") {
+    returns %>% filter(Candidate == "Joshua A. Boschee")
   } else {
     returns %>% slice_max(Proportion, n = 1, with_ties = FALSE)
   }
