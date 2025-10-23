@@ -137,9 +137,9 @@ calculate_party_errors <- function(year_data_list, election_results_df, config) 
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
         
         # Debug helper line
-        if (current_year == 2018 && state == "NORTH DAKOTA" && office_label == "Secretary of State") {
-          browser()
-        }
+        # if (current_year == 2018 && state == "NORTH DAKOTA" && office_label == "Secretary of State") {
+        #   browser()
+        # }
         
         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
           next
@@ -185,6 +185,7 @@ calculate_party_errors <- function(year_data_list, election_results_df, config) 
               # Variable type tracking
               Variable_Type = var_metadata$variable_type,
               Used_in_ANESRake_Weighting = var_metadata$used_in_anesrake_weighting,
+              Valid_for_Accuracy = var_metadata$valid_for_accuracy,
               
               Benchmark     = benchmark[party] * 100,
               
@@ -254,10 +255,10 @@ calculate_candidate_errors <- function(year_data_list, candidate_returns_df, con
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
         
         # Debug helper line
-        # if (current_year == 2018 && state == "NEW JERSEY" && office_label == "US Senate") {
+        # if (current_year == 2016 && state == "LOUISIANA" && office_label == "US Senate") {
         #   browser()
         # }
-
+        
         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
           next
         }
@@ -317,6 +318,7 @@ calculate_candidate_errors <- function(year_data_list, candidate_returns_df, con
               # Variable type tracking
               Variable_Type = var_metadata$variable_type,
               Used_in_ANESRake_Weighting = var_metadata$used_in_anesrake_weighting,
+              Valid_for_Accuracy = var_metadata$valid_for_accuracy,
               
               CES_Candidate    = str_to_title(match_result$matched_ces),
               True_Candidate   = str_to_title(top_cand$Candidate),
@@ -431,6 +433,7 @@ calculate_demovote_errors <- function(year_data_list,
           # Variable type tracking
           Variable_Type = var_metadata$variable_type,
           Used_in_ANESRake_Weighting = var_metadata$used_in_anesrake_weighting,
+          Valid_for_Accuracy = var_metadata$valid_for_accuracy,
           
           Benchmark     = true_pop_share * 100,
           
@@ -512,6 +515,7 @@ calculate_demovote_errors <- function(year_data_list,
             
             Variable_Type = var_metadata$variable_type,
             Used_in_ANESRake_Weighting = var_metadata$used_in_anesrake_weighting,
+            Valid_for_Accuracy = var_metadata$valid_for_accuracy,
             
             Benchmark     = state_turnout_prop * 100,
             
@@ -536,6 +540,7 @@ calculate_demovote_errors <- function(year_data_list,
             
             Variable_Type = var_metadata$variable_type,
             Used_in_ANESRake_Weighting = var_metadata$used_in_anesrake_weighting,
+            Valid_for_Accuracy = var_metadata$valid_for_accuracy,
             
             Benchmark     = (1 - state_turnout_prop) * 100,
             
@@ -580,6 +585,7 @@ calculate_demovote_errors <- function(year_data_list,
               # Variable type tracking
               Variable_Type = var_metadata$variable_type,
               Used_in_ANESRake_Weighting = var_metadata$used_in_anesrake_weighting,
+              Valid_for_Accuracy = var_metadata$valid_for_accuracy,
               
               Benchmark     = as.numeric(cps_props[cat]) * 100,
               
@@ -708,11 +714,19 @@ standardize_variable_names <- function(df, var_map = NULL) {
 #' Determines if a variable is "Primary" (used in CES weighting) or "Secondary"
 #' (not used in CES weighting), and whether it was used in ANESRake weighting.
 #'
+#' Also determines if variable is "Valid for Accuracy Assessment":
+#' - Must be Secondary (not used in CES weighting) AND
+#' - Must NOT be used in ANESRake weighting
+#'
+#' Only variables that are valid for accuracy assessment provide unbiased
+#' measures of survey accuracy, since they weren't used to calibrate either
+#' weighting scheme.
+#'
 #' @param var_name Variable name (raw CES variable name like "SEX_rc")
 #' @param year Year as character
 #' @param config Configuration object
 #'
-#' @return List with variable_type and used_in_anesrake_weighting
+#' @return List with variable_type, used_in_anesrake_weighting, and valid_for_accuracy
 #' @keywords internal
 determine_variable_metadata <- function(var_name, year, config) {
   
@@ -736,9 +750,13 @@ determine_variable_metadata <- function(var_name, year, config) {
     }
   }
   
+  # Valid for accuracy: Secondary AND not used in ANESRake
+  valid_for_accuracy <- (variable_type == "Secondary") && (!used_in_anesrake)
+  
   list(
     variable_type = variable_type,
-    used_in_anesrake_weighting = used_in_anesrake
+    used_in_anesrake_weighting = used_in_anesrake,
+    valid_for_accuracy = valid_for_accuracy
   )
 }
 

@@ -1285,7 +1285,7 @@ most_specific_wide <- bind_rows(
 ```
 
 
-## Convert to Long Format (optional)
+## Convert to Long Format
 ```{r}
 party_demovote_long <- pivot_errors_long(party_demovote_wide)
 candidate_demovote_long <- pivot_errors_long(candidate_demovote_wide)
@@ -1335,50 +1335,65 @@ secondary_only_rmse <- most_specific_long %>%
 
 ```
 
-# Results
+# ==============================================================================
+# Output Tables for Figures Analysis
+# ==============================================================================
 Now that an error table has been created, subset that table to compute RMSE and report various other breakdowns of error. Outputs are excel sheets that serve as inputs to figuresHQ.ipynb
 
-
-Big overall summary table, rows are years, columns are variables, values are RMSE
--- For candidate level + demoplus vars
 ```{r}
-secondary_variables <- c(
-  #These are the variables that can be used for assessing accuracy, since they
-  # were not used in any post-stratification process (excludes president, governor, us senate, age, sex, race, education)
-  "U.S. House",
-  "Attorney General",
-  "Secretary of State",
-  "State Senator",
-  "State Representative",
-  "Employment Status",
-  "Family Income",
-  "Region",
-  "Union Membership",
-  "Hispanic Origin",
-  "Citizenship Status",
-  "Veteran Status",
-  "Voting Turnout",
-  "Voting Method"
-)
+# ==============================================================================
+# FILTERING FOR ACCURACY ASSESSMENT
+# ==============================================================================
 
-ces_wtd_rmse_summary_table <- most_specific_modal_error_table_all %>%
-  filter(Weighting_Method == "CES-Provided Weights",
-         Variable %in% secondary_variables) %>%
+# IMPORTANT: For unbiased accuracy assessment, use Valid_for_Accuracy filter
+# This ensures variables were not used in EITHER CES or ANESRake weighting
+#
+# Valid_for_Accuracy = TRUE means:
+#   - Variable_Type == "Secondary" (not used in CES weighting) AND
+#   - Used_in_ANESRake_Weighting == FALSE (not used in ANESRake)
+#
+
+valid_accuracy_rmse <- most_specific_long %>%
+  filter(Valid_for_Accuracy == TRUE) %>%
+  group_by(Year, Variable, Weighting_Method) %>%
+  summarise(
+    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
+    n = n(),
+    .groups = "drop"
+  )
+
+# Alternative: Filter to Secondary only (may include ANESRake-weighted vars)
+# Less strict - includes variables not used in CES weighting but may have been
+# used in ANESRake weighting
+secondary_only_rmse <- most_specific_long %>%
+  filter(Variable_Type == "Secondary") %>%
+  group_by(Year, Variable, Weighting_Method) %>%
+  summarise(
+    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
+    n = n(),
+    .groups = "drop"
+  )
+
+# ---------------------------------------------------------------
+# Big overall summary table: Rows = years, Columns = variables, Values = RMSE
+# ---------------------------------------------------------------
+
+ces_wtd_rmse_summary_table <- most_specific_long %>%
+  filter(Weighting_Method == "CES Weights",
+         Valid_for_Accuracy == TRUE) %>%
   group_by(Year, Variable) %>%
-  summarise(RMSE = sqrt(mean(Value^2, na.rm = TRUE)), .groups = "drop") %>%
+  summarise(RMSE = sqrt(mean(Error^2, na.rm = TRUE)), .groups = "drop") %>%
   pivot_wider(
     names_from = Variable,
     values_from = RMSE
   ) %>%
-  select(Year, all_of(secondary_variables)) %>%
   mutate(Year = as.character(Year)) %>%
-  mutate(`Year Average` = rowMeans(across(all_of(secondary_variables)), na.rm = TRUE)) %>%
+  mutate(`Year Average` = rowMeans(across(where(is.numeric)), na.rm = TRUE)) %>%
   bind_rows(
     summarise(
       .,
       Year = "Variable Average",
-      across(all_of(secondary_variables), ~ mean(.x, na.rm = TRUE)),
-      `Year Average` = mean(`Year Average`, na.rm = TRUE)
+      across(where(is.numeric), ~ mean(.x, na.rm = TRUE))
     )
   )
 
@@ -1387,13 +1402,13 @@ write_xlsx(
   here("tables_and_figures/input tables", "ces_wtd_rmse_summary_table.xlsx")
 )
 
-```
+# ---------------------------------------------------------------
+# Distribution of errors (error buckets)
+# ---------------------------------------------------------------
 
-Distribution of errors
-```{r}
-dist_errors_bucket_table <- most_specific_modal_error_table_all %>%
+dist_errors_bucket_table <- most_specific_long %>%
   mutate(
-    Abs_Error = abs(Value),
+    Abs_Error = abs(Error),
     Error_Bucket = cut(
       Abs_Error,
       breaks = seq(0, ceiling(max(Abs_Error, na.rm = TRUE)), by = 1),
@@ -1411,14 +1426,15 @@ write_xlsx(
   dist_errors_bucket_table,
   here("tables_and_figures/input tables", "dist_errors_bucket_table.xlsx")
 )
-```
 
-Yearly RMSE by Weighting Method
-```{r}
-rmse_by_weighting_method <- most_specific_modal_error_table_all %>%
-  filter(Variable %in% secondary_variables) %>% 
+# ---------------------------------------------------------------
+# Yearly RMSE by Weighting Method
+# ---------------------------------------------------------------
+
+rmse_by_weighting_method <- most_specific_long %>%
+  filter(Valid_for_Accuracy == TRUE) %>%
   group_by(Year, Variable, Weighting_Method) %>%
-  summarise(RMSE = sqrt(mean(Value^2, na.rm = TRUE)), .groups = "drop") %>%
+  summarise(RMSE = sqrt(mean(Error^2, na.rm = TRUE)), .groups = "drop") %>%
   group_by(Year, Weighting_Method) %>%
   summarise(Avg_RMSE = mean(RMSE, na.rm = TRUE), .groups = "drop")
 
@@ -1426,42 +1442,41 @@ write_xlsx(
   rmse_by_weighting_method,
   here("tables_and_figures/input tables", "rmse_by_weighting_method.xlsx")
 )
-```
 
-Yearly RMSE by Weighting Method and Class
-```{r}
-rmse_by_weighting_method_and_class <- most_specific_modal_error_table_all %>%
-  filter(Variable %in% secondary_variables)
+# ---------------------------------------------------------------
+# Yearly RMSE by Weighting Method and Class
+# ---------------------------------------------------------------
 
 # RMSE by Class
-rmse_by_class <- rmse_by_weighting_method_and_class %>%
+rmse_by_class <- most_specific_long %>%
+  filter(Valid_for_Accuracy == TRUE) %>%
   group_by(Year, Variable, Weighting_Method, Class) %>%
-  summarise(RMSE = sqrt(mean(Value^2, na.rm = TRUE)), .groups = "drop") %>%
+  summarise(RMSE = sqrt(mean(Error^2, na.rm = TRUE)), .groups = "drop") %>%
   group_by(Year, Weighting_Method, Class) %>%
   summarise(Avg_RMSE = mean(RMSE, na.rm = TRUE), .groups = "drop")
 
 # RMSE over all classes (rollup)
-rmse_all <- rmse_by_weighting_method_and_class %>%
+rmse_all <- most_specific_long %>%
+  filter(Valid_for_Accuracy == TRUE) %>%
   group_by(Year, Variable, Weighting_Method) %>%
-  summarise(RMSE = sqrt(mean(Value^2, na.rm = TRUE)), .groups = "drop") %>%
+  summarise(RMSE = sqrt(mean(Error^2, na.rm = TRUE)), .groups = "drop") %>%
   group_by(Year, Weighting_Method) %>%
   summarise(Avg_RMSE = mean(RMSE, na.rm = TRUE), .groups = "drop") %>%
   mutate(Class = "All")
 
 # Combine and save
-rmse_by_weighting_method <- bind_rows(rmse_by_class, rmse_all) %>%
+rmse_by_weighting_method_and_class <- bind_rows(rmse_by_class, rmse_all) %>%
   arrange(Year, Weighting_Method, Class)
 
 write_xlsx(
-  rmse_by_weighting_method,
+  rmse_by_weighting_method_and_class,
   here("tables_and_figures/input tables", "rmse_by_weighting_method_and_class.xlsx")
 )
 
-```
+# ---------------------------------------------------------------
+# Candidate choice accuracy by race competitiveness
+# ---------------------------------------------------------------
 
-
-Candidate choice accuracy by race competitiveness
-```{r}
 competitiveness_bins <- tribble(
   ~Range_Label, ~Lower, ~Upper,
   "0-100%",      0,      100,
@@ -1471,14 +1486,14 @@ competitiveness_bins <- tribble(
   "80-100%",    95,      100
 )
 
-election_rmse_by_competitiveness_range <- most_specific_modal_error_table_all %>%
+election_rmse_by_competitiveness_range <- most_specific_long %>%
   filter(Class == "Candidate Choice") %>%
   crossing(competitiveness_bins) %>%
   filter(Benchmark >= Lower, Benchmark <= Upper) %>%
   group_by(Year, Party = Category, Weighting_Method, Range_Label) %>%
   summarise(
-    RMSE = sqrt(mean(Value^2, na.rm = TRUE)),
-    Avg_Abs_Error = mean(abs(Value), na.rm = TRUE),
+    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
+    Avg_Abs_Error = mean(abs(Error), na.rm = TRUE),
     .groups = "drop"
   )
 
@@ -1486,20 +1501,24 @@ write_xlsx(
   election_rmse_by_competitiveness_range,
   here("tables_and_figures/input tables", "election_rmse_by_competitiveness_range.xlsx")
 )
-```
 
-```{r}
+# ---------------------------------------------------------------
+# Turnout comparison table
+# ---------------------------------------------------------------
+
 calculate_turnout_comparison <- function(year_data, year) {
   ces_df <- year_data$CES
   cps_df <- year_data$CPS
-  weight_vars <- yearly_ces_wtvar_names_shortened[[as.character(year)]]
-  
+
+  # Get weight variables from config
+  weight_vars <- config$weight_vars[[as.character(year)]]
+
   all_results <- list()
-  
+
   for (state in unique(na.omit(ces_df$POST_STATE_rc))) {
     ces_state <- filter(ces_df, POST_STATE_rc == state)
     cps_state <- filter(cps_df, POST_STATE_rc == state)
-    
+
     # Check if VOTED_rc exists in both datasets
     if (!("VOTED_rc" %in% names(ces_state)) || !("VOTED_rc" %in% names(cps_state))) {
       next
@@ -1509,22 +1528,22 @@ calculate_turnout_comparison <- function(year_data, year) {
     state_turnout <- turnout_statewide %>%
       filter(State == state) %>%
       pull(as.character(year))
-    
+
     # Convert to numeric and handle if missing
-    state_turnout <- ifelse(length(state_turnout) > 0, 
-                           as.numeric(state_turnout) * 100, 
+    state_turnout <- ifelse(length(state_turnout) > 0,
+                           as.numeric(state_turnout) * 100,
                            NA_real_)
-    
+
     # Calculate turnout proportions (proportion who "Voted")
     cps_turnout <- mean(cps_state$VOTED_rc == "Voted", na.rm = TRUE) * 100
     ces_unweighted_turnout <- mean(ces_state$VOTED_rc == "Voted", na.rm = TRUE) * 100
-    ces_weighted_turnout <- weighted.mean(ces_state$VOTED_rc == "Voted", 
-                                          ces_state[[weight_vars[1]]], 
+    ces_weighted_turnout <- weighted.mean(ces_state$VOTED_rc == "Voted",
+                                          ces_state[[weight_vars[1]]],
                                           na.rm = TRUE) * 100
-    ces_anesrake_weighted_turnout <- weighted.mean(ces_state$VOTED_rc == "Voted", 
-                                                   ces_state[[weight_vars[2]]], 
+    ces_anesrake_weighted_turnout <- weighted.mean(ces_state$VOTED_rc == "Voted",
+                                                   ces_state$anesrake_weight,
                                                    na.rm = TRUE) * 100
-    
+
     # Combine results
     turnout_results <- data.frame(
       Year = year,
@@ -1536,10 +1555,10 @@ calculate_turnout_comparison <- function(year_data, year) {
       CES_ANESRake_Weighted = ces_anesrake_weighted_turnout,
       stringsAsFactors = FALSE
     )
-    
+
     all_results[[length(all_results) + 1]] <- turnout_results
   }
-  
+
   bind_rows(all_results)
 }
 
@@ -1550,7 +1569,7 @@ turnout_comparison_table <- map2_dfr(
   .f = calculate_turnout_comparison
 )
 
-# export to excel
+# Export to excel
 write_xlsx(
   turnout_comparison_table,
   here("tables_and_figures/input tables", "turnout_comparison_table.xlsx")
@@ -1558,10 +1577,6 @@ write_xlsx(
 ```
 
 ```{r}
-# Load required libraries
-library(tidyverse)
-library(ggplot2)
-
 # 1. Average turnout by source across all years
 turnout_summary <- turnout_comparison_table %>%
   group_by(Year) %>%
