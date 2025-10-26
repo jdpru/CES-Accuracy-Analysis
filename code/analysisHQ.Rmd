@@ -1280,7 +1280,7 @@ most_specific_wide <- bind_rows(
   cand_keep,
   party_keep
 ) %>%
-  arrange(Year, State, Class, Variable, Category)
+  arrange(Year, State, Class, Variable, Category) 
 
 ```
 
@@ -1301,7 +1301,9 @@ rmse_summary <- most_specific_long %>%
   group_by(Year, Variable, Weighting_Method) %>%
   summarise(
     RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n = n(),
+    n_observations = n(),
+    n_states = n_distinct(State),
+    n_respondents = sum(n_respondents, na.rm = TRUE),
     .groups = "drop"
   )
 
@@ -1310,7 +1312,9 @@ rmse_by_class <- most_specific_long %>%
   group_by(Year, Class, Weighting_Method) %>%
   summarise(
     RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n = n(),
+    n_observations = n(),
+    n_states = n_distinct(State),
+    n_respondents = sum(n_respondents, na.rm = TRUE),
     .groups = "drop"
   )
 
@@ -1319,7 +1323,9 @@ rmse_by_variable_type <- most_specific_long %>%
   group_by(Year, Variable_Type, Weighting_Method) %>%
   summarise(
     RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n = n(),
+    n_observations = n(),
+    n_states = n_distinct(State),
+    n_respondents = sum(n_respondents, na.rm = TRUE),
     .groups = "drop"
   )
 
@@ -1329,7 +1335,9 @@ secondary_only_rmse <- most_specific_long %>%
   group_by(Year, Variable, Weighting_Method) %>%
   summarise(
     RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n = n(),
+    n_observations = n(),
+    n_states = n_distinct(State),
+    n_respondents = sum(n_respondents, na.rm = TRUE),
     .groups = "drop"
   )
 
@@ -1712,4 +1720,3 @@ p6 <- ggplot(cor_long, aes(x = Source1, y = Source2, fill = Correlation)) +
 
 print(p6)
 ```
-
