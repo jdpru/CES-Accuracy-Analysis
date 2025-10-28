@@ -578,7 +578,7 @@ calculate_demovote_errors <- function(year_data_list,
             all_results[[length(all_results) + 1]] <- tibble(
               Year          = year,
               State         = state,
-              Class         = if_else(demo_var %in% c("VOTEHOW_rc"), "Voting", "Demographic"),
+              Class         = if_else(demo_var %in% c("VOTED_rc", "VOTEHOW_rc", "VOTEREG_rc"), "Voting", "Demographic"),
               Variable      = demo_var,
               Category      = cat,
               
@@ -655,8 +655,8 @@ pivot_errors_long <- function(error_df) {
     ) %>%
     mutate(
       Weighting_Method = case_when(
-        Weighting_Method == "Error_Unweighted"   ~ "Unweighted",
-        Weighting_Method == "Error_CES_Weighted" ~ "CES Weights",
+        Weighting_Method == "Error_Unweighted"   ~ "CES-Unweighted",
+        Weighting_Method == "Error_CES_Weighted" ~ "CES-Provided Weights",
         Weighting_Method == "Error_ANESRake"     ~ "ANESRake",
         TRUE ~ Weighting_Method
       )

@@ -1292,12 +1292,16 @@ candidate_demovote_long <- pivot_errors_long(candidate_demovote_wide)
 most_specific_long <- pivot_errors_long(most_specific_wide)
 ```
 
-## Calculate Summary Statistics
+# Calculate Summary Statistics and Export Tables
 ```{r}
-# Use most_specific_long for summary statistics (avoids double-counting)
+# ==============================================================================
+# SUMMARY TABLES FOR EXPLORATION AND ANALYSIS
+# ==============================================================================
+# These tables use ALL variables (no filtering) and include detailed sample size metrics
+# Useful for exploratory analysis and comparing all variables/weighting methods
 
-# Calculate RMSE by year and variable
-rmse_summary <- most_specific_long %>%
+# RMSE by Year × Variable × Weighting Method (all variables)
+rmse_summary_all <- most_specific_long %>%
   group_by(Year, Variable, Weighting_Method) %>%
   summarise(
     RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
@@ -1307,8 +1311,8 @@ rmse_summary <- most_specific_long %>%
     .groups = "drop"
   )
 
-# Calculate RMSE by class
-rmse_by_class <- most_specific_long %>%
+# RMSE by Year × Class × Weighting Method (all variables)
+rmse_by_class_all <- most_specific_long %>%
   group_by(Year, Class, Weighting_Method) %>%
   summarise(
     RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
@@ -1318,7 +1322,7 @@ rmse_by_class <- most_specific_long %>%
     .groups = "drop"
   )
 
-# Calculate RMSE by variable type (Primary vs Secondary)
+# RMSE by Year × Variable_Type × Weighting Method
 rmse_by_variable_type <- most_specific_long %>%
   group_by(Year, Variable_Type, Weighting_Method) %>%
   summarise(
@@ -1329,9 +1333,19 @@ rmse_by_variable_type <- most_specific_long %>%
     .groups = "drop"
   )
 
-# Filter to only Secondary variables (not used in CES weighting)
-secondary_only_rmse <- most_specific_long %>%
-  filter(Variable_Type == "Secondary") %>%
+# ==============================================================================
+# FILTERED TABLES FOR ACCURACY ASSESSMENT
+# ==============================================================================
+# IMPORTANT: For unbiased accuracy assessment, use Valid_for_Accuracy filter
+# This ensures variables were not used in EITHER CES or ANESRake weighting
+#
+# Valid_for_Accuracy = TRUE means:
+#   - Variable_Type == "Secondary" (not used in CES weighting) AND
+#   - Used_in_ANESRake_Weighting == FALSE (not used in ANESRake)
+
+# RMSE by Year × Variable × Weighting Method (Valid_for_Accuracy only)
+rmse_summary <- most_specific_long %>%
+  filter(Valid_for_Accuracy == TRUE) %>%
   group_by(Year, Variable, Weighting_Method) %>%
   summarise(
     RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
@@ -1341,49 +1355,14 @@ secondary_only_rmse <- most_specific_long %>%
     .groups = "drop"
   )
 
-```
-
 # ==============================================================================
-# Output Tables for Figures Analysis
+# EXCEL EXPORT TABLES FOR PUBLICATION/VISUALIZATION
 # ==============================================================================
-Now that an error table has been created, subset that table to compute RMSE and report various other breakdowns of error. Outputs are excel sheets that serve as inputs to figuresHQ.ipynb
-
-```{r}
-# ==============================================================================
-# FILTERING FOR ACCURACY ASSESSMENT
-# ==============================================================================
-
-# IMPORTANT: For unbiased accuracy assessment, use Valid_for_Accuracy filter
-# This ensures variables were not used in EITHER CES or ANESRake weighting
-#
-# Valid_for_Accuracy = TRUE means:
-#   - Variable_Type == "Secondary" (not used in CES weighting) AND
-#   - Used_in_ANESRake_Weighting == FALSE (not used in ANESRake)
-#
-
-valid_accuracy_rmse <- most_specific_long %>%
-  filter(Valid_for_Accuracy == TRUE) %>%
-  group_by(Year, Variable, Weighting_Method) %>%
-  summarise(
-    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n = n(),
-    .groups = "drop"
-  )
-
-# Alternative: Filter to Secondary only (may include ANESRake-weighted vars)
-# Less strict - includes variables not used in CES weighting but may have been
-# used in ANESRake weighting
-secondary_only_rmse <- most_specific_long %>%
-  filter(Variable_Type == "Secondary") %>%
-  group_by(Year, Variable, Weighting_Method) %>%
-  summarise(
-    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n = n(),
-    .groups = "drop"
-  )
+# These tables are exported to Excel for use in figuresHQ.ipynb and publications
+# All use Valid_for_Accuracy filter for unbiased accuracy assessment
 
 # ---------------------------------------------------------------
-# Big overall summary table: Rows = years, Columns = variables, Values = RMSE
+# 1. Wide-format summary table: Years × Variables matrix
 # ---------------------------------------------------------------
 
 ces_wtd_rmse_summary_table <- most_specific_long %>%
@@ -1411,7 +1390,7 @@ write_xlsx(
 )
 
 # ---------------------------------------------------------------
-# Distribution of errors (error buckets)
+# 2. Distribution of errors (error buckets)
 # ---------------------------------------------------------------
 
 dist_errors_bucket_table <- most_specific_long %>%
@@ -1436,7 +1415,7 @@ write_xlsx(
 )
 
 # ---------------------------------------------------------------
-# Yearly RMSE by Weighting Method
+# 3. Yearly RMSE by Weighting Method
 # ---------------------------------------------------------------
 
 rmse_by_weighting_method <- most_specific_long %>%
@@ -1452,7 +1431,7 @@ write_xlsx(
 )
 
 # ---------------------------------------------------------------
-# Yearly RMSE by Weighting Method and Class
+# 4. Yearly RMSE by Weighting Method and Class
 # ---------------------------------------------------------------
 
 # RMSE by Class
@@ -1482,7 +1461,7 @@ write_xlsx(
 )
 
 # ---------------------------------------------------------------
-# Candidate choice accuracy by race competitiveness
+# 5. Candidate choice accuracy by race competitiveness
 # ---------------------------------------------------------------
 
 competitiveness_bins <- tribble(
@@ -1511,7 +1490,7 @@ write_xlsx(
 )
 
 # ---------------------------------------------------------------
-# Turnout comparison table
+# 6. Turnout comparison table
 # ---------------------------------------------------------------
 
 calculate_turnout_comparison <- function(year_data, year) {
@@ -1583,6 +1562,7 @@ write_xlsx(
   here("tables_and_figures/input tables", "turnout_comparison_table.xlsx")
 )
 ```
+
 
 ```{r}
 # 1. Average turnout by source across all years
