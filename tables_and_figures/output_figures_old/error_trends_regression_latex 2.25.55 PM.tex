@@ -1,0 +1,23 @@
+\begin{table}[!htbp]
+\centering
+\caption{Linear Regression: RMSE Trends Over Time by Class (Always-Secondary Variables)}
+\label{tab:regression_trends}
+\begin{threeparttable}
+\begin{tabular}{lcccccc}
+\midrule
+\midrule
+Class & Slope & Intercept & $R^2$ & p-value & Std. Error & N \\
+\midrule
+Demographic & 0.0690 & -132.15 & 0.341 & 0.0988 & 0.0363 & 9 \\
+Voting Administration & 0.1272 & -251.22 & 0.385 & 0.0747 & 0.0608 & 9 \\
+Candidate Choice & -0.0084 & 25.71 & 0.001 & 0.9301 & 0.0928 & 9 \\
+All & 0.0300 & -52.72 & 0.035 & 0.6306 & 0.0598 & 9 \\
+\midrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001. Negative slope indicates improving accuracy over time.
+\item Analysis restricted to variables that are always Secondary across all years.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

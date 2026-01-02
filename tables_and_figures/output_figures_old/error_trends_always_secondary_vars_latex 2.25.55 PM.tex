@@ -1,0 +1,47 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{RMSE by Year for Always-Secondary Variables}
+\label{tab:always_secondary_rmse}
+\begin{threeparttable}
+\begin{tabular}{lccccccccccc}
+\midrule
+\midrule
+Variable & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Slope & p-value \\
+\midrule
+\multicolumn{12}{l}{\textit{Demographic}} \\
+\addlinespace[0.2em]
+~~Hispanic Origin & - & - & 7.6 & 8.1 & 7.5 & 7.6 & 7.8 & 7.0 & 2.7 & -0.293 & 0.094 \\
+~~Employment Status & 7.0 & 10.3 & 10.6 & 13.5 & 11.5 & 12.0 & 12.2 & 12.4 & 10.1 & 0.172 & 0.173 \\
+~~Family Income & 4.5 & 3.5 & 3.9 & 3.9 & 4.4 & 4.9 & 5.3 & 6.8 & 8.8 & 0.256** & 0.005 \\
+~~Union Membership & 5.4 & 3.7 & 5.8 & 6.0 & 5.2 & 5.3 & 5.9 & 6.4 & 5.4 & 0.065 & 0.212 \\
+~~Veteran Status & 4.6 & 4.3 & 4.8 & 4.0 & 4.3 & 3.8 & 2.7 & 2.6 & 2.8 & -0.137** & 0.001 \\
+~~Residence Duration & - & 6.9 & 7.4 & 4.9 & 4.7 & 5.0 & - & 4.4 & - & -0.237* & 0.050 \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Demographic Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.3}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.8}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.6}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{0.069}} & {\fontseries{sb}\selectfont\textcolor{black!85}{0.099}} \\
+\addlinespace[0.3em]
+\multicolumn{12}{l}{\textit{Voting Administration}} \\
+\addlinespace[0.2em]
+~~Voting Method & 3.7 & 4.3 & 6.0 & 4.5 & 3.4 & 5.4 & 5.0 & 6.7 & 6.0 & 0.127 & 0.075 \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Voting Administration Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{3.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{4.3}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{4.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{3.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{0.127}} & {\fontseries{sb}\selectfont\textcolor{black!85}{0.075}} \\
+\addlinespace[0.3em]
+\multicolumn{12}{l}{\textit{Candidate Choice}} \\
+\addlinespace[0.2em]
+~~President & - & - & - & 2.9 & - & 1.7 & - & 2.4 & - & -0.071 & 0.701 \\
+~~U.S. House & 4.9 & 6.1 & 11.4 & 9.8 & 9.0 & 9.6 & 9.5 & 8.0 & - & 0.194 & 0.264 \\
+~~Attorney General & 13.3 & - & 14.2 & 15.1 & 8.0 & 4.9 & 4.8 & 3.5 & 7.6 & -0.684* & 0.021 \\
+~~Secretary of State & 11.2 & - & 12.0 & 10.9 & 8.3 & 9.6 & 4.2 & 3.6 & 6.5 & -0.495* & 0.012 \\
+~~State Senator & 10.7 & 6.5 & 9.5 & 7.4 & 13.4 & 8.0 & 4.7 & 6.6 & 10.1 & -0.094 & 0.617 \\
+~~State Representative & 7.3 & 5.0 & 5.5 & 6.4 & 6.3 & 6.5 & 11.2 & 9.0 & 9.1 & 0.255* & 0.038 \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Candidate Choice Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{9.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.9}} & {\fontseries{sb}\selectfont\textcolor{black!85}{10.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{8.8}} & {\fontseries{sb}\selectfont\textcolor{black!85}{9.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.9}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{8.3}} & {\fontseries{sb}\selectfont\textcolor{black!85}{-0.008}} & {\fontseries{sb}\selectfont\textcolor{black!85}{0.930}} \\
+\midrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001
+\item \textit{Note:} Always-secondary variables are those classified as Secondary in all years they appear. Slope represents the linear trend coefficient (RMSE per year). Negative slopes indicate improving accuracy over time.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

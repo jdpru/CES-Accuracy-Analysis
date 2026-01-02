@@ -145,168 +145,159 @@ assign_president_candidate_numbers <- function(returns_data) {
     relocate(cand_num, .after = party_simplified)
 }
 
-
 make_bp_prop_table <- function(df) {
   
-  # Rename columns for simplicity
-  df <- df %>%
-    rename(
-      State = `State (full name)`,
-      ElectionDate = `Election date`,
-      OfficeDistrict = `Office/district`,
-      OfficeNumber = `Office number for sorting`,
-      CandidateName = `Candidate name\r\r\n(Copy and paste from source)`,
-      PoliticalParty = `Political party`,
-      CandidateVotes = `Votes  candidate`,
-      TotalVotesInRace = `Total votes in race (if included in the source)`,
-      SourceURL = `Source url`,
-      SpecialElection = `Special election`
-    )
-  
-  # 1. Create a new Year column
-  df <- df %>%
-    mutate(Year = format(as.Date(ElectionDate), "%Y"),
-           State = toupper(State))
-  
-  # 2. Identify and classify the political party
+  # ------------------------------------------------------------------
+  # 1. Basic normalization
+  # ------------------------------------------------------------------
   df <- df %>%
     mutate(
-      PartyDetailed = PoliticalParty,
-      PartySimplified = case_when(
-        str_detect(tolower(PoliticalParty), "dem") & !str_detect(tolower(PoliticalParty), "democracy") ~ "Democratic",
-        str_detect(tolower(PoliticalParty), "rep") & !str_detect(tolower(PoliticalParty), "representation|repeal") ~ "Republican",
-        TRUE ~ "Other"
+      election_date = as.Date(as.POSIXct(election_date, tz = "UTC")),
+      Year = format(election_date, "%Y"),
+      State = toupper(state)
+    )
+  
+  # ------------------------------------------------------------------
+  # 2. Party classification (STRICT: Democrat / Republican / Other)
+  # ------------------------------------------------------------------
+  df <- df %>%
+    mutate(
+      Party_Detailed = party_original,
+      Party_Simplified = case_when(
+        party_simplified == "Democrat"   ~ "Democrat",
+        party_simplified == "Republican" ~ "Republican",
+        TRUE                             ~ "Other"
       )
     )
   
-  # 3. Identify main party for each candidate
+  # ------------------------------------------------------------------
+  # 3. Identify primary party per candidate within race
+  # ------------------------------------------------------------------
   df <- df %>%
-    group_by(Year, State, OfficeDistrict, OfficeNumber, CandidateName) %>%
+    group_by(Year, State, office_district, district, candidate) %>%
     mutate(
       PrimaryParty = case_when(
-        (any(PartySimplified == "Democratic") & any(PartySimplified == "Republican")) ~ "Both",
-        any(PartySimplified == "Democratic") ~ "Democratic",
-        any(PartySimplified == "Republican") ~ "Republican",
+        any(Party_Simplified == "Democrat") & any(Party_Simplified == "Republican") ~ "Both",
+        any(Party_Simplified == "Democrat") ~ "Democrat",
+        any(Party_Simplified == "Republican") ~ "Republican",
         TRUE ~ "Other"
       )
     ) %>%
     ungroup()
   
-  # Summarize Total Votes in each State-Year combination
+  # ------------------------------------------------------------------
+  # 4. Compute total votes per State-Year
+  # ------------------------------------------------------------------
   df <- df %>%
-    group_by(State, Year) %>% 
-    mutate(TotalVotesInState = sum(CandidateVotes, na.rm = TRUE)) %>% ungroup()
+    group_by(State, Year) %>%
+    mutate(TotalVotesInState = sum(votes, na.rm = TRUE)) %>%
+    ungroup()
   
+  # ------------------------------------------------------------------
+  # 5. Aggregate by State-Year-PrimaryParty
+  # ------------------------------------------------------------------
   statewise_results <- df %>%
     group_by(State, Year, PrimaryParty) %>%
     summarise(
-      PrimaryPartyVotes = sum(CandidateVotes, na.rm = TRUE),
+      PrimaryPartyVotes = sum(votes, na.rm = TRUE),
       TotalVotesInState = first(TotalVotesInState),
-      .groups = 'drop' 
+      .groups = "drop"
     ) %>%
-    mutate(Proportion = PrimaryPartyVotes / TotalVotesInState) %>% 
-    ungroup()
+    mutate(
+      Proportion = PrimaryPartyVotes / TotalVotesInState
+    )
   
+  # ------------------------------------------------------------------
+  # 6. Final formatting (matches old output semantics)
+  # ------------------------------------------------------------------
   final_df <- statewise_results %>%
     mutate(
       District = "statewide",
       Cand_Num = case_when(
-        PrimaryParty == "Democratic" ~ 1,
+        PrimaryParty == "Democrat"   ~ 1,
         PrimaryParty == "Republican" ~ 2,
-        TRUE ~ NA
+        TRUE                         ~ NA_real_
       ),
       Candidate = case_when(
-        PrimaryParty == "Democratic" ~ "Democratic Candidates",
+        PrimaryParty == "Democrat"   ~ "Democratic Candidates",
         PrimaryParty == "Republican" ~ "Republican Candidates",
-        TRUE ~ "Various Candidates"
+        TRUE                         ~ "Various Candidates"
       ),
       Party_Simplified = case_when(
-        PrimaryParty == "Democratic" ~ "DEM",
+        PrimaryParty == "Democrat"   ~ "DEM",
         PrimaryParty == "Republican" ~ "REP",
-        TRUE ~ "OTHER"
-      )
-    ) %>%
-    rename( 
+        TRUE                         ~ "OTHER"
+      ),
       Party_Detailed = PrimaryParty,
-      `Total Votes` = TotalVotesInState,
-    )
-  
-  return_df <- final_df %>%
-    rename(
-      Total_Votes = `Total Votes`
+      Total_Votes = TotalVotesInState
     ) %>%
     select(
       State,
       District,
       Year,
       Candidate,
-      Cand_Num, 
+      Cand_Num,
       Party_Detailed,
       Party_Simplified,
       Total_Votes,
       Proportion
     )
   
+  return(final_df)
 }
 
-
-## For candidate-level AG and SecState from BallotPedia
 candidate_level_BP_statewide_offices <- function(df) {
-  library(dplyr)
-  library(lubridate)
-  library(stringr)
   
-  # Step 1: Standardize column names
   df_clean <- df %>%
-    rename(
-      State = `State (full name)`,
-      Election_Date = `Election date`,
-      Office = `Office/district`,
-      Office_Number = `Office number for sorting`,
-      Candidate = `Candidate name\r\r\n(Copy and paste from source)`,
-      Party_Detailed = `Political party`,
-      Candidate_Votes = `Votes  candidate`,
-      TotalVotesInRace = `Total votes in race (if included in the source)`,
-      SourceURL = `Source url`,
-      SpecialElection = `Special election`
-    ) %>%
     mutate(
-      Year = year(Election_Date),
+      Year = year(election_date),
       District = "statewide",
+      
+      Party_Detailed = party_original,
       Party_Simplified = case_when(
-        str_detect(tolower(Party_Detailed), "republican") ~ "Republican",
-        str_detect(tolower(Party_Detailed), "democratic") ~ "Democrat",
-        TRUE ~ Party_Detailed  # leave unchanged if not matched
+        party_simplified == "Democrat"   ~ "Democrat",
+        party_simplified == "Republican" ~ "Republican",
+        TRUE                             ~ "Other"
       )
     )
   
-  # Step 2: Sum votes by candidate (some names may appear under multiple parties)
+  # 1. Sum votes by candidate (handles fusion candidates)
   summed <- df_clean %>%
-    group_by(Year, State, Office, District, Candidate) %>%
+    group_by(Year, state, office, District, candidate) %>%
     summarise(
-      Candidate_Votes = sum(Candidate_Votes, na.rm = TRUE),
+      Candidate_Votes = sum(votes, na.rm = TRUE),
       .groups = "drop"
     )
   
-  # Step 3: Get party with most votes for each candidate, in case of multiple parties
+  # 2. Pick party from row with MOST votes
   top_party <- df_clean %>%
-    group_by(Year, State, Office, District, Candidate) %>%
-    slice_max(Candidate_Votes, n = 1, with_ties = FALSE) %>%
+    group_by(Year, state, office, District, candidate) %>%
+    slice_max(votes, n = 1, with_ties = FALSE) %>%   # <-- FIX IS HERE
     select(
-      Year, State, Office, District, Candidate,
+      Year, state, office, District, candidate,
       Party_Detailed, Party_Simplified
     )
   
-  # Step 4: Compute total votes per race
+  # 3. Compute total votes per race
   total_votes <- summed %>%
-    group_by(Year, State, Office, District) %>%
-    summarise(Total_Votes = sum(Candidate_Votes, na.rm = TRUE), .groups = "drop")
+    group_by(Year, state, office, District) %>%
+    summarise(
+      Total_Votes = sum(Candidate_Votes, na.rm = TRUE),
+      .groups = "drop"
+    )
   
-  # Step 5: Combine everything
+  # 4. Combine everything
   cleaned <- summed %>%
-    left_join(top_party, by = c("Year", "State", "Office", "District", "Candidate")) %>%
-    left_join(total_votes, by = c("Year", "State", "Office", "District")) %>%
+    left_join(top_party,
+              by = c("Year", "state", "office", "District", "candidate")) %>%
+    left_join(total_votes,
+              by = c("Year", "state", "office", "District")) %>%
     mutate(Proportion = Candidate_Votes / Total_Votes) %>%
+    rename(
+      State = state,
+      Office = office,
+      Candidate = candidate
+    ) %>%
     select(
       Office, State, District, Year, Candidate,
       Party_Detailed, Party_Simplified,
@@ -315,5 +306,3 @@ candidate_level_BP_statewide_offices <- function(df) {
   
   return(cleaned)
 }
-
-

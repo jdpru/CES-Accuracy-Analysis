@@ -1,0 +1,40 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{RMSE by Year for Always-Secondary Variables Present in All Years}
+\label{tab:always_sec_all_years_rmse}
+\begin{threeparttable}
+\begin{tabular}{lccccccccccc}
+\midrule
+\midrule
+Variable & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Slope & p-value \\
+\midrule
+\multicolumn{12}{l}{\textit{Demographic}} \\
+\addlinespace[0.2em]
+~~Employment Status & 7.0 & 10.3 & 10.6 & 13.5 & 11.5 & 12.0 & 12.2 & 12.4 & 10.1 & 0.172 & 0.173 \\
+~~Family Income & 4.5 & 3.5 & 3.9 & 3.9 & 4.4 & 4.9 & 5.3 & 6.8 & 8.8 & 0.256** & 0.005 \\
+~~Union Membership & 5.4 & 3.7 & 5.8 & 6.0 & 5.2 & 5.3 & 5.9 & 6.4 & 5.4 & 0.065 & 0.212 \\
+~~Veteran Status & 4.6 & 4.3 & 4.8 & 4.0 & 4.3 & 3.8 & 2.7 & 2.6 & 2.8 & -0.137** & 0.001 \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Demographic Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.3}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.9}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.3}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{7.1}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.8}} & {\fontseries{sb}\selectfont\textcolor{black!85}{0.112}} & {\fontseries{sb}\selectfont\textcolor{black!85}{0.016}} \\
+\addlinespace[0.3em]
+\multicolumn{12}{l}{\textit{Voting Administration}} \\
+\addlinespace[0.2em]
+~~Voting Method & 3.7 & 4.3 & 6.0 & 4.5 & 3.4 & 5.4 & 5.0 & 6.7 & 6.0 & 0.127 & 0.075 \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Voting Administration Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{3.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{4.3}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{4.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{3.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{0.127}} & {\fontseries{sb}\selectfont\textcolor{black!85}{0.075}} \\
+\addlinespace[0.3em]
+\multicolumn{12}{l}{\textit{Candidate Choice}} \\
+\addlinespace[0.2em]
+~~State Senator & 10.7 & 6.5 & 9.5 & 7.4 & 13.4 & 8.0 & 4.7 & 6.6 & 10.1 & -0.094 & 0.617 \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Candidate Choice Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{10.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{9.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{7.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{13.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{8.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{4.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.6}} & {\fontseries{sb}\selectfont\textcolor{black!85}{10.1}} & {\fontseries{sb}\selectfont\textcolor{black!85}{-0.094}} & {\fontseries{sb}\selectfont\textcolor{black!85}{0.617}} \\
+\midrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001
+\item \textit{Note:} Variables shown are classified as Secondary in all years and have data for all 9 survey years (2006-2022). Slope represents the linear trend coefficient (RMSE per year). Negative slopes indicate improving accuracy over time.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
