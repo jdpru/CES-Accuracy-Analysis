@@ -1295,7 +1295,7 @@ vars_used_ces_weights <- list(
   `2014` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
   `2016` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
   `2018` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPANIC_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
-  `2020` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPANIC_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
+  `2020` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPANIC_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc", "PRES_PARTY_rc", "PRES_CANDIDATE_rc"),
   `2022` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPANIC_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"
   )
 )
@@ -1472,10 +1472,6 @@ metrics_base <- bind_rows(
 )
 ```
 
-```{r}
-grep("HOUSE_CAND", names(CES_06_raw), value = TRUE)
-```
-
 ## Most-Specific
 This table uses candidate-level error where available, and otherwise falls back on party-level error.
 ```{r}
@@ -1486,38 +1482,30 @@ cc_base <- metrics_base %>%
 cand_keep <- cc_base %>%
   filter(
     Specificity == "Candidate",
-    (
-      # 2010–2016: President, Senate, House, Governor
-      (Year >= 2010 & Year <= 2016 &
-         Variable %in% c("President", "U.S. Senate", "U.S. House", "Governor")) |
-
-      # 2018–2022: add SecState + AG
-      (Year >= 2018 & Year <= 2022 &
-         Variable %in% c(
-           "President","U.S. Senate","U.S. House","Governor",
-           "Secretary of State","Attorney General"
-         ))
-    )
-  )
+    Year != 2006,
+    (Variable %in% c("President", "U.S. Senate", "U.S. House") |
+      # 2010–: Governor
+      (Year >= 2010 & Variable == "Governor")) |
+      # 2018–: SecState + AG
+      (Year >= 2018 &
+         Variable %in% c("Secretary of State","Attorney General")))
 
 
 party_keep <- cc_base %>%
   filter(
     Specificity == "Party",
     (
-      # 2006–2008: all candidate choice from party
-      (Year %in% c(2006, 2008)) |
+      # 2006: all candidate choice from party
+      (Year == 2006) |
+      # State senator and state rep always party-level
+      (Variable %in% c("State Senator", "State Representative")) |
+         
+      (Year <= 2008 &
+         Variable %in% c("Governor")) |
 
       # 2010–2016: only SecState, AG, State Leg
-      (Year >= 2010 & Year <= 2016 &
-         Variable %in% c("Secretary of State", "Attorney General",
-                         "State Senator", "State Representative")) |
-
-      # 2018–2022: only State Leg
-      (Year >= 2018 & Year <= 2022 &
-         Variable %in% c("State Senator", "State Representative"))
-    )
-  )
+      (Year <= 2016 &
+         Variable %in% c("Secretary of State", "Attorney General"))))
 
 demo_keep <- metrics_base %>%
   filter(Class != "Candidate Choice")
@@ -1528,6 +1516,7 @@ most_specific <- bind_rows(
   party_keep
 ) %>%
   arrange(Year, State, Class, Variable, Category)
+
 ```
 
 
