@@ -1,6 +1,6 @@
 # LaTeX Code for Figures and Tables
 
-## Tables (14 total)
+## Tables (15 total)
 
 ```latex
 % =============================================================================
@@ -300,4 +300,4 @@
 
 ---
 
-**Summary: 14 tables, 27 figures**
+**Summary: 15 tables, 27 figures**
