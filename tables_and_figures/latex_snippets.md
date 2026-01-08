@@ -69,7 +69,7 @@
 \input{output/rmse_by_office_year.tex}
 ```
 
-## Figures (25 total)
+## Figures (24 total)
 
 ```latex
 % =============================================================================
@@ -164,13 +164,6 @@
 % =============================================================================
 % ERROR DISTRIBUTIONS
 % =============================================================================
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{output/error_distribution_by_class.png}
-    \caption{Distribution of Absolute Errors by Variable Class (Secondary Variables)}
-    \label{fig:error_distribution_by_class}
-\end{figure}
 
 \begin{figure}[H]
     \centering
@@ -286,7 +279,7 @@
 
 ---
 
-**Summary: 15 tables, 25 figures**
+**Summary: 15 tables, 24 figures**
 
 \begin{figure}[H]
     \centering
