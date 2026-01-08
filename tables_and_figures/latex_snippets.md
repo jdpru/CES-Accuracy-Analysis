@@ -69,7 +69,7 @@
 \input{output/rmse_by_office_year.tex}
 ```
 
-## Figures (24 total)
+## Figures (22 total)
 
 ```latex
 % =============================================================================
@@ -215,23 +215,9 @@
     \label{fig:rmse_by_office_salience_party}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{output/rmse_by_office_year_heatmap.png}
-    \caption{RMSE by Office and Year (Heatmap)}
-    \label{fig:rmse_by_office_year_heatmap}
-\end{figure}
-
 % =============================================================================
 % PARTY VS CANDIDATE SPECIFICITY
 % =============================================================================
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{output/candidate_vs_party_specificity.png}
-    \caption{Candidate vs Party Level Specificity Comparison}
-    \label{fig:candidate_vs_party_specificity}
-\end{figure}
 
 \begin{figure}[H]
     \centering
@@ -279,7 +265,7 @@
 
 ---
 
-**Summary: 15 tables, 24 figures**
+**Summary: 15 tables, 22 figures**
 
 \begin{figure}[H]
     \centering
