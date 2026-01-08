@@ -69,7 +69,7 @@
 \input{output/rmse_by_office_year.tex}
 ```
 
-## Figures (22 total)
+## Figures (21 total)
 
 ```latex
 % =============================================================================
@@ -178,13 +178,6 @@
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{output/error_trends_over_time.png}
-    \caption{RMSE Trends Over Time by Variable Class}
-    \label{fig:error_trends_over_time}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
     \includegraphics[width=1\linewidth]{output/rmse_trends_always_secondary.png}
     \caption{RMSE Trends for Always-Secondary Variables}
     \label{fig:rmse_trends_always_secondary}
@@ -265,7 +258,7 @@
 
 ---
 
-**Summary: 15 tables, 22 figures**
+**Summary: 15 tables, 21 figures**
 
 \begin{figure}[H]
     \centering
