@@ -1,6 +1,6 @@
 # LaTeX Code for Figures and Tables
 
-## Tables (15 total)
+## Tables (16 total)
 
 ```latex
 % =============================================================================
@@ -39,6 +39,9 @@
 % Table: Error Trend Regression by Variable
 \input{output/error_trend_regression_by_variable.tex}
 
+% Table: Multilevel Model - Error Trends Over Time
+\input{output/rmse_multilevel_trend.tex}
+
 % =============================================================================
 % WINSORIZED ANALYSIS TABLES
 % =============================================================================
@@ -69,7 +72,7 @@
 \input{output/rmse_by_office_year.tex}
 ```
 
-## Figures (21 total)
+## Figures (22 total)
 
 ```latex
 % =============================================================================
@@ -178,6 +181,13 @@
 
 \begin{figure}[H]
     \centering
+    \includegraphics[width=1\linewidth]{output/rmse_multilevel_trend.png}
+    \caption{Multilevel Model: Error Trends Over Time (Random Intercepts by Year)}
+    \label{fig:rmse_multilevel_trend}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
     \includegraphics[width=1\linewidth]{output/rmse_trends_always_secondary.png}
     \caption{RMSE Trends for Always-Secondary Variables}
     \label{fig:rmse_trends_always_secondary}
@@ -258,7 +268,7 @@
 
 ---
 
-**Summary: 15 tables, 21 figures**
+**Summary: 16 tables, 22 figures**
 
 \begin{figure}[H]
     \centering

@@ -1,0 +1,27 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{Multilevel Model: Error Trends Over Time}
+\label{tab:rmse_multilevel_trend}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Parameter & Estimate & SE & p-value \\
+\midrule
+\multicolumn{4}{l}{\textit{Fixed Effects}} \\
+\quad Intercept (at 2014) & 8.135 & 0.153 & <0.001* \\
+\quad Year ($\beta$) & -0.090 & 0.030 & 0.003* \\
+\midrule
+\multicolumn{4}{l}{\textit{Variance Components}} \\
+\quad Between-year ($\sigma^2_u$) & 0.097 & - & - \\
+\quad Within-year ($\sigma^2_\varepsilon$) & 128.76 & - & - \\
+\quad ICC & 0.001 & - & - \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} Multilevel model with random intercepts by year. N = 10,437 observations across 9 years.
+\item * indicates p < 0.05
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
