@@ -1,0 +1,26 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{Primary Analysis: RMSE Trends Over Time (Unweighted, Secondary Variables Only)}
+\label{tab:rmse_trend_primary_unweighted}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Method & $\beta$ (RMSE/year) & SE & p-value \\
+\midrule
+\multicolumn{4}{l}{\textit{Primary Analysis (Year $\times$ Variable Aggregated)}} \\
+\quad OLS + HC3 Robust SEs & 0.148 & 0.057 & 0.010* \\
+\quad Permutation Test (n=10,000) & 0.148 & - & 0.013* \\
+\midrule
+\multicolumn{4}{l}{\textit{Robustness Check}} \\
+\quad Individual-level + Year-clustered SEs & 3.07$^\dagger$ & 0.76 & 0.000 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} Analysis restricted to 8 secondary variables present in all 9 years. Unweighted (matching only).
+\item $^\dagger$ Coefficient is in squared error units.
+\item * indicates p < 0.05. 95\% CI: [0.036, 0.261].
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

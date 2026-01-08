@@ -1,6 +1,6 @@
 # LaTeX Code for Figures and Tables
 
-## Tables (16 total)
+## Tables (17 total)
 
 ```latex
 % =============================================================================
@@ -39,8 +39,11 @@
 % Table: Error Trend Regression by Variable
 \input{output/error_trend_regression_by_variable.tex}
 
-% Table: Primary Analysis - RMSE Trends Over Time
+% Table: Primary Analysis - RMSE Trends Over Time (Weighted)
 \input{output/rmse_trend_primary_analysis.tex}
+
+% Table: Primary Analysis - RMSE Trends Over Time (Unweighted)
+\input{output/rmse_trend_primary_analysis_unweighted.tex}
 
 % =============================================================================
 % WINSORIZED ANALYSIS TABLES
@@ -72,7 +75,7 @@
 \input{output/rmse_by_office_year.tex}
 ```
 
-## Figures (22 total)
+## Figures (23 total)
 
 ```latex
 % =============================================================================
@@ -182,8 +185,15 @@
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{output/rmse_trend_primary_analysis.png}
-    \caption{Primary Analysis: RMSE Trends Over Time (Aggregated to Year $\times$ Variable)}
+    \caption{Primary Analysis: RMSE Trends Over Time (Weighted, Secondary Variables Only)}
     \label{fig:rmse_trend_primary_analysis}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{output/rmse_trend_primary_analysis_unweighted.png}
+    \caption{Primary Analysis: RMSE Trends Over Time (Unweighted, Secondary Variables Only)}
+    \label{fig:rmse_trend_primary_analysis_unweighted}
 \end{figure}
 
 \begin{figure}[H]
@@ -268,7 +278,7 @@
 
 ---
 
-**Summary: 16 tables, 22 figures**
+**Summary: 17 tables, 23 figures**
 
 \begin{figure}[H]
     \centering
