@@ -1,7 +1,7 @@
 \begin{table}[!htbp]
 \centering
 \footnotesize
-\caption{Multilevel Model: Error Trends Over Time}
+\caption{Multilevel Model: Squared Error Trends Over Time}
 \label{tab:rmse_multilevel_trend}
 \begin{threeparttable}
 \begin{tabular}{lccc}
@@ -9,23 +9,23 @@
 Parameter & Estimate & SE & p-value \\
 \midrule
 \multicolumn{4}{l}{\textit{Fixed Effects}} \\
-\quad Intercept (at 2014) & 3.275 & 0.404 & <0.001* \\
-\quad Year ($\beta$) & -0.0611 & 0.0108 & <0.001* \\
+\quad Intercept (at 2014) & 18.84 & 21.12 & 0.372 \\
+\quad Year ($\beta$) & -3.769 & 0.553 & <0.001* \\
 \midrule
 \multicolumn{4}{l}{\textit{Variance Components}} \\
-\quad Unit-within-variable ($\sigma^2_{unit}$) & 5.208 & - & - \\
-\quad Year ($\sigma^2_{year}$) & 16.092 & - & - \\
-\quad Residual ($\sigma^2_\varepsilon$) & 12.054 & - & - \\
+\quad Unit-within-variable ($\sigma^2_{unit}$) & 14,522 & - & - \\
+\quad Year ($\sigma^2_{year}$) & 41,977 & - & - \\
+\quad Residual ($\sigma^2_\varepsilon$) & 31,959 & - & - \\
 \midrule
 \multicolumn{4}{l}{\textit{Variance Decomposition}} \\
-\quad ICC (unit) & 0.156 & - & - \\
-\quad ICC (year) & 0.482 & - & - \\
+\quad ICC (unit) & 0.164 & - & - \\
+\quad ICC (year) & 0.475 & - & - \\
 \quad Residual & 0.361 & - & - \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \footnotesize
-\item \textit{Note:} Multilevel model: AbsError $\sim$ Year + Variable FE + (1|unit\_var) + (1|Year).
+\item \textit{Note:} Multilevel model: SqError $\sim$ Year + Variable FE + (1|unit\_var) + (1|Year).
 \item N = 10,437 observations; 1,470 unit-variable combinations; 21 variables; 9 years.
 \item Variable fixed effects included but not shown. * indicates p < 0.05.
 \end{tablenotes}
