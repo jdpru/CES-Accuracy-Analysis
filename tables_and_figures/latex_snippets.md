@@ -301,3 +301,10 @@
 ---
 
 **Summary: 15 tables, 27 figures**
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{output/primary_secondary_delta_by_year.png}
+    \caption{Primary vs Secondary RMSE Delta by Year (Excluding Turnout \& Registration)}
+    \label{fig:primary_secondary_delta_by_year}
+\end{figure}
