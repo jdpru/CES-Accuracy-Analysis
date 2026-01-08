@@ -168,7 +168,7 @@
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{output/error_distribution_by_class.png}
-    \caption{Distribution of Absolute Errors by Variable Class}
+    \caption{Distribution of Absolute Errors by Variable Class (Secondary Variables)}
     \label{fig:error_distribution_by_class}
 \end{figure}
 
