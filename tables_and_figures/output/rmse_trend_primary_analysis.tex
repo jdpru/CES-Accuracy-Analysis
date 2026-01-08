@@ -1,7 +1,7 @@
 \begin{table}[!htbp]
 \centering
 \footnotesize
-\caption{Primary Analysis: RMSE Trends Over Time}
+\caption{Primary Analysis: RMSE Trends Over Time (Secondary Variables Only)}
 \label{tab:rmse_trend_primary}
 \begin{threeparttable}
 \begin{tabular}{lccc}
@@ -9,18 +9,18 @@
 Method & $\beta$ (RMSE/year) & SE & p-value \\
 \midrule
 \multicolumn{4}{l}{\textit{Primary Analysis (Year $\times$ Variable Aggregated)}} \\
-\quad OLS + HC3 Robust SEs & -0.105 & 0.068 & 0.123 \\
-\quad Permutation Test (n=10,000) & -0.105 & - & 0.008* \\
+\quad OLS + HC3 Robust SEs & 0.094 & 0.043 & 0.030* \\
+\quad Permutation Test (n=10,000) & 0.094 & - & 0.003* \\
 \midrule
 \multicolumn{4}{l}{\textit{Robustness Check}} \\
-\quad Individual-level + Year-clustered SEs & -3.72$^\dagger$ & 1.15 & 0.001* \\
+\quad Individual-level + Year-clustered SEs & 0.74$^\dagger$ & 0.65 & 0.254 \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \footnotesize
-\item \textit{Note:} Primary model aggregates to year $\times$ variable level (N=177), then regresses RMSE on Year with variable fixed effects. Permutation test shuffles year labels 10,000 times.
+\item \textit{Note:} Analysis restricted to 8 secondary variables present in all 9 years. Primary model aggregates to year $\times$ variable level (N=72), then regresses RMSE on Year with variable fixed effects.
 \item $^\dagger$ Coefficient is in squared error units (not directly comparable to RMSE units).
-\item * indicates p < 0.05. 95\% CI for primary estimate: [-0.238, 0.028].
+\item * indicates p < 0.05. 95\% CI for primary estimate: [0.009, 0.178].
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
