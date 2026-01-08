@@ -1,0 +1,26 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{Error Trend Regression by Variable}
+\label{tab:error_trend_regression_by_variable}
+\begin{threeparttable}
+\begin{tabular}{lccccccc}
+\toprule
+ & Variable & Class & Slope & Intercept & R\_squared & p\_value & n\_observations \\
+\midrule
+6 & Veteran Status & Demographic & -0.13 & 260.63 & 0.08 & 0.00 & 459 \\
+0 & Employment Status & Demographic & 0.22 & -436.09 & 0.06 & 0.00 & 459 \\
+1 & Family Income & Demographic & 0.18 & -360.34 & 0.06 & 0.00 & 459 \\
+7 & Voting Method & Voting Administration & 0.13 & -250.55 & 0.04 & 0.00 & 458 \\
+5 & Union Membership & Demographic & 0.07 & -135.50 & 0.01 & 0.01 & 459 \\
+2 & State Representative & Candidate Choice & 0.12 & -241.79 & 0.01 & 0.02 & 407 \\
+3 & State Senator & Candidate Choice & -0.04 & 94.30 & 0.00 & 0.48 & 386 \\
+4 & U.S. House & Candidate Choice & -0.01 & 33.93 & 0.00 & 0.62 & 2889 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} Linear regression of mean absolute error over time by individual variable.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

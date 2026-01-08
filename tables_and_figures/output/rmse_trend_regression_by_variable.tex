@@ -1,0 +1,26 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{RMSE Trend Regression by Variable}
+\label{tab:rmse_trend_regression_by_variable}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+ & Variable & Class & Slope & R\_squared & p\_value \\
+\midrule
+6 & Veteran Status & Demographic & -0.14 & 0.80 & 0.00 \\
+1 & Family Income & Demographic & 0.26 & 0.69 & 0.01 \\
+2 & State Representative & Candidate Choice & 0.25 & 0.48 & 0.04 \\
+7 & Voting Method & Voting Administration & 0.13 & 0.38 & 0.07 \\
+0 & Employment Status & Demographic & 0.17 & 0.25 & 0.17 \\
+5 & Union Membership & Demographic & 0.07 & 0.21 & 0.21 \\
+4 & U.S. House & Candidate Choice & 0.10 & 0.10 & 0.40 \\
+3 & State Senator & Candidate Choice & -0.09 & 0.04 & 0.62 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} Linear regression of RMSE over time for always-secondary variables. * p<0.05, ** p<0.01, *** p<0.001.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

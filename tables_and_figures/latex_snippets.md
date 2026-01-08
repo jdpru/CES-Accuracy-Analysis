@@ -69,7 +69,7 @@
 \input{output/rmse_by_office_year.tex}
 ```
 
-## Figures (27 total)
+## Figures (25 total)
 
 ```latex
 % =============================================================================
@@ -161,13 +161,6 @@
     \label{fig:primary_vs_secondary_by_year_stacked}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{output/error_distribution_primary_vs_secondary_by_class.png}
-    \caption{Error Distribution: Primary vs Secondary Variables by Class}
-    \label{fig:error_distribution_primary_vs_secondary_by_class}
-\end{figure}
-
 % =============================================================================
 % ERROR DISTRIBUTIONS
 % =============================================================================
@@ -184,13 +177,6 @@
     \includegraphics[width=1\linewidth]{output/error_distribution_by_class_sidebyside.png}
     \caption{Distribution of Absolute Errors by Variable Class (Side-by-Side)}
     \label{fig:error_distribution_by_class_sidebyside}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{output/error_distribution_by_race_grid.png}
-    \caption{Distribution of Errors by Candidate Choice Race}
-    \label{fig:error_distribution_by_race_grid}
 \end{figure}
 
 % =============================================================================
@@ -300,7 +286,7 @@
 
 ---
 
-**Summary: 15 tables, 27 figures**
+**Summary: 15 tables, 25 figures**
 
 \begin{figure}[H]
     \centering
