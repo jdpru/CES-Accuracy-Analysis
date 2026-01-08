@@ -1,0 +1,27 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{Sensitivity Analysis: Trend Significance at Different Winsorization Levels}
+\label{tab:winsor_sensitivity}
+\begin{threeparttable}
+\begin{tabular}{lcccccc}
+\midrule
+\midrule
+Winsorization & Slope & SE & p-value & Sig. & R$^2$ & Mean Error \\
+\midrule
+None & 0.0861 & 0.0147 & 0.0000* & Yes & 0.0057 & 6.26 \\
+1% & 0.0845 & 0.0141 & 0.0000* & Yes & 0.0060 & 6.21 \\
+2.5% & 0.0841 & 0.0136 & 0.0000* & Yes & 0.0063 & 6.15 \\
+5% & 0.0810 & 0.0129 & 0.0000* & Yes & 0.0066 & 6.06 \\
+10% & 0.0725 & 0.0117 & 0.0000* & Yes & 0.0064 & 5.88 \\
+\midrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} Linear regression of Year on absolute error for all individual observations.
+\item Winsorization applied per variable across all years.
+\item * indicates p < 0.05
+\item N = 5,976 observations across 8 variables.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
