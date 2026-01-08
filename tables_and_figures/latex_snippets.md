@@ -39,8 +39,8 @@
 % Table: Error Trend Regression by Variable
 \input{output/error_trend_regression_by_variable.tex}
 
-% Table: Multilevel Model - Error Trends Over Time
-\input{output/rmse_multilevel_trend.tex}
+% Table: Primary Analysis - RMSE Trends Over Time
+\input{output/rmse_trend_primary_analysis.tex}
 
 % =============================================================================
 % WINSORIZED ANALYSIS TABLES
@@ -181,9 +181,9 @@
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{output/rmse_multilevel_trend.png}
-    \caption{Multilevel Model: Error Trends Over Time (Random Intercepts by Year)}
-    \label{fig:rmse_multilevel_trend}
+    \includegraphics[width=1\linewidth]{output/rmse_trend_primary_analysis.png}
+    \caption{Primary Analysis: RMSE Trends Over Time (Aggregated to Year $\times$ Variable)}
+    \label{fig:rmse_trend_primary_analysis}
 \end{figure}
 
 \begin{figure}[H]
