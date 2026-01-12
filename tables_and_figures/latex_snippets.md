@@ -1,6 +1,6 @@
 # LaTeX Code for Figures and Tables
 
-## Tables (17 total)
+## Tables (18 total)
 
 ```latex
 % =============================================================================
@@ -25,6 +25,9 @@
 
 % Table: Primary vs Secondary Delta by Year
 \input{output/primary_secondary_delta.tex}
+
+% Table: Primary vs Secondary RMSE by Year (Consistent Variables, 2008-2022)
+\input{output/primary_secondary_rmse_by_year.tex}
 
 % =============================================================================
 % TREND REGRESSION TABLES
@@ -278,7 +281,7 @@
 
 ---
 
-**Summary: 17 tables, 23 figures**
+**Summary: 18 tables, 23 figures**
 
 \begin{figure}[H]
     \centering
