@@ -1,0 +1,62 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{ANESRake-Weighted RMSE for Variables Used in Weighting}
+\label{tab:anesrake_variables_accuracy}
+\begin{threeparttable}
+\begin{tabular}{lcccccccccc}
+\toprule
+Variable & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Yearly Mean \\
+\midrule
+\multicolumn{11}{c}{\textbf{ANESRake Full Variables}} \\
+\midrule
+\multicolumn{11}{l}{\textit{Demographic}} \\
+\addlinespace[0.2em]
+~~Age Group & 6.6 & 9.5 & 6.0 & 7.5 & 4.6 & 6.1 & 5.7 & 7.8 & 6.3 & 6.7 \\
+~~Sex & 9.3 & 13.9 & 7.7 & 8.5 & 6.1 & 8.5 & 6.4 & 9.5 & - & 8.8 \\
+~~Hispanic Origin & - & - & 10.6 & 6.5 & 7.4 & 6.7 & 8.0 & 6.0 & 4.9 & 7.2 \\
+~~Education & 7.3 & 9.8 & 7.9 & 7.5 & 7.4 & 9.6 & 7.3 & 8.1 & 6.1 & 7.9 \\
+~~Family Income & 8.6 & 8.2 & 6.1 & 8.0 & 5.7 & 5.9 & 6.3 & 6.6 & 7.3 & 7.0 \\
+~~Employment Status & 10.9 & 12.5 & 8.0 & 12.8 & 6.5 & 9.5 & 6.7 & 7.0 & 6.1 & 8.9 \\
+~~Union Membership & 4.1 & - & 4.9 & 4.4 & 3.3 & 4.4 & 3.8 & 5.0 & 4.2 & 4.3 \\
+~~Veteran Status & 4.9 & 4.9 & 3.9 & 5.2 & 4.3 & 3.9 & 3.8 & 3.4 & 3.3 & 4.2 \\
+~~State of Residence & 0.3 & 0.2 & 0.3 & 0.3 & 0.1 & 0.1 & 0.1 & 0.3 & 0.1 & 0.2 \\
+~~Residence Duration & - & - & 8.1 & 10.8 & 5.5 & 8.7 & - & 11.5 & - & 8.9 \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Demographic Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{8.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{7.1}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.1}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.3}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{4.8}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.3}} \\
+\addlinespace[0.3em]
+\multicolumn{11}{l}{\textit{Voting Administration}} \\
+\addlinespace[0.2em]
+~~Voter Registration & 29.0 & 35.9 & 27.0 & 26.5 & 11.8 & 20.1 & 15.5 & 29.6 & 15.9 & 23.5 \\
+~~Voting Turnout & 15.4 & 19.5 & 12.8 & 14.4 & 10.8 & 12.8 & 12.1 & 14.6 & 13.4 & 14.0 \\
+~~Voting Method & 8.4 & 5.2 & 7.5 & 10.2 & 7.3 & 8.9 & 10.0 & 12.8 & 12.8 & 9.2 \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Voting Administration Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{17.6}} & {\fontseries{sb}\selectfont\textcolor{black!85}{20.2}} & {\fontseries{sb}\selectfont\textcolor{black!85}{15.8}} & {\fontseries{sb}\selectfont\textcolor{black!85}{17.1}} & {\fontseries{sb}\selectfont\textcolor{black!85}{10.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{13.9}} & {\fontseries{sb}\selectfont\textcolor{black!85}{12.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{19.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{14.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{15.6}} \\
+\midrule
+\textbf{Yearly RMSE (Full)} & \textbf{9.5} & \textbf{12.0} & \textbf{8.5} & \textbf{9.4} & \textbf{6.2} & \textbf{8.1} & \textbf{7.1} & \textbf{9.4} & \textbf{7.3} & \textbf{8.6} \\
+\midrule
+\multicolumn{11}{c}{\textbf{ANESRake Restricted Variables}} \\
+\midrule
+\multicolumn{11}{l}{\textit{Demographic}} \\
+\addlinespace[0.2em]
+~~Education & 7.1 & 5.9 & 6.9 & 5.4 & 5.7 & 8.2 & 5.8 & 7.0 & 6.1 & 6.5 \\
+~~Employment Status & 8.4 & 6.5 & 6.3 & 8.6 & 5.2 & 8.9 & 6.0 & 12.2 & 4.8 & 7.4 \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Demographic Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{7.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.2}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.6}} & {\fontseries{sb}\selectfont\textcolor{black!85}{7.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{8.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.9}} & {\fontseries{sb}\selectfont\textcolor{black!85}{9.6}} & {\fontseries{sb}\selectfont\textcolor{black!85}{5.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{6.9}} \\
+\addlinespace[0.3em]
+\multicolumn{11}{l}{\textit{Voting Administration}} \\
+\addlinespace[0.2em]
+~~Voter Registration & 29.8 & 38.0 & 26.3 & 24.8 & 8.1 & 16.8 & 13.4 & 20.9 & 14.3 & 21.4 \\
+~~Voting Turnout & 10.2 & 15.0 & 9.5 & 7.5 & 7.4 & 9.4 & 7.6 & 8.2 & 6.4 & 9.0 \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Voting Administration Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{20.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{26.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{17.9}} & {\fontseries{sb}\selectfont\textcolor{black!85}{16.2}} & {\fontseries{sb}\selectfont\textcolor{black!85}{7.8}} & {\fontseries{sb}\selectfont\textcolor{black!85}{13.1}} & {\fontseries{sb}\selectfont\textcolor{black!85}{10.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{14.6}} & {\fontseries{sb}\selectfont\textcolor{black!85}{10.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{15.2}} \\
+\midrule
+\textbf{Yearly RMSE (Restricted)} & \textbf{13.9} & \textbf{16.3} & \textbf{12.3} & \textbf{11.6} & \textbf{6.6} & \textbf{10.8} & \textbf{8.2} & \textbf{12.1} & \textbf{7.9} & \textbf{11.1} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} RMSE in percentage points. ANESRake Full uses all available demographic and voting administration variables. ANESRake Restricted uses a subset (Education, Employment Status, Voter Registration, Voting Turnout).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
