@@ -1,0 +1,56 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{Delta: Matching Only $-$ (Matching + Post-Stratification)}
+\label{tab:rmse_delta}
+\begin{threeparttable}
+\begin{tabular}{lcccccccccc}
+\midrule
+\midrule
+Variable & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Yearly Mean \\
+\midrule
+\multicolumn{11}{l}{\textit{Demographic}} \\
+\addlinespace[0.2em]
+~~Age Group & -2.3 & +0.5 & +4.8 & +5.2 & +2.9 & +3.5 & +1.1 & -0.1 & -0.7 &  \\
+~~Education & -7.5 & +0.6 & +7.6 & +4.2 & +1.0 & +1.5 & +1.7 & +1.4 & +3.2 &  \\
+~~Sex & -0.2 & -1.4 & -1.5 & +2.1 & +1.9 & +4.4 & +2.2 & +3.5 & +2.1 &  \\
+~~Hispanic Origin & - & - & -0.3 & +0.2 & +0.3 & -0.0 & +0.5 & +1.1 & +1.8 &  \\
+~~Employment Status & +3.6 & -3.5 & -0.2 & +1.8 & +0.5 & -2.0 & -0.8 & -1.4 & -0.4 &  \\
+~~Family Income & -0.2 & +0.3 & +1.3 & -0.5 & -1.2 & -0.7 & -1.2 & -1.8 & -1.7 &  \\
+~~Union Membership & +0.2 & -0.0 & -0.2 & -0.5 & +0.2 & -0.3 & -0.8 & -0.7 & -0.6 &  \\
+~~Veteran Status & +3.7 & +2.5 & +5.8 & +4.9 & +2.3 & +1.4 & +2.2 & +1.2 & +1.2 &  \\
+~~Residence Duration & - & -2.3 & +1.6 & +3.0 & -0.2 & -0.1 & - & -0.7 & - &  \\
+~~State of Residence & -0.0 & +0.1 & -0.1 & +0.0 & +0.0 & +0.0 & +0.0 & +0.1 & +0.1 &  \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Demographic Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{-0.3}} & {\fontseries{sb}\selectfont\textcolor{black!85}{-0.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+1.9}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+2.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+0.8}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+0.8}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+0.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+0.3}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+0.6}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+0.7}} \\
+\addlinespace[0.3em]
+\multicolumn{11}{l}{\textit{Voting Administration}} \\
+\addlinespace[0.2em]
+~~Voter Registration & +1.7 & +3.1 & +5.7 & +8.2 & -2.8 & +13.6 & +7.1 & +7.3 & +15.1 &  \\
+~~Voting Turnout & +3.5 & +4.2 & +12.1 & -1.0 & -3.8 & -1.3 & +5.1 & +4.3 & -8.1 &  \\
+~~Voting Method & +0.5 & -0.5 & -1.4 & +1.5 & +0.3 & -0.3 & -0.1 & +1.5 & +1.6 &  \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Voting Administration Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+1.9}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+2.2}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+5.5}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+2.9}} & {\fontseries{sb}\selectfont\textcolor{black!85}{-2.1}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+4.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+4.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+4.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+2.9}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+2.9}} \\
+\addlinespace[0.3em]
+\multicolumn{11}{l}{\textit{Candidate Choice}} \\
+\addlinespace[0.2em]
+~~President & - & +2.3 & - & +1.5 & - & +6.4 & - & +7.7 & - &  \\
+~~U.S. Senate & -0.3 & +2.4 & +4.1 & +0.4 & +2.8 & +3.3 & +1.5 & +6.5 & +5.1 &  \\
+~~U.S. House & -0.7 & +1.2 & -2.1 & -2.1 & -0.5 & -1.6 & -0.1 & +2.1 & +1.3 &  \\
+~~Governor & -0.0 & +0.1 & +2.3 & -0.6 & +1.5 & +3.1 & +2.1 & +6.6 & +5.1 &  \\
+~~Attorney General & -0.9 & - & -1.1 & +0.3 & +1.3 & +1.6 & +3.0 & +7.8 & +5.3 &  \\
+~~Secretary of State & +0.3 & - & -1.9 & -1.2 & +0.8 & +0.4 & +3.7 & +7.5 & +5.9 &  \\
+~~State Senator & -0.6 & -0.3 & -0.0 & +0.6 & +1.8 & +1.4 & +3.0 & +6.7 & +5.9 &  \\
+~~State Representative & -0.3 & +0.3 & +1.1 & -0.7 & +2.4 & +2.1 & +1.0 & +4.8 & +4.5 &  \\
+\addlinespace[0.1em]
+{\fontseries{sb}\selectfont\textcolor{black!85}{~~Candidate Choice Avg.}} & {\fontseries{sb}\selectfont\textcolor{black!85}{-0.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+1.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+0.3}} & {\fontseries{sb}\selectfont\textcolor{black!85}{-0.2}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+1.4}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+2.1}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+2.0}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+6.2}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+4.7}} & {\fontseries{sb}\selectfont\textcolor{black!85}{+1.9}} \\
+\midrule
+\textbf{Yearly Delta} & \textbf{+0.0} & \textbf{+0.5} & \textbf{+1.9} & \textbf{+1.3} & \textbf{+0.6} & \textbf{+1.7} & \textbf{+1.6} & \textbf{+3.1} & \textbf{+2.5} & \textbf{+1.5} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} Delta = Matching Only $-$ (Matching + Post-Stratification). Positive values indicate matching-only had greater error (post-stratification improved accuracy). All values in percentage points.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,31 @@
+\begin{table}[!htbp]
+\centering
+\caption{RMSE Trend Analysis: Statistical Tests}
+\label{tab:rmse_trend_tests}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+Model & $\beta$ & SE & $p$-value & Perm. $p$ \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Simple OLS by Class}} \\
+\addlinespace[0.2em]
+~~Demographic & 0.0890** & 0.0232 & 0.006 & -- \\
+~~Voting Administration & 0.1272 & 0.0608 & 0.075 & -- \\
+~~Candidate Choice & 0.0884 & 0.0535 & 0.142 & -- \\
+~~Overall & 0.0936** & 0.0233 & 0.005 & -- \\
+\addlinespace[0.3em]
+\multicolumn{5}{l}{\textit{Panel B: Fixed Effects Model}} \\
+\addlinespace[0.2em]
+~~Variable FE & 0.0936* & 0.0430 & 0.030 & 0.003 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} $\beta$ represents the change in RMSE (percentage points) per year.
+\item Panel A reports simple OLS regressions of RMSE on year, separately by class and overall.
+\item Panel B reports OLS with variable fixed effects (controls for 8 variables).
+\item Robust standard errors (HC3) used for all models. Permutation $p$-value based on 10,000 permutations.
+\item * $p<0.05$, ** $p<0.01$, *** $p<0.001$
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
