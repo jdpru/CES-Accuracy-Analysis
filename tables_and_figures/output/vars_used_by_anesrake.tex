@@ -1,0 +1,31 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{Variables Used during ANESRake Weight Generation}
+\label{tab:vars_used_by_anesrake}
+\begin{threeparttable}
+\begin{tabular}{lccccccccc}
+\toprule
+Variable & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 \\
+\midrule
+Age Group & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Education & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Employment Status & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Family Income & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Hispanic Origin & -- & -- & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Sex & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Union Membership & \checkmark & $\times$ & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Veteran Status & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Voting Turnout & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Voting Method & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Residence Duration & -- & \checkmark & \checkmark & \checkmark & \checkmark & $\times$ & -- & \checkmark & -- \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \checkmark~Variable used as a target for ANESRake weighting.
+\item $\times$~Variable provided to ANESRake but not selected by the algorithm.
+\item --~Variable not provided to ANESRake (benchmark unavailable for that year).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
