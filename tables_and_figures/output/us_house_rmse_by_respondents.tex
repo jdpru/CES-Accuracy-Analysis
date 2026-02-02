@@ -1,0 +1,31 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{U.S. House RMSE by Minimum Respondent Threshold and Year}
+\label{tab:us_house_rmse_by_respondents}
+\begin{threeparttable}
+\begin{tabular}{lccccccccccc}
+\toprule
+Min. Respondents & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Mean & SD \\
+\midrule
+All & 4.9 & 9.4 & 11.4 & 9.8 & 9.0 & 9.6 & 9.5 & 8.0 & 10.1 & 9.1 & 1.7 \\
+30+ & 4.9 & 8.1 & 11.0 & 9.7 & 8.9 & 9.6 & 9.3 & 8.0 & 10.1 & 8.8 & 1.6 \\
+60+ & 5.0 & 7.0 & 10.1 & 9.2 & 8.2 & 9.1 & 8.1 & 7.5 & 9.9 & 8.2 & 1.5 \\
+90+ & 4.3 & 11.1 & 8.1 & 7.9 & 8.0 & 8.2 & 6.7 & 7.0 & 8.7 & 7.8 & 1.7 \\
+120+ & 4.3 & - & 9.7 & 6.8 & 7.9 & 8.2 & 5.3 & 6.6 & 7.7 & 7.1 & 1.6 \\
+\midrule
+\multicolumn{12}{l}{\textit{Number of Congressional Districts}} \\
+\addlinespace[0.2em]
+All & 50 & 132 & 152 & 426 & 423 & 426 & 424 & 427 & 429 &  &  \\
+30+ & 50 & 108 & 145 & 422 & 420 & 425 & 411 & 425 & 429 &  &  \\
+60+ & 49 & 31 & 112 & 350 & 321 & 385 & 323 & 382 & 377 &  &  \\
+90+ & 44 & 1 & 56 & 162 & 99 & 246 & 189 & 255 & 195 &  &  \\
+120+ & 40 & 0 & 9 & 42 & 20 & 86 & 57 & 107 & 49 &  &  \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} RMSE calculated for congressional districts meeting the minimum respondent threshold. Mean and SD are computed across years.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

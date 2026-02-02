@@ -1,39 +1,33 @@
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
-\caption{Comparison of Calculated CES-Weighted RMSE vs. CES-Reported RMSE}
-\label{tab:ces-comparison}
-\begin{tabular}{l|cccccccccc}
-\hline
-\multirow{2}{*}{\textbf{Year}} & \multicolumn{2}{c}{President} & \multicolumn{2}{c}{Governor} & \multicolumn{2}{c}{U.S. Senate} & \multicolumn{2}{c}{Attorney General} & \multicolumn{2}{c}{Secretary of State} \\
- & Calc. & CES & Calc. & CES & Calc. & CES & Calc. & CES & Calc. & CES \\
-\hline
-2006 & - & - & 4.97 & 2.24 & 13.74 & 4.29 & 13.29 & 4.31 & 11.15 & 4.36 \\
-2008 & 3.54 & 2.43 & 4.66 & 3.22 & 9.90 & - & - & - & - & - \\
-2010 & - & - & 3.48 & 2.22 & 5.16 & 1.30 & 11.84 & 5.04 & 6.40 & 4.49 \\
-2012 & 2.93 & 3.32 & 3.40 & - & 2.24 & 3.66 & 15.14 & 16.86 & 10.89 & 9.93 \\
-2014 & - & - & 3.57 & 3.95 & 6.34 & 3.38 & 8.01 & - & 8.27 & - \\
-2016 & 1.69 & 1.59 & 4.00 & 4.05 & 4.03 & 7.38 & 4.89 & - & 9.65 & - \\
-2018 & - & - & 4.46 & 4.10 & 8.46 & 4.90 & 4.82 & - & 4.17 & 3.40 \\
-2020 & 2.37 & - & 4.31 & 1.92 & 5.45 & - & 3.53 & 1.92 & 3.62 & 5.33 \\
-2022 & - & - & 5.74 & - & 7.36 & 2.42 & 7.57 & 3.14 & 6.51 & 4.43 \\
-\hline
-\multicolumn{11}{l}{\textit{Average Delta by Year (Calculated $-$ CES-reported)}} \\
-\hline
-2006 & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{+2.73} & \multicolumn{2}{c}{+9.45} & \multicolumn{2}{c}{+8.98} & \multicolumn{2}{c}{+6.79} \\
-2008 & \multicolumn{2}{c}{+1.11} & \multicolumn{2}{c}{+1.44} & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{-} \\
-2010 & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{+1.26} & \multicolumn{2}{c}{+3.86} & \multicolumn{2}{c}{+6.80} & \multicolumn{2}{c}{+1.91} \\
-2012 & \multicolumn{2}{c}{-0.39} & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{-1.42} & \multicolumn{2}{c}{-1.72} & \multicolumn{2}{c}{+0.96} \\
-2014 & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{-0.38} & \multicolumn{2}{c}{+2.96} & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{-} \\
-2016 & \multicolumn{2}{c}{+0.10} & \multicolumn{2}{c}{-0.05} & \multicolumn{2}{c}{-3.35} & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{-} \\
-2018 & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{+0.36} & \multicolumn{2}{c}{+3.56} & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{+0.77} \\
-2020 & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{+2.39} & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{+1.61} & \multicolumn{2}{c}{-1.71} \\
-2022 & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{-} & \multicolumn{2}{c}{+4.94} & \multicolumn{2}{c}{+4.43} & \multicolumn{2}{c}{+2.08} \\
-\hline
-\textbf{Avg. $\Delta$} & \multicolumn{2}{c}{+0.27} & \multicolumn{2}{c}{+1.11} & \multicolumn{2}{c}{+2.86} & \multicolumn{2}{c}{+4.02} & \multicolumn{2}{c}{+1.80} \\
-\hline
+\footnotesize
+\caption{CES-Reported RMSEs vs. RMSEs Calculated in This Study}
+\label{tab:ces_comparison}
+\begin{threeparttable}
+\begin{tabular}{lccccccccccccccc}
+\toprule
+ & \multicolumn{3}{c}{President} & \multicolumn{3}{c}{Governor} & \multicolumn{3}{c}{U.S. Senate} & \multicolumn{3}{c}{Attorney General} & \multicolumn{3}{c}{Secretary of State} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13} \cmidrule(lr){14-16}
+Year & Study & CES & $\Delta$ & Study & CES & $\Delta$ & Study & CES & $\Delta$ & Study & CES & $\Delta$ & Study & CES & $\Delta$ \\
+\midrule
+2006 & - & - & - & 5.0 & 2.2 & +2.7 & 13.7 & 4.3 & +9.5 & 13.3 & 4.3 & +9.0 & 11.2 & 4.4 & +6.8 \\
+2008 & 3.5 & 2.4 & +1.1 & 4.7 & 3.2 & +1.4 & 9.9 & - & - & - & - & - & - & - & - \\
+2010 & - & - & - & 3.5 & 2.2 & +1.3 & 5.2 & 1.3 & +3.9 & 11.8 & 5.0 & +6.8 & 6.4 & 4.5 & +1.9 \\
+2012 & 2.9 & 3.3 & -0.4 & 3.4 & - & - & 2.2 & 3.7 & -1.4 & 15.1 & 16.9 & -1.7 & 10.9 & 9.9 & +1.0 \\
+2014 & - & - & - & 3.6 & 4.0 & -0.4 & 6.3 & 3.4 & +3.0 & 8.0 & - & - & 8.3 & - & - \\
+2016 & 1.7 & 1.6 & +0.1 & 4.0 & 4.0 & -0.1 & 4.0 & 7.4 & -3.4 & 4.9 & - & - & 9.6 & - & - \\
+2018 & - & - & - & 4.5 & 4.1 & +0.4 & 8.5 & 4.9 & +3.6 & 4.8 & - & - & 4.2 & 3.4 & +0.8 \\
+2020 & 2.4 & - & - & 4.3 & 1.9 & +2.4 & 5.5 & - & - & 3.5 & 1.9 & +1.6 & 3.6 & 5.3 & -1.7 \\
+2022 & - & - & - & 5.7 & - & - & 7.4 & 2.4 & +4.9 & 7.6 & 3.1 & +4.4 & 6.5 & 4.4 & +2.1 \\
+\midrule
+\textbf{Mean} & \textbf{2.6} & \textbf{2.4} & \textbf{+0.3} & \textbf{4.3} & \textbf{3.1} & \textbf{+1.1} & \textbf{7.0} & \textbf{3.9} & \textbf{+2.9} & \textbf{8.6} & \textbf{6.3} & \textbf{+4.0} & \textbf{7.6} & \textbf{5.3} & \textbf{+1.8} \\
+\bottomrule
 \end{tabular}
-\small
-\begin{flushleft}
-\textit{Note:} Calc. = RMSE from CES-weighted estimates in this analysis. CES = RMSE from CES's official reports. ``-'' indicates data not available for that year-race combination. Delta = Calculated $-$ CES-reported. Positive values indicate we calculated higher error than CES reported.
-\end{flushleft}
+\begin{tablenotes}
+\footnotesize
+\item - indicates data not available for that year-office combination.
+\item \textit{Note:} All RMSEs are computed using CES-provided post-stratification weights. ``Study'' shows RMSEs calculated in this analysis; ``CES'' shows RMSEs reported by the CES team. $\Delta$ = Study $-$ CES; positive values indicate this study calculated higher error than CES reported.
+\item \textit{Source:} CES-reported RMSEs from publicly-available CES data guides published alongside each year's primary dataset (\url{https://cces.gov.harvard.edu/}).
+\end{tablenotes}
+\end{threeparttable}
 \end{table}
