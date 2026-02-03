@@ -1,20 +1,20 @@
 \begin{table}[!htbp]
 \centering
 \footnotesize
-\caption{RMSE Changes by Weighting Method -- ANESRake-Full Validity Scheme}
+\caption{RMSE Changes by Weighting Method}
 \label{tab:rmse_anesrake_full}
 \begin{threeparttable}
 \begin{tabular}{lcccccccccc}
 \toprule
 Variable & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Mean \\
 \midrule
-\multicolumn{11}{l}{\textit{Unweighted RMSE (\%)}} \\
+\multicolumn{11}{l}{\textit{Matching-Only RMSE (\%)}} \\
 \addlinespace[0.2em]
 ~~State Representative & 7.1 & 5.4 & 6.2 & 5.7 & 8.7 & 8.6 & 12.2 & 13.7 & 13.6 & 9.0 \\
 ~~State Senator & 10.1 & 5.9 & 9.6 & 8.0 & 15.3 & 9.3 & 7.8 & 13.3 & 16.0 & 10.6 \\
 ~~U.S. House & 4.3 & 10.6 & 9.3 & 7.7 & 8.5 & 8.0 & 9.4 & 10.1 & 11.4 & 8.8 \\
 \addlinespace[0.1em]
-{\fontseries{sb}\selectfont Average} & 7.1 & 7.3 & 8.4 & 7.2 & 10.9 & 8.6 & 9.8 & 12.4 & 13.7 & {\fontseries{sb}\selectfont 9.5} \\
+~~\textbf{Average} & \textbf{7.1} & \textbf{7.3} & \textbf{8.4} & \textbf{7.2} & \textbf{10.9} & \textbf{8.6} & \textbf{9.8} & \textbf{12.4} & \textbf{13.7} & \textbf{9.5} \\
 \addlinespace[0.4em]
 \multicolumn{11}{l}{\textit{$\Delta$ to Matching + Post-Strat. (pp)}} \\
 \addlinespace[0.2em]
@@ -22,20 +22,20 @@ Variable & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Mean \
 ~~State Senator & +0.6 & -0.3 & -0.0 & -0.6 & -1.8 & -1.4 & -3.0 & -6.7 & -5.9 & -2.1 \\
 ~~U.S. House & +0.7 & -1.2 & +2.1 & +2.1 & +0.5 & +1.6 & +0.1 & -2.1 & -1.3 & +0.3 \\
 \addlinespace[0.1em]
-{\fontseries{sb}\selectfont Average} & +0.5 & -0.7 & +0.4 & +0.7 & -1.2 & -0.6 & -1.3 & -4.5 & -3.9 & {\fontseries{sb}\selectfont -1.2} \\
+~~\textbf{Average} & \textbf{+0.5} & \textbf{-0.7} & \textbf{+0.4} & \textbf{+0.7} & \textbf{-1.2} & \textbf{-0.6} & \textbf{-1.3} & \textbf{-4.5} & \textbf{-3.9} & \textbf{-1.2} \\
 \addlinespace[0.4em]
-\multicolumn{11}{l}{\textit{$\Delta$ to ANESRake (Full) (pp)}} \\
+\multicolumn{11}{l}{\textit{$\Delta$ to ANESRake (pp)}} \\
 \addlinespace[0.2em]
 ~~State Representative & +3.0 & +1.4 & +1.3 & +2.9 & -1.2 & +0.0 & +0.4 & -2.1 & -0.1 & +0.6 \\
 ~~State Senator & +2.1 & +1.0 & +1.8 & +2.4 & -0.5 & -0.3 & +0.5 & -3.1 & -0.2 & +0.4 \\
 ~~U.S. House & +2.3 & +1.8 & +3.7 & +3.8 & +3.2 & +1.6 & +2.9 & +2.5 & +0.3 & +2.5 \\
 \addlinespace[0.1em]
-{\fontseries{sb}\selectfont Average} & +2.5 & +1.4 & +2.3 & +3.0 & +0.5 & +0.5 & +1.3 & -0.9 & +0.0 & {\fontseries{sb}\selectfont +1.2} \\
+~~\textbf{Average} & \textbf{+2.5} & \textbf{+1.4} & \textbf{+2.3} & \textbf{+3.0} & \textbf{+0.5} & \textbf{+0.5} & \textbf{+1.3} & \textbf{-0.9} & \textbf{+0.0} & \textbf{+1.2} \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \footnotesize
-\item \textit{Note:} Only variables present in all years with Valid\_for\_Accuracy\_Full = True. Deltas show change in RMSE (negative = improvement).
+\item \textit{Note:} Deltas show change in RMSE percentage points (pp) from Matching-Only. The three variables shown were the only variables present in all years and not used in either YouGov post-stratification or ANESRake.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
