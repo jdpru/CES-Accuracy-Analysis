@@ -2,7 +2,6 @@
 title: "analysisHQ"
 author: "JD Pruett"
 date: "2025-04-04"
-output: html_document
 ---
 
 # Environment Setup --------------------------------------
@@ -122,28 +121,6 @@ House_0622 <- read_excel("data/Benchmarks/Election Returns/US_House_Returns_2006
 
 # State Senate, State House, Attorney General, Secretary of State
 State_legislative_0623 <- read_excel("data/benchmarks/Election Returns/State_Legislative_and_Constitutional_Offices_2006_2023.xlsx", guess_max = 20000)
-
-special_state <- State_legislative_0623 %>% 
-  filter(special_election == TRUE,
-         year(election_date) %% 2 == 0)
-
-# remaining to check
-remaining <- anti_join(
-  special_state,
-  rows_only_in_special_state,
-  by = names(special_state)
-)
-
-
-
-# find rows that are NOT duplicates but are still special election == TRUE
-rows_only_in_special_state <- anti_join(
-  special_state,
-  dupes_new,
-  by = names(special_state)
-) %>%
-  filter(year(election_date) %% 2 == 0)
-
 State_senate_full <- State_legislative_0623 %>%
   filter(office == "State Senate")
 State_house_full <- State_legislative_0623 %>%
@@ -209,6 +186,11 @@ conflict_dfs <- find_vote_conflict_scenarios(df_new)
 same_party_diff_votes <- conflict_dfs$same_party_diff_votes
 same_party_same_votes <- conflict_dfs$same_party_same_votes
 diff_party_same_votes <- conflict_dfs$diff_party_same_votes
+
+write_xlsx(conflict_dfs$same_party_diff_votes, "same_party_diff_votes.xlsx")
+write_xlsx(conflict_dfs$same_party_same_votes, "same_party_same_votes.xlsx")
+write_xlsx(conflict_dfs$diff_party_same_votes, "diff_party_same_votes.xlsx")
+
 ```
 
 ### Turnout
@@ -231,11 +213,11 @@ state_populations <- read_excel("data/Benchmarks/Historical_State_Population_by_
 ### Misc.
 ```{r}
 # CES assigned some respondents to incorrect congressional district in 2020
-NC_flag_df <- read.csv("data/misc/NC_responents_incorrect_CD.csv") %>%
+NC_flag_df <- read.csv("data/misc./NC_responents_incorrect_CD.csv") %>%
   filter(cd_change_flag_post == 1)
 
 # This is a list of all the races that should be skipped because they were asked about in the CES but did not actually occur
-skip_conditions <- read.xlsx("data/misc/skip_conditions_final.xlsx")
+skip_conditions <- read.xlsx("data/misc./skip_conditions_final.xlsx")
 ```
 
 ## CPS Datasets
@@ -764,21 +746,36 @@ house_prop_table$Office <- "US House"
 
 # US Senate
 Senate_0622_clean_fixed <- recalculate_total_votes(Senate_0622, "statewide")
-senate_cand_prop_table <- calculate_cand_num_proportions(Senate_0622_clean_fixed) %>%
+senate_cand_prop_table <- calculate_party_proportions(Senate_0622_clean_fixed) %>%
   mutate(office = "US Senate") %>%
   rename(
     Office = office,
     State = state,
     District = district,
     Year = year,
-    Candidate = candidate_name,
-    Cand_Num = cand_num,
+    #Candidate = candidate_name,
     Party_Detailed = party_detailed,
     Party_Simplified = party_simplified,
-    Candidate_Votes = candidatevotes,
+    #Candidate_Votes = candidatevotes,
     Total_Votes = totalvotes,
     Proportion = proportion
   )
+# 
+# senate_cand_prop_table <- calculate_cand_num_proportions(Senate_0622_clean_fixed) %>%
+#   mutate(office = "US Senate") %>%
+#   rename(
+#     Office = office,
+#     State = state,
+#     District = district,
+#     Year = year,
+#     Candidate = candidate_name,
+#     Cand_Num = cand_num,
+#     Party_Detailed = party_detailed,
+#     Party_Simplified = party_simplified,
+#     Candidate_Votes = candidatevotes,
+#     Total_Votes = totalvotes,
+#     Proportion = proportion
+#   )
 
 # Governor
 Governor_0622_clean_fixed <- recalculate_total_votes(Governor_0622, "statewide")
@@ -970,7 +967,6 @@ secretary_of_state_candidate_level_props <- candidate_level_BP_statewide_offices
   mutate(Office = "Secretary of State") %>%   
   select(Office, everything()) 
 
-
 # Merge all results
 merged_candidate_level_props <- rbind(president_candidate_level_props, senate_candidate_level_props, house_candidate_level_props, governor_candidate_level_props, attorney_general_candidate_level_props, secretary_of_state_candidate_level_props)
 
@@ -1009,7 +1005,7 @@ create_targets <- function(year_data_list) {
     # Create a list of all recoded variables for CES data
     variables <- intersect(names(ces_df), names(cps_df))
     # Exclude variables I don't want to use in weighting
-    variables <- variables[!grepl("DUM|OVERTIME|REGION_rc|CUR_MIL_rc|CLASSWKR_rc|CITIZEN_rc", variables)]
+    variables <- variables[!grepl("DUM|OVERTIME|REGION_rc|CUR_MIL_rc|CLASSWKR_rc|CITIZEN_rc|POST_STATE|VOTEREG_rc", variables)]
   
     # Create population (cps) numeric values list with level names
     targets <- list()
@@ -1153,44 +1149,94 @@ weighting_results_all <- run_weighting(c(2006, 2008, 2010, 2012, 2014, 2016, 201
 Add the new weight column to each year's df
 ```{r}
 add_weights_to_df <- function(df, year, weighting_results, col_name) {
-  
-  # Check if the weight column is already present
+
+  # Notify and remove existing weight column if present
   if (col_name %in% colnames(df)) {
-    message(paste0(col_name, " already present in ", year))
-    return(df)
+    message(paste0(
+      col_name,
+      " already present in ",
+      year,
+      " — replacing with new weights."
+    ))
+    df <- df %>% dplyr::select(-all_of(col_name))
   }
-  
-  # Extract weights and case IDs for the specified year
+
+  # Extract weights for the specified year
   weights <- weighting_results[[as.character(year)]]$caseweights
   weights <- weights[order(weights$cases), ]  # ensure consistent order
-  
+
   # Merge weights with the dataframe
   merged_df <- merge(
     df,
     weights,
-    by.x = 1,      # assumes case ID is first column of df
+    by.x = 1,          # assumes case ID is first column of df
     by.y = "cases",
     all.x = TRUE
   )
-  
+
   # Rename the weights column
   colnames(merged_df)[ncol(merged_df)] <- col_name
-  
+
   merged_df
 }
+
 ```
 
 Add new weighting column to each CES df
 ```{r}
-CES_06_rc_clean <- add_weights_to_df(CES_06_rc_clean, 2006, weighting_results, "anesrake_weight_full")
-CES_08_rc_clean <- add_weights_to_df(CES_08_rc_clean, 2008, weighting_results, "anesrake_weight_full")
-CES_10_rc_clean <- add_weights_to_df(CES_10_rc_clean, 2010, weighting_results, "anesrake_weight_full")
-CES_12_rc_clean <- add_weights_to_df(CES_12_rc_clean, 2012, weighting_results, "anesrake_weight_full")
-CES_14_rc_clean <- add_weights_to_df(CES_14_rc_clean, 2014, weighting_results, "anesrake_weight_full")
-CES_16_rc_clean <- add_weights_to_df(CES_16_rc_clean, 2016, weighting_results, "anesrake_weight_full")
-CES_18_rc_clean <- add_weights_to_df(CES_18_rc_clean, 2018, weighting_results, "anesrake_weight_full")
-CES_20_rc_clean <- add_weights_to_df(CES_20_rc_clean, 2020, weighting_results, "anesrake_weight_full")
-CES_22_rc_clean <- add_weights_to_df(CES_22_rc_clean, 2022, weighting_results, "anesrake_weight_full")
+CES_06_rc_clean <- add_weights_to_df(CES_06_rc_clean, 2006, weighting_results_all, "anesrake_weight_full")
+CES_08_rc_clean <- add_weights_to_df(CES_08_rc_clean, 2008, weighting_results_all, "anesrake_weight_full")
+CES_10_rc_clean <- add_weights_to_df(CES_10_rc_clean, 2010, weighting_results_all, "anesrake_weight_full")
+CES_12_rc_clean <- add_weights_to_df(CES_12_rc_clean, 2012, weighting_results_all, "anesrake_weight_full")
+CES_14_rc_clean <- add_weights_to_df(CES_14_rc_clean, 2014, weighting_results_all, "anesrake_weight_full")
+CES_16_rc_clean <- add_weights_to_df(CES_16_rc_clean, 2016, weighting_results_all, "anesrake_weight_full")
+CES_18_rc_clean <- add_weights_to_df(CES_18_rc_clean, 2018, weighting_results_all, "anesrake_weight_full")
+CES_20_rc_clean <- add_weights_to_df(CES_20_rc_clean, 2020, weighting_results_all, "anesrake_weight_full")
+CES_22_rc_clean <- add_weights_to_df(CES_22_rc_clean, 2022, weighting_results_all, "anesrake_weight_full")
+```
+Table shows which variables were selected by anesrake for weighting in each year
+```{r}
+# ------------------------------------------------------------
+# 1) Define the universe of variables across all years
+# ------------------------------------------------------------
+all_vars <- sort(unique(unlist(lapply(all_targets, names))))
+
+# ------------------------------------------------------------
+# 2) Build long table with 3-level status
+# ------------------------------------------------------------
+vars_status_long <- do.call(
+  rbind,
+  lapply(names(weighting_results_all), function(y_chr) {
+
+    y <- as.character(y_chr)
+
+    proposed <- names(all_targets[[y]])
+    used     <- weighting_results_all[[y]]$vars_used
+
+    data.frame(
+      Year     = y,
+      Variable = all_vars,
+      Status   = dplyr::case_when(
+        all_vars %in% used     ~ "Used",
+        all_vars %in% proposed ~ "Provided but not selected",
+        TRUE                   ~ "Not provided"
+      ),
+      stringsAsFactors = FALSE
+    )
+  })
+)
+
+# ------------------------------------------------------------
+# 3) Pivot to wide (years as columns)
+# ------------------------------------------------------------
+vars_used_by_anesrake <- vars_status_long %>%
+  pivot_wider(
+    names_from  = Year,
+    values_from = Status,
+    values_fill = "Not provided"
+  ) %>%
+  arrange(Variable) %>%
+  standardize_variable_names()
 ```
 
 ## anesrake_weight_restricted
@@ -1250,7 +1296,10 @@ discrepancy_consistency <- discrepancy_long %>%
   ) %>%
   arrange(desc(Mean_Discrepancy))
 
+ignore_voting_admin_vars <- c("VOTED_rc", "VOTEHOW_rc", "VOTEREG_rc")
+
 selected_weighting_vars <- discrepancy_consistency %>%
+  filter(!Variable %in% ignore_voting_admin_vars) %>%
   arrange(Mean_Rank) %>%
   slice_head(n = 4)
 ```
@@ -1301,7 +1350,6 @@ vars_used_ces_weights <- list(
 )
 ```
 
-
 ```{r}
 # CES Weighting vars for each year
 yearly_ces_wt_vars <- list(
@@ -1329,36 +1377,6 @@ config <- create_accuracy_config(
   anesrake_restricted_results = weighting_results_restricted,
   selected_weighting_vars = selected_weighting_vars
 )
-```
-
-```{r}
-# These are the variables that were NOT selected by anesrake to use in weighting
-vars_used_vs_all <- do.call(
-  rbind,
-  lapply(names(weighting_results), function(y_chr) {
-
-    # Keys might be numeric or character; normalize
-    y <- as.character(y_chr)
-
-    # Variables proposed to ANESRake for this year
-    proposed <- names(all_targets[[y]])
-
-    # Variables actually used by ANESRake
-    used <- weighting_results[[y]]$vars_used
-
-    # Build one row per proposed variable
-    data.frame(
-      Year     = y,
-      Variable = proposed,
-      Used     = proposed %in% used,
-      stringsAsFactors = FALSE
-    )
-  })
-)
-
-# Just the excluded variables (not used)
-vars_excluded_by_year <- subset(vars_used_vs_all, !Used)
-
 ```
 
 ## Calculate party-level election errors
@@ -1403,6 +1421,151 @@ demovote_errors <- calculate_demovote_errors(
 ) %>%
   standardize_variable_names() %>%
   mutate(Specificity = NA)
+```
+
+## National-level errors
+The above accurac functions measure error where the unit of observation is the state. This function treats the country as the unit of observation, so there's just one error per variable per year (x the number of categories for that variable)
+
+```{r}
+calculate_demovote_errors_national <- function(year_data_list,
+                                               all_targets,
+                                               config,
+                                               turnout_national = NULL) {
+
+  comparison_vars <- extract_comparison_vars(all_targets)
+  all_results <- list()
+
+  for (year_data in year_data_list) {
+
+    year   <- year_data$year
+    ces_df <- year_data$CES
+    cps_df <- year_data$CPS
+
+    wt_vars <- config$weight_vars[[as.character(year)]]
+
+    for (demo_var in comparison_vars) {
+
+      # ---------------------------------------
+      # Skip inherently state-distribution vars
+      # ---------------------------------------
+      if (demo_var == "POST_STATE_rc") next
+      if (!(demo_var %in% names(ces_df))) next
+
+      var_metadata <- determine_variable_metadata(demo_var, year, config)
+
+      # ---------------------------------------
+      # Special case: turnout
+      # ---------------------------------------
+      if (demo_var == "VOTED_rc" && !is.null(turnout_national)) {
+
+        categories <- c("Voted", "Did not vote")
+        benchmark_voted <- turnout_national %>%
+          filter(Year == year) %>%
+          select(-Year) %>%
+          unlist(use.names = FALSE)
+
+
+        benchmark <- c(
+          Voted = benchmark_voted,
+          `Did not vote` = 1 - benchmark_voted
+        )
+
+      } else {
+        # ---------------------------------------
+        # CPS benchmark variables
+        # ---------------------------------------
+        if (!(demo_var %in% names(cps_df))) next
+
+        categories <- sort(unique(c(ces_df[[demo_var]], cps_df[[demo_var]])))
+        categories <- categories[!is.na(categories)]
+
+        benchmark <- prop.table(
+          table(factor(cps_df[[demo_var]], levels = categories))
+        )
+      }
+
+      # ---------------------------------------
+      # CES national estimates
+      # ---------------------------------------
+      ces_unwt <- prop.table(
+        table(factor(ces_df[[demo_var]], levels = categories))
+      )
+
+      ces_wt <- weighted_prop_zero(
+        ces_df[[demo_var]],
+        ces_df[[wt_vars[1]]],
+        categories
+      )
+
+      anes_full <- weighted_prop_zero(
+        ces_df[[demo_var]],
+        ces_df$anesrake_weight_full,
+        categories
+      )
+
+      anes_res <- weighted_prop_zero(
+        ces_df[[demo_var]],
+        ces_df$anesrake_weight_restricted,
+        categories
+      )
+
+      # ---------------------------------------
+      # Store results
+      # ---------------------------------------
+      for (cat in categories) {
+
+        all_results[[length(all_results) + 1]] <- tibble(
+          Year     = year,
+          State    = "NATIONAL",
+          Class    = if_else(
+            demo_var %in% c("VOTED_rc","VOTEHOW_rc","VOTEREG_rc"),
+            "Voting Administration",
+            "Demographic"
+          ),
+          Variable = demo_var,
+          Category = cat,
+
+          Variable_Type = var_metadata$variable_type,
+          Used_in_ANESRake_Full       = var_metadata$used_in_anesrake_full,
+          Used_in_ANESRake_Restricted = var_metadata$used_in_anesrake_restricted,
+          Valid_for_Accuracy_Full       = var_metadata$valid_for_accuracy_full,
+          Valid_for_Accuracy_Restricted = var_metadata$valid_for_accuracy_restricted,
+
+          Benchmark = benchmark[cat] * 100,
+
+          CES_Unweighted          = ces_unwt[cat] * 100,
+          CES_Weighted            = ces_wt[cat] * 100,
+          CES_ANESRake_Full       = anes_full[cat] * 100,
+          CES_ANESRake_Restricted = anes_res[cat] * 100,
+
+          Error_Unweighted          = (ces_unwt[cat] - benchmark[cat]) * 100,
+          Error_CES_Weighted        = (ces_wt[cat]   - benchmark[cat]) * 100,
+          Error_ANESRake_Full       = (anes_full[cat] - benchmark[cat]) * 100,
+          Error_ANESRake_Restricted = (anes_res[cat]  - benchmark[cat]) * 100,
+
+          n_respondents = sum(!is.na(ces_df[[demo_var]]))
+        )
+      }
+    }
+  }
+
+  bind_rows(all_results)
+}
+```
+
+```{r}
+demovote_errors_national <- calculate_demovote_errors_national(
+  year_data_list = list_all_years,
+  all_targets    = all_targets,
+  config         = config,
+  turnout_national = turnout_national
+) %>%
+  standardize_variable_names() %>%
+  mutate(Specificity = NA)
+
+demovote_errors_national_modal <- keep_modal_only(demovote_errors_national)
+demovote_errors_national_modal_long <- demovote_errors_national_modal %>%
+  pivot_errors_long()
 ```
 
 ## Keep modal category only, combine, pivot
@@ -1532,71 +1695,17 @@ write_xlsx(
   most_specific,
   here("tables_and_figures/input_tables", "most_specific.xlsx")
 )
-# 
-# # Error Distributions
-# write_xlsx(
-#   dist_errors_bucket_table,
-#   here("tables_and_figures/input_tables", "dist_errors_bucket_table.xlsx")
-# )
-# 
-# # Race Competitiveness
-# write_xlsx(
-#   election_rmse_by_competitiveness_range,
-#   here("tables_and_figures/input_tables", "election_rmse_by_competitiveness_range.xlsx")
-# )
-# 
-# # Party + Candidate combined for comparison
-# write_xlsx(
-#   party_candidate_combined_valid,
-#   here("tables_and_figures/input_tables", "party_candidate_combined_valid.xlsx")
-# )
+
+write_xlsx(
+  demovote_errors_national_modal_long,
+  here("tables_and_figures/input_tables", "national_errors.xlsx")
+)
+
+write_xlsx(
+  vars_used_by_anesrake,
+  here("tables_and_figures/input_tables", "vars_used_by_anesrake.xlsx")
+)
 ```
-
-
-## Competitiveness range
-```{r}
-banded <- most_specific %>%
-  filter(
-    Validity_Scheme == "ANESRake - Full",
-    Class == "Candidate Choice"
-  ) %>%
-  mutate(
-    Comp_Band = case_when(
-      Benchmark < 20  ~ "0–20%",
-      Benchmark < 40  ~ "20–40%",
-      Benchmark < 45  ~ "40–45%",
-      Benchmark <= 55 ~ "45–55%",
-      Benchmark <= 60 ~ "55–60%",
-      Benchmark <= 80 ~ "60–80%",
-      Benchmark <= 100 ~ "80–100%",
-      TRUE ~ NA_character_
-    )
-  )
-
-election_rmse_by_competitiveness_range <- bind_rows(
-  banded,
-  banded %>% mutate(Comp_Band = "0–100%")
-) %>%
-  group_by(
-    Year,
-    Weighting_Method,
-    Comp_Band
-  ) %>%
-  summarise(
-    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    Avg_Abs_Error = mean(abs(Error), na.rm = TRUE),
-    n_observations = sum(!is.na(Error)),
-    n_states = n_distinct(State),
-    n_respondents = sum(n_respondents, na.rm = TRUE),
-    .groups = "drop"
-  )
-
-```
-
-
-
-NOTE THAT NOW, WHEN FILTERING, YOU MUST PICK A VALIDITY_scheme, THEN IF YOU DO A SPECIFICITY LEVEL + DEMOGRAPHICS, IT MUST BE SPECIFICITY LEVEL & IS.NA(SPECIFICITY)
-########### re write above
 
 
 ## Combining Errors
@@ -1677,18 +1786,6 @@ most_specific_wide <- bind_rows(
 ```
 
 
-## Add Validity Scheme
-```{r}
-# party_demovote_long
-
-
-# candidate_demovote_long
-
-# most_specific_long
-```
-
-
-
 ## Convert to Long Format
 ```{r}
 party_demovote_long <- pivot_errors_long(party_demovote_wide)
@@ -1747,843 +1844,3 @@ metrics_base <- bind_rows(
     mutate(Validity_Scheme = "ANESRake - Restricted")
 )
 ```
-
-## Distribution of errors buckets
-```{r}
-dist_errors_bucket_table <- metrics_base %>%
-  mutate(
-    Abs_Error = abs(Error)
-  ) %>%
-  group_by(Validity_Scheme) %>%
-  mutate(
-    Error_Bucket = cut(
-      Abs_Error,
-      breaks = seq(
-        0,
-        ceiling(max(Abs_Error, na.rm = TRUE)),
-        by = 1
-      ),
-      right = FALSE,
-      include.lowest = TRUE
-    )
-  ) %>%
-  ungroup() %>%
-  group_by(
-    Validity_Scheme,
-    Class,
-    Weighting_Method,
-    Error_Bucket,
-    .drop = FALSE   # keep zero-count buckets
-  ) %>%
-  summarise(
-    Count = n(),
-    .groups = "drop"
-  )
-```
-
-## Candidate vs. Party-level specificity
-```{r}
-party_long_to_combine <- party_demovote_long %>%
-  mutate(
-    Specificity = "Party",
-    District = NA_character_,
-    CES_Candidate = NA_character_,
-    True_Candidate = NA_character_,
-    Match_Score = NA_real_
-  ) %>%
-  filter(Class == "Candidate Choice")
-
-candidate_long_to_combine <- candidate_demovote_long %>%
-  mutate(
-    Specificity = "Candidate"
-  ) %>%
-  filter(Class == "Candidate Choice")
-
-party_candidate_combined <- bind_rows(
-  party_long_to_combine,
-  candidate_long_to_combine
-)
-
-party_candidate_combined_valid <- bind_rows(
-
-  # ALL
-  party_candidate_combined %>%
-    mutate(Validity_Scheme = "All"),
-
-  # FULL
-  party_candidate_combined %>%
-    filter(Valid_for_Accuracy_Full) %>%
-    filter(
-      Weighting_Method %in% c(
-        "CES-Unweighted",
-        "CES-Provided Weights",
-        "ANESRake-Full"
-      )
-    ) %>%
-    mutate(Validity_Scheme = "ANESRake - Full"),
-
-  # RESTRICTED
-  party_candidate_combined %>%
-    filter(Valid_for_Accuracy_Restricted) %>%
-    filter(
-      Weighting_Method %in% c(
-        "CES-Unweighted",
-        "CES-Provided Weights",
-        "ANESRake-Restricted"
-      )
-    ) %>%
-    mutate(Validity_Scheme = "ANESRake - Restricted")
-) %>%
-
-  select(
-    Year, State, District, Class, Specificity, Validity_Scheme,
-    Variable, Variable_Type, Category,
-    Used_in_ANESRake_Full, Used_in_ANESRake_Restricted,
-    Valid_for_Accuracy_Full, Valid_for_Accuracy_Restricted,
-    CES_Candidate, True_Candidate, Match_Score,
-    Benchmark, CES_Unweighted, CES_Weighted,
-    CES_ANESRake_Full, CES_ANESRake_Restricted,
-    n_respondents, Weighting_Method, Error
-  )
-```
-
-
-<!--
-# Create summary tables
-calc sumary stats OLD
-```{r}
-# ==============================================================================
-# SUMMARY TABLES FOR EXPLORATION AND ANALYSIS
-# ==============================================================================
-# These tables use ALL variables (no filtering) and include detailed sample size metrics
-
-# RMSE by Year × Variable × Weighting Method (all variables)
-rmse_summary_all <- most_specific_long %>%
-  group_by(Year, Variable, Weighting_Method) %>%
-  summarise(
-    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n_observations = n(),
-    n_states = n_distinct(State),
-    n_respondents = sum(n_respondents, na.rm = TRUE),
-    .groups = "drop"
-  )
-
-# RMSE by Year × Class × Weighting Method (all variables)
-rmse_by_class_all <- most_specific_long %>%
-  group_by(Year, Class, Weighting_Method) %>%
-  summarise(
-    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n_observations = n(),
-    n_states = n_distinct(State),
-    n_respondents = sum(n_respondents, na.rm = TRUE),
-    .groups = "drop"
-  )
-
-# RMSE by Year × Variable_Type × Weighting Method
-rmse_by_variable_type_all <- most_specific_long %>%
-  group_by(Year, Variable_Type, Weighting_Method) %>%
-  summarise(
-    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n_observations = n(),
-    n_states = n_distinct(State),
-    n_respondents = sum(n_respondents, na.rm = TRUE),
-    .groups = "drop"
-  )
-
-# ==============================================================================
-# FILTERED TABLE FOR ACCURACY ASSESSMENT
-# ==============================================================================
-# IMPORTANT: For unbiased accuracy assessment, filter using the appropriate
-# Valid_for_Accuracy_* flag for the weighting scheme being evaluated.
-#
-# Valid_for_Accuracy_Full = TRUE means:
-#   - Variable_Type == "Secondary" (not used in CES-provided weighting), AND
-#   - Used_in_ANESRake_Full == FALSE (not used in full ANESRake weighting)
-#
-# Valid_for_Accuracy_Restricted = TRUE means:
-#   - Variable_Type == "Secondary" (not used in CES-provided weighting), AND
-#   - Used_in_ANESRake_Restricted == FALSE (not used in restricted ANESRake weighting)
-most_specific_long_valid <- bind_rows(
-  # ===============================
-  # FULL validity scheme
-  # ===============================
-  most_specific_long %>%
-    filter(Valid_for_Accuracy_Full) %>%
-    filter(
-      Weighting_Method %in% c(
-        "CES-Unweighted",
-        "CES-Provided Weights",
-        "ANESRake-Full"
-      )
-    ) %>%
-    mutate(Validity_Scheme = "Full"),
-
-  # ===============================
-  # RESTRICTED validity scheme
-  # ===============================
-  most_specific_long %>%
-    filter(Valid_for_Accuracy_Restricted) %>%
-    filter(
-      Weighting_Method %in% c(
-        "CES-Unweighted",
-        "CES-Provided Weights",
-        "ANESRake-Restricted"
-      )
-    ) %>%
-    mutate(Validity_Scheme = "Restricted")
-)
-
-
-# Filtered RMSE by Year × Variable × Weighting Method
-rmse_summary_valid <- most_specific_long_valid %>%
-  group_by(
-    Validity_Scheme,
-    Year,
-    Variable,
-    Weighting_Method
-  ) %>%
-  summarise(
-    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n_observations = sum(!is.na(Error)),
-    n_states = n_distinct(State),
-    n_respondents = sum(n_respondents, na.rm = TRUE),
-    .groups = "drop"
-  )
-
-# Filtered RMSE by Year × Class × Weighting Method
-rmse_by_class_valid <- most_specific_long_valid %>%
-  group_by(
-    Validity_Scheme,
-    Year,
-    Class,
-    Weighting_Method
-  ) %>%
-  summarise(
-    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n_observations = sum(!is.na(Error)),
-    n_states = n_distinct(State),
-    n_respondents = sum(n_respondents, na.rm = TRUE),
-    .groups = "drop"
-  )
-
-# Filtered RMSE by Year × Variable_Type × Weighting Method
-rmse_by_variable_type_valid <- most_specific_long_valid %>%
-  group_by(
-    Validity_Scheme,
-    Year,
-    Variable_Type,
-    Weighting_Method
-  ) %>%
-  summarise(
-    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    n_observations = sum(!is.na(Error)),
-    n_states = n_distinct(State),
-    n_respondents = sum(n_respondents, na.rm = TRUE),
-    .groups = "drop"
-  )
-```
-
-# Export tables
-```{r}
-# ==============================================================================
-# EXCEL EXPORT TABLES FOR PUBLICATION/VISUALIZATION
-# ==============================================================================
-# These tables are exported to Excel for use in figuresHQ.ipynb and publications
-# All use Valid_for_Accuracy filter for unbiased accuracy assessment
-
-# ---------------------------------------------------------------
-# 1. Wide-format summary table: Years × Variables matrix
-# ---------------------------------------------------------------
-
-ces_wtd_rmse_summary_table <- most_specific_long %>%
-  filter(Weighting_Method == "CES Weights",
-         Valid_for_Accuracy == TRUE) %>%
-  group_by(Year, Variable) %>%
-  summarise(RMSE = sqrt(mean(Error^2, na.rm = TRUE)), .groups = "drop") %>%
-  pivot_wider(
-    names_from = Variable,
-    values_from = RMSE
-  ) %>%
-  mutate(Year = as.character(Year)) %>%
-  mutate(`Year Average` = rowMeans(across(where(is.numeric)), na.rm = TRUE)) %>%
-  bind_rows(
-    summarise(
-      .,
-      Year = "Variable Average",
-      across(where(is.numeric), ~ mean(.x, na.rm = TRUE))
-    )
-  )
-
-write_xlsx(
-  ces_wtd_rmse_summary_table,
-  here("tables_and_figures/input tables", "ces_wtd_rmse_summary_table.xlsx")
-)
-
-
-
-# ---------------------------------------------------------------
-# 3. Yearly RMSE by Weighting Method
-# ---------------------------------------------------------------
-
-rmse_by_weighting_method <- most_specific_long %>%
-  filter(Valid_for_Accuracy == TRUE) %>%
-  group_by(Year, Variable, Weighting_Method) %>%
-  summarise(RMSE = sqrt(mean(Error^2, na.rm = TRUE)), .groups = "drop") %>%
-  group_by(Year, Weighting_Method) %>%
-  summarise(Avg_RMSE = mean(RMSE, na.rm = TRUE), .groups = "drop")
-
-write_xlsx(
-  rmse_by_weighting_method,
-  here("tables_and_figures/input tables", "rmse_by_weighting_method.xlsx")
-)
-
-# ---------------------------------------------------------------
-# 4. Yearly RMSE by Weighting Method and Class
-# ---------------------------------------------------------------
-
-# RMSE by Class
-rmse_by_class <- most_specific_long %>%
-  filter(Valid_for_Accuracy == TRUE) %>%
-  group_by(Year, Variable, Weighting_Method, Class) %>%
-  summarise(RMSE = sqrt(mean(Error^2, na.rm = TRUE)), .groups = "drop") %>%
-  group_by(Year, Weighting_Method, Class) %>%
-  summarise(Avg_RMSE = mean(RMSE, na.rm = TRUE), .groups = "drop")
-
-# RMSE over all classes (rollup)
-rmse_all <- most_specific_long %>%
-  filter(Valid_for_Accuracy == TRUE) %>%
-  group_by(Year, Variable, Weighting_Method) %>%
-  summarise(RMSE = sqrt(mean(Error^2, na.rm = TRUE)), .groups = "drop") %>%
-  group_by(Year, Weighting_Method) %>%
-  summarise(Avg_RMSE = mean(RMSE, na.rm = TRUE), .groups = "drop") %>%
-  mutate(Class = "All")
-
-# Combine and save
-rmse_by_weighting_method_and_class <- bind_rows(rmse_by_class, rmse_all) %>%
-  arrange(Year, Weighting_Method, Class)
-
-write_xlsx(
-  rmse_by_weighting_method_and_class,
-  here("tables_and_figures/input tables", "rmse_by_weighting_method_and_class.xlsx")
-)
-
-# ---------------------------------------------------------------
-# 5. Candidate choice accuracy by race competitiveness
-# ---------------------------------------------------------------
-
-competitiveness_bins <- tribble(
-  ~Range_Label, ~Lower, ~Upper,
-  "0-100%",      0,      100,
-  "30-70%",     30,       70,
-  "40-60%",     40,       60,
-  "45-55%",     45,       55,
-  "80-100%",    95,      100
-)
-
-election_rmse_by_competitiveness_range <- most_specific_long %>%
-  filter(Class == "Candidate Choice") %>%
-  crossing(competitiveness_bins) %>%
-  filter(Benchmark >= Lower, Benchmark <= Upper) %>%
-  group_by(Year, Party = Category, Weighting_Method, Range_Label) %>%
-  summarise(
-    RMSE = sqrt(mean(Error^2, na.rm = TRUE)),
-    Avg_Abs_Error = mean(abs(Error), na.rm = TRUE),
-    .groups = "drop"
-  )
-
-write_xlsx(
-  election_rmse_by_competitiveness_range,
-  here("tables_and_figures/input tables", "election_rmse_by_competitiveness_range.xlsx")
-)
-
-# ---------------------------------------------------------------
-# 6. Turnout comparison table
-# ---------------------------------------------------------------
-
-calculate_turnout_comparison <- function(year_data, year) {
-  ces_df <- year_data$CES
-  cps_df <- year_data$CPS
-
-  # Get weight variables from config
-  weight_vars <- config$weight_vars[[as.character(year)]]
-
-  all_results <- list()
-
-  for (state in unique(na.omit(ces_df$POST_STATE_rc))) {
-    ces_state <- filter(ces_df, POST_STATE_rc == state)
-    cps_state <- filter(cps_df, POST_STATE_rc == state)
-
-    # Check if VOTED_rc exists in both datasets
-    if (!("VOTED_rc" %in% names(ces_state)) || !("VOTED_rc" %in% names(cps_state))) {
-      next
-    }
-
-    # Get state turnout from turnout_statewide
-    state_turnout <- turnout_statewide %>%
-      filter(State == state) %>%
-      pull(as.character(year))
-
-    # Convert to numeric and handle if missing
-    state_turnout <- ifelse(length(state_turnout) > 0,
-                           as.numeric(state_turnout) * 100,
-                           NA_real_)
-
-    # Calculate turnout proportions (proportion who "Voted")
-    cps_turnout <- mean(cps_state$VOTED_rc == "Voted", na.rm = TRUE) * 100
-    ces_unweighted_turnout <- mean(ces_state$VOTED_rc == "Voted", na.rm = TRUE) * 100
-    ces_weighted_turnout <- weighted.mean(ces_state$VOTED_rc == "Voted",
-                                          ces_state[[weight_vars[1]]],
-                                          na.rm = TRUE) * 100
-    ces_anesrake_weighted_turnout <- weighted.mean(ces_state$VOTED_rc == "Voted",
-                                                   ces_state$anesrake_weight,
-                                                   na.rm = TRUE) * 100
-
-    # Combine results
-    turnout_results <- data.frame(
-      Year = year,
-      State = state,
-      State_Turnout = state_turnout,
-      CPS = cps_turnout,
-      CES_Unweighted = ces_unweighted_turnout,
-      CES_Weighted = ces_weighted_turnout,
-      CES_ANESRake_Weighted = ces_anesrake_weighted_turnout,
-      stringsAsFactors = FALSE
-    )
-
-    all_results[[length(all_results) + 1]] <- turnout_results
-  }
-
-  bind_rows(all_results)
-}
-
-# Call the function
-turnout_comparison_table <- map2_dfr(
-  .x = list_all_years,
-  .y = map_chr(list_all_years, ~ as.character(.x$year)),
-  .f = calculate_turnout_comparison
-)
-
-# Export to excel
-write_xlsx(
-  turnout_comparison_table,
-  here("tables_and_figures/input tables", "turnout_comparison_table.xlsx")
-)
-```
-
-
-```{r}
-# 1. Average turnout by source across all years
-turnout_summary <- turnout_comparison_table %>%
-  group_by(Year) %>%
-  summarise(
-    State_Turnout = mean(State_Turnout, na.rm = TRUE),
-    CPS = mean(CPS, na.rm = TRUE),
-    CES_Unweighted = mean(CES_Unweighted, na.rm = TRUE),
-    CES_Weighted = mean(CES_Weighted, na.rm = TRUE),
-    CES_ANESRake_Weighted = mean(CES_ANESRake_Weighted, na.rm = TRUE)
-  ) %>%
-  pivot_longer(
-    cols = -Year,
-    names_to = "Source",
-    values_to = "Turnout"
-  )
-
-# Plot 1: Line plot showing turnout trends over time
-p1 <- ggplot(turnout_summary, aes(x = Year, y = Turnout, color = Source, group = Source)) +
-  geom_line(linewidth = 1) +
-  geom_point(size = 3) +
-  labs(
-    title = "Average Turnout Across All States by Source",
-    subtitle = "Comparison of State Records, CPS, and CES Estimates",
-    x = "Year",
-    y = "Turnout (%)",
-    color = "Source"
-  ) +
-  theme_minimal() +
-  theme(legend.position = "bottom")
-
-print(p1)
-
-# Plot 3: Error/bias visualization (difference from state official records)
-error_summary <- turnout_comparison_table %>%
-  mutate(
-    Error_CPS = CPS - State_Turnout,
-    Error_CES_Unweighted = CES_Unweighted - State_Turnout,
-    Error_CES_Weighted = CES_Weighted - State_Turnout,
-    Error_CES_ANESRake = CES_ANESRake_Weighted - State_Turnout
-  ) %>%
-  group_by(Year) %>%
-  summarise(
-    CPS = mean(Error_CPS, na.rm = TRUE),
-    CES_Unweighted = mean(Error_CES_Unweighted, na.rm = TRUE),
-    CES_Weighted = mean(Error_CES_Weighted, na.rm = TRUE),
-    CES_ANESRake_Weighted = mean(Error_CES_ANESRake, na.rm = TRUE)
-  ) %>%
-  pivot_longer(
-    cols = -Year,
-    names_to = "Source",
-    values_to = "Bias"
-  )
-
-p3 <- ggplot(error_summary, aes(x = Year, y = Bias, color = Source, group = Source)) +
-  geom_line(linewidth = 1) +
-  geom_point(size = 3) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
-  labs(
-    title = "Survey Bias Relative to Official State Turnout",
-    subtitle = "Positive values = overestimate, Negative values = underestimate",
-    x = "Year",
-    y = "Bias (percentage points)",
-    color = "Source"
-  ) +
-  theme_minimal() +
-  theme(legend.position = "bottom")
-
-print(p3)
-
-# Plot 4: Scatterplot comparing CPS vs CES weighted
-p4 <- ggplot(turnout_comparison_table, 
-             aes(x = CPS, y = CES_Weighted)) +
-  geom_point(alpha = 0.5, size = 2) +
-  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +
-  facet_wrap(~Year) +
-  labs(
-    title = "CPS vs CES Weighted Turnout Estimates",
-    subtitle = "Each point is a state; dashed line shows perfect agreement",
-    x = "CPS Turnout (%)",
-    y = "CES Weighted Turnout (%)"
-  ) +
-  theme_minimal()
-
-print(p4)
-
-# Plot 5: Summary statistics table
-summary_stats <- turnout_comparison_table %>%
-  summarise(
-    across(
-      c(State_Turnout, CPS, CES_Unweighted, CES_Weighted, CES_ANESRake_Weighted),
-      list(
-        Mean = ~mean(., na.rm = TRUE),
-        SD = ~sd(., na.rm = TRUE),
-        Min = ~min(., na.rm = TRUE),
-        Max = ~max(., na.rm = TRUE)
-      ),
-      .names = "{.col}_{.fn}"
-    )
-  ) %>%
-  pivot_longer(
-    everything(),
-    names_to = c("Source", "Statistic"),
-    names_sep = "_(?=[^_]+$)",
-    values_to = "Value"
-  ) %>%
-  pivot_wider(
-    names_from = Statistic,
-    values_from = Value
-  )
-
-print(summary_stats)
-
-# Plot 6: Heatmap of correlations
-cor_data <- turnout_comparison_table %>%
-  select(State_Turnout, CPS, CES_Unweighted, CES_Weighted, CES_ANESRake_Weighted) %>%
-  cor(use = "pairwise.complete.obs")
-
-cor_long <- as.data.frame(cor_data) %>%
-  rownames_to_column("Source1") %>%
-  pivot_longer(-Source1, names_to = "Source2", values_to = "Correlation")
-
-p6 <- ggplot(cor_long, aes(x = Source1, y = Source2, fill = Correlation)) +
-  geom_tile() +
-  geom_text(aes(label = round(Correlation, 2)), color = "white", size = 4) +
-  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0.5) +
-  labs(
-    title = "Correlation Matrix of Turnout Sources",
-    x = NULL,
-    y = NULL
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-print(p6)
-```
--->
-
-<!--
-## testing some shit
-```{r}
-# make a new version of most specific long that ingores voting registration status and rows where the discrepany between CES_Weighted and Benchmark is less than 10%
-
-test1 <- most_specific_long %>%
-  filter(abs(Error) > 30)
-
-test2 <- most_specific_long %>%
-  filter(abs(Error) > 30) %>%
-  filter(Variable == "Voter Registration")
-
-test3 <- most_specific_long %>%
-  filter(Variable %notin% c("Voter Registration", "Voting Turnout")) %>%
-  mutate(Discrepancy = abs(CES_Weighted - Benchmark)) %>%
-  filter(Discrepancy > 30)
-
-testdoc <- read_csv("/Users/jdpruett/Downloads/elections-2006.csv")
-
-summary <- testdoc %>%
-  mutate(Total_Votes = sum(Votes, na.rm = TRUE)) %>%
-  group_by(Party) %>%
-  summarise(Votes = sum(Votes, na.rm = TRUE),
-            Total_Votes = first(Total_Votes),
-            Proportion = Votes / Total_Votes,
-            .groups = "drop") %>%
-  ungroup()
-```
-
-```{r}
-# Packages
-# ---------- 1) Load data ----------
-# Master (single sheet)
-master_path <- "data/Benchmarks/Election Returns/[FIN-FIX] Historical election results data (2006 - 2023) clean fixed.xlsx"
-State_race_master_table_DUP <- read_excel(master_path) %>% 
-  clean_names()
-
-# AR/NY file (only the "Arkansas" tab)
-arny_path <- "/Users/jdpruett/Desktop/PPRG/PPRG_R_Directory/AR_NY_Missing_Election_Results.xlsx"
-ar_ny_raw <- read_excel(arny_path, sheet = "Arkansas") %>% 
-  clean_names()
-
-# ---------- 2) Minimal cleaning & alignment ----------
-# Normalize election date to DATE (not datetime) so 04:00 vs 05:00 UTC doesn't break matches
-normalize_dates <- function(df) {
-  df %>% 
-    mutate(
-      election_date = suppressWarnings(ymd_hms(election_date, quiet = TRUE)),
-      election_date = as.Date(election_date) # drop time-of-day
-    )
-}
-
-master <- State_race_master_table_DUP %>% normalize_dates()
-ar_ny  <- ar_ny_raw %>% normalize_dates()
-
-# Optional: trim strings to avoid stray whitespace mismatches
-trim_all_chars <- function(df) {
-  df %>% mutate(across(where(is.character), ~ str_squish(.x)))
-}
-master <- trim_all_chars(master)
-ar_ny  <- trim_all_chars(ar_ny)
-
-coerce_key_types <- function(df) {
-  df %>%
-    mutate(
-      # join on DATE already handled earlier
-      office_number_for_sorting = as.character(office_number_for_sorting),  # <- was numeric in one, char in the other
-      special_election = as.character(special_election)  # guard against logical vs character mismatches
-    )
-}
-
-master <- master %>% coerce_key_types()
-ar_ny  <- ar_ny  %>% coerce_key_types()
-
-# --- Party normalization ---
-normalize_party <- function(x) {
-  x0 <- str_squish(str_to_lower(as.character(x)))
-  x0 <- str_replace_all(x0, "[^a-z0-9 ]", " ")         # drop punctuation
-  x0 <- str_squish(x0)
-  # remove trailing "party"
-  x0 <- str_replace(x0, "\\bparty\\b$", "")
-  x0 <- str_squish(x0)
-
-  dplyr::case_when(
-    x0 %in% c("democratic", "democrat", "dem", "d", "dfl", "democratic farmer labor") ~ "Democratic",
-    x0 %in% c("republican", "republic", "rep", "r", "gop")                            ~ "Republican",
-    x0 %in% c("green", "g")                                                           ~ "Green",
-    x0 %in% c("libertarian", "lib", "l")                                              ~ "Libertarian",
-    x0 %in% c("constitution")                                                         ~ "Constitution",
-    x0 %in% c("independent", "indy", "ind", "no party", "nonpartisan", "non partisan",
-              "unaffiliated", "none")                                                 ~ "Independent/Nonpartisan",
-    x0 %in% c("write in", "writein")                                                  ~ "Write-In",
-    is.na(x0) | x0 == ""                                                              ~ NA_character_,
-    TRUE                                                                              ~ str_to_title(x0) # fallback: title-case whatever remains
-  )
-}
-
-master <- master %>% mutate(political_party_norm = normalize_party(political_party))
-ar_ny  <- ar_ny  %>% mutate(political_party_norm = normalize_party(political_party))
-
-library(stringr)
-library(dplyr)
-
-# -------- OFFICE NORMALIZATION HELPERS --------
-
-# Extract a district number from free text like:
-# "House District 12", "HD 12", "Dist. 12", "D12", "Senate 12", "SD-12", "Place 3" (optional)
-extract_district <- function(txt, fallback_num = NA) {
-  if (is.null(txt)) txt <- NA_character_
-  s <- tolower(as.character(txt))
-
-  # Try standard "district ##" variants first
-  m <- str_match(s, "\\b(?:district|dist\\.?|d)\\s*-?\\s*(\\d{1,3})\\b")[,2]
-  # If not found, try HD/SD forms
-  if (all(is.na(m))) m <- str_match(s, "\\b(?:hd|sd)\\s*-?\\s*(\\d{1,3})\\b")[,2]
-  # If still not found, try "house/senate ##"
-  if (all(is.na(m))) m <- str_match(s, "\\b(?:house|senate)\\s*-?\\s*(\\d{1,3})\\b")[,2]
-  # Optional: sometimes "Place 3" is used (comment out if not desired)
-  # if (all(is.na(m))) m <- str_match(s, "\\bplace\\s*(\\d{1,3})\\b")[,2]
-
-  # Fall back to provided numeric column if available
-  if (all(is.na(m)) && !all(is.na(fallback_num))) {
-    suppressWarnings({
-      num <- as.numeric(fallback_num)
-    })
-    m <- ifelse(is.na(num), NA_character_, as.character(as.integer(num)))
-  }
-
-  # Standardize as integer-like character
-  m <- ifelse(is.na(m), NA_character_, as.character(as.integer(m)))
-  m
-}
-
-# Classify the office into a standardized category
-classify_office <- function(office_raw) {
-  s <- tolower(as.character(office_raw))
-  s <- str_replace_all(s, "[^a-z0-9 ]", " ")
-  s <- str_squish(s)
-
-  case_when(
-    str_detect(s, "\\b(house|assembly|representative|assemblymember|state rep\\.?|\\bsr\\b|\\bhd\\b|house ?district|stateRepresentative|HouseDistrict|partyresentative)\\b") ~ "State House/Assembly",
-    str_detect(s, "\\b(senate|senator|\\bss\\b|\\bsd\\b|senate ?district|kysenator)\\b") ~ "State Senate",
-
-    str_detect(s, "attorney") ~ "Attorney General",
-    str_detect(s, "secretar|secratary") ~ "Secretary of State",
-    str_detect(s, "\\btreas") ~ "Treasurer",
-    str_detect(s, "auditor") ~ "Auditor",
-    str_detect(s, "governor\\b") ~ "Governor",
-    str_detect(s, "lieutenant|lt\\.?\\s*gov") ~ "Lieutenant Governor",
-    str_detect(s, "comptroller") ~ "Comptroller",
-    str_detect(s, "superintendent|public instruction|education") ~ "Superintendent of Public Instruction",
-    str_detect(s, "insurance") ~ "Insurance Commissioner",
-    str_detect(s, "agricultur|ag comm") ~ "Commissioner of Agriculture",
-    str_detect(s, "public service|utilities? commission|railroad commission") ~ "Public Service Commission",
-
-    TRUE ~ str_to_title(s) # fallback: keep a readable label
-  )
-}
-
-# Normalize office fields on a data frame:
-# - office_category_norm (standardized chamber/office)
-# - district_norm (only for legislative seats; statewide -> NA)
-normalize_office_fields <- function(df) {
-  df %>%
-    mutate(
-      office_category_norm = classify_office(office_district),
-      # Only try to extract districts for legislative chambers
-      district_norm = if_else(
-        office_category_norm %in% c("State House/Assembly", "State Senate"),
-        extract_district(office_district, fallback_num = office_number_for_sorting),
-        NA_character_
-      )
-    )
-}
-
-# Apply to both frames
-master <- master %>% normalize_office_fields()
-ar_ny  <- ar_ny  %>% normalize_office_fields()
-
-
-# ---------- 3) Define key columns (all non-vote fields) ----------
-# After janitor::clean_names(), your columns should be like:
-# state_full_name, election_date, office_district, office_number_for_sorting,
-# candidate_name_copy_and_paste_from_source, political_party, votes_candidate,
-# total_votes_in_race_if_included_in_the_source, source_url, special_election
-
-# We'll match on everything EXCEPT the vote columns.
-key_cols <- c(
-  "state_full_name",
-  "election_date",
-  "office_category_norm",          # <-- normalized office category
-  #"district_norm",                 # <-- normalized district (NA for statewide)
-  #"candidate_name_copy_and_paste_from_source",
-  "political_party_norm"      # from the earlier party-normalization step
-)
-
-# Safety check: ensure all keys exist; if not, stop with a clear message
-missing_in_master <- setdiff(key_cols, names(master))
-missing_in_arny   <- setdiff(key_cols, names(ar_ny))
-if (length(missing_in_master) > 0) stop("Master missing key columns: ", paste(missing_in_master, collapse = ", "))
-if (length(missing_in_arny) > 0)   stop("AR_NY missing key columns: ", paste(missing_in_arny, collapse = ", "))
-
-# Coerce vote columns to numeric for clean comparisons
-coerce_votes <- function(df){
-  df %>% mutate(
-    votes_candidate = suppressWarnings(as.numeric(votes_candidate)),
-    total_votes_in_race_if_included_in_the_source = suppressWarnings(as.numeric(total_votes_in_race_if_included_in_the_source))
-  )
-}
-master <- coerce_votes(master)
-ar_ny  <- coerce_votes(ar_ny)
-
-# ---------- 4) Build the three buckets ----------
-# 1) Rows that match on keys BUT master is missing votes
-bucket1_exact_match_missing_votes <- ar_ny %>%
-  inner_join(
-    master %>% select(all_of(key_cols), votes_candidate),
-    by = key_cols,
-    suffix = c("_arny", "_master")
-  ) %>%
-  filter(is.na(votes_candidate_master)) %>%            # <-- fixed
-  select(all_of(key_cols),
-         votes_candidate_arny,
-         votes_candidate_master)
-
-# 2) Rows in AR_NY that are NOT present in master (by key)
-bucket2_not_in_master <- ar_ny %>%
-  anti_join(master, by = key_cols)
-
-# 3) Present in master, but master already has a value or it differs from AR_NY
-bucket3_conflict_with_master <- ar_ny %>%
-  inner_join(
-    master %>% select(all_of(key_cols), votes_candidate),
-    by = key_cols,
-    suffix = c("_arny", "_master")
-  ) %>%
-  filter(
-    !is.na(votes_candidate_master) &                   # master has a value
-      (is.na(votes_candidate_arny) |                   # AR_NY missing OR different
-       votes_candidate_arny != votes_candidate_master)
-  ) %>%
-  select(all_of(key_cols),
-         votes_candidate_arny,
-         votes_candidate_master)
-
-# ---------- 5) (Optional) Inspect counts ----------
-cat("\nBucket 1 (match on keys, master missing votes): ", nrow(bucket1_exact_match_missing_votes))
-cat("\nBucket 2 (not in master): ", nrow(bucket2_not_in_master))
-cat("\nBucket 3 (present but conflicting/filled votes): ", nrow(bucket3_conflict_with_master), "\n")
-
-# ---------- 6) (Optional) Write out to an xlsx with 3 tabs ----------
-# Uncomment if you want a file with the results.
-# library(writexl)
-# writexl::write_xlsx(
-#   list(
-#     bucket1_exact_match_missing_votes = bucket1_exact_match_missing_votes,
-#     bucket2_not_in_master             = bucket2_not_in_master,
-#     bucket3_conflict_with_master      = bucket3_conflict_with_master
-#   ),
-#   path = "arkansas_vote_merge_buckets.xlsx"
-# )
-
-
-# Spot-check how things got categorized
-count(master, office_category_norm, sort = TRUE)
-count(ar_ny,  office_category_norm, sort = TRUE)
-
-# Verify district extraction for a few examples
-ar_ny %>% 
-  select(office_district, office_number_for_sorting, office_category_norm, district_norm) %>% 
-  head(20)
-
-# See what changed in bucket2 after normalization
-nrow(bucket2_not_in_master)
-```
-
-
--->

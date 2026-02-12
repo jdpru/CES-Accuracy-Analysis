@@ -5,6 +5,10 @@
 # Session Data files
 .RData
 .RDataTmp
+.RDataTmp*
+
+# Agents 
+.claude/
 
 # User-specific files
 .Ruserdata
@@ -20,6 +24,8 @@
 
 # RStudio files
 .Rproj.user/
+.RData/
+.Rhistory/
 
 # produced vignettes
 vignettes/*.html
