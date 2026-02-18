@@ -16,7 +16,7 @@ source("code/utilities/recoding_utilities.R")
 source("code/utilities/data_structures.R")
 source("code/utilities/election_return_utilities.R")
 source("code/utilities/accuracy_utilities.R")
-source("code/utilities/accuracy_utilities_refactored.R")
+source("code/utilities/accuracy_utilities.R")
 ```
 
 ```{r, echo=False, warnings=FALSE, message=FALSE}
@@ -116,7 +116,12 @@ CES_08_raw <- CES_08_raw %>%
 # President, Governor, U.S. Senate, U.S. House
 President_0820 <- read_excel("data/Benchmarks/Election Returns/President_Returns_2008_2020.xlsx")
 Governor_0622 <- read_excel("data/Benchmarks/Election Returns/Governor_Returns_2006_2022.xlsx")
-Senate_0622 <- read_excel("data/Benchmarks/Election Returns/US_Senate_Returns_2006_2022.xlsx")
+Senate_0622 <- read_excel("data/Benchmarks/Election Returns/US_Senate_Returns_2006_2022.xlsx") %>% 
+  filter(!(concurrent_special == TRUE & special == TRUE)) %>% 
+  select(-concurrent_special) # concurrent_special == TRUE indicates a state/year with both a regular and a special Senate election.
+# These cases are excluded because the CES typically asks about only one Senate race, 
+# making it ambiguous which election respondents are reporting on.
+# If there was only a single election (even if special), it would still be captured.
 House_0622 <- read_excel("data/Benchmarks/Election Returns/US_House_Returns_2006_2022.xlsx", guess_max = 20000)
 
 # State Senate, State House, Attorney General, Secretary of State
@@ -580,15 +585,74 @@ CES_22_rc_clean <- as.data.frame(CES_22_rc_clean)
 update_list_all_years()
 ```
 
+# TEMP
+```{r}
+CES_06_rc_clean <- clean_NAs(CES_06_rc)
+CES_08_rc_clean <- clean_NAs(CES_08_rc)
+CES_10_rc_clean <- clean_NAs(CES_10_rc)
+CES_12_rc_clean <- clean_NAs(CES_12_rc)
+CES_14_rc_clean <- clean_NAs(CES_14_rc)
+CES_16_rc_clean <- clean_NAs(CES_16_rc)
+CES_18_rc_clean <- clean_NAs(CES_18_rc)
+CES_20_rc_clean <- clean_NAs(CES_20_rc)
+CES_22_rc_clean <- clean_NAs(CES_22_rc)
+
+CES_06_rc_clean <- as.data.frame(CES_06_rc_clean)
+CES_08_rc_clean <- as.data.frame(CES_08_rc_clean)
+CES_10_rc_clean <- as.data.frame(CES_10_rc_clean)
+CES_12_rc_clean <- as.data.frame(CES_12_rc_clean)
+CES_14_rc_clean <- as.data.frame(CES_14_rc_clean)
+CES_16_rc_clean <- as.data.frame(CES_16_rc_clean)
+CES_18_rc_clean <- as.data.frame(CES_18_rc_clean)
+CES_20_rc_clean <- as.data.frame(CES_20_rc_clean)
+CES_22_rc_clean <- as.data.frame(CES_22_rc_clean)
+
+update_list_all_years()
+```
 
 # RECODE PARTY AND CANDIDATE VOTE
-For 2006 and 2008, respondent vote choices could be directly mapped to a party because the response options were simply "Democrat," "Republican," and "Other". However, from 2010 - 2022, the CES changed the response options. Instead of using party names, respondents were provided candidate names. These names were inputted dynamically based on other "contextual" variables that recorded candidate names for a particular respondent based on their state of residence.
+For 2006 and 2008, respondent vote choices could be directly mapped to a party because the response options were simply "Democrat," "Republican," and "Other". However, from 2010 - 2022, the CES changed the response options. Instead of using party names, respondents were provided candidate names. These names were inputted dynamically based for a particular respondent based on their state of residence.
 
 This means that error can be calculated in two ways: at the party level (by aggregating across all candidates of a particular party), and at the candidate level (by comparing CES votes for a particular candidate to actual votes received by that specific candidate).
 
 Thus, I create two variables for each CES respondent. The first will be named [RACE]_PARTY_rc and will contain indicate the Party that the respondent voted for. In the cases when a respondent was presented a candidate name, the party will be filled in based on the provided contextual variables. The second will be [RACE]_CANDIDATE_rc and will contain the name of the candidate that the respondent voted for.
 
-Note: Once you have run the two functions below once, you cannot run them again on the same dfs. You would need to go back and re-run everything from "Codebook recodings."
+Note: Once you have run the two functions below once, you cannot run them again on the same dfs. You would need to go back and re-run # Clean up NAs.
+```{r}
+# The CES raw data contains two cases where a candidate's party was omitted.
+# These are manually corrected here before running the recoding functions below.
+# (1) Nick Begich III (R), AK US House, 2022
+# (2) Sam Petsonk (D), WV Attorney General, 2020
+
+# Nick Begich III - AK, US House, 2022 - missing party
+CES_22_rc_clean <- CES_22_rc_clean %>%
+  mutate(HouseCand3Party_post = if_else(
+    HouseCand3Name_post == "Nick Begich III" & POST_STATE_rc == "ALASKA",
+    "Republican",
+    HouseCand3Party_post
+  ))
+
+# Sam Petsonk - WV, AG, 2020 - missing party
+CES_20_rc_clean <- CES_20_rc_clean %>%
+  mutate(AttCand1Party = if_else(
+    AttCand1Name == "Sam Petsonk" & POST_STATE_rc == "WEST VIRGINIA",
+    "Democrat",
+    AttCand1Party
+  ))
+
+# (3) Joe Dorman (D) and Mary Fallin (R), OK Governor, 2014
+# Some rows were missing both candidates' names and parties for this race.
+CES_14_rc_clean <- CES_14_rc_clean %>%
+  mutate(
+    GovCand1Name_post = if_else(POST_STATE_rc == "OKLAHOMA" & (is.na(GovCand1Name_post) | GovCand1Name_post == ""), "Joe Dorman", GovCand1Name_post),
+    GovCand1Party_post = if_else(POST_STATE_rc == "OKLAHOMA" & (is.na(GovCand1Party_post) | GovCand1Party_post == ""), "Democratic", GovCand1Party_post),
+    GovCand2Name_post = if_else(POST_STATE_rc == "OKLAHOMA" & (is.na(GovCand2Name_post) | GovCand2Name_post == ""), "Mary Fallin", GovCand2Name_post),
+    GovCand2Party_post = if_else(POST_STATE_rc == "OKLAHOMA" & (is.na(GovCand2Party_post) | GovCand2Party_post == ""), "Republican", GovCand2Party_post)
+  )
+
+update_list_all_years()
+```
+
 ```{r}
 #' Recode Party and Candidate Vote Variables from Dynamic References
 #'
@@ -646,10 +710,28 @@ recode_party_and_candidate_votes <- function(list_all_years) {
               year_chr, col, r, val
             ))
           }
-          df[[col]][r] <- as.character(df[[ val ]][r])
+          df[[col]][r] <- as.character(df[[val]][r])
         }
       }
     }
+    
+    # # --- CANDIDATE columns (skip 2006 & 2008) ---
+    # if (! year_chr %in% c("2006")) {
+    #   for (col in candidate_cols) {
+    #     for (r in seq_len(nrow(df))) {
+    #       val <- df[[col]][r]
+    #       if (!(val %in% no_recode) && !is.na(val)) {
+    #         if (! val %in% names(df)) {
+    #           stop(sprintf(
+    #             "Year %s: column '%s', row %d: reference '%s' not found",
+    #             year_chr, col, r, val
+    #           ))
+    #         }
+    #         df[[col]][r] <- as.character(df[[ val ]][r])
+    #       }
+    #     }
+    #   }
+    # }
 
     # --- CANDIDATE columns (skip 2006 & 2008) ---
     if (! year_chr %in% c("2006")) {
@@ -663,13 +745,30 @@ recode_party_and_candidate_votes <- function(list_all_years) {
                 year_chr, col, r, val
               ))
             }
-            df[[col]][r] <- as.character(df[[ val ]][r])
+            # In some cases, even though a respondent selected the "Other"
+            # candidate, no name is provided for that candidate. In those cases,
+            # fill in manually.
+            referenced_value <- as.character(df[[val]][r])
+            
+            # Derive corresponding party column
+            party_col <- sub("_CANDIDATE_rc$", "_PARTY_rc", col)
+            party_val <- if (party_col %in% names(df)) as.character(df[[party_col]][r]) else NA
+            
+            if (is.na(referenced_value) || referenced_value == "") {
+              # Only fill placeholder if party is not blank/NA
+              if (!is.na(party_val) && party_val != "") {
+                df[[col]][r] <- "Other Candidate - No Name Provided"
+              }
+              # Otherwise leave it as NA (do nothing)
+            } else {
+              df[[col]][r] <- referenced_value
+            }
           }
         }
       }
     }
     
-    df[party_cols]     <- lapply(df[party_cols],     factor)
+    df[party_cols] <- lapply(df[party_cols], factor)
 
     # put the modified CES DF back
     list_all_years[[i]]$CES <- df
@@ -731,6 +830,8 @@ Update list_all_years, run the recoding, clean party names, then push changes fr
 update_list_all_years()
 recoded_party_candidate_list_all_years <- recode_party_and_candidate_votes(list_all_years)
 recoded_party_candidate_list_all_years_cleaned <- clean_party_names(recoded_party_candidate_list_all_years)
+rm(recoded_party_candidate_list_all_years)
+
 list_all_years <- recoded_party_candidate_list_all_years_cleaned
 push_list_all_years_to_env()
 ```
@@ -760,22 +861,6 @@ senate_cand_prop_table <- calculate_party_proportions(Senate_0622_clean_fixed) %
     Total_Votes = totalvotes,
     Proportion = proportion
   )
-# 
-# senate_cand_prop_table <- calculate_cand_num_proportions(Senate_0622_clean_fixed) %>%
-#   mutate(office = "US Senate") %>%
-#   rename(
-#     Office = office,
-#     State = state,
-#     District = district,
-#     Year = year,
-#     Candidate = candidate_name,
-#     Cand_Num = cand_num,
-#     Party_Detailed = party_detailed,
-#     Party_Simplified = party_simplified,
-#     Candidate_Votes = candidatevotes,
-#     Total_Votes = totalvotes,
-#     Proportion = proportion
-#   )
 
 # Governor
 Governor_0622_clean_fixed <- recalculate_total_votes(Governor_0622, "statewide")
@@ -968,14 +1053,20 @@ secretary_of_state_candidate_level_props <- candidate_level_BP_statewide_offices
   select(Office, everything()) 
 
 # Merge all results
-merged_candidate_level_props <- rbind(president_candidate_level_props, senate_candidate_level_props, house_candidate_level_props, governor_candidate_level_props, attorney_general_candidate_level_props, secretary_of_state_candidate_level_props)
-
-merged_candidate_level_props <- merged_candidate_level_props %>%
+merged_candidate_level_props <- rbind(
+    president_candidate_level_props,
+    senate_candidate_level_props,
+    house_candidate_level_props,
+    governor_candidate_level_props,
+    attorney_general_candidate_level_props,
+    secretary_of_state_candidate_level_props
+  ) %>%
   mutate(
-    Candidate = format_reverse(Candidate),
+    Candidate = Candidate %>%
+      fix_suffix_position() %>%
+      humaniformat::format_reverse(),
     State = toupper(State)
   )
-
 ```
 
 
@@ -1424,7 +1515,7 @@ demovote_errors <- calculate_demovote_errors(
 ```
 
 ## National-level errors
-The above accurac functions measure error where the unit of observation is the state. This function treats the country as the unit of observation, so there's just one error per variable per year (x the number of categories for that variable)
+The above accuracy functions measure error where the unit of observation is the state. This function treats the country as the unit of observation, so there's just one error per variable per year (x the number of categories for that variable)
 
 ```{r}
 calculate_demovote_errors_national <- function(year_data_list,
@@ -1680,6 +1771,19 @@ most_specific <- bind_rows(
 ) %>%
   arrange(Year, State, Class, Variable, Category)
 
+```
+
+```{r}
+test1 <- CES_20_rc_clean %>%
+  filter(POST_STATE_rc == "WEST VIRGINIA")
+
+unique(test1$AG_CANDIDATE_rc)
+unique(test1$AG_PARTY_rc)
+table(test1$AG_PARTY_rc)
+
+test <- CES_20_raw %>%
+  filter(inputstate_post == 54) %>%
+  select(CC20_414a, AttCand1Name, AttCand1Party, AttCand2Name, AttCand2Party, AttCand3Name, AttCand3Party)
 ```
 
 

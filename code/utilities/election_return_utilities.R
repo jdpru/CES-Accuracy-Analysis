@@ -343,3 +343,18 @@ candidate_level_BP_statewide_offices <- function(df) {
   
   return(cleaned)
 }
+
+# fix_suffix_position("BIDEN, JOSEPH R. JR.")
+# Should return: "BIDEN JR., JOSEPH R."
+fix_suffix_position <- function(x) {
+  suffix_pattern <- "(JR\\.?|II|III|IV|SR\\.?)"
+  
+  # Match: LAST, FIRST... SUFFIX (no comma before suffix)
+  x <- str_replace(
+    x,
+    paste0("^([^,]+),\\s*(.+?)\\s+", suffix_pattern, "\\s*$"),
+    "\\1 \\3, \\2"
+  )
+  x
+}
+

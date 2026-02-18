@@ -25,49 +25,6 @@
 #' @param anesrake_results Named list (by year) with ANESRake results including varsused
 #'
 #' @return A configuration list for accuracy calculations
-# create_accuracy_config <- function(yearly_ces_wt_vars,
-#                                    skip_conditions,
-#                                    NC_flag_df,
-#                                    vars_used_ces_weights = NULL,
-#                                    anesrake_results = NULL) {
-#   list(
-#     # Weight variables by year
-#     weight_vars = yearly_ces_wt_vars,
-#     
-#     # Race type mappings
-#     race_maps = list(
-#       party = c(
-#         HOUSE_PARTY_rc       = "US House",
-#         SENATOR_PARTY_rc     = "US Senate",
-#         PRES_PARTY_rc        = "President",
-#         GOV_PARTY_rc         = "Governor",
-#         SECSTATE_PARTY_rc    = "Secretary of State",
-#         AG_PARTY_rc          = "Attorney General",
-#         ST_REP_PARTY_rc      = "State Representative",
-#         ST_SENATOR_PARTY_rc  = "State Senator"
-#       ),
-#       candidate = c(
-#         PRES_CANDIDATE_rc     = "President",
-#         SENATOR_CANDIDATE_rc  = "US Senate",
-#         HOUSE_CANDIDATE_rc    = "US House",
-#         GOV_CANDIDATE_rc      = "Governor",
-#         SECSTATE_CANDIDATE_rc = "Secretary of State",
-#         AG_CANDIDATE_rc       = "Attorney General"
-#       )
-#     ),
-#     
-#     # Skip conditions
-#     skip_conditions = skip_conditions,
-#     NC_flag_df = NC_flag_df,
-#     
-#     # Variables used in weighting processes
-#     vars_used_ces_weights = vars_used_ces_weights,
-#     anesrake_results = anesrake_results,
-#     
-#     # Standard parties
-#     standard_parties = c("Democrat", "Republican", "Other")
-#   )
-# }
 
 create_accuracy_config <- function(yearly_ces_wt_vars,
                                    skip_conditions,
@@ -296,110 +253,6 @@ calculate_party_errors <- function(year_data_list, election_results_df, config) 
 
 
 
-#' @return Tibble with party-level errors in standardized format
-# calculate_party_errors <- function(year_data_list, election_results_df, config) {
-#   
-#   race_map <- config$race_maps$party
-#   result_list <- list()
-#   
-#   pb <- progress_bar$new(
-#     format = "Party-level [:year] [:bar] :percent eta: :eta",
-#     total = length(year_data_list), clear = FALSE, width = 60
-#   )
-#   
-#   for (year_data in year_data_list) {
-#     pb$tick(tokens = list(year = year_data$year))
-#     current_year <- year_data$year
-#     ces_df <- year_data$CES
-#     
-#     year_elec <- election_results_df %>% filter(Year == current_year)
-#     available_races <- intersect(names(ces_df), names(race_map))
-#     
-#     year_results <- tibble()
-#     
-#     for (race_col in available_races) {
-#       ces_filtered <- filter_nc_if_needed(ces_df, current_year, race_col, config$NC_flag_df)
-#       office_label <- race_map[[race_col]]
-#       
-#       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
-#         
-#         # Debug helper line
-#         # if (current_year == 2018 && state == "NORTH DAKOTA" && office_label == "Secretary of State") {
-#         #   browser()
-#         # }
-#         
-#         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
-#           next
-#         }
-#         
-#         state_survey <- ces_filtered %>% filter(POST_STATE_rc == state)
-#         n_resp <- sum(!is.na(state_survey[[race_col]]))
-#         if (n_resp == 0) next
-#         
-#         # Get benchmark
-#         state_returns <- year_elec %>%
-#           filter(State == state, Office == office_label)
-#         if (nrow(state_returns) == 0) {
-#           stop(glue::glue("No election results for {office_label}, {state}, {current_year}"))
-#         }
-#         
-#         # Calculate proportions for all weighting schemes
-#         ces_props <- calculate_all_weight_proportions(
-#           state_survey, race_col, current_year, config, ensure_parties = TRUE
-#         )
-#         
-#         # Benchmark proportions
-#         benchmark <- c(
-#           Democrat   = state_returns$DEM_Proportion,
-#           Republican = state_returns$REP_Proportion,
-#           Other      = state_returns$OTHER_Proportion
-#         )
-#         
-#         # Determine variable metadata (using raw variable name)
-#         var_metadata <- determine_variable_metadata(race_col, current_year, config)
-#         
-#         # Create rows for each party
-#         for (party in names(benchmark)) {
-#           year_results <- bind_rows(
-#             year_results,
-#             tibble(
-#               Year          = current_year,
-#               State         = state,
-#               Class         = "Candidate Choice",
-#               Variable      = office_label,
-#               Category      = party,
-#               
-#               # Variable type tracking
-#               Variable_Type = var_metadata$variable_type,
-#               Used_in_ANESRake_Weighting = var_metadata$used_in_anesrake_weighting,
-#               Valid_for_Accuracy = var_metadata$valid_for_accuracy,
-#               
-#               Benchmark     = benchmark[party] * 100,
-#               
-#               CES_Unweighted        = ces_props$unweighted[party] * 100,
-#               CES_Weighted          = ces_props$ces_weight[party] * 100,
-#               CES_ANESRake_Weighted = ces_props$anes_weight[party] * 100,
-#               
-#               # Consistent convention: CES - Benchmark
-#               Error_Unweighted      = (ces_props$unweighted[party] - benchmark[party]) * 100,
-#               Error_CES_Weighted    = (ces_props$ces_weight[party] - benchmark[party]) * 100,
-#               Error_ANESRake        = (ces_props$anes_weight[party] - benchmark[party]) * 100,
-#               
-#               n_respondents = n_resp
-#             )
-#           )
-#         }
-#       }
-#     }
-#     
-#     result_list[[as.character(current_year)]] <- year_results
-#   }
-#   
-#   bind_rows(result_list)
-# }
-
-
-
 #' Calculate candidate-level election errors
 #'
 #' @description
@@ -445,9 +298,11 @@ calculate_candidate_errors <- function(year_data_list,
       office_label <- race_map[[race_col]]
       
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
-        
         # Uncomment for helpful debug line
-        # if (current_year == "2016" & POST_STATE_rc == "LOUISIANA" & office_label == "U.S. Senate")
+        if (current_year == "2014" & state == "OKLAHOMA" & office_label == "Governor") {
+          print("arrived at error")
+          browser()
+        }
         
         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
           next
@@ -551,127 +406,6 @@ calculate_candidate_errors <- function(year_data_list,
   
   bind_rows(result_list)
 }
-# 
-# calculate_candidate_errors <- function(year_data_list, candidate_returns_df, config) {
-#   
-#   race_map <- config$race_maps$candidate
-#   result_list <- list()
-#   
-#   pb <- progress_bar$new(
-#     format = "Candidate-level [:year] [:bar] :percent eta: :eta",
-#     total = length(year_data_list), clear = FALSE, width = 60
-#   )
-#   
-#   for (year_data in year_data_list) {
-#     pb$tick(tokens = list(year = year_data$year))
-#     current_year <- year_data$year
-#     
-#     # Skip years without candidate data
-#     if (current_year %in% c("2006", "2008")) next
-#     
-#     ces_df <- year_data$CES
-#     ces_cols <- intersect(names(ces_df), names(race_map))
-#     year_results <- tibble()
-#     
-#     for (race_col in ces_cols) {
-#       ces_filtered <- filter_nc_if_needed(ces_df, current_year, race_col, config$NC_flag_df)
-#       office_label <- race_map[[race_col]]
-#       
-#       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
-#         
-#         # Debug helper line
-#         # if (current_year == 2016 && state == "LOUISIANA" && office_label == "US Senate") {
-#         #   browser()
-#         # }
-#         
-#         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
-#           next
-#         }
-#         
-#         state_df <- ces_filtered %>% filter(POST_STATE_rc == state)
-#         districts <- get_districts_for_office(office_label, state_df)
-#         
-#         for (district in districts) {
-#           
-#           survey <- filter_by_district(state_df, office_label, district)
-#           n_resp <- sum(!is.na(survey[[race_col]]))
-#           if (n_resp == 0) next
-#           
-#           # Get benchmark candidate
-#           top_cand <- get_top_candidate(
-#             candidate_returns_df, current_year, state, office_label, district
-#           )
-#           if (is.null(top_cand)) next
-#           
-#           # Fuzzy match
-#           match_result <- match_candidate_fuzzy(survey, race_col, top_cand$Candidate)
-#           
-#           # Find party
-#           ces_party <- get_candidate_party(survey, race_col, match_result$matched_ces)
-#           
-#           # Calculate proportions
-#           ces_props <- calculate_all_weight_proportions(
-#             survey, race_col, current_year, config, ensure_parties = FALSE
-#           )
-#           
-#           # Extract values for matched candidate
-#           benchmark_pct <- top_cand$Proportion * 100
-#           ces_unwt  <- ces_props$unweighted[match_result$matched_ces] * 100
-#           ces_wt    <- ces_props$ces_weight[match_result$matched_ces] * 100
-#           anes_wt   <- ces_props$anes_weight[match_result$matched_ces] * 100
-#           
-#           # Determine variable metadata (using raw variable name)
-#           var_metadata <- determine_variable_metadata(race_col, current_year, config)
-#           
-#           # Format district for display
-#           district_display <- if (district %in% c("statewide", "nationwide")) {
-#             district
-#           } else {
-#             paste0("District ", district)
-#           }
-#           
-#           year_results <- bind_rows(
-#             year_results,
-#             tibble(
-#               Year          = current_year,
-#               State         = state,
-#               Class         = "Candidate Choice",
-#               Variable      = office_label,
-#               District      = district_display,
-#               Category      = ces_party,
-#               
-#               # Variable type tracking
-#               Variable_Type = var_metadata$variable_type,
-#               Used_in_ANESRake_Weighting = var_metadata$used_in_anesrake_weighting,
-#               Valid_for_Accuracy = var_metadata$valid_for_accuracy,
-#               
-#               CES_Candidate    = str_to_title(match_result$matched_ces),
-#               True_Candidate   = str_to_title(top_cand$Candidate),
-#               Match_Score      = match_result$score,
-#               
-#               Benchmark        = benchmark_pct,
-#               
-#               CES_Unweighted        = ces_unwt,
-#               CES_Weighted          = ces_wt,
-#               CES_ANESRake_Weighted = anes_wt,
-#               
-#               # Consistent convention: CES - Benchmark
-#               Error_Unweighted   = ces_unwt - benchmark_pct,
-#               Error_CES_Weighted = ces_wt - benchmark_pct,
-#               Error_ANESRake     = anes_wt - benchmark_pct,
-#               
-#               n_respondents = n_resp
-#             )
-#           )
-#         }
-#       }
-#     }
-#     
-#     result_list[[as.character(current_year)]] <- year_results
-#   }
-#   
-#   bind_rows(result_list)
-# }
 
 
 #' Calculate demovote errors (CES vs CPS/State Turnout/State Populations)
