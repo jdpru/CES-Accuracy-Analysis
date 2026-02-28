@@ -291,10 +291,10 @@ calculate_candidate_errors <- function(year_data_list,
       
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
         # Uncomment for helpful debug line
-        if (current_year == "2014" & state == "OKLAHOMA" & office_label == "Governor") {
-          print("arrived at error")
-          browser()
-        }
+        # if (current_year == "2014" & state == "OKLAHOMA" & office_label == "Governor") {
+        #   print("arrived at error")
+        #   browser()
+        # }
         
         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
           next
