@@ -8,7 +8,7 @@ R code for the CES Accuracy Analysis: loading data, recoding CES and CPS, comput
 |------|------|
 | **analysisHQ.Rmd** | Single entry point. Run from top to bottom to reproduce the full analysis. Sources all utilities, reads data from `../data/`, and writes summary tables to `../tables_and_figures/input_tables/`. |
 
-**Run order:** Open the project via the root **CES Accuracy Analysis.Rproj**, then knit or run **analysisHQ.Rmd** in order. See the [main README](../README.md#getting-started) for data setup (CES data, IPUMS API key, etc.).
+**Run order:** Open the project via the root **CES Accuracy Analysis.Rproj**, then run **analysisHQ.Rmd** from top to bottom. See the [main README](../README.md#getting-started) for data setup (CES data, IPUMS API key, etc.).
 
 At the top of **analysisHQ.Rmd**, the setup chunk sets the knitr root directory. If you are not running from the opened .Rproj, set `knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')` to your project root so paths resolve correctly.
 
