@@ -6,8 +6,7 @@ date: "2025-04-04"
 
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
-# knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
-knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis')
+knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 ```
 
 ```{r}
@@ -129,8 +128,11 @@ State_legislative_0623_raw <- read_excel("data/benchmarks/Election Returns/State
 # Ballotpedia mislabeled some elections as general elections that were actually special in their initial data query. This is a list of candidates that should be removed from State_legislative_0623 to avoid mixing in special elections.
 special_candidates_to_remove <- read_excel("data/misc./mixed_in_special_election_candidates.xlsx")
 State_legislative_0623 <- State_legislative_0623_raw %>%
-  anti_join(special_candidates_to_remove,
-            by = c("office_district", "candidate", "year")) %>%
+  anti_join(
+    special_candidates_to_remove %>%
+      filter(concurrent_special != TRUE),
+    by = c("office_district", "candidate", "year")
+  ) %>%
   select(-year)
 
 State_senate_full <- State_legislative_0623 %>%
