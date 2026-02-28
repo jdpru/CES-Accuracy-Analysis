@@ -1,0 +1,503 @@
+Election,State,State FIPS Code,District,"Seat Status (1=D Incumbent, 2=R Incumbent, 3=D Open, 4=R Open",Democrat Name,Democrat Vote,Republican Name,Republican Vote,Other Name,Other Vote,Other name 2,Other vote,Party Winner
+H,AL,1,01,2,NA,0.0%,Jo Bonner,Uncontested,NA,0.0%,NA,0.0%,2
+H,AL,1,02,4,Bobby Bright,50.2%,Jay Love,49.6%,NA,0.0%,NA,0.0%,1
+H,AL,1,03,2,Joshua Segall,45.8%,Mike Rogers,54.0%,NA,0.0%,NA,0.0%,2
+H,AL,1,04,2,Nicholas B. Sparks,25.1%,Robert Aderholt,74.8%,NA,0.0%,NA,0.0%,2
+H,AL,1,05,3,Parker Griffith,51.5%,Wayne Parker,47.9%,NA,0.0%,NA,0.0%,1
+H,AL,1,06,2,NA,0.0%,Spencer Bachus,Uncontested,NA,0.0%,NA,0.0%,2
+H,AL,1,07,1,Artur Davis,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+S,AL,1,NA,2,Vivan Davis Figures,36.6%,Jeff Sessions,63.5%,NA,0.0%,NA,0.0%,2
+H,AK,2,0,2,Ethan Berkowitz,45.0%,Don E. Young,50.4%,Don R. Wright,4.5%,NA,0.0%,2
+S,AK,2,NA,2,Mark Begich,47.4%,Ted Stevens,47.0%,NA,0.0%,NA,0.0%,1
+H,AZ,4,01,4,Ann Kirkpatrick,55.9%,Sydney Hay,39.4%,NA,0.0%,NA,0.0%,1
+H,AZ,4,02,2,John Thrasher,37.2%,Trent Franks,59.4%,NA,0.0%,NA,0.0%,2
+H,AZ,4,03,2,Bob Lord,42.1%,John B. Shadegg,54.1%,NA,0.0%,NA,0.0%,2
+H,AZ,4,04,1,Ed Pastor,72.1%,Don Karg,21.2%,NA,0.0%,NA,0.0%,1
+H,AZ,4,05,1,Harry Mitchell,53.2%,David Schweikert,43.6%,NA,0.0%,NA,0.0%,1
+H,AZ,4,06,2,Rebecca Schneider,34.5%,Jeff Flake,62.4%,NA,0.0%,NA,0.0%,2
+H,AZ,4,07,1,Raul Grijalva,63.3%,Joseph Sweeney,32.8%,NA,0.0%,NA,0.0%,1
+H,AZ,4,08,1,Gabrielle Giffords,54.7%,"Timothy S. ""Tim"" Bee",42.8%,NA,0.0%,NA,0.0%,1
+H,AR,5,01,1,Marion Berry,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,AR,5,02,1,Vic Snyder,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,AR,5,03,2,NA,0.0%,John Boozman,Uncontested,NA,0.0%,NA,0.0%,2
+H,AR,5,04,1,Mike Ross,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+S,AR,5,NA,1,Mark Pryor,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,CA,6,01,1,Mike Thompson,68.2%,Zane Starkwolf,23.3%,NA,0.0%,NA,0.0%,1
+H,CA,6,02,2,Jeffrey Morris,42.1%,Wally Herger,57.9%,NA,0.0%,NA,0.0%,2
+H,CA,6,03,2,Bill Durston,44.0%,Dan Lungren,49.5%,NA,0.0%,NA,0.0%,2
+H,CA,6,04,4,Charlie Brown,49.7%,Tom McClintock,50.3%,NA,0.0%,NA,0.0%,2
+H,CA,6,05,1,Doris Matsui,74.3%,Paul A. Smith,20.9%,NA,0.0%,NA,0.0%,1
+H,CA,6,06,1,Lynn Woolsey,71.7%,Mike Halliwell,24.1%,NA,0.0%,NA,0.0%,1
+H,CA,6,07,1,George Miller,72.9%,Roger Allen Petersen,21.8%,NA,0.0%,NA,0.0%,1
+H,CA,6,08,1,Nancy Pelosi,71.9%,Dana Walsh,9.7%,Cindy Sheehan,16.2%,NA,0.0%,1
+H,CA,6,09,1,Barbara Lee,86.1%,Charles Hargrave,9.7%,NA ,0.0%,NA,0.0%,1
+H,CA,6,10,1,Ellen O. Tauscher,65.2%,Nicholas Gerber,31.1%,NA ,0.0%,NA,0.0%,1
+H,CA,6,11,1,Jerry McNerney,55.3%,Dean Andal,44.7%,NA ,0.0%,NA,0.0%,1
+H,CA,6,12,1,Jackie Speier,75.2%,Greg Conlon,18.5%,NA ,0.0%,NA,0.0%,1
+H,CA,6,13,1,"Fortney ""Pete"" Stark",76.5%,Raymond Chui,23.5%,NA ,0.0%,NA,0.0%,1
+H,CA,6,14,1,Anna Eshoo,69.8%,Ronny Santana,22.3%,NA ,0.0%,NA,0.0%,1
+H,CA,6,15,1,Michael M. Honda,71.7%,Joyce Stoer Cordi,23.3%,NA ,0.0%,NA,0.0%,1
+H,CA,6,16,1,Zoe Lofgren,71.4%,Charel Winston,24.0%,NA ,0.0%,NA,0.0%,1
+H,CA,6,17,1,Sam Farr,73.9%,Jeff Taylor,25.9%,NA ,0.0%,NA,0.0%,1
+H,CA,6,18,1,Dennis Cardoza,Uncontested,NA,0.0%,NA ,0.0%,NA,0.0%,1
+H,CA,6,19,2,NA,0.0%,George P. Radanovich,Uncontested,NA ,0.0%,NA,0.0%,2
+H,CA,6,20,1,Jim Costa,74.4%,Jim Lopez,25.6%,NA ,0.0%,NA,0.0%,1
+H,CA,6,21,2,Larry Johnson,31.6%,Devin Nunes,68.4%,NA ,0.0%,NA,0.0%,2
+H,CA,6,22,2,NA ,0.0%,Kevin McCarthy,Uncontested,NA ,0.0%,NA,0.0%,2
+H,CA,6,23,1,Lois G. Capps,68.1%,Matt T. Kokkonen,31.9%,NA ,0.0%,NA,0.0%,1
+H,CA,6,24,2,Marta Ann Jorgensen,41.8%,Elton Gallegly,58.2%,NA ,0.0%,NA,0.0%,2
+H,CA,6,25,2,Jackie Conaway,42.2%,Buck McKeon,57.8%,NA ,0.0%,NA,0.0%,2
+H,CA,6,26,2,Russ Warner,40.4%,David Dreier,52.7%,NA ,0.0%,NA,0.0%,2
+H,CA,6,27,1,Brad Sherman,68.6%,Navraj Singh,24.8%,NA ,0.0%,NA,0.0%,1
+H,CA,6,28,1,Howard Berman,Uncontested,NA ,0.0%,NA ,0.0%,NA,0.0%,1
+H,CA,6,29,1,Adam B. Schiff,69.0%,Charles Hahn,26.7%,NA ,0.0%,NA,0.0%,1
+H,CA,6,30,1,Henry Waxman,Uncontested,NA ,0.0%,NA ,0.0%,NA,0.0%,1
+H,CA,6,31,1,Xavier Becerra,Uncontested,NA ,0.0%,NA ,0.0%,NA,0.0%,1
+H,CA,6,32,1,Hilda Solis,Uncontested,NA ,0.0%,NA ,0.0%,NA,0.0%,1
+H,CA,6,33,1,Diane E. Watson,87.6%,David C. Crowley II,12.4%,NA ,0.0%,NA,0.0%,1
+H,CA,6,34,1,Lucille Roybal-Allard,77.1%,Christopher Balding,22.9%,NA ,0.0%,NA,0.0%,1
+H,CA,6,35,1,Maxine Waters,82.6%,Ted Hayes,13.3%,NA ,0.0%,NA,0.0%,1
+H,CA,6,36,1,Jane Harman,68.7%,Brian Gibson,31.3%,NA ,0.0%,NA,0.0%,1
+H,CA,6,37,1,Laura Richardson,Uncontested,NA ,0.0%,NA ,0.0%,NA,0.0%,1
+H,CA,6,38,1,Grace Flores Napolitano,Uncontested,NA ,0.0%,NA ,0.0%,NA,0.0%,1
+H,CA,6,39,1,Linda T. Sanchez,69.7%,Diane Lenning,30.3%,NA ,0.0%,NA,0.0%,1
+H,CA,6,40,2,Christina Avalos,37.4%,Ed Royce,62.6%,NA ,0.0%,NA,0.0%,2
+H,CA,6,41,2,Tim Prince,38.3%,Jerry Lewis,61.7%,NA ,0.0%,NA,0.0%,2
+H,CA,6,42,2,"Edwin ""Ed"" Chau",39.8%,Gary G. Miller,60.2%,NA ,0.0%,NA,0.0%,2
+H,CA,6,43,1,Joe Baca,69.2%,John Roberts,30.8%,NA ,0.0%,NA,0.0%,1
+H,CA,6,44,2,Bill Hedrick,48.8%,Ken Calvert,51.2%,NA ,0.0%,NA,0.0%,2
+H,CA,6,45,2,Julie Bornstein,41.7%,Mary Bono Mack,58.3%,NA ,0.0%,NA,0.0%,2
+H,CA,6,46,2,Debbie Cook,43.6%,Dana Rohrbacher,52.6%,NA ,0.0%,NA,0.0%,2
+H,CA,6,47,1,Loretta Sanchez,69.5%,Rosie Avila,25.5%,NA ,0.0%,NA,0.0%,1
+H,CA,6,48,2,Steve Young,40.6%,John Campbell,55.7%,NA ,0.0%,NA,0.0%,2
+H,CA,6,49,2,Robert Hamilton,37.5%,Darrell Issa,58.3%,NA ,0.0%,NA,0.0%,2
+H,CA,6,50,2,Nick Leibham,45.2%,Brian Bilbray,50.3%,NA ,0.0%,NA,0.0%,2
+H,CA,6,51,1,Bob Filner,72.8%,David Lee Joy,24.2%,NA ,0.0%,NA,0.0%,1
+H,CA,6,52,4,Mike Lumpkin,39.0%,Duncan D. Hunter,56.4%,NA ,0.0%,NA,0.0%,2
+H,CA,6,53,1,Susan A. Davis,68.5%,Michael Crimmins,27.5%,NA ,0.0%,NA,0.0%,1
+H,CO,8,01,1,Diana DeGette,72.0%,George C. Lilly,23.8%,NA ,0.0%,NA,0.0%,1
+H,CO,8,02,3,Jared Polis,62.6%,Scott Starin,33.9%,NA ,0.0%,NA,0.0%,1
+H,CO,8,03,1,John T. Salazar,61.6%,Wayne Wolf,38.4%,NA ,0.0%,NA,0.0%,1
+H,CO,8,04,2,Betsy Markey,56.2%,Marilyn N. Musgrave,43.8%,NA ,0.0%,NA,0.0%,1
+H,CO,8,05,2,Hal Bidlack,37.0%,Doug Lamborn,60.0%,NA ,0.0%,NA,0.0%,2
+H,CO,8,06,4,Hank Eng,39.3%,Mike Coffman,60.7%,NA ,0.0%,NA,0.0%,2
+H,CO,8,07,1,Ed Perlmutter,63.5%,John William Lerew,36.5%,NA ,0.0%,NA,0.0%,1
+S,CO,8,NA,4,Mark Udall,52.8%,Bob Schaffer,42.5%,NA ,0.0%,NA,0.0%,1
+H,CT,9,01,1,John B. Larson,71.6%,Joe Visconti,26.0%,NA ,0.0%,NA,0.0%,1
+H,CT,9,02,1,Joe Courtney,65.7%,Sean Patrick Sullivan,32.4%,NA ,0.0%,NA,0.0%,1
+H,CT,9,03,1,Rosa L. DeLauro,77.4%,"Boaz ""Bo"" Itshaky",19.7%,NA ,0.0%,NA,0.0%,1
+H,CT,9,04,2,Jim Himes,51.3%,Christopher Shays,47.6%,NA ,0.0%,NA,0.0%,1
+H,CT,9,05,1,Chris Murphy,59.3%,David J. Cappiello,39.0%,NA ,0.0%,NA,0.0%,1
+G,DE,10,NA,3,Jack Markell,67.5%,William Swain Lee,32.0%,NA ,0.0%,NA,0.0%,1
+H,DE,10,0,2,Karen Hartley-Nagle,38.0%,Michael N. Castle,61.1%,NA ,0.0%,NA,0.0%,2
+S,DE,10,NA,1,Joe Biden,64.7%,Christine O'Donnell,35.3%,NA ,0.0%,NA,0.0%,1
+H,FL,12,01,2,"James ""Jim"" Bryan",29.8%,Jeff Miller,70.2%,NA ,0.0%,NA,0.0%,2
+H,FL,12,02,1,Allen Boyd,61.9%,Mark Mulligan,38.1%,NA ,0.0%,NA,0.0%,1
+H,FL,12,03,1,Corrine Brown,Uncontested,NA ,0.0%,NA ,0.0%,NA,0.0%,1
+H,FL,12,04,2,Jay McGovern,34.7%,Ander Crenshaw,65.3%,NA ,0.0%,NA,0.0%,2
+H,FL,12,05,2,John Russell,38.8%,Ginny Brown-Waite,61.2%,NA ,0.0%,NA,0.0%,2
+H,FL,12,06,2,Tim Cunha,39.1%,Clifford B. Stearns,60.9%,NA ,0.0%,NA,0.0%,2
+H,FL,12,07,2,Faye Armitage,38.0%,John L. Mica,62.0%,NA ,0.0%,NA,0.0%,2
+H,FL,12,08,2,Alan Grayson,52.0%,Ric Keller,48.0%,NA ,0.0%,NA,0.0%,1
+H,FL,12,09,2,Bill Mitchell,36.3%,Gus Michael Bilirakis,62.2%,NA ,0.0%,NA,0.0%,2
+H,FL,12,10,2,Bob Hackworth,39.3%,"C.W. ""Bill"" Young",60.7%,NA ,0.0%,NA,0.0%,2
+H,FL,12,11,1,Kathy Castor,71.7%,"Eddie Adams, Jr.",28.3%,NA ,0.0%,NA,0.0%,1
+H,FL,12,12,2,Doug Tudor,42.5%,Adam H. Putnam,57.5%,NA ,0.0%,NA,0.0%,2
+H,FL,12,13,2,Christine L. Jennings,37.5%,Vern Buchanan,55.5%,Jan Schneider,5.5%,NA,0.0%,2
+H,FL,12,14,2,Robert M. Neeld,24.8%,Connie Mack,59.4%,NA,0.0%,NA,0.0%,2
+H,FL,12,15,4,Steve Blythe,42.0%,Bill Posey,53.1%,NA,0.0%,NA,0.0%,2
+H,FL,12,16,1,Tim Mahoney,39.9%,Tom Rooney,60.1%,NA,0.0%,NA,0.0%,2
+H,FL,12,17,1,Kendrick B. Meek,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,FL,12,18,2,Annette Taddeo,42.1%,Ileana Ros-Lehtinen,57.9%,NA,0.0%,NA,0.0%,2
+H,FL,12,19,1,Robert Wexler,66.2%,Edward J. Lynch,27.2%,NA,0.0%,NA,0.0%,1
+H,FL,12,20,1,Debbie Wasserman-Schultz,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,FL,12,21,2,Raul L. Martinez,42.1%,Lincoln Diaz-Balart,57.9%,NA,0.0%,NA,0.0%,2
+H,FL,12,22,1,Ron Klein,54.7%,Allen B. West,45.3%,NA,0.0%,NA,0.0%,1
+H,FL,12,23,1,Alcee L. Hastings ,82.2%,Marion D. Thorpe Jr.,17.8%,NA,0.0%,NA,0.0%,1
+H,FL,12,24,2,Suzanne M. Kosmas,57.2%,Tom Feeney,41.1%,NA,0.0%,NA,0.0%,1
+H,FL,12,25,2,"Jose Antonio ""Joe"" Garica",46.9%,Mario Diaz-Balart,53.1%,NA,0.0%,NA,0.0%,2
+H,GA,13,01,2,Bill Gillespie,33.5%,Jack Kingston,66.5%,NA,0.0%,NA,0.0%,2
+H,GA,13,02,1,Sanford Bishop,68.9%,Lee Ferrell,31.1%,NA,0.0%,NA,0.0%,1
+H,GA,13,03,2,Stephen Camp,34.3%,Lynn Westmoreland,65.7%,NA,0.0%,NA,0.0%,2
+H,GA,13,04,1,"Henry C. ""Hank"" Johnson, Jr.",Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,GA,13,05,1,John Lewis,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,GA,13,06,2,Bill Jones,31.5%,Tom Price,68.5%,NA,0.0%,NA,0.0%,2
+H,GA,13,07,2,Douglas Heckman,38.0%,John Linder,62.0%,NA,0.0%,NA,0.0%,2
+H,GA,13,08,1,Jim Marshall,57.2%,Rick Goddard,42.8%,NA,0.0%,NA,0.0%,1
+H,GA,13,09,2,Jeff Scott,24.5%,Nathan Deal,75.5%,NA,0.0%,NA,0.0%,2
+H,GA,13,10,2,Bobby Saxon,39.3%,Paul Broun,60.7%,NA,0.0%,NA,0.0%,2
+H,GA,13,11,2,"Hugh ""Bud"" Gammon",31.8%,Phil Gingrey,68.2%,NA,0.0%,NA,0.0%,2
+H,GA,13,12,1,John Barrow,66.0%,John Stone,34.0%,NA,0.0%,NA,0.0%,1
+H,GA,13,13,1,David Scott,69.0%,Deborah Honeycutt,31.0%,NA,0.0%,NA,0.0%,1
+S,GA,13,NA,2,Jim Martin,46.8%,Saxby Chambliss,49.8%,Allen Buckley,3.4%,NA,0.0%,2
+H,HI,15,01,1,Neil Abercrombie,70.6%,Steve Tataii,17.4%,NA,0.0%,NA,0.0%,1
+H,HI,15,02,1,Mazie K. Hirono,69.8%,Roger B. Evans,18.7%,NA,0.0%,NA,0.0%,1
+H,ID,16,01,2,Walt Minnick,50.6%,Bill Sali,49.4%,NA,0.0%,NA,0.0%,1
+H,ID,16,02,2,Debbie Holmes,29.0%,Mike Simpson,71.0%,NA,0.0%,NA,0.0%,2
+S,ID,16,NA,2,Larry LaRocco,34.1%,Jim Risch,57.6%,NA,0.0%,NA,0.0%,2
+H,IL,17,01,1,Bobby L. Rush,85.9%,Antoine Members,14.1%,NA,0.0%,NA,0.0%,1
+H,IL,17,02,1,"Jesse L. Jackson, Jr. ",89.4%,Anthony W. Williams ,10.6%,NA,0.0%,NA,0.0%,1
+H,IL,17,03,1,Daniel William Lipinski ,73.3%,Michael Hawkins ,21.4%,NA,0.0%,NA,0.0%,1
+H,IL,17,04,1,Luis V. Gutierrez ,80.6%,Daniel Cunningham ,11.5%,NA,0.0%,NA,0.0%,1
+H,IL,17,05,1,Rahm Emanuel,73.9%,Tom Hanson,22.0%,NA,0.0%,NA,0.0%,1
+H,IL,17,06,2,Jill Morgenthaler,42.4%,Peter J. Roskam ,57.6%,NA,0.0%,NA,0.0%,2
+H,IL,17,07,1,Danny K. Davis,85.0%,Steve Miller,15.0%,NA,0.0%,NA,0.0%,1
+H,IL,17,08,1,Melissa Bean,60.7%,Steve Greenberg,39.3%,NA,0.0%,NA,0.0%,1
+H,IL,17,09,1,Jan Schakowsky,74.7%,Michael Younan ,22.0%,NA,0.0%,NA,0.0%,1
+H,IL,17,10,2,Daniel J. Seals,47.4%,Mark Steven Kirk ,52.6%,NA,0.0%,NA,0.0%,2
+H,IL,17,11,4,"Deborah ""Debbie"" Halvorson ",58.4%,Marty Ozinga,34.5%,NA,0.0%,NA,0.0%,1
+H,IL,17,12,1,Jerry F. Costello,71.4%,Timmy Jay Richardson,25.0%,NA,0.0%,NA,0.0%,1
+H,IL,17,13,2,Scott Harper,43.6%,Judy Biggert,53.6%,NA,0.0%,NA,0.0%,2
+H,IL,17,14,1,Bill Foster,57.8%,Jim Oberweis,42.2%,NA,0.0%,NA,0.0%,1
+H,IL,17,15,2,Steve Cox,35.8%,Timothy V. Johnson,64.2%,NA,0.0%,NA,0.0%,2
+H,IL,17,16,2,Robert G. Abboud,36.1%,Donald A. Manzullo,60.9%,NA,0.0%,NA,0.0%,2
+H,IL,17,17,1,Phil Hare,Uncontested,,0.0%,NA,0.0%,NA,0.0%,1
+H,IL,17,18,4,Colleen Callahan,37.9%,Aaron Schock,58.9%,NA,0.0%,NA,0.0%,2
+H,IL,17,19,2,Daniel Davis,33.4%,John M. Shimkus ,64.5%,NA,0.0%,NA,0.0%,2
+S,IL,17,NA,1,Dick Durbin,63.1%,Steve Sauerberg,32.7%,NA,0.0%,NA,0.0%,1
+G,IN,18,NA,2,Jill Long Thompson,40.0%,Mitch Daniels,57.8%,NA,0.0%,NA,0.0%,2
+H,IN,18,01,1,Peter J. Visclosky,70.9%,Mark Leyva,27.2%,NA,0.0%,NA,0.0%,1
+H,IN,18,02,1,Joe Donnelly ,67.1%,Luke Puckett,30.2%,NA,0.0%,NA,0.0%,1
+H,IN,18,03,2,Mike Montagano,39.7%,Mark Edward Souder,55.0%,NA,0.0%,NA,0.0%,2
+H,IN,18,04,2,Nels Ackerson,40.1%,Steve Buyer,59.9%,NA,0.0%,NA,0.0%,2
+H,IN,18,05,2,Mary Etta Ruley,34.5%,Dan Burton,65.5%,NA,0.0%,NA,0.0%,2
+H,IN,18,06,2,Barry A. Welsh,33.4%,Mike Pence,64.0%,NA,0.0%,NA,0.0%,2
+H,IN,18,07,1,Andre D. Carson,65.1%,Gabrielle Campo,34.9%,NA,0.0%,NA,0.0%,1
+H,IN,18,08,1,Brad Ellsworth ,64.7%,Greg Goode,35.3%,NA,0.0%,NA,0.0%,1
+H,IN,18,09,1,Baron P. Hill ,57.8%,Mike Sodrel,38.4%,D. Eric Schansberg,3.8%,NA,0.0%,1
+H,IA,19,01,1,Bruce Braley,62.8%,David Hartsuch,37.2%,NA,0.0%,NA,0.0%,1
+H,IA,19,02,1,David Wayne Loebsack,54.9%,Mariannette Miller-Meeks,37.1%,NA,0.0%,NA,0.0%,1
+H,IA,19,03,1,Leonard L. Boswell,54.6%,Kim Schmett,40.8%,NA,0.0%,NA,0.0%,1
+H,IA,19,04,2,Becky Greenwald,38.4%,Tom Latham,59.0%,NA,0.0%,NA,0.0%,2
+H,IA,19,05,2,Rob Hubler,36.3%,"Steven A. ""Steve"" King ",58.2%,NA,0.0%,NA,0.0%,2
+S,IA,19,NA,1,Tom Harkin,62.7%,Christopher Reed,32.7%,NA,0.0%,NA,0.0%,1
+H,KS,20,01,2,James Bordonaro,13.3%,Jerry Moran,81.9%,NA,0.0%,NA,0.0%,2
+H,KS,20,02,1,Nancy E. Boyda ,46.2%,Lynn Jenkins,50.6%,NA,0.0%,NA,0.0%,2
+H,KS,20,03,1,Dennis Moore,56.4%,Nick Jordan ,39.7%,NA,0.0%,NA,0.0%,1
+H,KS,20,04,2,"Donald Betts, Jr.",32.4%,Todd W. Tiahrt,63.4%,NA,0.0%,NA,0.0%,2
+S,KS,20,NA,2,Jim Slattery,36.3%,Pat Roberts,60.2%,NA,0.0%,NA,0.0%,2
+H,KY,21,01,2,Heather Ann Ryan,35.7%,"Edward ""Ed"" Whitfield ",64.3%,NA,0.0%,NA,0.0%,2
+H,KY,21,02,4,David E. Boswell,47.2%,Brett Guthrie,52.8%,NA,0.0%,NA,0.0%,2
+H,KY,21,03,1,John A. Yarmuth,59.4%,Anne M. Northup ,40.6%,NA,0.0%,NA,0.0%,1
+H,KY,21,04,2,Michael J. Kelley,37.0%,Geoff Davis,63.0%,NA,0.0%,NA,0.0%,2
+H,KY,21,05,2,NA,0.0%,"Harold ""Hal"" Rogers",Uncontested,NA,0.0%,NA,0.0%,2
+H,KY,21,06,1,"A.B. ""Ben"" Chandler, III",64.7%,Jon Larson,35.3%,NA,0.0%,NA,0.0%,1
+S,KY,21,NA,2,Bruce Lunsford,47.0%,Mitch McConnell,53.0%,NA,0.0%,NA,0.0%,2
+H,LA,22,01,2,Jim Harlan,34.3%,Steve Scalise,65.9%,NA,0.0%,NA,0.0%,2
+H,LA,22,03,1,"Charlie Melancon, Jr. ",Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,LA,22,05,2,NA,0.0%,Rodney Alexander ,Uncontested,NA,0.0%,NA,0.0%,2
+H,LA,22,06,1,Don Cazayoux,40.3%,Bill Cassidy ,48.1%,Michael L. Jackson,11.6%,NA,0.0%,2
+H,LA,22,07,2,Don Cravins,34.3%,Charles W. Boustany ,61.9%,NA,0.0%,NA,0.0%,2
+S,LA,22,NA,1,Mary Landrieu,52.1%,John Kennedy,45.8%,NA,0.0%,NA,0.0%,1
+H,ME,23,01,3,Chellie Pingree ,54.9%,Charles E. Summers ,45.1%,NA,0.0%,NA,0.0%,1
+H,ME,23,02,1,Michael H. Michaud,67.4%,John N. Frary,32.6%,NA,0.0%,NA,0.0%,1
+S,ME,23,NA,2,Tom Allen,38.5%,Susan Collins,61.5%,NA,0.0%,NA,0.0%,2
+H,MD,24,01,4,"Frank M. Kratovil, Jr.",49.1%,Andy Harris,48.3%,NA,0.0%,NA,0.0%,1
+H,MD,24,02,1,C.A. Dutch Ruppersberger ,71.9%,Richard Matthews,24.8%,NA,0.0%,NA,0.0%,1
+H,MD,24,03,1,John P. Sarbanes,69.7%,Pinkston Harris,30.1%,NA,0.0%,NA,0.0%,1
+H,MD,24,04,1,Donna Fern Edwards,85.8%,Peter James,12.9%,NA,0.0%,NA,0.0%,1
+H,MD,24,05,1,Steny Hamilton Hoyer ,73.6%,Collins Bailey,24.0%,NA,0.0%,NA,0.0%,1
+H,MD,24,06,2,Jennifer P. Dougherty,38.8%,Roscoe Bartlett,57.8%,NA,0.0%,NA,0.0%,2
+H,MD,24,07,1,Elijah Cummings,79.5%,Michael T. Hargadon,18.6%,NA,0.0%,NA,0.0%,1
+H,MD,24,08,1,Chris Van Hollen,75.1%,Steve Hudson,21.7%,NA,0.0%,NA,0.0%,1
+H,MA,25,01,1,John W. Olver,69.7%,Nathan Bech,25.9%,NA,0.0%,NA,0.0%,1
+H,MA,25,02,1,Richard E. Neal,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,MA,25,03,1,James P. McGovern,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,MA,25,04,1,Barney Frank,64.3%,Earl H. Sholley,23.9%,NA,0.0%,NA,0.0%,1
+H,MA,25,05,1,Nicola S. Tsongas,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,MA,25,06,1,John F. Tierney,66.8%,Richard A. Baker ,28.0%,NA,0.0%,NA,0.0%,1
+H,MA,25,07,1,Edward J. Markey,70.5%,John Cunningham ,22.6%,NA,0.0%,NA,0.0%,1
+H,MA,25,08,1,Michael E. Capuano,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,MA,25,09,1,Stephen F. Lynch,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,MA,25,10,1,William D. Delahunt,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+S,MA,25,NA,1,John Kerry,65.8%,Jeff Beatty,31.0%,NA,0.0%,NA,0.0%,1
+H,MI,26,01,1,Bart Stupak,65.0%,Tom Casperson,32.7%,NA,0.0%,NA,0.0%,1
+H,MI,26,02,2,Fred Johnson,34.8%,Peter Hoekstra,62.4%,NA,0.0%,NA,0.0%,2
+H,MI,26,03,2,Henry Sanchez,35.4%,Vernon J. Ehlers,61.1%,NA,0.0%,NA,0.0%,2
+H,MI,26,04,2,Andrew D. Concannon,35.7%,Dave Camp,61.9%,NA,0.0%,NA,0.0%,2
+H,MI,26,05,1,Dale E. Kildee,70.4%,Matt Sawicki ,27.0%,NA,0.0%,NA,0.0%,1
+H,MI,26,06,2,Don Cooney,38.6%,Fred Upton,58.9%,NA,0.0%,NA,0.0%,2
+H,MI,26,07,2,Mark Schauer,48.8%,Tim Walberg,46.5%,NA,0.0%,NA,0.0%,1
+H,MI,26,08,2,Robert D. Alexander,40.2%,Mike Rogers,56.5%,NA,0.0%,NA,0.0%,2
+H,MI,26,09,2,Gary Peters,52.1%,Joe Knollenberg,42.6%,Adam Goodman,1.4%,Jack Kevorkian,2.6%,1
+H,MI,26,10,2,Robert Denison,31.1%,Candice S. Miller,66.3%,NA,0.0%,NA,0.0%,2
+H,MI,26,11,2,Joseph W. Larkin,45.4%,Thaddeus G. McCotter,51.4%,NA,0.0%,NA,0.0%,2
+H,MI,26,12,1,Sander Levin,72.0%,Bert Copple,23.9%,NA,0.0%,NA,0.0%,1
+H,MI,26,13,1,Carolyn Kilpatrick,74.1%,Edward J. Gubics,19.1%,NA,0.0%,NA,0.0%,1
+H,MI,26,14,1,"John Conyers, Jr.",Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,MI,26,15,1,John D. Dingell,70.7%,John J. Lynch ,25.0%,NA,0.0%,NA,0.0%,1
+S,MI,26,NA,1,Carl Levin,62.6%,Jack Hoogendyk,33.9%,NA,0.0%,NA,0.0%,1
+H,MN,27,01,1,"Timothy J. ""Tim"" Walz",62.5%,Brian James Davis,32.9%,Greg Mikkelson,4.5%,NA,0.0%,1
+H,MN,27,02,2,"Stephen ""Steve"" Sarvi",42.6%,John P. Kline,57.3%,NA,0.0%,NA,0.0%,2
+H,MN,27,03,4,"Jigar ""Ashwin"" Madia",40.9%,Erik Paulsen,48.5%,NA,0.0%,NA,0.0%,2
+H,MN,27,04,1,Betty McCollum,68.4%,Ed Matthews,31.3%,NA,0.0%,NA,0.0%,1
+H,MN,27,05,1,Keith Maurice Ellison ,70.9%,Barb White,22.0%,NA,0.0%,NA,0.0%,1
+H,MN,27,06,2,"Elwyn ""El"" Tinklenberg ",43.4%,Michele Bachmann ,46.4%,NA,0.0%,NA,0.0%,2
+H,MN,27,07,1,Collin C. Peterson,72.2%,Glen R. Menze,27.7%,NA,0.0%,NA,0.0%,1
+H,MN,27,08,1,"James L. ""Jim"" Oberstar ",67.7%,Michael Cummins ,32.2%,NA,0.0%,NA,0.0%,1
+S,MN,27,NA,2,Al Franken,42.0%,Norm Coleman,42.0%,Dean Barkley,15.2%,NA,0.0%,1
+H,MS,28,01,1,Travis W. Childers,54.4%,Greg Davis,44.0%,NA,0.0%,NA,0.0%,1
+H,MS,28,02,1,Bennie G. Thompson ,69.2%,Richard Cook,30.8%,NA,0.0%,NA,0.0%,1
+H,MS,28,03,4,Joel L. Gill,37.2%,Gregg Harper,62.8%,NA,0.0%,NA,0.0%,2
+H,MS,28,04,1,Gene Taylor,74.6%,John McCay,25.4%,NA,0.0%,NA,0.0%,1
+S,MS,28,NA,2,Erik Fleming,38.3%,Thad Cochran,61.7%,NA,0.0%,NA,0.0%,2
+S,MS,28,NA,2,Ronnie Musgrove,44.7%,Roger Wicker,55.3%,NA,0.0%,NA,0.0%,2
+G,MO,29,NA,4,Jay Nixon,58.4%,Kenny Hulshof,39.5%,NA,0.0%,NA,0.0%,1
+H,MO,29,01,1,"William Lacy Clay, Jr.",Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,MO,29,02,2,"William C. ""Bill"" Haas",35.4%,Todd Akin,62.3%,NA,0.0%,NA,0.0%,2
+H,MO,29,03,1,Russ Carnahan,66.4%,Chris Sande,30.4%,NA,0.0%,NA,0.0%,1
+H,MO,29,04,1,Ike Skelton ,65.9%,Jeff Parnell,34.1%,NA,0.0%,NA,0.0%,1
+H,MO,29,05,1,"Emanuel Cleaver, II",64.4%,Jacob Turk,35.6%,NA,0.0%,NA,0.0%,1
+H,MO,29,06,2,Kay Barnes,36.9%,Sam Graves,59.4%,Dave Browning,3.7%,NA,0.0%,2
+H,MO,29,07,2,Richard Monroe,28.2%,Roy Blunt,67.8%,NA,0.0%,NA,0.0%,2
+H,MO,29,08,2,Joe Allen,26.1%,Jo Ann Emerson,71.5%,NA,0.0%,NA,0.0%,2
+H,MO,29,09,4,Judy Baker,47.5%,Blaine Luetkemeyer,50.0%,Tamara A. Millay,2.5%,NA,0.0%,2
+G,MT,30,NA,1,Brian Schweitzer,65.4%,Roy Brown,32.6%,NA,0.0%,NA,0.0%,1
+H,MT,30,0,2,John Driscoll,32.4%,Denny Rehberg,64.2%,Mike Fellows,3.4%,NA,0.0%,2
+S,MT,30,NA,1,Max Baucus,72.9%,Bob Kelleher,27.1%,NA,0.0%,NA,0.0%,1
+H,NE,31,01,2,Max Yashirin,29.5%,Jeff Fortenberry (70.5%),70.5%,NA,0.0%,NA,0.0%,2
+H,NE,31,02,2,Jim Esch,47.8%,Lee Terry,52.2%,NA,0.0%,NA,0.0%,2
+H,NE,31,03,2,Jay C. Stoddard,23.3%,Adrian Smith,76.7%,NA,0.0%,NA,0.0%,2
+S,NE,31,NA,4,Scott Kleeb,40.0%,Mike Johanns,57.6%,NA,0.0%,NA,0.0%,2
+H,NV,32,01,1,Shelley Berkley,67.6%,Kenneth Wegner,28.4%,NA,0.0%,NA,0.0%,1
+H,NV,32,02,2,Jill Taylor Derby,41.4%,Dean Heller,51.8%,NA,0.0%,NA,0.0%,2
+H,NV,32,03,2,Dina Titus,47.5%,"Jon Porter, Sr.",42.3%,NA,0.0%,NA,0.0%,1
+G,NH,33,NA,1,John Lynch,69.8%,Joe Kenney,27.9%,NA,0.0%,NA,0.0%,1
+H,NH,33,01,1,Carol Shea-Porter ,51.8%,Jeb Bradley,45.9%,NA,0.0%,NA,0.0%,1
+H,NH,33,02,1,Paul W. Hodes,56.5%,Jennifer Horn,41.5%,Chester L. Lapointe,2.1%,NA,0.0%,1
+S,NH,33,NA,2,Jeanne Shaheen,51.7%,John Sununu,45.3%,NA,0.0%,NA,0.0%,1
+H,NJ,34,01,1,"Robert ""Rob"" Andrews ",71.9%,Dale Glading,26.4%,NA,0.0%,NA,0.0%,1
+H,NJ,34,02,2,David Streich Kurkowski,39.0%,Frank A. LoBiondo,59.2%,NA,0.0%,NA,0.0%,2
+H,NJ,34,03,4,John H. Adler,51.7%,Chris Myers,48.4%,NA,0.0%,NA,0.0%,1
+H,NJ,34,04,4,"Joshua M. ""Josh"" Zeitz",32.5%,Chris Smith,66.4%,NA,0.0%,NA,0.0%,2
+H,NJ,34,05,2,Dennis G. Shulman,42.1%,Scott Garrett,56.3%,NA,0.0%,NA,0.0%,2
+H,NJ,34,06,1,"Frank Pallone, Jr.",66.7%,Robert E. McLeod,31.9%,NA,0.0%,NA,0.0%,1
+H,NJ,34,07,4,Linda D. Stender,41.6%,Leonard Lance,50.8%,Michael Hsing,5.6%,NA,0.0%,2
+H,NJ,34,08,1,"William J. ""Bill"" Pascrell, Jr.",70.9%,Roland Straten,28.4%,NA,0.0%,NA,0.0%,1
+H,NJ,34,09,1,Steven R. Rothman ,67.9%,Vince Micco,31.7%,NA,0.0%,NA,0.0%,1
+H,NJ,34,10,1,Donald M. Payne,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,NJ,34,11,2,Tom Wyka,36.8%,Rodney Frelinghuysen,62.1%,NA,0.0%,NA,0.0%,2
+H,NJ,34,12,1,Rush D. Holt,62.5%,Alan R. Bateman,36.0%,NA,0.0%,NA,0.0%,1
+H,NJ,34,13,1,Albio Sires,75.3%,Joseph Turula,21.9%,NA,0.0%,NA,0.0%,1
+S,NJ,34,NA,1,Frank Lautenberg,55.6%,Dick Zimmer,42.4%,NA,0.0%,NA,0.0%,1
+H,NM,35,01,4,Martin T. Heinrich ,55.5%,Darren White,44.5%,NA,0.0%,NA,0.0%,1
+H,NM,35,02,4,Harry Teague ,55.8%,Ed Tinsley ,44.2%,NA,0.0%,NA,0.0%,1
+H,NM,35,03,3,Ben Ray Lujan,56.6%,Dan East ,30.7%,NA,0.0%,NA,0.0%,1
+S,NM,35,NA,4,Tom Udall,61.2%,Steve Pearce,38.8%,NA,0.0%,NA,0.0%,1
+H,NY,36,01,1,"Timothy H. ""Tim"" Bishop",58.0%,Lee M. Zeldin,42.0%,NA,0.0%,NA,0.0%,1
+H,NY,36,02,1,Steve J. Israel,66.3%,Frank Stalzer,33.7%,NA,0.0%,NA,0.0%,1
+H,NY,36,03,2,Graham E. Long,35.8%,Pete King ,64.2%,NA,0.0%,NA,0.0%,2
+H,NY,36,04,1,Carolyn McCarthy,63.7%,Jack Martins,36.3%,NA,0.0%,NA,0.0%,1
+H,NY,36,05,1,Gary L. Ackerman,70.5%,Liz Berney,27.6%,"Gonzalo Manalo ""Jun"" Policarpio",1.9%,NA,0.0%,1
+H,NY,36,06,1,Gregory Meeks ,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,NY,36,07,1,Joseph Crowley,84.7%,William Britt,15.3%,NA,0.0%,NA,0.0%,1
+H,NY,36,08,1,"Jerrold ""Jerry"" Nadler",79.7%,Grace Lin ,20.3%,NA,0.0%,NA,0.0%,1
+H,NY,36,09,1,Anthony D. Weiner,92.3%,Alfred Donohue,7.7%,NA,0.0%,NA,0.0%,1
+H,NY,36,10,1,"Edolphus ""Ed"" Towns",93.7%,Salvatore Grupico,6.3%,NA,0.0%,NA,0.0%,1
+H,NY,36,11,1,Yvette D. Clarke,92.5%,Hugh C. Carr,6.6%,Cartrell Gore,0.8%,NA,0.0%,1
+H,NY,36,12,1,Nydia M. Velazquez,89.2%,Allan Romaguera,10.8%,NA,0.0%,NA,0.0%,1
+H,NY,36,13,4,Mike McMahon,60.8%,Robert Strainiere,33.3%,NA,0.0%,NA,0.0%,1
+H,NY,36,14,1,Carolyn B. Maloney,79.5%,Robert Heim,18.9%,NA,0.0%,NA,0.0%,1
+H,NY,36,15,1,Charles B. Rangel,87.5%,Edward Daniels,9.3%,NA,0.0%,NA,0.0%,1
+H,NY,36,16,1,Jose E. Serrano,96.6%,Ali Mohamed ,3.4%,NA,0.0%,NA,0.0%,1
+H,NY,36,17,1,Eliot L. Engel,79.2%,Robert Goodman,20.8%,NA,0.0%,NA,0.0%,1
+H,NY,36,18,1,Nita M. Lowey,68.0%,Jim C. Russell,32.0%,NA,0.0%,NA,0.0%,1
+H,NY,36,19,1,John Joseph Hall,58.5%,Kieran Lalor,41.5%,NA,0.0%,NA,0.0%,1
+H,NY,36,20,1,Kirsten E. Gillibrand,61.8%,Sandy Treadwell,38.2%,NA,0.0%,NA,0.0%,1
+H,NY,36,21,3,Paul David Tonko,61.8%,Jim Buhrmaster,35.4%,Phil Steck,2.9%,NA,0.0%,1
+H,NY,36,22,1,Maurice D. Hinchey,66.1%,George Phillips,33.9%,NA,0.0%,NA,0.0%,1
+H,NY,36,23,2,"Michael P. ""Mike"" Oot",34.7%,John McHugh,65.3%,NA,0.0%,NA,0.0%,2
+H,NY,36,24,1,"Michael Angelo ""Mike"" Arcuri ",51.4%,Richard L. Hanna,48.6%,NA,0.0%,NA,0.0%,1
+H,NY,36,25,4,"Daniel B. ""Dan"" Maffei",54.5%,Dale Sweetland,42.2%,NA,0.0%,NA,0.0%,1
+H,NY,36,26,4,Alice J. Kryzan,42.0%,Chris Lee,58.0%,NA,0.0%,NA,0.0%,2
+H,NY,36,27,1,Brian M. Higgins ,73.9%,Dan Humiston ,23.1%,"Harold W. ""Budd"" Shroeder",3.0%,NA,0.0%,1
+H,NY,36,28,1,Louise Slaughter,77.8%,Danvid Crimmen,22.2%,NA,0.0%,NA,0.0%,1
+H,NY,36,29,2,Eric J. J. Massa ,50.8%,Randy Kuhl,49.2%,NA,0.0%,NA,0.0%,1
+G,NC,37,NA,3,Beverly Perdue,50.2%,Pat McCrory,46.9%,Michael Munger,2.9%,NA,0.0%,1
+H,NC,37,01,1,G. K. Butterfield,70.3%,Dean Stephens,29.7%,NA,0.0%,NA,0.0%,1
+H,NC,37,02,1,Bob Ethridge,66.9%,Dan Mansell ,31.3%,NA,0.0%,NA,0.0%,1
+H,NC,37,03,2,Craig Peter Weber ,34.1%,Walter Jones,65.9%,NA,0.0%,NA,0.0%,2
+H,NC,37,04,1,David E. Price ,63.3%,B.J. Lawson,36.7%,NA,0.0%,NA,0.0%,1
+H,NC,37,05,2,Roy Carter ,41.6%,Virginia Foxx ,58.4%,NA,0.0%,NA,0.0%,2
+H,NC,37,06,2,Teresa Sue Bratton,33.0%,Howard Coble ,67.0%,NA,0.0%,NA,0.0%,2
+H,NC,37,07,1,Mike McIntyre,68.9%,Will Brezeale,31.2%,NA,0.0%,NA,0.0%,1
+H,NC,37,08,2,Larry Kissell ,55.4%,Robin Hayes ,44.6%,NA,0.0%,NA,0.0%,1
+H,NC,37,09,2,Harry Taylor ,35.9%,Sue Myrick ,62.4%,NA,0.0%,NA,0.0%,2
+H,NC,37,10,2,Daniel Johnson ,42.5%,Patrick McHenry,57.6%,NA,0.0%,NA,0.0%,2
+H,NC,37,11,1,Heath Shuler,62.0%,Carl Mumpower,35.8%,NA,0.0%,NA,0.0%,1
+H,NC,37,12,1,Mel Watt ,71.6%,"Ty Cobb, Jr.",28.4%,NA,0.0%,NA,0.0%,1
+H,NC,37,13,1,"Ralph ""Brad"" Miller",65.9%,Hugh Webster,34.1%,NA,0.0%,NA,0.0%,1
+S,NC,37,NA,2,Kay Hagan,52.7%,Elizabeth Dole,44.2%,Chris Cole,3.1%,NA,0.0%,1
+G,ND,38,NA,2,Tim Mathern,23.5%,John Hoeven,74.4%,NA,0.0%,NA,0.0%,2
+H,ND,38,0,2,Earl Ralph Pomeroy,62.1%,Duane Sand,37.9%,NA,0.0%,NA,0.0%,1
+H,OH,39,01,2,Steve Driehaus,51.5%,Steve Chabot,48.5%,NA,0.0%,NA,0.0%,1
+H,OH,39,02,2,Victoria Wells Wulsin,37.5%,Jean Schmidt,44.8%,David Henry Krikorian,17.7%,NA,0.0%,2
+H,OH,39,03,2,Jane Mitakides ,36.1%,Mike Turner ,63.9%,NA,0.0%,NA,0.0%,2
+H,OH,39,04,2,Mike Carroll,34.9%,Jim Jordan,65.1%,NA,0.0%,NA,0.0%,2
+H,OH,39,05,2,George F. Mays,35.7%,Bob Latta ,64.3%,NA,0.0%,NA,0.0%,2
+H,OH,39,06,1,Charlie Wilson ,62.3%,Dick Stobbs,32.8%,NA,0.0%,NA,0.0%,1
+H,OH,39,07,4,Sharen Neuhardt,41.3%,Steve Austria,58.7%,NA,0.0%,NA,0.0%,2
+H,OH,39,08,2,Nicholas A. von Stein,31.9%,John Boehner,68.1%,NA,0.0%,NA,0.0%,2
+H,OH,39,09,1,Marcy Kaptur ,74.1%,Bradley S. Leavitt,25.9%,NA,0.0%,NA,0.0%,1
+H,OH,39,10,1,Dennis J. Kucinich,56.8%,Jim Trakas,39.4%,NA,0.0%,NA,0.0%,1
+H,OH,39,11,3,Marcia L. Fudge ,85.1%,Thomas Pekarek ,14.9%,NA,0.0%,NA,0.0%,1
+H,OH,39,12,2,David W. Robinson,42.2%,Pat Tiberi,54.8%,NA,0.0%,NA,0.0%,2
+H,OH,39,13,1,Betty Sue Sutton,64.4%,David Potter,35.5%,NA,0.0%,NA,0.0%,1
+H,OH,39,14,2,Bill O'Neill,38.7%,Steve LaTourette ,58.4%,NA,0.0%,NA,0.0%,2
+H,OH,39,15,4,Mary Jo Kilroy,45.9%,Steve Stivers,45.2%,Don Eckhart,4.3%,NA,0.0%,1
+H,OH,39,16,4,John A. Boccieri,55.3%,J. Kirk Schuring,44.7%,NA,0.0%,NA,0.0%,1
+H,OH,39,17,1,Tim Ryan,78.1%,Duane Virgil Grassell,21.9%,NA,0.0%,NA,0.0%,1
+H,OH,39,18,1,Zack Space,59.8%,Fred L. Dailey,40.2%,NA,0.0%,NA,0.0%,1
+H,OK,40,01,2,Georgianna W. Oliver,33.8%,John Sullivan,66.2%,NA,0.0%,NA,0.0%,2
+H,OK,40,02,1,Dan Boren,70.5%,Raymond Wickson,29.5%,NA,0.0%,NA,0.0%,1
+H,OK,40,03,2,Frankie Lee Robbins,23.6%,Frank Lucas ,69.7%,NA,0.0%,NA,0.0%,2
+H,OK,40,04,2,Blake Cumming,29.2%,Tom Cole,66.0%,NA,0.0%,NA,0.0%,2
+H,OK,40,05,2,Steven L. Perry,34.1%,Mary C. Fallin,65.9%,NA,0.0%,NA,0.0%,2
+S,OK,40,NA,2,Andrew Rice,39.2%,James Inhofe,56.7%,Stephen Wallace,4.1%,NA,0.0%,2
+H,OR,41,01,1,David Wu ,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,OR,41,02,2,Noah I. Lemas,25.8%,Greg Walden,69.7%,NA,0.0%,NA,0.0%,2
+H,OR,41,03,1,Earl Blumenauer,75.0%,Delia Lopez,20.7%,NA,0.0%,NA,0.0%,1
+H,OR,41,04,1,"Peter ""Pete"" DeFazio",Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,OR,41,05,3,Kurt Schrader,54.7%,Mike Erickson,38.4%,NA,0.0%,NA,0.0%,1
+S,OR,41,NA,2,Jeff Merkeley,48.9%,Gordon Smith,45.6%,Dave Brownlow,5.2%,NA,0.0%,1
+H,PA,42,01,1,Robert A. Brady,90.8%,Mike Muhammad,9.2%,NA,0.0%,NA,0.0%,1
+H,PA,42,02,1,Chaka Fattah,80.9%,Adam Lang,19.1%,NA,0.0%,NA,0.0%,1
+H,PA,42,03,2,Kathy Dahlkemper,51.5%,Phil English,48.5%,NA,0.0%,NA,0.0%,1
+H,PA,42,04,1,Jason Altimire,56.0%,Melissa A. Hart,44.0%,NA,0.0%,NA,0.0%,1
+H,PA,42,05,4,Mark B. McCracken,41.0%,Glenn W. Thompson,56.8%,NA,0.0%,NA,0.0%,2
+H,PA,42,06,2,Robert Roggio,47.9%,Jim Gerlach,52.1%,NA,0.0%,NA,0.0%,2
+H,PA,42,07,1,Joe Sestak,59.6%,W. Craig Williams,40.4%,NA,0.0%,NA,0.0%,1
+H,PA,42,08,1,Patrick J. Murphy,56.8%,Tom Manion,41.7%,NA,0.0%,NA,0.0%,1
+H,PA,42,09,2,Tony Barr,36.1%,Bill Shuster,63.9%,NA,0.0%,NA,0.0%,2
+H,PA,42,10,1,Chris Carney,56.4%,Chris Hackett,43.6%,NA,0.0%,NA,0.0%,1
+H,PA,42,11,1,Paul E. Kanjorski,51.7%,Lou Barletta,48.4%,NA,0.0%,NA,0.0%,1
+H,PA,42,12,1,John P. Murtha,58.1%,William Russell,41.9%,NA,0.0%,NA,0.0%,1
+H,PA,42,13,1,Allyson Y. Schwartz,62.8%,Marina Kats,34.5%,NA,0.0%,NA,0.0%,1
+H,PA,42,14,1,Mike Doyle,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,PA,42,15,2,Sam Bennett,41.4%,Charlie Dent,58.6%,NA,0.0%,NA,0.0%,2
+H,PA,42,16,2,Bruce A. Slater,39.3%,Joseph Pitts,55.9%,NA,0.0%,NA,0.0%,2
+H,PA,42,17,1,Tim Holden,63.8%,Toni Gilhooley,36.2%,NA,0.0%,NA,0.0%,1
+H,PA,42,18,2,Steve O'Donnell ,36.0%,Tim Murphy ,65.0%,NA,0.0%,NA,0.0%,2
+H,PA,42,19,2,Phil Avillo,33.4%,Todd R. Platts,66.6%,NA,0.0%,NA,0.0%,2
+H,RI,44,01,1,Patrick J. Kennedy,68.6%,Jon Scott,24.2%,NA,0.0%,NA,0.0%,1
+H,RI,44,02,1,James R. Langevin,70.0%,Mark Zaccaria,30.0%,NA,0.0%,NA,0.0%,1
+S,RI,44,NA,1,Jack Reed,73.3%,Robert Tingle,26.7%,NA,0.0%,NA,0.0%,1
+H,SC,45,01,2,Linda Ketner,47.9%,Henry Brown,51.9%,NA,0.0%,NA,0.0%,2
+H,SC,45,02,2,Rob Miller,46.2%,Joe Wilson ,53.7%,NA,0.0%,NA,0.0%,2
+H,SC,45,03,2,Jane Ballard Dyer ,35.2%,Gresham Barrett,64.7%,NA,0.0%,NA,0.0%,2
+H,SC,45,04,2,Paul Corden,36.9%,Bob Inglis,60.1%,NA,0.0%,NA,0.0%,2
+H,SC,45,05,1,John Spratt,61.6%,Albert Spencer,37.0%,NA,0.0%,NA,0.0%,1
+H,SC,45,06,1,"James E. ""Jim"" Clyburn",67.5%,Nancy Harrelson,32.5%,NA,0.0%,NA,0.0%,1
+S,SC,45,NA,2,Bob Conley,42.3%,Lindsey Graham,57.5%,NA,0.0%,NA,0.0%,2
+H,SD,46,0,1,Stephanie Herseth Sandlin,67.6%,"Christian ""Chris"" Lien",32.4%,NA,0.0%,NA,0.0%,1
+S,SD,46,NA,1,Tim Johnson,62.5%,Joel Dykstra,37.5%,NA,0.0%,NA,0.0%,1
+H,TN,47,01,4,Rob Russell,24.6%,David Roe,71.8%,NA,0.0%,NA,0.0%,2
+H,TN,47,02,2,Bob Scott,21.8%,John Duncan,78.2%,NA,0.0%,NA,0.0%,2
+H,TN,47,03,2,Doug Vandagriff ,27.4%,Zach Wamp,69.4%,NA,0.0%,NA,0.0%,2
+H,TN,47,04,1,Lincoln Edward Davis,58.8%,Monty Joe Lankford,37.8%,NA,0.0%,NA,0.0%,1
+H,TN,47,05,1,Jim Cooper,65.9%,John Donovan,31.0%,NA,0.0%,NA,0.0%,1
+H,TN,47,06,1,Bart Gordon,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,TN,47,07,2,Randy Gene Morris,31.4%,Marsha Blackburn,68.6%,NA,0.0%,NA,0.0%,2
+H,TN,47,08,1,John S. Tanner ,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,TN,47,09,1,Steve Cohen,87.9%,NA,0.0%,Jake Ford,4.9%,NA,0.0%,1
+S,TN,47,NA,2,Bob Tuke,31.6%,Lamar Alexander,65.2%,NA,0.0%,NA,0.0%,2
+H,TX,48,01,2,NA,0.0%,Louie Gohmert,Uncontested,NA,0.0%,NA,0.0%,2
+H,TX,48,02,2,NA,0.0%,Ted Poe,Uncontested,NA,0.0%,NA,0.0%,2
+H,TX,48,03,2,Tom Daley,38.0%,Sam Johnson,59.8%,NA,0.0%,NA,0.0%,2
+H,TX,48,04,2,Glenn Melancon,29.3%,Ralph M. Hall,68.8%,NA,0.0%,NA,0.0%,2
+H,TX,48,05,2,NA,0.0%,Jeb Hensarling,Uncontested,NA,0.0%,NA,0.0%,2
+H,TX,48,06,2,Ludwig Otto,35.6%,Joe Barton,62.0%,NA,0.0%,NA,0.0%,2
+H,TX,48,07,2,Michael Skelly,42.4%,John Culberson,55.9%,NA,0.0%,NA,0.0%,2
+H,TX,48,08,2,Kent Hargett,24.8%,Kevin Brady,72.6%,NA,0.0%,NA,0.0%,2
+H,TX,48,09,1,Al Green,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,TX,48,10,2,Larry Joe Doherty,43.1%,Michael T. McCaul,53.9%,NA,0.0%,NA,0.0%,2
+H,TX,48,11,2,NA,0.0%,Mike Conaway,Uncontested,NA,0.0%,NA,0.0%,2
+H,TX,48,12,2,Tracey Smith,30.6%,Kay Granger,67.6%,NA,0.0%,NA,0.0%,2
+H,TX,48,13,2,Roger James Waun,22.4%,Mac Thornberry,77.6%,NA,0.0%,NA,0.0%,2
+H,TX,48,14,2,NA,0.0%,Ron Paul,Uncontested,NA,0.0%,NA,0.0%,2
+H,TX,48,15,1,Ruben Hinojosa,65.7%,Eddie Zamora,32.0%,NA,0.0%,NA,0.0%,1
+H,TX,48,16,1,Silvestre Reyes,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,TX,48,17,1,Chet Edwards,53.0%,Rob Curnock,45.5%,NA,0.0%,NA,0.0%,1
+H,TX,48,18,1,Sheila Jackson Lee,77.3%,John M. Faulk,20.4%,NA,0.0%,NA,0.0%,1
+H,TX,48,19,2,Dwight Fullingim,24.9%,Randy Neugebauer,72.5%,NA,0.0%,NA,0.0%,2
+H,TX,48,20,1,Charles A. Gonzales,71.9%,Robert Litoff,25.2%,NA,0.0%,NA,0.0%,1
+H,TX,48,21,2,NA,0.0%,Lamar Smith,Uncontested,NA,0.0%,NA,0.0%,2
+H,TX,48,22,1,Nick Lampson,45.4%,Pete Olson ,52.4%,NA,0.0%,NA,0.0%,2
+H,TX,48,23,1,Ciro D. Rodriguez,55.8%,Lyle T. Larson,41.9%,NA,0.0%,NA,0.0%,1
+H,TX,48,24,2,Tom Love,41.4%,Kenny E. Marchant,55.9%,NA,0.0%,NA,0.0%,2
+H,TX,48,25,1,Lloyd Doggett,65.8%,George L. Morovich,30.5%,NA,0.0%,NA,0.0%,1
+H,TX,48,26,2,Ken Leach,36.4%,Michael C. Burgess,60.2%,NA,0.0%,NA,0.0%,2
+H,TX,48,27,1,Solomon P. Ortiz,57.9%,William Vaden,38.4%,NA,0.0%,NA,0.0%,1
+H,TX,48,28,1,Henry Cuellar,68.7%,Jim Fish,29.2%,NA,0.0%,NA,0.0%,1
+H,TX,48,29,1,Gene Green,74.7%,Eric Story,23.9%,NA,0.0%,NA,0.0%,1
+H,TX,48,30,1,Eddie Bernice Johnson,82.6%,Fred Wood,15.8%,NA,0.0%,NA,0.0%,1
+H,TX,48,31,2,Brian P. Ruiz,36.5%,John Carter,60.3%,NA,0.0%,NA,0.0%,2
+H,TX,48,32,2,Eric Nelson Roberson,40.6%,Pete Sessions,57.2%,NA,0.0%,NA,0.0%,2
+S,TX,48,NA,2,Rick Noriega,42.9%,John Cornyn,54.8%,NA,0.0%,NA,0.0%,2
+G,UT,49,NA,2,Bob Springmeyer,19.7%,Jon Huntsman,77.7%,NA,0.0%,NA,0.0%,2
+H,UT,49,01,2,Morgan Emory Bowen,30.4%,Rob Bishop,65.0%,NA,0.0%,NA,0.0%,2
+H,UT,49,02,1,"James ""Jim"" Matheson",63.3%,Bill Dew,34.6%,NA,0.0%,NA,0.0%,1
+H,UT,49,03,4,Bennion Lloyd Spencer,28.1%,Jason Chaffetz,65.8%,NA,0.0%,NA,0.0%,2
+G,VT,50,NA,2,Gaye Symington,19.4%,Jim Douglas,55.4%,Anthony Pollina,23.3%,NA,0.0%,2
+H,VT,50,0,1,Peter F. Welch,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,VA,51,01,2,"William S. ""Bill"" Day, Jr.",41.8%,Rob Wittman,56.6%,NA,0.0%,NA,0.0%,2
+H,VA,51,02,2,"Glenn Carlyle Nye, III ",52.4%,Thelma Drake ,47.5%,NA,0.0%,NA,0.0%,1
+H,VA,51,03,1,Robert C. Scott,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,VA,51,04,2,Andrea Ruth Miller,40.3%,J. Randy Forbes ,59.6%,NA,0.0%,NA,0.0%,2
+H,VA,51,05,2,Tom Perriello ,50.1%,"Virgil H. Goode, Jr. ",49.9%,NA,0.0%,NA,0.0%,1
+H,VA,51,06,2,"Salam ""Sam"" Rasoul ",36.6%,Bob Goodlatte,61.6%,NA,0.0%,NA,0.0%,2
+H,VA,51,07,2,Anita Ruth Hartke,37.1%,Eric Cantor ,62.7%,NA,0.0%,NA,0.0%,2
+H,VA,51,08,1,James P. Moran ,67.9%,Mark Ellmore,29.7%,NA,0.0%,NA,0.0%,1
+H,VA,51,09,1,Rick Boucher,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,VA,51,10,2,"Judith M. ""Judy"" Feder",38.8%,Frank R. Wolf,58.8%,NA,0.0%,NA,0.0%,2
+H,VA,51,11,4,"Gerald ""Gerry"" Connolly",54.7%,Keith Fimian,43.1%,NA,0.0%,NA,0.0%,1
+S,VA,51,NA,4,Mark Warner,65.0%,Jim Gilmore,33.7%,NA,0.0%,NA,0.0%,1
+G,WA,53,NA,1,Christine Gregoire,53.2%,Dino Rossi,46.8%,NA,0.0%,NA,0.0%,1
+H,WA,53,01,1,Jay Inslee,68.0%,Larry Ishmael,32.0%,NA,0.0%,NA,0.0%,1
+H,WA,53,02,1,Rick Larsen,62.4%,Rick Bart,37.6%,NA,0.0%,NA,0.0%,1
+H,WA,53,03,1,Brian Baird ,64.0%,Michael Delavar,36.0%,NA,0.0%,NA,0.0%,1
+H,WA,53,04,2,George Fearing ,37.0%,Doc Hastings ,63.0%,NA,0.0%,NA,0.0%,2
+H,WA,53,05,2,Mark Mays ,35.0%,Cathy Ann McMorris Rodgers,65.0%,NA,0.0%,NA,0.0%,2
+H,WA,53,06,1,Norm Dicks,66.7%,Doug Cloud,33.3%,NA,0.0%,NA,0.0%,1
+H,WA,53,07,1,Jim McDermott ,83.8%,Steve Beren,16.2%,NA,0.0%,NA,0.0%,1
+H,WA,53,08,2,Darcy Burner ,47.8%,Dave Reichert,52.2%,NA,0.0%,NA,0.0%,2
+H,WA,53,09,1,Adam Smith,65.7%,James Lee Postma,34.3%,NA,0.0%,NA,0.0%,1
+G,WV,54,NA,1,Joe Manchin III,69.8%,Russ Weeks,25.7%,NA,0.0%,NA,0.0%,1
+H,WV,54,01,1,Alan Mollohan,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,WV,54,02,2,Anne Barth ,42.9%,Shelley Capito,57.1%,NA,0.0%,NA,0.0%,2
+H,WV,54,03,1,Nick Rahall ,66.9%,Marty Gearheart,33.1%,NA,0.0%,NA,0.0%,1
+S,WV,54,NA,1,Jay Rockefeller,63.7%,Jay Wolfe,36.3%,NA,0.0%,NA,0.0%,1
+H,WI,55,01,2,Marge Krupp,34.7%,Paul D. Ryan,64.0%,NA,0.0%,NA,0.0%,2
+H,WI,55,02,1,Tammy Baldwin,69.4%,Peter Theron,30.6%,NA,0.0%,NA,0.0%,1
+H,WI,55,03,1,Ron Kind,63.2%,Paul Stark ,34.5%,NA,0.0%,NA,0.0%,1
+H,WI,55,04,1,Gwen Moore,Uncontested,NA,0.0%,NA,0.0%,NA,0.0%,1
+H,WI,55,05,2,NA,0.0%,Jim Sensenbrenner ,Uncontested,NA,0.0%,NA,0.0%,2
+H,WI,55,06,,Roger A. Kittelson,36.2%,Tom Petri,63.8%,NA,0.0%,NA,0.0%,2
+H,WI,55,07,1,David R. Obey,60.8%,Dan Mielke,39.2%,NA,0.0%,NA,0.0%,1
+H,WI,55,08,,Steve Kagen,54.0%,John G. Gard,46.0%,NA,0.0%,NA,0.0%,1
+H,WY,56,0,,Gary S. Trauner,40.8%,Cynthia Marie Lummis ,52.7%,"Walter David ""David"" Herbert",4.4%,NA,0.0%,2
+S,WY,56,NA,2,Chris Rothfuss,24.2%,Mike Enzi,75.8%,NA,0.0%,NA,0.0%,2
+S,WY,56,NA,2,Nick Carter,26.6%,John Barrasso,73.4%,NA,0.0%,NA,0.0%,2
+
+
+
+
+
+
+
+
+
+,,,,,,,,,,,,,,
+
+
+
+,,,,,,,,,,,,,,
+
+
+
+
+
+
+
+
+,,,,,,,,,,,,,,

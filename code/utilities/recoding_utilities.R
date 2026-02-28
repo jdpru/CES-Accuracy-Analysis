@@ -206,6 +206,3 @@ add_location_vars <- function(ces_rc_datasets, pre_post_location_vars) {
     print(paste("CES", year, "location variables created"))
   }
 }
-
-# Recode vote-choice variables from just saying "Cand1" or "Cand2" to the corresponding party of those candidates
-

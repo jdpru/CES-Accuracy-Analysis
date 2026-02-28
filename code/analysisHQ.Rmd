@@ -58,7 +58,7 @@ The CES generally included candidate names as variables in the primary data rele
 ```{r}
 ces_08_cand_name_file <- suppressWarnings(
   read_csv(
-    "data/CES Data/2008 CCES Election File (House and Senate).csv",
+    "data/misc./2008 CCES Election File (House and Senate).csv",
     col_types = cols_only(
       `Election` = col_character(),
       `State FIPS Code` = col_integer(),
@@ -125,7 +125,14 @@ Senate_0622 <- read_excel("data/Benchmarks/Election Returns/US_Senate_Returns_20
 House_0622 <- read_excel("data/Benchmarks/Election Returns/US_House_Returns_2006_2022.xlsx", guess_max = 20000)
 
 # State Senate, State House, Attorney General, Secretary of State
-State_legislative_0623 <- read_excel("data/benchmarks/Election Returns/State_Legislative_and_Constitutional_Offices_2006_2023.xlsx", guess_max = 20000)
+State_legislative_0623_raw <- read_excel("data/benchmarks/Election Returns/State_Legislative_and_Constitutional_Offices_2006_2023.xlsx", guess_max = 20000) %>% mutate(year = year(election_date))
+# Ballotpedia mislabeled some elections as general elections that were actually special in their initial data query. This is a list of candidates that should be removed from State_legislative_0623 to avoid mixing in special elections.
+special_candidates_to_remove <- read_excel("data/misc./mixed_in_special_election_candidates.xlsx")
+State_legislative_0623 <- State_legislative_0623_raw %>%
+  anti_join(special_candidates_to_remove,
+            by = c("office_district", "candidate", "year")) %>%
+  select(-year)
+
 State_senate_full <- State_legislative_0623 %>%
   filter(office == "State Senate")
 State_house_full <- State_legislative_0623 %>%
@@ -134,68 +141,6 @@ Attorney_general_full <- State_legislative_0623 %>%
   filter(office == "Attorney General")
 Secretary_of_state_full <- State_legislative_0623 %>%
   filter(office == "Secretary of State")
-```
-
-# this code HIGIHLIGHTS THE FACT THAT MANY CANDIDATES JHAVE DUPLICATED DATA, EVEN THOUGH THEY ONLY APPEARE ONCE IN OFFICIAL ELECTION RETUNRS. BALLOTPEDIA NEEDS TO BE NOTIFIED. AND THIS NEEDS TO BE REMIEDE. AND JON NEEDS TO BE EMAILED. 
-```{r}
-find_vote_conflict_scenarios <- function(df) {
-
-  # Columns that define a "record" apart from vote counts
-  id_cols <- intersect(
-    c("state", "election_date", "office_district", "district", "candidate"),
-    names(df)
-  )
-
-  party_col <- "party_simplified"
-
-  if (!all(c("votes", party_col) %in% names(df))) {
-    stop("Required columns missing (votes, party_simplified).")
-  }
-
-  # Identify duplicated records ignoring votes
-  dupes <- df %>%
-    group_by(across(all_of(id_cols))) %>%
-    filter(n() > 1) %>%
-    ungroup()
-
-  # Compute group-level diagnostics
-  classified <- dupes %>%
-    group_by(across(all_of(id_cols))) %>%
-    mutate(
-      same_party = n_distinct(.data[[party_col]], na.rm = TRUE) == 1,
-      same_votes = n_distinct(votes, na.rm = TRUE) == 1
-    ) %>%
-    ungroup() %>%
-    arrange(state, election_date, office_district, district, candidate)
-
-  list(
-    same_party_diff_votes = classified %>%
-      filter(same_party, !same_votes),
-
-    same_party_same_votes = classified %>%
-      filter(same_party, same_votes),
-
-    diff_party_same_votes = classified %>%
-      filter(!same_party, same_votes),
-
-    diff_party_diff_votes = classified %>%
-      filter(!same_party, !same_votes)
-  )
-}
-
-
-df_new <- State_legislative_0623
-
-conflict_dfs <- find_vote_conflict_scenarios(df_new)
-
-same_party_diff_votes <- conflict_dfs$same_party_diff_votes
-same_party_same_votes <- conflict_dfs$same_party_same_votes
-diff_party_same_votes <- conflict_dfs$diff_party_same_votes
-
-write_xlsx(conflict_dfs$same_party_diff_votes, "same_party_diff_votes.xlsx")
-write_xlsx(conflict_dfs$same_party_same_votes, "same_party_same_votes.xlsx")
-write_xlsx(conflict_dfs$diff_party_same_votes, "diff_party_same_votes.xlsx")
-
 ```
 
 ### Turnout
@@ -1772,20 +1717,6 @@ most_specific <- bind_rows(
   arrange(Year, State, Class, Variable, Category)
 
 ```
-
-```{r}
-test1 <- CES_20_rc_clean %>%
-  filter(POST_STATE_rc == "WEST VIRGINIA")
-
-unique(test1$AG_CANDIDATE_rc)
-unique(test1$AG_PARTY_rc)
-table(test1$AG_PARTY_rc)
-
-test <- CES_20_raw %>%
-  filter(inputstate_post == 54) %>%
-  select(CC20_414a, AttCand1Name, AttCand1Party, AttCand2Name, AttCand2Party, AttCand3Name, AttCand3Party)
-```
-
 
 # Export Tables
 ```{r}

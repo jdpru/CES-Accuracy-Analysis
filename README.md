@@ -1,20 +1,5 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a id="readme-top"></a>
-<!--
--->
 
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/jdpru/CES-Accuracy-Analysis">
@@ -24,7 +9,7 @@
   <h3 align="center">CES Accuracy Analysis</h3>
 
   <p align="center">
-    A README.
+    Accuracy of the Cooperative Election Study (2006–2022) under multiple weighting scenarios, with analysis in R and figures in Python.
     <br />
     <a href="https://github.com/jdpru/CES-Accuracy-Analysis#readme"><strong>Explore the docs »</strong></a>
     <br /><br />
@@ -70,7 +55,7 @@
 
 This project calculated the accuracy of the Cooperative Election Study (CES) from 2006 to 2022 using election returns. It did so under various weighting scenarios: unweighted, using the CES-provided weights, and using a custom set of weights generated with ANESRake according to marginal demographic distributions from the Current Population Survey (CPS). 
 
-After cloning the repo (instructions below), you will see a top-level directory with the following sub-directories: data, code, tables_and_figures, and renv. The recoding and analysis is done in R Markdown, while most of the tables and all of the figures are done in Python with a jupyter notebook. **analysisHQ.Rmd** can be run straight through to recreate all the analysis. The primary output is an excel file called **partitioned_accuracy_results.xlsx** which serves as the primary input for **figuresHQ.ipynb**. 
+After cloning the repo (instructions below), you will see a top-level directory with the following sub-directories: `data`, `code`, `tables_and_figures`, and `renv`. The recoding and analysis are done in R Markdown; tables and figures are produced in Python via a Jupyter notebook. **analysisHQ.Rmd** can be run straight through to recreate the analysis. It writes summary tables (e.g. `metrics_base.xlsx`, `most_specific.xlsx`, `national_errors.xlsx`, `vars_used_by_anesrake.xlsx`) to **tables_and_figures/input_tables/**, which **figuresHQ.ipynb** then reads to produce all final figures and tables. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -81,20 +66,20 @@ After cloning the repo (instructions below), you will see a top-level directory 
 ### Clone the repo
 1. Clone the repo
    ```sh
-   git clone (https://github.com/jdpru/CES-Accuracy-Analysis.git)
+   git clone https://github.com/jdpru/CES-Accuracy-Analysis.git
    ```
 ### Download CES data
-2. CES data should be downloaded from the CES Dataverse. The Dataverse can be accesed [directly](https://dataverse.harvard.edu/dataverse/cces), though I've found the search functionality to be a bit finnicky. I'd recommend using [these links](https://tischcollege.tufts.edu/research-faculty/research-centers/cooperative-election-study/data-downloads-and-tools-scholars) to each year's release from Tufts, which can be found under "Download CES Datasets and Documentation".
+2. CES data should be downloaded from the CES Dataverse. The Dataverse can be accessed [directly](https://dataverse.harvard.edu/dataverse/cces), though the search can be finicky. [Tufts CES data downloads](https://tischcollege.tufts.edu/research-faculty/research-centers/cooperative-election-study/data-downloads-and-tools-scholars) (under "Download CES Datasets and Documentation") link to each year's release.
 3. Each year's file should be placed in CES Accuracy Analysis/data/CES Data. The CES occasionally releases updates, so just ensure that the name of each file matches whatever is being loaded in the "CES Datasets" chunk of analysisHQ.Rmd.
 
 
 ### Get an IPUMS API Key
 4. I use the IPUMS API to download the relevant CPS data. A free key can be acquired at [https://developer.ipums.org/docs/v2/get-started/](https://developer.ipums.org/docs/v2/get-started/).
-5. Place this key as a string into the variable `USER_IPUMS_API_KEY` in analysisHQ. The CPS data can also be downloaded manually off the IPUMS site [https://cps.ipums.org/cps-action/variables/group](here), if this is preferred.
+5. Place this key as a string into the variable `USER_IPUMS_API_KEY` in analysisHQ.Rmd. CPS data can also be [downloaded manually from IPUMS](https://cps.ipums.org/cps-action/variables/group) if preferred.
 
 ### Open the CES Accuracy Analysis.Rproj file
 6. This should recreate the R environment and set up your working directory properly
-Note that Rproj should use [renv](https://rstudio.github.io/renv/) to recreate the package environmemnt. See their documentation if you have any environment issues.
+Opening the project uses [renv](https://rstudio.github.io/renv/) to restore the package environment. See the renv docs if you run into environment issues.
 
 ### Install necessary packages
 7. If you don't already have any of the required packages, uncomment the following lines in the top of analysisHQ, which will install any missing packages. 
@@ -105,18 +90,16 @@ Note that Rproj should use [renv](https://rstudio.github.io/renv/) to recreate t
 ```
 
 ### Adjust Root Directory in Setup Chunk
-8. At the top of AnalysisHQ.Rmd, replace the following with your root directory
-```sh
+8. If you are not running from the opened .Rproj (e.g. running from a different working directory), set the root at the top of **analysisHQ.Rmd**:
+```r
 knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 ```
 
 ### Run
 Once the environment is set up, you can run the entire analysis as follows:
-9. **`analysisHQ.Rmd`** (located in the `code/` directory) can be run from top to bottom.
-   * This script generates all necessary summary tables and saves them to `tables_and_figures/input tables/`.
+9. **`analysisHQ.Rmd`** (in `code/`) can be run from top to bottom. It writes summary tables to `tables_and_figures/input_tables/`.
 
-10. **`figuresHQ.ipynb`** (located in `tables_and_figures/`) can then be run from top to bottom.
-   * It reads in the input tables and produces all final figures, which are saved to `tables_and_figures/output figures/`.
+10. **`figuresHQ.ipynb`** (in `tables_and_figures/`) can then be run from top to bottom. It reads from `input_tables/` and saves figures and tables to `tables_and_figures/output/`.
 
 <!-- LICENSE -->
 ## License
@@ -150,10 +133,4 @@ Sarah Flood, Miriam King, Renae Rodgers, Steven Ruggles, J. Robert Warren, Danie
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
 

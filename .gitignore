@@ -55,11 +55,11 @@ po/*~
 rsconnect/
 
 # Keep input and output folder locations
-tables_and_figures/input tables/*
-!tables_and_figures/input tables/.gitkeep
+tables_and_figures/input_tables/*
+!tables_and_figures/input_tables/.gitkeep
 
-tables_and_figures/output figures/*
-!tables_and_figures/output figures/.gitkeep
+tables_and_figures/output/*
+!tables_and_figures/output/.gitkeep
 
 # Keep data folders but ignore contents
 /data/CES Data/**
@@ -71,11 +71,13 @@ tables_and_figures/output figures/*
 #Mac OS temp finder files
 .DS_Store
 
-# IPUMS CPS Files
+# IPUMS CPS / external data artifacts
 *.xml
 *.dat.gz
+*.dta.gz
 
-# CES raw data
+# CES raw data (Stata)
+*.dta
 *.dat
 
 # Figures

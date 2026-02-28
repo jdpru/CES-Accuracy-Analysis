@@ -185,30 +185,6 @@ make_bp_prop_table <- function(df) {
       )
     )
   
-  # ------------------------------------------------------------------
-  # 3. Identify primary party per candidate within race
-  # ------------------------------------------------------------------
-  # Verify there are no candidates with both Dem and Rep as primary party
-  # bad_groups <- df %>%
-  #   group_by(Year, State, office_district, district, candidate) %>%
-  #   summarise(
-  #     has_dem = any(Party_Simplified == "Democrat"),
-  #     has_rep = any(Party_Simplified == "Republican"),
-  #     .groups = "drop"
-  #   ) %>%
-  #   filter(has_dem & has_rep)
-  # 
-  # if (nrow(bad_groups) > 0) {
-  #   stop(
-  #     "Invalid data: candidate appears as both Democrat and Republican in the same race.\n",
-  #     "Examples:\n",
-  #     paste0(
-  #       apply(head(bad_groups, 5), 1, paste, collapse = " | "),
-  #       collapse = "\n"
-  #     )
-  #   )
-  # }
-  
   # Now assign PrimaryParty
   df <- df %>%
     group_by(Year, State, office_district, district, candidate) %>%
@@ -223,7 +199,7 @@ make_bp_prop_table <- function(df) {
   
   
   # ------------------------------------------------------------------
-  # 4. Compute total votes per State-Year
+  # 3. Compute total votes per State-Year
   # ------------------------------------------------------------------
   df <- df %>%
     group_by(State, Year) %>%
@@ -231,7 +207,7 @@ make_bp_prop_table <- function(df) {
     ungroup()
   
   # ------------------------------------------------------------------
-  # 5. Aggregate by State-Year-PrimaryParty
+  # 4. Aggregate by State-Year-PrimaryParty
   # ------------------------------------------------------------------
   statewise_results <- df %>%
     group_by(State, Year, PrimaryParty) %>%
@@ -245,7 +221,7 @@ make_bp_prop_table <- function(df) {
     )
   
   # ------------------------------------------------------------------
-  # 6. Final formatting
+  # 5. Final formatting
   # ------------------------------------------------------------------
   final_df <- statewise_results %>%
     mutate(
