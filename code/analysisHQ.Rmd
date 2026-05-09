@@ -6,7 +6,7 @@ date: "2025-04-04"
 
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
-knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
+knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis/')
 ```
 
 ```{r}
@@ -994,18 +994,23 @@ merged_candidate_level_props <- rbind(
 
 # CREATE WEIGHTING TARGETS
 ANESRake requires that "targets" are created for each variable, which specify the expected distribution of that variable in the population for each level (category) of that variable.
+
+The CPS uses special weighting for a few variables.
 ```{r}
-# Some variables require special weighting variables. This dictionary specifies which weighting variable should be used for those special variables, otherwise
-# the common weighting var is used. 
-create_targets <- function(year_data_list) {
   cps_wtvar_dict <- c(
   "UNION_rc" = "EARNWT",
-  "VOTED_rc" = "VOSUPPWT",
   "VOTEHOW_rc" = "VOSUPPWT",
   "VOTERES_rc" = "VOSUPPWT",
   "VOTEREG_rc" = "VOSUPPWT"
 )
-  
+```
+
+
+```{r}
+# Some variables require special weighting variables. This dictionary specifies which weighting variable should be used for those special variables, otherwise
+# the common weighting var is used. 
+create_targets <- function(year_data_list, cps_wtvar_dict) {
+
   # Create a list to store targets for each year
   all_targets <- list()
   
@@ -1063,7 +1068,7 @@ create_targets <- function(year_data_list) {
 Update list_all_years, then create targets for each year for all variables that are present in both CES and CPS.
 ```{r}
 update_list_all_years()
-all_targets <- create_targets(list_all_years)
+all_targets <- create_targets(list_all_years, cps_wtvar_dict)
 ```
 
 # CREATES ANESRAKE WEIGHTS
@@ -1428,6 +1433,7 @@ candidate_errors_modal <- calculate_candidate_errors(
 demovote_errors <- calculate_demovote_errors(
   year_data_list = list_all_years,
   all_targets = all_targets,  # Automatically extracts all comparable variables
+  cps_wtvar_dict = cps_wtvar_dict,
   config = config,
   turnout_statewide = turnout_statewide,  # For accurate turnout benchmarks
   state_populations = state_populations    # For accurate state sampling benchmarks
@@ -1442,6 +1448,7 @@ The above accuracy functions measure error where the unit of observation is the 
 ```{r}
 calculate_demovote_errors_national <- function(year_data_list,
                                                all_targets,
+                                               cps_wtvar_dict,
                                                config,
                                                turnout_national = NULL) {
 
@@ -1492,8 +1499,17 @@ calculate_demovote_errors_national <- function(year_data_list,
         categories <- sort(unique(c(ces_df[[demo_var]], cps_df[[demo_var]])))
         categories <- categories[!is.na(categories)]
 
-        benchmark <- prop.table(
-          table(factor(cps_df[[demo_var]], levels = categories))
+        ##
+        weight_var <- if (demo_var %in% names(cps_wtvar_dict)) {
+          cps_wtvar_dict[[demo_var]]
+        } else {
+          "WTFINL"
+        }
+        
+        benchmark <- weighted_prop_zero(
+          cps_df[[demo_var]],
+          cps_df[[weight_var]],
+          categories
         )
       }
 
@@ -1570,6 +1586,7 @@ calculate_demovote_errors_national <- function(year_data_list,
 demovote_errors_national <- calculate_demovote_errors_national(
   year_data_list = list_all_years,
   all_targets    = all_targets,
+  cps_wtvar_dict = cps_wtvar_dict,
   config         = config,
   turnout_national = turnout_national
 ) %>%

@@ -424,6 +424,7 @@ calculate_candidate_errors <- function(year_data_list,
 #' @return Tibble with demovote errors in standardized format
 calculate_demovote_errors <- function(year_data_list,
                                       all_targets,
+                                      cps_wtvar_dict,
                                       config,
                                       turnout_statewide,
                                       state_populations) {
@@ -598,7 +599,8 @@ calculate_demovote_errors <- function(year_data_list,
           categories <- sort(unique(c(ces_state[[demo_var]], cps_state[[demo_var]])))
           categories <- categories[!is.na(categories)]
           
-          cps_props <- prop.table(table(factor(cps_state[[demo_var]], levels = categories)))
+          cps_wt_var <- if (demo_var %in% names(cps_wtvar_dict)) cps_wtvar_dict[[demo_var]] else "WTFINL"
+          cps_props <- weighted_prop_zero(cps_state[[demo_var]], cps_state[[cps_wt_var]], categories)
           
           ces_unwt <- prop.table(table(factor(ces_state[[demo_var]], levels = categories)))
           ces_wt   <- weighted_prop_zero(ces_state[[demo_var]], ces_state[[wt_vars[1]]], categories)
