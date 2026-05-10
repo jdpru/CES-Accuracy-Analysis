@@ -291,10 +291,10 @@ calculate_candidate_errors <- function(year_data_list,
       
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
         # Uncomment for helpful debug line
-        if (current_year == "2018" & state == "NEW JERSEY" & office_label == "US Senate") {
-          print("arrived at error")
-          browser()
-        }
+        # if (current_year == "2018" & state == "NEW JERSEY" & office_label == "US Senate") {
+        #   print("arrived at error")
+        #   browser()
+        # }
         
         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
           next
@@ -666,12 +666,26 @@ calculate_demovote_errors <- function(year_data_list,
 #' @return Filtered data frame with only modal categories
 keep_modal_only <- function(error_df, group_vars = c("Year", "State", "Variable")) {
   
-  error_df %>%
+  modal <- error_df %>%
     group_by(across(all_of(group_vars))) %>%
     slice_max(order_by = Benchmark, n = 1, with_ties = FALSE) %>%
     ungroup()
+  
+  # Exception: 2010 Alaska U.S. Senate — force Republican as modal.
+  # Lisa Murkowski won as a write-in (Other), but Joe Miller (R) is the
+  # relevant candidate for CES accuracy measurement.
+  alaska_exception <- error_df %>%
+    filter(Year == 2010, State == "ALASKA", Variable == "U.S. Senate", Category == "Republican")
+  
+  if (nrow(alaska_exception) > 0) {
+    browser()
+    modal <- modal %>%
+      filter(!(Year == 2010 & State == "ALASKA" & Variable == "U.S. Senate")) %>%
+      bind_rows(alaska_exception)
+  }
+  
+  modal %>% arrange(Year, State, Variable)
 }
-
 
 # ==============================================================================
 # OUTPUT FORMATTING

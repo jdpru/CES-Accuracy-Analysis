@@ -532,7 +532,7 @@ CES_22_rc_clean <- as.data.frame(CES_22_rc_clean)
 update_list_all_years()
 ```
 
-# RECODE PARTY AND CANDIDATE VOTE
+# Recode Party and Candidate Vote
 For 2006 and 2008, respondent vote choices could be directly mapped to a party because the response options were simply "Democrat," "Republican," and "Other". However, from 2010 - 2022, the CES changed the response options. Instead of using party names, respondents were provided candidate names. These names were inputted dynamically based for a particular respondent based on their state of residence.
 
 This means that error can be calculated in two ways: at the party level (by aggregating across all candidates of a particular party), and at the candidate level (by comparing CES votes for a particular candidate to actual votes received by that specific candidate).
@@ -758,7 +758,7 @@ list_all_years <- recoded_party_candidate_list_all_years_cleaned
 push_list_all_years_to_env()
 ```
 
-# ELECTION RETURN PROP TABLES
+# Election Return Prop Tables
 ## Create Party-level Election Return Prop Tables
 The raw election return files are loaded in the "Election Return Datasets" section. The following code creates a series of "prop" (proportion) tables for each election, then collapses across party to indicate what share of votes each party received in each election. 
 ```{r}
@@ -886,7 +886,122 @@ merged_prop_tables_combined <- rbind(collapsed_merged_prop_table, house_prop_tab
 
 
 ## Create Candidate-Level Election Return Prop Tables
-Now I create a candidate-level prop table, which will be used to compare the CES vote to the actual votes received by each candidate in each election. This is done by creating a table that contains the proportion of votes received by each candidate in each state, for each year, and not grouping by party. 
+Now I create a candidate-level prop table, which will be used to compare the CES vote to the actual votes received by 
+each candidate in each election. This is done by creating a table that contains the proportion of votes received by 
+each candidate in each state, for each year, and not grouping by party. 
+
+### Harmonize Candidate Names
+First, we need to harmonize candidate names for known within-contest name variants. Some election return 
+files contain the same candidate more than once within the same contest, but under slightly different name strings. For example, "MURKOWSKI" and "MURKOWSKI, LISA". If we group directly by the raw candidate string, those rows are treated as different candidates, which incorrectly splits the candidate's vote total.
+
+I audited candidate names within each contest using fuzzy matching
+and containment checks. The audit only flagged a small number of real cases,
+all in the House and Senate data.
+```{r}
+candidate_name_crosswalk <- tibble::tribble(
+  ~year, ~state, ~office, ~district, ~candidate_raw, ~candidate_clean,
+
+  # Senate: Rhode Island 2006
+  2006, "RHODE ISLAND", "US SENATE", "statewide",
+  "CHAFFEE, LINCOLN", "CHAFEE, LINCOLN D.",
+
+  # Senate: Alaska 2010
+  2010, "ALASKA", "US SENATE", "statewide",
+  "MURKOWSKI", "MURKOWSKI, LISA",
+
+  2010, "ALASKA", "US SENATE", "statewide",
+  "MCADAMS", "MCADAMS, SCOTT T.",
+
+  # Senate: Rhode Island 2018
+  # Treat manually reviewed write-in variants as the same person.
+  # Canonical version is the highest-vote observed version.
+  2018, "RHODE ISLAND", "US SENATE", "statewide",
+  "FONTES, PATRICIA A.", "FONTES, PATRICIA",
+
+  2018, "RHODE ISLAND", "US SENATE", "statewide",
+  "FONTES, PATRICIA J", "FONTES, PATRICIA",
+
+  2018, "RHODE ISLAND", "US SENATE", "statewide",
+  "FONTES, PATT", "FONTES, PATRICIA",
+
+  2018, "RHODE ISLAND", "US SENATE", "statewide",
+  "COSTA", "COSTA, MICHAEL",
+
+  2018, "RHODE ISLAND", "US SENATE", "statewide",
+  "COSTA, MIKE", "COSTA, MICHAEL",
+
+  # House: Rhode Island 2006, District 1
+  2006, "RHODE ISLAND", "US HOUSE", "1",
+  "Kennedy, Patrick", "Kennedy, Patrick J.",
+
+  # House: Rhode Island 2018, District 1
+  # Treat manually reviewed middle-initial variants as the same person.
+  # Canonical version is the highest-vote observed version.
+  2018, "RHODE ISLAND", "US HOUSE", "1",
+  "Ugilmette, Daniel G.", "Ugilmette, Daniel",
+
+  2018, "RHODE ISLAND", "US HOUSE", "1",
+  "Ugilmette, Daniel J", "Ugilmette, Daniel"
+)
+```
+
+Apply the manual candidate-name crosswalk. 
+```{r}
+apply_candidate_name_crosswalk <- function(df, crosswalk) {
+
+  df %>%
+    mutate(
+      state_key = toupper(as.character(state)),
+      office_key = as.character(office),
+      district_key = as.character(district),
+      candidate_key = as.character(candidate)
+    ) %>%
+    left_join(
+      crosswalk %>%
+        mutate(
+          state_key = toupper(as.character(state)),
+          office_key = as.character(office),
+          district_key = as.character(district),
+          candidate_key = as.character(candidate_raw)
+        ) %>%
+        select(
+          year,
+          state_key,
+          office_key,
+          district_key,
+          candidate_key,
+          candidate_clean
+        ),
+      by = c(
+        "year",
+        "state_key",
+        "office_key",
+        "district_key",
+        "candidate_key"
+      )
+    ) %>%
+    mutate(
+      candidate = dplyr::coalesce(candidate_clean, candidate)
+    ) %>%
+    select(
+      -state_key,
+      -office_key,
+      -district_key,
+      -candidate_key,
+      -candidate_clean
+    )
+}
+```
+
+```{r}
+Senate_0622_clean_fixed_harmonized <- Senate_0622_clean_fixed %>%
+  apply_candidate_name_crosswalk(candidate_name_crosswalk)
+
+House_0622_district_harmonized <- House_0622_district %>%
+  apply_candidate_name_crosswalk(candidate_name_crosswalk)
+```
+
+Function to create candidate level proportions.
 ```{r}
 candidate_level_proportions <- function(df) {
 
@@ -930,14 +1045,15 @@ candidate_level_proportions <- function(df) {
 }
 ```
 
+### Create cand-level tables
 ```{r}
 # US House
 House_0622_district <- recalculate_total_votes(House_0622, "district")
-house_candidate_level_props <- candidate_level_proportions(House_0622_district)
+house_candidate_level_props <- candidate_level_proportions(House_0622_district_harmonized)
 house_candidate_level_props$Office <- "US House"
 
 # US Senate
-senate_candidate_level_props  <- candidate_level_proportions(Senate_0622_clean_fixed)
+senate_candidate_level_props  <- candidate_level_proportions(Senate_0622_clean_fixed_harmonized)
 senate_candidate_level_props$Office <- "US Senate"
 
 # Governor
@@ -992,7 +1108,7 @@ merged_candidate_level_props <- rbind(
 ```
 
 
-# CREATE WEIGHTING TARGETS
+# Create Weighting Targets
 ANESRake requires that "targets" are created for each variable, which specify the expected distribution of that variable in the population for each level (category) of that variable.
 
 The CPS uses special weighting for a few variables.
@@ -1071,7 +1187,7 @@ update_list_all_years()
 all_targets <- create_targets(list_all_years, cps_wtvar_dict)
 ```
 
-# CREATES ANESRAKE WEIGHTS
+# Create ANESRake Weights
 I construct two sets of post-stratification weights with anesrake.
 
 (1) anesrake_weight_full: An unrestricted weighting specification, in which all 
@@ -1345,7 +1461,7 @@ CES_22_rc_clean <- add_weights_to_df(CES_22_rc_clean, 2022, weighting_results_re
 update_list_all_years()
 ```
 
-# COMPUTE CES ERRORS
+# Compute CES Errors
 CES error is measured in the following ways:
   - Candidate choice at the Party-level: compare vote share for the modal party (e.g., Democrats 55%).
   - Candidate choice at the Candidate-level: compare vote share for the modal candidate (e.g., Obama 55%).
@@ -1420,7 +1536,7 @@ candidate_errors_modal <- calculate_candidate_errors(
   mutate(Specificity = "Candidate")
 
 # export to excel sorted by Matching score to review fuzzy matching if needed
-write_excel_csv(candidate_errors_modal, "candidate_errors_modal.csv")
+# write_excel_csv(candidate_errors_modal, "candidate_errors_modal.csv")
 ```
 
 ## Calculate demovote errors (demographics + voting administration)
