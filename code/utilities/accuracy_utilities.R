@@ -291,10 +291,10 @@ calculate_candidate_errors <- function(year_data_list,
       
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
         # Uncomment for helpful debug line
-        # if (current_year == "2014" & state == "OKLAHOMA" & office_label == "Governor") {
-        #   print("arrived at error")
-        #   browser()
-        # }
+        if (current_year == "2018" & state == "NEW JERSEY" & office_label == "US Senate") {
+          print("arrived at error")
+          browser()
+        }
         
         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
           next
@@ -959,6 +959,12 @@ get_top_candidate <- function(candidate_returns, year, state, office, district) 
 match_candidate_fuzzy <- function(survey_df, race_col, true_cand) {
   
   ces_vals <- unique(na.omit(survey_df[[race_col]]))
+  
+  # Manual fix for Robert/Bob Menendez mismatch
+  if (stri_trans_toupper(true_cand) == "ROBERT MENENDEZ" &&
+      "Bob Menendez" %in% ces_vals) {
+    return(list(matched_ces = "Bob Menendez", score = 0))
+  }
   
   # Case-insensitive exact match
   exact_match <- any(stri_trans_tolower(true_cand) == stri_trans_tolower(ces_vals))

@@ -1420,7 +1420,7 @@ candidate_errors_modal <- calculate_candidate_errors(
   mutate(Specificity = "Candidate")
 
 # export to excel sorted by Matching score to review fuzzy matching if needed
-# write_excel_csv(candidate_errors_modal, "candidate_errors_modal.csv")
+write_excel_csv(candidate_errors_modal, "candidate_errors_modal.csv")
 ```
 
 ## Calculate demovote errors (demographics + voting administration)
