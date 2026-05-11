@@ -291,7 +291,7 @@ calculate_candidate_errors <- function(year_data_list,
       
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
         # Uncomment for helpful debug line
-        # if (current_year == "2018" & state == "NEW JERSEY" & office_label == "US Senate") {
+        # if (current_year == "2018" & state == "NORTH DAKOTA" & office_label == "Secretary of State") {
         #   print("arrived at error")
         #   browser()
         # }
@@ -664,6 +664,8 @@ calculate_demovote_errors <- function(year_data_list,
 #' @param group_vars Grouping variables (default: Year, State, Variable)
 #'
 #' @return Filtered data frame with only modal categories
+#' keep_modal_only <- function(error_df, group_vars = c("Year", "State", "Variable")) {
+
 keep_modal_only <- function(error_df, group_vars = c("Year", "State", "Variable")) {
   
   modal <- error_df %>%
@@ -671,17 +673,44 @@ keep_modal_only <- function(error_df, group_vars = c("Year", "State", "Variable"
     slice_max(order_by = Benchmark, n = 1, with_ties = FALSE) %>%
     ungroup()
   
-  # Exception: 2010 Alaska U.S. Senate — force Republican as modal.
-  # Lisa Murkowski won as a write-in (Other), but Joe Miller (R) is the
-  # relevant candidate for CES accuracy measurement.
-  alaska_exception <- error_df %>%
-    filter(Year == 2010, State == "ALASKA", Variable == "U.S. Senate", Category == "Republican")
+  # Manual exceptions where the numerically largest benchmark category is not
+  # the category we want to use for CES candidate accuracy measurement.
+  #
+  # 2010 Alaska U.S. Senate:
+  # Lisa Murkowski won as a write-in / Other, but Joe Miller (Republican)
+  # is the relevant CES comparison category.
+  #
+  # 2010 Maine Governor:
+  # "Other" is selected by the modal rule, but Republican should be forced
+  # as the relevant CES comparison category.
+  modal_exceptions <- tibble::tribble(
+    ~Year, ~State,    ~Variable,      ~Category,
+    2010,  "ALASKA",  "U.S. Senate",  "Republican",
+    2010,  "MAINE",   "Governor",  "Republican",
+    2010, "RHODE ISLAND", "Governor", "Republican",
+    2012,  "MAINE",  "U.S. Senate",  "Republican",
+    2012,  "VERMONT",  "U.S. Senate",  "Republican",
+    2018,  "MAINE",  "U.S. Senate",  "Republican",
+    2018,  "VERMONT",  "U.S. Senate",  "Republican",
+    2018,  "NORTH DAKOTA",  "Secretary of State",  "Democrat",
+    # Foster Campbell is picked at candidate level, who's a Dem, so we force Dem at party level even thuogh it's as jungle primary
+    2016, "LOUISIANA", "U.S. Senate", "Democrat"
+  )
   
-  if (nrow(alaska_exception) > 0) {
-    browser()
+  exception_rows <- error_df %>%
+    inner_join(
+      modal_exceptions,
+      by = c("Year", "State", "Variable", "Category")
+    )
+  
+  if (nrow(exception_rows) > 0) {
     modal <- modal %>%
-      filter(!(Year == 2010 & State == "ALASKA" & Variable == "U.S. Senate")) %>%
-      bind_rows(alaska_exception)
+      anti_join(
+        modal_exceptions %>%
+          select(Year, State, Variable),
+        by = c("Year", "State", "Variable")
+      ) %>%
+      bind_rows(exception_rows)
   }
   
   modal %>% arrange(Year, State, Variable)
@@ -943,30 +972,249 @@ filter_by_district <- function(state_df, office_label, district) {
   }
 }
 
-#' Get top candidate from benchmark data
-#' @keywords internal
-get_top_candidate <- function(candidate_returns, year, state, office, district) {
+# -------------------------------------------------------------------
+# Manual benchmark candidate overrides
+# -------------------------------------------------------------------
+#
+# These are cases where the numerically top benchmark candidate is not
+# the candidate we want to evaluate against CES.
+#
+# Examples:
+# - write-in or independent winner is not available as a CES candidate option
+# - CES asked about the major-party candidate rather than the actual winner
+# - benchmark winner is not the analytically relevant comparison candidate
+#
+# Important:
+# These overrides only choose the benchmark candidate.
+# The selected benchmark candidate is still matched to the CES response
+# option downstream by match_candidate_fuzzy().
+
+candidate_benchmark_overrides <- tibble::tribble(
+  ~Year, ~State, ~Office, ~District, ~Candidate,
+  
+  # 2010 Alaska Senate:
+  # Lisa Murkowski won as a write-in / Other, but Joe Miller is the
+  # Republican candidate available/relevant for CES accuracy measurement.
+  2010, "ALASKA", "US Senate", "statewide", "JOE MILLER",
+  
+  # 2016 Louisiana Senate:
+  # John Kennedy was the top candidate, but Foster Campbell is the
+  # relevant candidate for the CES comparison.
+  2016, "LOUISIANA", "US Senate", "statewide", "FOSTER CAMPBELL",
+  
+  # 2018 North Dakota Secretary of State:
+  # Al Jaeger ran as an independent after dropping out of the Republican
+  # primary process; Joshua Boschee is the Democratic candidate used for
+  # the CES comparison.
+  2018, "NORTH DAKOTA", "Secretary of State", "statewide", "Joshua A. Boschee",
+  
+  # Additional cases where the top benchmark candidate is "Other."
+  # Because "Other" at the party-aggregation level can combine write-ins,
+  # independents, and minor-party candidates, we force the major-party
+  # candidate that aligns with the party-level comparison.
+  2010, "RHODE ISLAND", "Governor",  "statewide", "John F. Robitaille",
+  2012, "MAINE",        "US Senate", "statewide", "CHARLES E. SUMMERS JR.",
+  2012, "VERMONT",      "US Senate", "statewide", "JOHN MACGOVERN",
+  2018, "MAINE",        "US Senate", "statewide", "ERIC L. BRAKEY",
+  2018, "VERMONT",      "US Senate", "statewide", "LAWRENCE # ZUPAN"
+)
+
+# -------------------------------------------------------------------
+# Helper: force one manually specified benchmark candidate
+# -------------------------------------------------------------------
+#
+# Used when get_top_candidate() finds a manual override for a contest.
+# The override must resolve to exactly one row in candidate_returns.
+#
+# If it resolves to zero rows, the candidate name/key probably does not
+# match the benchmark data, or the contest was skipped unexpectedly.
+#
+# If it resolves to multiple rows, the override is ambiguous.
+
+force_benchmark_candidate <- function(returns,
+                                      forced_candidate,
+                                      year,
+                                      state,
+                                      office,
+                                      district) {
+  
+  forced_row <- returns %>%
+    filter(Candidate == forced_candidate)
+  
+  if (nrow(forced_row) != 1) {
+    available_candidates <- returns %>%
+      arrange(desc(Proportion)) %>%
+      mutate(candidate_display = paste0(Candidate, " [", Party_Simplified, "]")) %>%
+      pull(candidate_display) %>%
+      paste(collapse = "; ")
+    
+    stop(glue::glue(
+      "Benchmark candidate override failed for {office}, {state}, {year}, district {district}. ",
+      "Requested candidate: '{forced_candidate}'. ",
+      "Matched {nrow(forced_row)} benchmark rows. ",
+      "Available candidates: {available_candidates}"
+    ))
+  }
+  
+  forced_row
+}
+
+
+# -------------------------------------------------------------------
+# Get benchmark candidate for candidate-level accuracy calculation
+# -------------------------------------------------------------------
+#
+# Default behavior:
+#   Select the candidate with the largest benchmark vote proportion.
+#
+# Override behavior:
+#   If the contest appears in candidate_benchmark_overrides, force the
+#   specified benchmark candidate instead.
+#
+# Why overrides exist:
+#   In a small number of contests, the top benchmark candidate is not the
+#   analytically relevant CES comparison candidate. This usually happens
+#   when the top vote-getter is "Other" / independent / write-in, while the
+#   CES comparison needs to align with a major-party candidate.
+#
+# Safety:
+#   Any override must match exactly one row in the benchmark returns.
+#   If not, the function stops immediately.
+
+get_top_candidate <- function(candidate_returns,
+                              year,
+                              state,
+                              office,
+                              district,
+                              overrides = candidate_benchmark_overrides) {
+  
+  district_chr <- as.character(district)
   
   returns <- candidate_returns %>%
-    filter(Year == year, State == state, Office == office, District == district)
+    mutate(District = as.character(District)) %>%
+    filter(
+      Year == year,
+      State == state,
+      Office == office,
+      District == district_chr
+    )
   
-  if (nrow(returns) == 0) return(NULL)
-  
-  # Special case: 2010 Alaska Senate (write-in winner not in CES)
-  if (year == 2010 && office == "US Senate" && state == "ALASKA") {
-    returns %>% filter(Candidate == "JOE MILLER")
-    # Special case: 2016 Louisiana Senate (John Kennedy not listed in CES)
-  } else if (year == 2016 && office == "US Senate" && state == "LOUISIANA") {
-    returns %>% filter(Candidate == "FOSTER CAMPBELL")
-    # Special case: 2018 North Dakota Secretary of State
-    # Al Jaeger (Republican incumbent) dropped out and ran as an independent
-    # Joshua Boschee was the Democratic candidate who received the most votes among major party candidates
-  } else if (year == 2018 && office == "Secretary of State" && state == "NORTH DAKOTA") {
-    returns %>% filter(Candidate == "Joshua A. Boschee")
-  } else {
-    returns %>% slice_max(Proportion, n = 1, with_ties = FALSE)
+  if (nrow(returns) == 0) {
+    return(NULL)
   }
+  
+  override <- overrides %>%
+    mutate(District = as.character(District)) %>%
+    filter(
+      Year == year,
+      State == state,
+      Office == office,
+      District == district_chr
+    )
+  
+  if (nrow(override) > 1) {
+    stop(glue::glue(
+      "Multiple benchmark candidate overrides found for {office}, {state}, {year}, district {district_chr}."
+    ))
+  }
+  
+  if (nrow(override) == 1) {
+    return(
+      force_benchmark_candidate(
+        returns = returns,
+        forced_candidate = override$Candidate[1],
+        year = year,
+        state = state,
+        office = office,
+        district = district_chr
+      )
+    )
+  }
+  
+  returns %>%
+    slice_max(Proportion, n = 1, with_ties = FALSE)
 }
+
+# -------------------------------------------------------------------
+# Validate benchmark candidate overrides before running accuracy code
+# -------------------------------------------------------------------
+#
+# This ensures every programmed override corresponds to exactly one row
+# in the candidate benchmark return data. If this fails, the override
+# table or candidate return data need to be corrected before proceeding.
+
+validate_candidate_benchmark_overrides <- function(candidate_returns,
+                                                   overrides = candidate_benchmark_overrides) {
+  
+  check <- overrides %>%
+    mutate(District = as.character(District)) %>%
+    left_join(
+      candidate_returns %>%
+        mutate(District = as.character(District)) %>%
+        select(
+          Year,
+          State,
+          Office,
+          District,
+          Candidate,
+          Party_Detailed,
+          Party_Simplified,
+          Candidate_Votes,
+          Proportion
+        ),
+      by = c("Year", "State", "Office", "District", "Candidate")
+    )
+  
+  failed <- check %>%
+    filter(is.na(Proportion))
+  
+  if (nrow(failed) > 0) {
+    print(failed, n = Inf, width = Inf)
+    stop("One or more candidate benchmark overrides did not resolve to benchmark rows.")
+  }
+  
+  duplicate_matches <- check %>%
+    count(Year, State, Office, District, Candidate, name = "n_matches") %>%
+    filter(n_matches > 1)
+  
+  if (nrow(duplicate_matches) > 0) {
+    print(duplicate_matches, n = Inf, width = Inf)
+    stop("One or more candidate benchmark overrides resolved to multiple benchmark rows.")
+  }
+  
+  message(glue::glue(
+    "All {nrow(overrides)} candidate benchmark overrides resolved successfully."
+  ))
+  
+  
+  invisible(check)
+}
+
+#' 
+#' #' Get top candidate from benchmark data
+#' #' @keywords internal
+#' get_top_candidate <- function(candidate_returns, year, state, office, district) {
+#'   
+#'   returns <- candidate_returns %>%
+#'     filter(Year == year, State == state, Office == office, District == district)
+#'   
+#'   if (nrow(returns) == 0) return(NULL)
+#'   
+#'   # Special case: 2010 Alaska Senate (write-in winner not in CES)
+#'   if (year == 2010 && office == "US Senate" && state == "ALASKA") {
+#'     returns %>% filter(Candidate == "JOE MILLER")
+#'     # Special case: 2016 Louisiana Senate (John Kennedy not listed in CES)
+#'   } else if (year == 2016 && office == "US Senate" && state == "LOUISIANA") {
+#'     returns %>% filter(Candidate == "FOSTER CAMPBELL")
+#'     # Special case: 2018 North Dakota Secretary of State
+#'     # Al Jaeger (Republican incumbent) dropped out and ran as an independent
+#'     # Joshua Boschee was the Democratic candidate who received the most votes among major party candidates
+#'   } else if (year == 2018 && office == "Secretary of State" && state == "NORTH DAKOTA") {
+#'     returns %>% filter(Candidate == "Joshua A. Boschee")
+#'   } else {
+#'     returns %>% slice_max(Proportion, n = 1, with_ties = FALSE)
+#'   }
+#' }
 
 #' Fuzzy match candidate name
 #' @keywords internal

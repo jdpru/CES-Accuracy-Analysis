@@ -178,6 +178,63 @@ skip_conditions <- read.xlsx("data/misc./skip_conditions_final.xlsx")
 USER_IPUMS_API_KEY = "59cba10d8a5da536fc06b59dd33fd321a4eb480fa8fe8ad46c9d0d3e"
 set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
 ```
+#### START OF TEMP CPS LOAD
+```{r}
+library(ipumsr)
+library(purrr)
+library(dplyr)
+
+cps_artifact_dir <- "/Users/jdpruett/Desktop/CES Accuracy Analysis/data/IPUMS CPS Artifacts"
+
+target_years <- seq(2006, 2022, by = 2)
+
+ddi_files <- list.files(
+  cps_artifact_dir,
+  pattern = "\\.xml$",
+  full.names = TRUE
+)
+
+read_cps_extract <- function(ddi_file) {
+  message("Reading: ", basename(ddi_file))
+
+  ddi <- read_ipums_ddi(ddi_file)
+  df  <- read_ipums_micro(ddi)
+
+  years <- sort(unique(df$YEAR))
+  years <- years[!is.na(years)]
+
+  if (length(years) != 1) {
+    warning(
+      "Extract ", basename(ddi_file),
+      " has multiple or missing years: ",
+      paste(years, collapse = ", ")
+    )
+  }
+
+  year <- years[1]
+  obj_name <- paste0("CPS_", substr(year, 3, 4), "_raw")
+
+  list(
+    file = ddi_file,
+    year = year,
+    name = obj_name,
+    data = df
+  )
+}
+
+cps_loaded <- map(ddi_files, read_cps_extract) %>%
+  keep(~ .x$year %in% target_years)
+
+cps_raw_list <- setNames(
+  map(cps_loaded, "data"),
+  map_chr(cps_loaded, "name")
+)
+
+list2env(cps_raw_list, envir = .GlobalEnv)
+```
+
+#### END OF TEMP CPS LOAD
+
 
 ### Prep monthly sample codes and variables
 This is necessary to use the IPUMS API to download CPS data.
@@ -997,7 +1054,7 @@ apply_candidate_name_crosswalk <- function(df, crosswalk) {
 Senate_0622_clean_fixed_harmonized <- Senate_0622_clean_fixed %>%
   apply_candidate_name_crosswalk(candidate_name_crosswalk)
 
-House_0622_district_harmonized <- House_0622_district %>%
+House_0622_clean_fixed_harmonized <- House_0622 %>%
   apply_candidate_name_crosswalk(candidate_name_crosswalk)
 ```
 
@@ -1048,7 +1105,7 @@ candidate_level_proportions <- function(df) {
 ### Create cand-level tables
 ```{r}
 # US House
-House_0622_district <- recalculate_total_votes(House_0622, "district")
+House_0622_district_harmonized <- recalculate_total_votes(House_0622_clean_fixed_harmonized, "district")
 house_candidate_level_props <- candidate_level_proportions(House_0622_district_harmonized)
 house_candidate_level_props$Office <- "US House"
 
@@ -1526,6 +1583,12 @@ party_errors <- calculate_party_errors(
 
 ## Calculate candidate-level election errors
 ```{r}
+# First, make sure that overrides are valid
+validate_candidate_benchmark_overrides(
+  candidate_returns = merged_candidate_level_props,
+  overrides = candidate_benchmark_overrides
+)
+
 # Candidate-level is only calculated at modal level to begin with
 candidate_errors_modal <- calculate_candidate_errors(
   year_data_list = list_all_years,
@@ -1538,6 +1601,7 @@ candidate_errors_modal <- calculate_candidate_errors(
 # export to excel sorted by Matching score to review fuzzy matching if needed
 # write_excel_csv(candidate_errors_modal, "candidate_errors_modal.csv")
 ```
+
 
 ## Calculate demovote errors (demographics + voting administration)
 ```{r}
@@ -1731,7 +1795,6 @@ combined_errors <- bind_rows(
 combined_errors_long <- combined_errors %>%
   pivot_errors_long()
 ```
-
 
 # Create Summary Tables
 ## Metrics base
