@@ -141,6 +141,16 @@ calculate_party_errors <- function(year_data_list, election_results_df, config) 
       
       office_label <- race_map[[race_col]]
       
+      # Exclude FL-23 from 2014 House party accuracy because CES appears to have
+      # shown Debbie Wasserman Schultz with the wrong party label. That label error
+      # may have affected both candidate-choice and derived party-choice responses.
+      if (
+        year == "2014" && race_col == "HOUSE_PARTY_rc"
+      ) {
+        ces_filtered <- ces_filtered %>%
+          filter(!(POST_STATE_rc == "FLORIDA" & CDID_post_rc == "23"))
+      }
+      
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
         
         if (should_skip_race(state, year, race_col, config$skip_conditions)) {
@@ -243,8 +253,6 @@ calculate_party_errors <- function(year_data_list, election_results_df, config) 
   bind_rows(result_list)
 }
 
-
-
 #' Calculate candidate-level election errors
 #'
 #' @description
@@ -262,7 +270,12 @@ calculate_party_errors <- function(year_data_list, election_results_df, config) 
 #' @return Tibble with candidate-level errors in standardized format (already modal)
 calculate_candidate_errors <- function(year_data_list,
                                        candidate_returns_df,
-                                       config) {
+                                       config,
+                                       return_party_review = FALSE) {
+  
+# calculate_candidate_errors <- function(year_data_list,
+#                                        candidate_returns_df,
+#                                        config) {
   
   race_map <- config$race_maps$candidate
   result_list <- list()
@@ -291,11 +304,11 @@ calculate_candidate_errors <- function(year_data_list,
       
       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
         # Uncomment for helpful debug line
-        # if (current_year == "2018" & state == "NORTH DAKOTA" & office_label == "Secretary of State") {
+        # if (current_year == "2014" & state == "FLORIDA" & office_label == "US House") {
         #   print("arrived at error")
         #   browser()
         # }
-        
+
         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
           next
         }
@@ -303,7 +316,22 @@ calculate_candidate_errors <- function(year_data_list,
         state_df <- ces_filtered %>% filter(POST_STATE_rc == state)
         districts <- get_districts_for_office(office_label, state_df)
         
+        # Skip FL-23 in 2014 because the benchmark data correctly identifies
+        # Debbie Wasserman Schultz as a Democrat, but the CES candidate label
+        # appears to identify her as a Republican. Respondents may have seen the
+        # incorrect party label, which could have affected candidate-choice responses.
         for (district in districts) {
+          if (
+            current_year == "2014" && state == "FLORIDA" && office_label == "US House" && district == "23"
+          ) {
+            next
+          }
+          
+          # Uncomment for helpful debug line
+          # if (current_year == "2014" & state == "FLORIDA" & office_label == "US House" & district == "23") {
+          #   print("arrived at error")
+          #   browser()
+          # }
           
           survey <- filter_by_district(state_df, office_label, district)
           n_resp <- sum(!is.na(survey[[race_col]]))
@@ -395,7 +423,6 @@ calculate_candidate_errors <- function(year_data_list,
     
     result_list[[as.character(current_year)]] <- year_results
   }
-  
   bind_rows(result_list)
 }
 

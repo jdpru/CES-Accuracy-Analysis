@@ -7,7 +7,11 @@ date: "2025-04-04"
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
 knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis/')
+
+## USER: You will need to set USER_IPUMS_API_KEY, your IPUMS API Key, in order to run code in
+## section "CPS Datasets". 
 ```
+
 
 ```{r}
 # Load functions and structures from other utility scripts
@@ -37,7 +41,12 @@ set_here()
 
 # Read-in Data ----------------------------------------------
 ## CES Datasets
+
 ```{r}
+###### 
+# NOTE TO USER: The CES often updates metadata and changes the filename on the Dataverse, you will likely need to update the file names below to whatever they are when you download them.
+######
+
 CES_06_raw <- read_dta(here("data/CES Data/cces_2006_common.dta"))
 CES_08_raw <- read_dta(here("data/CES Data/cces_2008_common.dta")) %>% 
   mutate(StateFIPS = as.numeric(V265),
@@ -49,7 +58,7 @@ CES_14_raw <- read_dta(here("data/CES Data/CCES14_Common_Content_Validated.dta")
 CES_16_raw <- read_dta(here("data/CES Data/CCES16_Common_OUTPUT_Feb2018_VV.dta"))
 CES_18_raw <- read_dta(here("data/CES Data/cces18_common_vv.dta"))
 CES_20_raw <- read_dta(here("data/CES Data/CES20_Common_OUTPUT_vv.dta"))
-CES_22_raw <- read_dta(here("data/CES Data/CES_2022_Common_Output.dta"))
+CES_22_raw <- read_dta(here("data/CES Data/CCES22_Common_OUTPUT_vv_topost.dta"))
 ```
 
 ## Augment 2008 with Candidate File
@@ -175,7 +184,17 @@ skip_conditions <- read.xlsx("data/misc./skip_conditions_final.xlsx")
 ## CPS Datasets
 ```{r}
 # Set IPUMS API Key (specific to user, free to acquire on IPUMS site)
-USER_IPUMS_API_KEY = "59cba10d8a5da536fc06b59dd33fd321a4eb480fa8fe8ad46c9d0d3e"
+USER_IPUMS_API_KEY = ""
+
+
+if (USER_IPUMS_API_KEY == "") {
+  stop(
+    "USER_IPUMS_API_KEY is blank. Create a free IPUMS API key at ",
+    "https://account.ipums.org/api_keys, then paste it into USER_IPUMS_API_KEY and re-run from this point",
+    call. = FALSE
+  )
+}
+
 set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
 ```
 #### START OF TEMP CPS LOAD
@@ -260,7 +279,6 @@ cps_sample_2018 = c('cps2018_01s', 'cps2018_02s', 'cps2018_03b', 'cps2018_04b', 
 cps_sample_2020 = c('cps2020_01s', 'cps2020_02s', 'cps2020_03b', 'cps2020_04b', 'cps2020_05b', 'cps2020_06s', 'cps2020_07b', 'cps2020_08s', 'cps2020_09b', 'cps2020_10s', 'cps2020_11s', 'cps2020_12s')
 # 2022
 cps_sample_2022 = c('cps2022_01s', 'cps2022_02s', 'cps2022_03b', 'cps2022_04s', 'cps2022_05s', 'cps2022_06s', 'cps2022_07s', 'cps2022_08s', 'cps2022_09s', 'cps2022_10s', 'cps2022_11s', 'cps2022_12s')
-
 ```
 
 ### Read in CPS datasets to global environment
@@ -815,14 +833,26 @@ list_all_years <- recoded_party_candidate_list_all_years_cleaned
 push_list_all_years_to_env()
 ```
 
+
 # Election Return Prop Tables
 ## Create Party-level Election Return Prop Tables
 The raw election return files are loaded in the "Election Return Datasets" section. The following code creates a series of "prop" (proportion) tables for each election, then collapses across party to indicate what share of votes each party received in each election. 
 ```{r}
 # US House
-House_0622_clean_fixed <- recalculate_total_votes(House_0622, "statewide")
-house_prop_table <- calculate_state_level_party_proportions(House_0622_clean_fixed) 
+# Exclude FL-23 from 2014 House party accuracy to match the CES-side exclusion
+# for the known Debbie Wasserman Schultz party-label error.
+House_0622_party_accuracy <- House_0622 %>%
+  filter(!(year == 2014 & state == "FLORIDA" & as.character(district) == "23"))
+
+House_0622_clean_fixed <- recalculate_total_votes(House_0622_party_accuracy, "statewide")
+house_prop_table <- calculate_state_level_party_proportions(House_0622_clean_fixed)
 house_prop_table$Office <- "US House"
+
+# 
+# # US House
+# House_0622_clean_fixed <- recalculate_total_votes(House_0622, "statewide")
+# house_prop_table <- calculate_state_level_party_proportions(House_0622_clean_fixed) 
+# house_prop_table$Office <- "US House"
 
 # US Senate
 Senate_0622_clean_fixed <- recalculate_total_votes(Senate_0622, "statewide")
@@ -940,7 +970,6 @@ collapse_proportion_table <- function(df) {
 collapsed_merged_prop_table <- collapse_proportion_table(merged_prop_tables)
 merged_prop_tables_combined <- rbind(collapsed_merged_prop_table, house_prop_table)
 ```
-
 
 ## Create Candidate-Level Election Return Prop Tables
 Now I create a candidate-level prop table, which will be used to compare the CES vote to the actual votes received by 
@@ -1588,6 +1617,7 @@ validate_candidate_benchmark_overrides(
   candidate_returns = merged_candidate_level_props,
   overrides = candidate_benchmark_overrides
 )
+
 
 # Candidate-level is only calculated at modal level to begin with
 candidate_errors_modal <- calculate_candidate_errors(
