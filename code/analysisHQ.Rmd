@@ -6,10 +6,10 @@ date: "2025-04-04"
 
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
+## USER: Set your project root here, something like /Users/jdpruett/Desktop/CES Accuracy Analysis/')
 knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis/')
 
-## USER: You will need to set USER_IPUMS_API_KEY, your IPUMS API Key, in order to run code in
-## section "CPS Datasets". 
+## USER: You will need to set USER_IPUMS_API_KEY to fetch CPS data. Look at section "CPS Datasets" and paste it in there.  
 ```
 
 
@@ -196,13 +196,23 @@ if (USER_IPUMS_API_KEY == "") {
 
 set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
 ```
-#### START OF TEMP CPS LOAD
-```{r}
-library(ipumsr)
-library(purrr)
-library(dplyr)
+#### Optional local CPS load
+<!--
+This block is intentionally commented out.
 
-cps_artifact_dir <- "/Users/jdpruett/Desktop/CES Accuracy Analysis/data/IPUMS CPS Artifacts"
+Use it only if you have already downloaded the IPUMS CPS extracts and have the
+`.xml` DDI files plus associated fixed-width data files stored locally in
+`data/IPUMS CPS Artifacts`.
+
+This is a convenience path for reloading local CPS files without submitting new
+extract requests to IPUMS. If you have not already downloaded the CPS data, leave
+this commented out and use the normal IPUMS remote-download workflow instead.
+
+```{r}
+# Path to the CPS Artifacts folder from this repo. Something like
+# cps_artifact_dir <- "/Users/jdpruett/Desktop/CES Accuracy Analysis/data/IPUMS CPS Artifacts"
+
+cps_artifact_dir <- ""
 
 target_years <- seq(2006, 2022, by = 2)
 
@@ -250,8 +260,7 @@ cps_raw_list <- setNames(
 
 list2env(cps_raw_list, envir = .GlobalEnv)
 ```
-
-#### END OF TEMP CPS LOAD
+-->
 
 
 ### Prep monthly sample codes and variables
