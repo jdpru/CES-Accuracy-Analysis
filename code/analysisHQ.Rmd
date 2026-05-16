@@ -189,8 +189,7 @@ USER_IPUMS_API_KEY = ""
 
 if (USER_IPUMS_API_KEY == "") {
   stop(
-    "USER_IPUMS_API_KEY is blank. Create a free IPUMS API key at ",
-    "https://account.ipums.org/api_keys, then paste it into USER_IPUMS_API_KEY and re-run from this point",
+    "USER_IPUMS_API_KEY is blank. Create a free IPUMS API key at https://developer.ipums.org/docs/v2/get-started/, then paste it into USER_IPUMS_API_KEY and re-run from this point",
     call. = FALSE
   )
 }
