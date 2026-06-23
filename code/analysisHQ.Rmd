@@ -44,7 +44,7 @@ set_here()
 
 ```{r}
 ###### 
-# NOTE TO USER: The CES often updates metadata and changes the filename on the Dataverse, you will likely need to update the file names below to whatever they are when you download them.
+# NOTE TO USER: The CES occasionally updates metadata and changes the filename on the Dataverse, you may need to update the file names below to whatever they are when you download them.
 ######
 
 CES_06_raw <- read_dta(here("data/CES Data/cces_2006_common.dta"))
@@ -93,7 +93,7 @@ ces_08_us_senate_names <- ces_08_cand_name_file %>%
     US_Senate_Republican_Name   = `Republican Name`,
     US_Senate_Other_Name = `Other Name`
   ) %>% 
-  # Need to excude special election cases
+  # Need to exclude special election cases
   group_by(StateFIPS) %>%
   mutate(row_in_state = row_number()) %>%
   ungroup() %>%
@@ -134,12 +134,11 @@ House_0622 <- read_excel("data/Benchmarks/Election Returns/US_House_Returns_2006
 
 # State Senate, State House, Attorney General, Secretary of State
 State_legislative_0623_raw <- read_excel("data/benchmarks/Election Returns/State_Legislative_and_Constitutional_Offices_2006_2023.xlsx", guess_max = 20000) %>% mutate(year = year(election_date))
-# Ballotpedia mislabeled some elections as general elections that were actually special in their initial data query. This is a list of candidates that should be removed from State_legislative_0623 to avoid mixing in special elections.
+# Ballotpedia mislabeled some elections as general elections that were actually special in their initial data query. This is a list of candidates that should be removed from State_legislative_0623 to avoid mixing in special general elections.
 special_candidates_to_remove <- read_excel("data/misc./mixed_in_special_election_candidates.xlsx")
 State_legislative_0623 <- State_legislative_0623_raw %>%
   anti_join(
-    special_candidates_to_remove %>%
-      filter(concurrent_special != TRUE),
+    special_candidates_to_remove,
     by = c("office_district", "candidate", "year")
   ) %>%
   select(-year)
@@ -196,6 +195,7 @@ if (USER_IPUMS_API_KEY == "") {
 
 set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
 ```
+
 #### Optional local CPS load
 <!--
 This block is intentionally commented out.
@@ -213,6 +213,9 @@ this commented out and use the normal IPUMS remote-download workflow instead.
 # cps_artifact_dir <- "/Users/jdpruett/Desktop/CES Accuracy Analysis/data/IPUMS CPS Artifacts"
 
 cps_artifact_dir <- ""
+if (!nzchar(cps_artifact_dir)) {
+  stop("cps_artifact_dir is blank. Please set it to the directory containing the CPS XML/DDI files.")
+}
 
 target_years <- seq(2006, 2022, by = 2)
 
@@ -261,7 +264,6 @@ cps_raw_list <- setNames(
 list2env(cps_raw_list, envir = .GlobalEnv)
 ```
 -->
-
 
 ### Prep monthly sample codes and variables
 This is necessary to use the IPUMS API to download CPS data.
@@ -319,8 +321,6 @@ for (df_name in names(extract_codes)) {
   assign(df_name, eval(parse(text = extract_codes[[df_name]])), envir = .GlobalEnv)
 }
 ```
-
-
 
 ## Subset datasets --------------
 Subset CES to only include relevant variables
@@ -856,12 +856,6 @@ House_0622_clean_fixed <- recalculate_total_votes(House_0622_party_accuracy, "st
 house_prop_table <- calculate_state_level_party_proportions(House_0622_clean_fixed)
 house_prop_table$Office <- "US House"
 
-# 
-# # US House
-# House_0622_clean_fixed <- recalculate_total_votes(House_0622, "statewide")
-# house_prop_table <- calculate_state_level_party_proportions(House_0622_clean_fixed) 
-# house_prop_table$Office <- "US House"
-
 # US Senate
 Senate_0622_clean_fixed <- recalculate_total_votes(Senate_0622, "statewide")
 senate_cand_prop_table <- calculate_party_proportions(Senate_0622_clean_fixed) %>%
@@ -899,7 +893,10 @@ governor_cand_prop_table <- calculate_cand_num_proportions(Governor_0622_clean_f
 
 # President
 President_0820_nums <- assign_president_candidate_numbers(President_0820) %>%
-  filter(candidate %notin% c("OVER VOTE", "OVERVOTE", "OVERVOTES", "OVER VOTES"))
+  filter(candidate %notin% c("OVER VOTE", "OVERVOTE", "OVERVOTES", "OVER VOTES")) %>%
+  group_by(year, state, office, district) %>%
+  mutate(totalvotes = sum(candidatevotes, na.rm = TRUE)) %>%
+  ungroup()
 president_candid_prop_table <- calculate_cand_num_proportions(President_0820_nums) %>%
   mutate(office = "President") %>%
   rename(
@@ -1200,7 +1197,6 @@ merged_candidate_level_props <- rbind(
     State = toupper(State)
   )
 ```
-
 
 # Create Weighting Targets
 ANESRake requires that "targets" are created for each variable, which specify the expected distribution of that variable in the population for each level (category) of that variable.
@@ -1571,9 +1567,9 @@ vars_used_ces_weights <- list(
   `2012` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTED_rc"),
   `2014` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
   `2016` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
-  `2018` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPANIC_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
-  `2020` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPANIC_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc", "PRES_PARTY_rc", "PRES_CANDIDATE_rc"),
-  `2022` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPANIC_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"
+  `2018` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPAN_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
+  `2020` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPAN_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc", "PRES_PARTY_rc", "PRES_CANDIDATE_rc"),
+  `2022` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPAN_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"
   )
 )
 ```
