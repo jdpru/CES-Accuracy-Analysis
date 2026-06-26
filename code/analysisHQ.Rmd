@@ -23,7 +23,7 @@ source("code/utilities/accuracy_utilities.R")
 ```
 
 ```{r, echo=False, warnings=FALSE, message=FALSE}
-# create notin operator
+-# create notin operator
 `%notin%` <- Negate(`%in%`)
 
 # Packages & working directory
@@ -1948,3 +1948,4 @@ write_xlsx(
   here("tables_and_figures/input_tables", "vars_used_by_anesrake.xlsx")
 )
 ```
+
