@@ -7,7 +7,7 @@ date: "2025-04-04"
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
 ## USER: Set your project root here, something like /Users/jdpruett/Desktop/CES Accuracy Analysis/')
-knitr::opts_knit$set(root.dir = '/Users/jdpruett/Desktop/CES Accuracy Analysis/')
+knitr::opts_knit$set(root.dir = '/Users/jdpruett/Repos/CES Accuracy Analysis/')
 
 ## USER: You will need to set USER_IPUMS_API_KEY to fetch CPS data. Look at section "CPS Datasets" and paste it in there.  
 ```
@@ -22,16 +22,16 @@ source("code/utilities/accuracy_utilities.R")
 source("code/utilities/accuracy_utilities.R")
 ```
 
-```{r, echo=False, warnings=FALSE, message=FALSE}
--# create notin operator
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# create notin operator
 `%notin%` <- Negate(`%in%`)
 
 # Packages & working directory
 pckgs <- c("haven", "readxl", "ipumsr", "here", "dplyr", "cdlTools", "anesrake", "writexl", "tidyverse", "rlang", "tibble", "naniar", "weights", "lubridate", "openxlsx", "cpsR", "purrr", "progress", "tidycensus", "humaniformat", "stringdist", "glue", "stringi")
 
 ## Uncomment this to download all necessary packages
-# if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
-# install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
+if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
+install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
 
 invisible(sapply(pckgs, FUN = require, character.only = TRUE))
 
@@ -170,6 +170,53 @@ turnout_statewide <- read_excel("data/Benchmarks/VAP_Turnout_Rates.xlsx",
 state_populations <- read_excel("data/Benchmarks/Historical_State_Population_by_Year.xlsx")
 ```
 
+### Strata, Matching, and Weighting Variable Classifications
+```{r}
+# CES matching and weighting classifications by variable and year.
+# Athoritative source for Variable_Type and all
+# weighting-stage-specific classifications.
+ces_weighting_stage_variables <- read_csv(
+  here("data", "misc.", "ces_weighting_stage_variables.csv"),
+  col_types = cols(
+    Year = col_integer(),
+    Variable = col_character(),
+    Guide_Variable = col_character(),
+    Used_in_Target_Strata = col_logical(),
+    Used_in_Matching = col_logical(),
+    Used_in_Stage1_Weighting = col_logical(),
+    Stage1_Weighting_Method = col_character(),
+    Used_in_PostStratification = col_logical(),
+    Notes = col_character()
+  ),
+  na = c("", "NA"),
+  show_col_types = FALSE
+) %>%
+  mutate(
+    Used_in_CES_Weighting = case_when(
+      is.na(Used_in_Stage1_Weighting) &
+        is.na(Used_in_PostStratification) ~ NA,
+      TRUE ~
+        coalesce(Used_in_Stage1_Weighting, FALSE) |
+        coalesce(Used_in_PostStratification, FALSE)
+    ),
+    Variable_Type = case_when(
+      is.na(Used_in_CES_Weighting) ~ "Unclassified",
+      Used_in_CES_Weighting ~ "Primary",
+      TRUE ~ "Secondary"
+    )
+  )
+
+stage_duplicates <- ces_weighting_stage_variables %>%
+  count(Year, Variable) %>%
+  filter(n > 1)
+
+if (nrow(stage_duplicates) > 0) {
+  stop(
+    "ces_variable_stage_crosswalk.csv contains duplicate Year × Variable rows."
+  )
+}
+```
+
 ### Misc.
 ```{r}
 # CES assigned some respondents to incorrect congressional district in 2020
@@ -210,7 +257,7 @@ this commented out and use the normal IPUMS remote-download workflow instead.
 
 ```{r}
 # Path to the CPS Artifacts folder from this repo. Something like
-# cps_artifact_dir <- "/Users/jdpruett/Desktop/CES Accuracy Analysis/data/IPUMS CPS Artifacts"
+cps_artifact_dir <- "/Users/jdpruett/Repos/CES Accuracy Analysis/data/IPUMS CPS Artifacts"
 
 cps_artifact_dir <- ""
 if (!nzchar(cps_artifact_dir)) {
@@ -1558,20 +1605,7 @@ CES error is measured in the following ways:
   - Demographic and voting variables ("demoplus"): compare true population proportions to CES proportions for demographic and voting behavior variables (e.g., union membership, voter turnout, etc.).
 
 ```{r}
-# Variables used by the CES for post-stratification in each year
-# This is necessary for classifying variables as "primary" or "secondary"
-vars_used_ces_weights <- list(
-  `2006` = character(0),
-  `2008` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTED_rc"),
-  `2010` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTED_rc"),
-  `2012` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTED_rc"),
-  `2014` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
-  `2016` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
-  `2018` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPAN_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"),
-  `2020` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPAN_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc", "PRES_PARTY_rc", "PRES_CANDIDATE_rc"),
-  `2022` = c("AGE_GROUP_rc", "EDUC_rc", "SEX_rc", "HISPAN_rc", "VOTEREG_rc", "POST_STATE_rc", "GOV_CANDIDATE_rc", "GOV_PARTY_rc", "SENATOR_CANDIDATE_rc", "SENATOR_PARTY_rc"
-  )
-)
+
 ```
 
 ```{r}
@@ -1594,10 +1628,8 @@ config <- create_accuracy_config(
   yearly_ces_wt_vars = yearly_ces_wt_vars,
   skip_conditions = skip_conditions,
   NC_flag_df = NC_flag_df,
-  vars_used_ces_weights = vars_used_ces_weights,
-  
-  
-  anesrake_full_results       = weighting_results_all,
+  ces_weighting_stage_variables = ces_weighting_stage_variables,
+  anesrake_full_results = weighting_results_all,
   anesrake_restricted_results = weighting_results_restricted,
   selected_weighting_vars = selected_weighting_vars
 )
@@ -1826,8 +1858,48 @@ combined_errors <- bind_rows(
 )
 
 # Pivot to long
+stage_metadata <- ces_weighting_stage_variables %>%
+  select(
+    Year,
+    Variable,
+    Guide_Variable,
+    Used_in_Target_Strata,
+    Used_in_Matching,
+    Used_in_Stage1_Weighting,
+    Stage1_Weighting_Method,
+    Used_in_PostStratification,
+    Used_in_CES_Weighting,
+    Notes
+  )
+
 combined_errors_long <- combined_errors %>%
-  pivot_errors_long()
+  pivot_errors_long() %>%
+  mutate(
+    Year = as.integer(Year)
+  ) %>%
+  left_join(
+    stage_metadata,
+    by = c("Year", "Variable")
+  )
+
+unmatched_stage_rows <- combined_errors_long %>%
+  filter(is.na(Stage1_Weighting_Method)) %>%
+  distinct(Year, Variable)
+
+if (nrow(unmatched_stage_rows) > 0) {
+  missing_stage_keys <- paste(
+    unmatched_stage_rows$Year,
+    unmatched_stage_rows$Variable,
+    sep = " / ",
+    collapse = ", "
+  )
+
+  stop(
+    "The following Year × Variable rows were not found in ",
+    "ces_weighting_stage_variables: ",
+    missing_stage_keys
+  )
+}
 ```
 
 # Create Summary Tables

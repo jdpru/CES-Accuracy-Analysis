@@ -13,7 +13,8 @@
 #' @param yearly_ces_wt_vars Named list of weight variable names by year
 #' @param skip_conditions Data frame with skip conditions
 #' @param NC_flag_df Data frame with NC district flags for 2020
-#' @param vars_used_ces_weights Named list (by year) of variables used in CES weighting
+#' @param ces_stage_crosswalk Data frame containing the CES stage classifications by year and analysis variable
+#' @param ces_weighting_stage_variables Named list (by year) of variables used in CES weighting
 #' @param anesrake_results Named list (by year) with ANESRake results including varsused
 #'
 #' @return A configuration list for accuracy calculations
@@ -21,7 +22,7 @@
 create_accuracy_config <- function(yearly_ces_wt_vars,
                                    skip_conditions,
                                    NC_flag_df,
-                                   vars_used_ces_weights,
+                                   ces_weighting_stage_variables,
                                    anesrake_full_results,
                                    anesrake_restricted_results,
                                    selected_weighting_vars) {
@@ -51,9 +52,7 @@ create_accuracy_config <- function(yearly_ces_wt_vars,
     
     skip_conditions = skip_conditions,
     NC_flag_df = NC_flag_df,
-    
-    vars_used_ces_weights = vars_used_ces_weights,
-    
+    ces_weighting_stage_variables = ces_weighting_stage_variables,
     # BOTH ANESRAKE VARIANTS LIVE HERE
     anesrake = list(
       full = list(
@@ -840,41 +839,80 @@ standardize_variable_names <- function(df, var_map = NULL) {
 #'
 #' @return List with variable_type, used_in_anesrake_weighting, and valid_for_accuracy
 #' @keywords internal
+# Convert the raw CES variable supplied to the accuracy functions into the
+# standardized analysis-variable name used by the stage-classification table.
+resolve_analysis_variable_name <- function(var_name, config) {
+  
+  analysis_variable <- var_name
+  
+  if (var_name %in% names(config$race_maps$party)) {
+    analysis_variable <- unname(
+      config$race_maps$party[[var_name]]
+    )
+  } else if (var_name %in% names(config$race_maps$candidate)) {
+    analysis_variable <- unname(
+      config$race_maps$candidate[[var_name]]
+    )
+  }
+  
+  standardize_variable_names(
+    tibble(Variable = analysis_variable)
+  )$Variable[[1]]
+}
+
 
 determine_variable_metadata <- function(var_name, year, config) {
   
-  year_chr <- as.character(year)
+  year_int <- as.integer(year)
+  year_chr <- as.character(year_int)
   
-  # -----------------------------
-  # Used in CES weights?
-  # -----------------------------
-  variable_type <- "Secondary"
-  ces_vars <- config$vars_used_ces_weights[[year_chr]]
-  used_in_ces <- !is.null(ces_vars) && (var_name %in% ces_vars)
-  if (used_in_ces) variable_type <- "Primary"
+  analysis_variable <- resolve_analysis_variable_name(
+    var_name = var_name,
+    config = config
+  )
   
-  # -----------------------------
-  # Used in ANESRake FULL? (empirical)
-  # -----------------------------
+  stage_row <- config$ces_weighting_stage_variables %>%
+    filter(
+      .data$Year == year_int,
+      .data$Variable == analysis_variable
+    )
+  
+  if (nrow(stage_row) != 1) {
+    stop(
+      glue::glue(
+        "Expected exactly one stage-classification row for ",
+        "{analysis_variable} in {year_int}; found {nrow(stage_row)}."
+      )
+    )
+  }
+  
+  used_in_ces <- stage_row$Used_in_CES_Weighting[[1]]
+  variable_type <- stage_row$Variable_Type[[1]]
+  
+  # Used in ANESRake Full?
   used_in_anes_full <- FALSE
   full_res <- config$anesrake$full$results[[year_chr]]
-  if (!is.null(full_res$vars_used) && var_name %in% full_res$vars_used) {
+  
+  if (
+    !is.null(full_res$vars_used) &&
+    var_name %in% full_res$vars_used
+  ) {
     used_in_anes_full <- TRUE
   }
   
-  # -----------------------------
-  # Used in ANESRake RESTRICTED? (design-based)
-  # -----------------------------
-  used_in_anes_restricted <- var_name %in% config$anesrake$restricted$vars_used
+  # Used in ANESRake Restricted?
+  used_in_anes_restricted <-
+    var_name %in% config$anesrake$restricted$vars_used
   
-  # -----------------------------
-  # Validity flags (scheme-specific)
-  # -----------------------------
+  # An undocumented CES classification, such as 2006, is not treated as
+  # eligible for the secondary-variable validity subsets.
   valid_full <-
-    (variable_type == "Secondary") && (!used_in_anes_full)
+    identical(variable_type, "Secondary") &&
+    !used_in_anes_full
   
   valid_restricted <-
-    (variable_type == "Secondary") && (!used_in_anes_restricted)
+    identical(variable_type, "Secondary") &&
+    !used_in_anes_restricted
   
   list(
     variable_type = variable_type,
@@ -884,10 +922,27 @@ determine_variable_metadata <- function(var_name, year, config) {
     used_in_anesrake_restricted = used_in_anes_restricted,
     
     valid_for_accuracy_full = valid_full,
-    valid_for_accuracy_restricted = valid_restricted
+    valid_for_accuracy_restricted = valid_restricted,
+    
+    used_in_target_strata =
+      stage_row$Used_in_Target_Strata[[1]],
+    
+    used_in_matching =
+      stage_row$Used_in_Matching[[1]],
+    
+    used_in_stage1_weighting =
+      stage_row$Used_in_Stage1_Weighting[[1]],
+    
+    stage1_weighting_method =
+      stage_row$Stage1_Weighting_Method[[1]],
+    
+    used_in_poststratification =
+      stage_row$Used_in_PostStratification[[1]],
+    
+    stage_notes =
+      stage_row$Notes[[1]]
   )
 }
-
 
 
 #' Filter NC cases if needed

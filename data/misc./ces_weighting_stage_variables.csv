@@ -1,0 +1,172 @@
+Year,Variable,Guide_Variable,Used_in_Target_Strata,Used_in_Matching,Used_in_Stage1_Weighting,Stage1_Weighting_Method,Used_in_PostStratification,Notes
+2006,Age Group,Age,TRUE,,,Not documented,,Matching and weighting stages are not documented for 2006. Direct mapping to the guide's Age row.
+2008,Age Group,Age,TRUE,TRUE,TRUE,Propensity-score weighting,TRUE,Direct mapping to the guide's Age row.
+2010,Age Group,Age,TRUE,TRUE,TRUE,Propensity-score weighting,TRUE,Direct mapping to the guide's Age row.
+2012,Age Group,Age,TRUE,TRUE,TRUE,Propensity-score weighting,TRUE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. Direct mapping to the guide's Age row.
+2014,Age Group,Age,TRUE,TRUE,TRUE,Entropy balancing,TRUE,Direct mapping to the guide's Age row.
+2016,Age Group,Age,TRUE,TRUE,TRUE,Entropy balancing,TRUE,Direct mapping to the guide's Age row.
+2018,Age Group,Age,FALSE,TRUE,TRUE,Entropy balancing,TRUE,Direct mapping to the guide's Age row.
+2020,Age Group,Age,FALSE,TRUE,TRUE,Entropy balancing,TRUE,Direct mapping to the guide's Age row.
+2022,Age Group,Age,FALSE,TRUE,TRUE,Entropy balancing,TRUE,Direct mapping to the guide's Age row.
+2006,Sex,Gender,TRUE,,,Not documented,,Matching and weighting stages are not documented for 2006. Sex maps to the guide's Gender row.
+2008,Sex,Gender,TRUE,TRUE,TRUE,Propensity-score weighting,TRUE,Sex maps to the guide's Gender row.
+2010,Sex,Gender,TRUE,TRUE,TRUE,Propensity-score weighting,TRUE,Sex maps to the guide's Gender row.
+2012,Sex,Gender,TRUE,TRUE,TRUE,Propensity-score weighting,TRUE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. Sex maps to the guide's Gender row.
+2014,Sex,Gender,TRUE,TRUE,TRUE,Entropy balancing,TRUE,Sex maps to the guide's Gender row.
+2016,Sex,Gender,TRUE,TRUE,TRUE,Entropy balancing,TRUE,Sex maps to the guide's Gender row.
+2018,Sex,Gender,FALSE,TRUE,TRUE,Entropy balancing,TRUE,Sex maps to the guide's Gender row.
+2020,Sex,Gender,FALSE,TRUE,TRUE,Entropy balancing,TRUE,Sex maps to the guide's Gender row.
+2022,Sex,Gender,FALSE,TRUE,TRUE,Entropy balancing,TRUE,Sex maps to the guide's Gender row.
+2006,Hispanic Origin,Hispanic origin,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. Direct mapping to the guide's Hispanic origin row.
+2008,Hispanic Origin,Hispanic origin,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,Direct mapping to the guide's Hispanic origin row.
+2010,Hispanic Origin,Hispanic origin,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,Direct mapping to the guide's Hispanic origin row.
+2012,Hispanic Origin,Hispanic origin,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. Direct mapping to the guide's Hispanic origin row.
+2014,Hispanic Origin,Hispanic origin,FALSE,FALSE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Hispanic origin row.
+2016,Hispanic Origin,Hispanic origin,FALSE,FALSE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Hispanic origin row.
+2018,Hispanic Origin,Hispanic origin,FALSE,FALSE,TRUE,Entropy balancing,FALSE,"For Stage-1 weighting, the variable is named among the frame distributions matched but not among the enumerated moment conditions. Direct mapping to the guide's Hispanic origin row."
+2020,Hispanic Origin,Hispanic origin,FALSE,FALSE,TRUE,Entropy balancing,FALSE,"For Stage-1 weighting, the variable is named among the frame distributions matched but not among the enumerated moment conditions. Direct mapping to the guide's Hispanic origin row."
+2022,Hispanic Origin,Hispanic origin,FALSE,FALSE,TRUE,Entropy balancing,FALSE,"For Stage-1 weighting, the variable is named among the frame distributions matched but not among the enumerated moment conditions. Direct mapping to the guide's Hispanic origin row."
+2006,Education,Education,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. Direct mapping to the guide's Education row.
+2008,Education,Education,TRUE,TRUE,TRUE,Propensity-score weighting,TRUE,Direct mapping to the guide's Education row.
+2010,Education,Education,TRUE,TRUE,TRUE,Propensity-score weighting,TRUE,Direct mapping to the guide's Education row.
+2012,Education,Education,TRUE,TRUE,TRUE,Propensity-score weighting,TRUE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. Direct mapping to the guide's Education row.
+2014,Education,Education,TRUE,TRUE,TRUE,Entropy balancing,TRUE,Direct mapping to the guide's Education row.
+2016,Education,Education,TRUE,TRUE,TRUE,Entropy balancing,TRUE,Direct mapping to the guide's Education row.
+2018,Education,Education,FALSE,TRUE,TRUE,Entropy balancing,TRUE,Direct mapping to the guide's Education row.
+2020,Education,Education,FALSE,TRUE,TRUE,Entropy balancing,TRUE,Direct mapping to the guide's Education row.
+2022,Education,Education,FALSE,TRUE,TRUE,Entropy balancing,TRUE,Direct mapping to the guide's Education row.
+2006,Family Income,Family income,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. Direct mapping to the guide's Family income row.
+2008,Family Income,Family income,FALSE,TRUE,FALSE,Propensity-score weighting,FALSE,Direct mapping to the guide's Family income row.
+2010,Family Income,Family income,FALSE,TRUE,FALSE,Propensity-score weighting,FALSE,Direct mapping to the guide's Family income row.
+2012,Family Income,Family income,FALSE,TRUE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. Direct mapping to the guide's Family income row.
+2014,Family Income,Family income,FALSE,FALSE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Family income row.
+2016,Family Income,Family income,FALSE,FALSE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Family income row.
+2018,Family Income,Family income,FALSE,FALSE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Family income row.
+2020,Family Income,Family income,FALSE,FALSE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Family income row.
+2022,Family Income,Family income,FALSE,FALSE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Family income row.
+2006,Employment Status,Employment status,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. Direct mapping to the guide's Employment status row.
+2008,Employment Status,Employment status,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,Direct mapping to the guide's Employment status row.
+2010,Employment Status,Employment status,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,Direct mapping to the guide's Employment status row.
+2012,Employment Status,Employment status,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. Direct mapping to the guide's Employment status row.
+2014,Employment Status,Employment status,FALSE,TRUE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Employment status row.
+2016,Employment Status,Employment status,FALSE,TRUE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Employment status row.
+2018,Employment Status,Employment status,FALSE,FALSE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Employment status row.
+2020,Employment Status,Employment status,FALSE,FALSE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Employment status row.
+2022,Employment Status,Employment status,FALSE,FALSE,FALSE,Entropy balancing,FALSE,Direct mapping to the guide's Employment status row.
+2006,Union Membership,,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. No corresponding variable is named at any stage in the supplied table.
+2008,Union Membership,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2010,Union Membership,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2012,Union Membership,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. No corresponding variable is named at any stage in the supplied table.
+2014,Union Membership,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2016,Union Membership,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2018,Union Membership,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2020,Union Membership,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2022,Union Membership,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2006,Veteran Status,,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. No corresponding variable is named at any stage in the supplied table.
+2008,Veteran Status,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2010,Veteran Status,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2012,Veteran Status,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. No corresponding variable is named at any stage in the supplied table.
+2014,Veteran Status,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2016,Veteran Status,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2018,Veteran Status,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2020,Veteran Status,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2022,Veteran Status,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2006,Residence Duration,,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. No corresponding variable is named at any stage in the supplied table.
+2008,Residence Duration,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2010,Residence Duration,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2012,Residence Duration,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. No corresponding variable is named at any stage in the supplied table.
+2014,Residence Duration,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2016,Residence Duration,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2018,Residence Duration,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2020,Residence Duration,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2022,Residence Duration,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2006,Voting Turnout,"Turnout, earlier election",FALSE,,,Not documented,,"Matching and weighting stages are not documented for 2006. The analysis outcome is mapped to the guide's Turnout, earlier election row."
+2008,Voting Turnout,"Turnout, earlier election",FALSE,FALSE,TRUE,Propensity-score weighting,FALSE,"The analysis outcome is mapped to the guide's Turnout, earlier election row."
+2010,Voting Turnout,"Turnout, earlier election",FALSE,FALSE,TRUE,Propensity-score weighting,FALSE,"The analysis outcome is mapped to the guide's Turnout, earlier election row."
+2012,Voting Turnout,"Turnout, earlier election",FALSE,FALSE,TRUE,Propensity-score weighting,FALSE,"The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. The analysis outcome is mapped to the guide's Turnout, earlier election row."
+2014,Voting Turnout,"Turnout, earlier election",FALSE,FALSE,FALSE,Entropy balancing,FALSE,"The analysis outcome is mapped to the guide's Turnout, earlier election row."
+2016,Voting Turnout,"Turnout, earlier election",FALSE,FALSE,FALSE,Entropy balancing,FALSE,"The analysis outcome is mapped to the guide's Turnout, earlier election row."
+2018,Voting Turnout,"Turnout, earlier election",FALSE,FALSE,FALSE,Entropy balancing,FALSE,"The analysis outcome is mapped to the guide's Turnout, earlier election row."
+2020,Voting Turnout,"Turnout, earlier election",FALSE,FALSE,FALSE,Entropy balancing,FALSE,"The analysis outcome is mapped to the guide's Turnout, earlier election row."
+2022,Voting Turnout,"Turnout, earlier election",FALSE,FALSE,TRUE,Entropy balancing,FALSE,"For Stage-1 weighting, the variable is named among the frame distributions matched but not among the enumerated moment conditions. The analysis outcome is mapped to the guide's Turnout, earlier election row."
+2006,Voting Method,,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. No corresponding variable is named at any stage in the supplied table.
+2008,Voting Method,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2010,Voting Method,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2012,Voting Method,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. No corresponding variable is named at any stage in the supplied table.
+2014,Voting Method,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2016,Voting Method,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2018,Voting Method,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2020,Voting Method,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2022,Voting Method,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2006,President,"Presidential vote, prior election",FALSE,,,Not documented,,"Matching and weighting stages are not documented for 2006. The analysis outcome is mapped to the guide's Presidential vote, prior election row."
+2008,President,"Presidential vote, prior election",FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,"The analysis outcome is mapped to the guide's Presidential vote, prior election row."
+2010,President,"Presidential vote, prior election",FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,"The analysis outcome is mapped to the guide's Presidential vote, prior election row."
+2012,President,"Presidential vote, prior election",FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,"The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. The analysis outcome is mapped to the guide's Presidential vote, prior election row."
+2014,President,"Presidential vote, prior election",FALSE,FALSE,FALSE,Entropy balancing,FALSE,"The analysis outcome is mapped to the guide's Presidential vote, prior election row."
+2016,President,"Presidential vote, prior election",FALSE,FALSE,FALSE,Entropy balancing,FALSE,"The analysis outcome is mapped to the guide's Presidential vote, prior election row."
+2018,President,"Presidential vote, prior election",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Presidential vote, prior election row."
+2020,President,"Presidential vote, prior election",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Presidential vote, prior election row."
+2022,President,"Presidential vote, prior election",FALSE,FALSE,TRUE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Presidential vote, prior election row."
+2006,U.S. Senate,"Vote choice, U.S. senator",FALSE,,,Not documented,,"Matching and weighting stages are not documented for 2006. The analysis outcome is mapped to the guide's Vote choice, U.S. senator row."
+2008,U.S. Senate,"Vote choice, U.S. senator",FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,"The analysis outcome is mapped to the guide's Vote choice, U.S. senator row."
+2010,U.S. Senate,"Vote choice, U.S. senator",FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,"The analysis outcome is mapped to the guide's Vote choice, U.S. senator row."
+2012,U.S. Senate,"Vote choice, U.S. senator",FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,"The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. The analysis outcome is mapped to the guide's Vote choice, U.S. senator row."
+2014,U.S. Senate,"Vote choice, U.S. senator",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Vote choice, U.S. senator row."
+2016,U.S. Senate,"Vote choice, U.S. senator",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Vote choice, U.S. senator row."
+2018,U.S. Senate,"Vote choice, U.S. senator",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Vote choice, U.S. senator row."
+2020,U.S. Senate,"Vote choice, U.S. senator",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Vote choice, U.S. senator row."
+2022,U.S. Senate,"Vote choice, U.S. senator",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Vote choice, U.S. senator row."
+2006,U.S. House,,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. No corresponding variable is named at any stage in the supplied table.
+2008,U.S. House,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2010,U.S. House,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2012,U.S. House,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. No corresponding variable is named at any stage in the supplied table.
+2014,U.S. House,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2016,U.S. House,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2018,U.S. House,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2020,U.S. House,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2022,U.S. House,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2006,Governor,"Vote choice, governor",FALSE,,,Not documented,,"Matching and weighting stages are not documented for 2006. The analysis outcome is mapped to the guide's Vote choice, governor row."
+2008,Governor,"Vote choice, governor",FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,"The analysis outcome is mapped to the guide's Vote choice, governor row."
+2010,Governor,"Vote choice, governor",FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,"The analysis outcome is mapped to the guide's Vote choice, governor row."
+2012,Governor,"Vote choice, governor",FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,"The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. The analysis outcome is mapped to the guide's Vote choice, governor row."
+2014,Governor,"Vote choice, governor",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Vote choice, governor row."
+2016,Governor,"Vote choice, governor",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Vote choice, governor row."
+2018,Governor,"Vote choice, governor",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Vote choice, governor row."
+2020,Governor,"Vote choice, governor",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Vote choice, governor row."
+2022,Governor,"Vote choice, governor",FALSE,FALSE,FALSE,Entropy balancing,TRUE,"The analysis outcome is mapped to the guide's Vote choice, governor row."
+2006,Attorney General,,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. No corresponding variable is named at any stage in the supplied table.
+2008,Attorney General,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2010,Attorney General,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2012,Attorney General,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. No corresponding variable is named at any stage in the supplied table.
+2014,Attorney General,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2016,Attorney General,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2018,Attorney General,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2020,Attorney General,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2022,Attorney General,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2006,Secretary of State,,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. No corresponding variable is named at any stage in the supplied table.
+2008,Secretary of State,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2010,Secretary of State,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2012,Secretary of State,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. No corresponding variable is named at any stage in the supplied table.
+2014,Secretary of State,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2016,Secretary of State,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2018,Secretary of State,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2020,Secretary of State,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2022,Secretary of State,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2006,State Senator,,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. No corresponding variable is named at any stage in the supplied table.
+2008,State Senator,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2010,State Senator,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2012,State Senator,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. No corresponding variable is named at any stage in the supplied table.
+2014,State Senator,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2016,State Senator,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2018,State Senator,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2020,State Senator,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2022,State Senator,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2006,State Representative,,FALSE,,,Not documented,,Matching and weighting stages are not documented for 2006. No corresponding variable is named at any stage in the supplied table.
+2008,State Representative,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2010,State Representative,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,No corresponding variable is named at any stage in the supplied table.
+2012,State Representative,,FALSE,FALSE,FALSE,Propensity-score weighting,FALSE,The 2012 guide repeats the 2010 description verbatim; the procedure is not independently documented. No corresponding variable is named at any stage in the supplied table.
+2014,State Representative,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2016,State Representative,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2018,State Representative,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2020,State Representative,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
+2022,State Representative,,FALSE,FALSE,FALSE,Entropy balancing,FALSE,No corresponding variable is named at any stage in the supplied table.
