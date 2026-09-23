@@ -904,14 +904,23 @@ determine_variable_metadata <- function(var_name, year, config) {
   used_in_anes_restricted <-
     var_name %in% config$anesrake$restricted$vars_used
   
-  # An undocumented CES classification, such as 2006, is not treated as
-  # eligible for the secondary-variable validity subsets.
+  # A variable is eligible for the accuracy subsets when the CES did not use it
+  # in weighting, so that the ANESRake comparison is measured on variables the
+  # CES weights did not already target.
+  #
+  # "Unclassified" means the guide for that wave does not document which
+  # variables entered matching or weighting; 2006 is the only such wave. Those
+  # variables are included here on the assumption that they were not CES
+  # weighting variables. Primary/Secondary status cannot be confirmed for that
+  # year, and every table and figure that reports it carries a note saying so.
+  eligible_type <- variable_type %in% c("Secondary", "Unclassified")
+  
   valid_full <-
-    identical(variable_type, "Secondary") &&
+    eligible_type &&
     !used_in_anes_full
   
   valid_restricted <-
-    identical(variable_type, "Secondary") &&
+    eligible_type &&
     !used_in_anes_restricted
   
   list(
