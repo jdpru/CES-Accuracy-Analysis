@@ -229,22 +229,22 @@ skip_conditions <- read.xlsx("data/misc./skip_conditions_final.xlsx")
 
 ## CPS Datasets
 ```{r}
-# Set IPUMS API Key (specific to user, free to acquire on IPUMS site)
-USER_IPUMS_API_KEY = ""
-
-
-if (USER_IPUMS_API_KEY == "") {
-  stop(
-    "USER_IPUMS_API_KEY is blank. Create a free IPUMS API key at https://developer.ipums.org/docs/v2/get-started/, then paste it into USER_IPUMS_API_KEY and re-run from this point",
-    call. = FALSE
-  )
-}
-
-set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
+# # Set IPUMS API Key (specific to user, free to acquire on IPUMS site)
+# USER_IPUMS_API_KEY = ""
+# 
+# 
+# if (USER_IPUMS_API_KEY == "") {
+#   stop(
+#     "USER_IPUMS_API_KEY is blank. Create a free IPUMS API key at https://developer.ipums.org/docs/v2/get-started/, then paste it into USER_IPUMS_API_KEY and re-run from this point",
+#     call. = FALSE
+#   )
+# }
+# 
+# set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
 ```
 
 #### Optional local CPS load
-<!--
+#<!--
 This block is intentionally commented out.
 
 Use it only if you have already downloaded the IPUMS CPS extracts and have the
@@ -257,9 +257,9 @@ this commented out and use the normal IPUMS remote-download workflow instead.
 
 ```{r}
 # Path to the CPS Artifacts folder from this repo. Something like
+cps_artifact_dir <- ""
 cps_artifact_dir <- "/Users/jdpruett/Repos/CES Accuracy Analysis/data/IPUMS CPS Artifacts"
 
-cps_artifact_dir <- ""
 if (!nzchar(cps_artifact_dir)) {
   stop("cps_artifact_dir is blank. Please set it to the directory containing the CPS XML/DDI files.")
 }
@@ -310,7 +310,7 @@ cps_raw_list <- setNames(
 
 list2env(cps_raw_list, envir = .GlobalEnv)
 ```
--->
+#-->
 
 ### Prep monthly sample codes and variables
 This is necessary to use the IPUMS API to download CPS data.
