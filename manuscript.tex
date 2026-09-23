@@ -1,0 +1,868 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{sectsty}
+\usepackage{titlesec}
+\usepackage{rotating}
+\usepackage{lipsum}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{authblk}
+\usepackage{etoolbox}
+\usepackage{changepage}
+\usepackage{xpatch}
+\usepackage{threeparttable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{marvosym}
+\usepackage{indentfirst}
+\usepackage[title]{appendix}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\graphicspath{ {figures/} }
+\usepackage{epigraph}
+\usepackage{titling}
+\usepackage{blindtext}
+\usepackage{float}
+\usepackage{amsmath,amssymb}
+\usepackage{pdflscape}
+\usepackage{multirow}
+\usepackage{adjustbox}
+\usepackage{xcolor}
+\usepackage[table]{xcolor}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{chngcntr}
+
+% --------------------------------------------------
+% Font & spacing
+% --------------------------------------------------
+\renewcommand{\familydefault}{\rmdefault}
+\onehalfspacing
+
+% --------------------------------------------------
+% Header / footer
+% --------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[R]{\thepage}
+
+% Title page style (no headers or footers)
+\fancypagestyle{titlepage}{
+  \fancyhf{}
+}
+
+% Horizontal rule after title
+\newcommand{\HRule}{\noindent\rule{\linewidth}{0.5pt}}
+
+% Abstract envi
+\newenvironment{myabstract}
+  {%
+    \begin{adjustwidth}{4em}{0em} % left indent = 2em, right indent = 0em
+    \noindent\textbf{Abstract}\hspace{1em}%
+  }
+  {%
+    \end{adjustwidth}
+    \par
+  }
+
+% Table styling
+\definecolor{primarycell}{RGB}{255,235,205}
+  
+% Author footnote numbers
+\renewcommand\Authsep{, }
+\renewcommand\Authands{, }
+\renewcommand\Affilfont{\small}
+
+% Define section
+% --- Section heading formatting ---
+% Left-aligned, sans-serif, bold, smaller than current
+\titleformat{\section}
+  {\sffamily\bfseries\Large\raggedright} % font + size + alignment
+  {}      % no numbering prefix (starred sections will still be unnumbered)
+  {0pt}
+  {}
+
+% Subsection (already left aligned; just convert to sans-serif and adjust size)
+\titleformat{\subsection}
+  {\sffamily\bfseries\large\raggedright}
+  {}
+  {0pt}
+  {}
+
+% Subsubsection (optional: match style)
+\titleformat{\subsubsection}
+  {\sffamily\bfseries\normalsize\raggedright}
+  {}
+  {0pt}
+  {}
+
+            
+% Bibliography
+\usepackage[colorlinks,
+            citecolor=blue,   % citations
+            linkcolor=blue,   % internal links (e.g. toc)
+            urlcolor=blue]{hyperref}
+\usepackage{xurl}
+
+\usepackage[
+  backend=biber,        % use biber
+  style=authoryear,     % author–year style
+  natbib=true,          % allow \citep / \citet if you like
+  hyperref=true,        % turn on hyperref integration
+  maxcitenames=3,       % in-text: show up to 3 names
+  mincitenames=1,       % if more than 3 authors, truncate to 1 + “et al.”
+  maxbibnames=99        % in bibliography: show up to 99 authors (i.e. effectively “all”)
+]{biblatex}
+% let biblatex break long URLs/DOIs at more points
+\setcounter{biburlnumpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
+\setcounter{biburllcpenalty}{9000}
+
+% make sure multiple keys in one \parencite are separated with “; ”
+\DeclareDelimFormat{multicitedelim}{\addsemicolon\space}
+% remove the comma between author and year
+\DeclareDelimFormat{nameyeardelim}{\addspace}
+% Get rid of "In: " from bib
+\renewbibmacro*{in:}{}
+
+% Print only date, not months.
+\AtEveryBibitem{%
+  \clearfield{month}%
+  \clearfield{day}%
+}
+
+  
+\addbibresource{CESBib.bib}
+
+
+\begin{document}
+
+% ==================================================
+% TITLE PAGE
+% ==================================================
+\begin{titlepage}
+\thispagestyle{titlepage}
+
+\begin{center}
+  \textbf{\Large The Accuracy of Matched Sample Surveys:}\\[0em]
+  \textbf{\Large Evidence from the Cooperative Election Study}
+\end{center}
+
+\vspace{-1.2em}
+\HRule
+\vspace{1.2em}
+
+\begin{flushleft}
+  {\bfseries
+    Jefferson Pruett\textsuperscript{1},
+    Gabriel Li\textsuperscript{2},
+    Jon Krosnick\textsuperscript{3,*}
+  }\\[0.8em]
+
+  {\footnotesize
+    \textsuperscript{1}Department of Economics, Stanford University, Stanford, CA, US\\
+    \textsuperscript{2}Assistant Professor, Department of Communication Studies, Chapman University, Orange, CA, US\\
+    \textsuperscript{3}Professor, Departments of Communication, Political Science, Psychology, and Environmental Communication, Stanford University, Stanford, CA, US
+  }
+\end{flushleft}
+
+\vfill
+
+\end{titlepage}
+
+% ==================================================
+% MAIN MANUSCRIPT
+% ==================================================
+
+\setcounter{page}{1}
+\pagestyle{fancy}
+
+\begin{myabstract}
+Nonprobability samples have grown in popularity among survey researchers, with proponents claiming that they can deliver accurate estimates at lower cost than probability samples. This growth has occurred despite accumulating evidence that nonprobability samples are generally less accurate. A notable exception appears in a small number of evaluations of YouGov, particularly a Pew study, which found YouGov to yield more accurate measurements than other nonprobability sample providers. Because YouGov uniquely relies on sample matching, perhaps its accuracy is attributable to that approach. This paper presents the largest evaluation of YouGov data to date, assessing accuracy across nine waves of the Cooperative Election Study, from 2006 to 2022. Across 3,927 demographic estimates, 908 turnout and voting-method estimates, and 4,705 candidate-choice estimates, the CES manifested substantial error, often quite large, even when using YouGov’s proprietary weights. The level of inaccuracy remained constant over the 17-year period. Without those weights, accuracy was considerably lower, meaning that sample matching alone yielded less accurate measurements. Conventional demographic post-stratification did not improve accuracy for variables outside the weights and slightly increased error, consistent with prior studies.
+
+\end{myabstract}
+
+\vspace{1em}
+
+% Optional footnote
+% \footnotetext[1]{*Corresponding author: Jon Krosnick, Department of Communication, Stanford University, 432 McClatchy Hall, Stanford, CA 94305; \texttt{krosnick@stanford.edu}.}
+
+Following eye-opening embarrassments for pollsters a century ago stemming from nonprobability sampling, scholars have relied on random sampling for decades to produce highly accurate measurements. Yet with the emergence of the internet in 2000, nonprobability sampling reemerged as a dominant methodology. Some firms implemented probability sampling for online questionnaire administration, improving efficiency in data collection and processing. But other firms have collected data more inexpensively by abandoning probability sampling. These providers have routinely claimed to be implementing sophisticated methods to yield remarkably accurate measurements.
+
+However, many studies have shown that nonprobability
+samples yielded less accurate measurements than probability samples (see \cite{cornesse_review_2020} for a review of 25 studies) and in some cases, strikingly less accurate
+\parencite[e.g.,][]{macinnis_accuracy_2018, yeager_comparing_2011}. Nonetheless, some scholars
+and survey firms have argued that advanced nonprobability methods can yield
+accurate estimates \parencite{ansolabehere_cooperative_2013, crampton_about_2007}, raising the
+possibility that many prior evaluations did not reflect the performance of more
+sophisticated vendors \parencite[see][]{baker_report_2013}.
+
+The present study is a large-scale evaluation of the
+accuracy of YouGov’s nonprobability sample surveys, which have used the method
+of sample matching \parencite{rivers_sampling_2007}. Sample matching was used initially for causal
+inference; matched control groups were constructed
+to estimate treatment effects \parencite{stuart_matching_2010}. Applied to internet surveys, this
+approach selects a sample from among nonrandom online panel members to
+approximate characteristics of a probability sample in terms of a small set of
+variables, usually demographics \parencite{rivers_sample_2006}. \textcite{noauthor_yougov_nodate} has claimed to be
+one of the most quoted pollsters and market research firms in the world. The company
+operates in more than 55 countries and is frequently cited by global media.
+
+We focus on nine Cooperative Election Study (CES) surveys conducted over a 17-year period by YouGov, all of which make use of sample matching. The CES, initially called the Cooperative Congressional Election Study, is the product of a collaboration of universities that contributed funding, supplemented by support from the National Science Foundation. YouGov collected data from large samples before and after each national election in the U.S. since 2006. CES data have been widely used across political science, cited over 4,700 times in scholarly publications as of August 2026.\footnote{Based on a Google Scholar full-text search for "Cooperative Congressional Election Study" OR "Cooperative Election Study" that returned approximately 4,770 works}
+
+We begin below by reviewing theoretical views of probability and non-probability sampling, then briefly describe the history of these methods’ use in American survey research during the last century. Building on the methodologies employed in past comparative studies of survey data accuracy, we then report assessments of the accuracy of CES measurements, broken down to isolate the respective contributions of sample matching and standard post-stratification weighting.
+
+As we will see, this distinction is critical.
+
+% We address these issues using nine Cooperative Election Study (CES) surveys collected over 17 years. We first report accuracy using YouGov’s proprietary weights, focusing on variables not used in weight construction, and then evaluate accuracy without post-survey weighting and with newly constructed calibration weights, isolating the accuracy gains attributable to sample matching versus weighting. The scale and matched-sample design of the CES allow us to assess whether sample matching—and YouGov specifically—constitutes an outlier among nonprobability survey methods and vendors. Throughout, we distinguish primary variables, which were used to generate the CES weights and so are constrained to population levels, from secondary variables, which were not. This distinction is central to interpreting CES accuracy and may help explain the differnece between prior valuations and ours.
+
+\section*{Nonprobability Sampling and the Rise of YouGov}
+
+Probability sampling selects units at random with known inclusion probabilities, with known probabilities of selection, ideally so that every member of a population has a known non-zero probability of becoming part of the intended sample. In theory, if members of such a sample are invited to complete a questionnaire, the result should closely resemble what would be obtained if all members of the population had done so.  
+
+% These inferential properties made probability sampling the foundation of major U.S. survey programs, including the Census Bureau’s Current Population Survey (CPS) and American Community Survey (ACS), the Bureau of Labor Statistics’ Consumer Expenditure Surveys, and the CDC’s National Health Interview Survey. After a series of high-profile polling failures in the 1930s and 1940s attributed to nonprobability designs—most notably the Gallup, Crossley, and Roper error in 1948 \parencite{mosteller_pre_election_1949}—probability sampling became the standard for high-quality social scientific research \parencite{cornesse_review_2020}.
+
+When large-scale survey research began in the U.S., however, probability sampling was not the norm. Well-known researchers, including Gallup, Crossley, and Roper, disseminated results of surveys of non-probability samples, to great acclaim \parencite{crossley_straw_1937}. Only after this methodology yielded embarrassing inaccuracy, especially in 1948 (see \cite{mosteller_pre_election_1949}), did probability sampling become the standard for high-quality social scientific research \parencite{cornesse_review_2020}. This methodology has been the foundation of major U.S. survey programs for decades, including the Census Bureau’s Current Population Survey (CPS) and American Community Survey (ACS), the Bureau of Labor Statistics’ Consumer Expenditure Surveys, the CDC’s National Health Interview Survey, and others. 
+
+With the arrival of the internet, enterprising survey researchers drew probability samples and invited people to complete online questionnaires, increasing efficiency (compared to face-to-face and telephone interviewing) and affording the privacy of self-completion. But firms soon recognized that opt-in nonprobability panels offered even greater speed and cost savings. Although some observers dismissed non-probability samples as “quick and dirty” tools \parencite{bethlehem_selection_2010}, their low per-respondent costs made such web surveys attractive to researchers \parencite{wright_researching_2017}.
+
+As nonprobability samples gained popularity, a substantial benchmarking literature emerged comparing them with high-quality probability samples across domains including voting behavior, consumption, sexual attitudes, and demographics. These studies generally found that probability samples yielded more accurate estimates, whereas nonprobability samples were less accurate and more variable in their accuracy \parencite[e.g.,][]{chang_national_2009, dutwin_apples_2017, erens_nonprobability_2014, macinnis_accuracy_2018, sturgis_assessment_2018, szolnoki_online_2013, yeager_comparing_2011}. Synthesizing evidence from 25 studies, \textcite{cornesse_review_2020} concluded that ``even in the age of declining response rates, accuracy in probability sample surveys is generally higher than in nonprobability sample surveys'' (p.~22).
+
+Researchers began to ask whether post-survey adjustment—especially weighting—can compensate for selection bias in opt-in panels and yield accurate population estimates. A 2013 AAPOR review concluded that such adjustments sometimes reduced bias but produced inconsistent results across outcomes and did not reliably eliminate coverage, nonresponse, and selection biases \parencite{baker_report_2013}. Methods have evolved, though, and some studies have suggested that sophisticated techniques can reduce bias. For example, \textcite{wang_forecasting_2015} used multilevel regression and post-stratification to obtain accurate 2012 presidential-election estimates from a highly unrepresentative Xbox sample. In a hybrid design combining probability and nonprobability samples, \textcite{dever_combining_2018} found that restricting propensity-score adjustment of the nonprobability sample to the region of common support reduced bias for some estimates, though not all. But other recent studies reach the opposite conclusion. \textcite{dutwin_apples_2017} found that propensity weighting reduced bias in an opt-in panel but was less effective than simple raking, and adjusted nonprobability samples remained more biased than low-response-rate probability samples. \textcite{yeager_comparing_2011} showed that  demographic weighting improved the accuracy of some non-probability estimates but did not do so for most. Likewise, \textcite{macinnis_accuracy_2018} reported that demographic post-stratification consistently benefited probability samples but rarely improved nonprobability samples. Taken together, this evidence is not reassuring that conventional post-stratification and other post-survey adjustments can solve the inaccuracy of non-probability samples. 
+
+Sample size is another proposed remedy for the error in nonprobability samples. In probability samples, increasing $n$ reduces sampling variance at a well-defined $1/\sqrt{N}$ rate. In nonprobability samples, a larger $n$ does not necessarily reduce selection bias, coverage bias, bogus-response bias, or adjustment-model error \parencite{elliott_inference_2017, mercer_theory_2017}. \textcite{meng_statistical_2018} formalized this concern as the ``big data paradox.'' Pooling the roughly fifty daily polls fielded before the 2016 presidential election---an estimated one percent of the eligible voter population, or about 2.3 million responses---he showed that a vote-choice estimate drawn from that pool would carry the same mean squared error as a simple random sample of roughly 400. Error that is sampling noise should shrink as respondent counts grow; error that reflects who is in the sample should persist regardless of how many respondents are added. Since the CES estimates quantities for states and districts whose respondent counts vary within and across waves, we can assess and extrapolate if sample matching exhibits scaling dynamics closer to that of a probability sample or other nonprobability sampling methods. 
+
+A handful of studies have examined error in sample matched surveys, specifically, and have found that matching alone provides little or no consistent advantage over conventional post-stratification or raking \parencite{brick_weighting_2015, buskirk_probability_2015, mercer_for_2018}. Evidence from specialized populations similarly indicates that matching can improve sample comparability without necessarily eliminating selection bias \parencite{disogra_matching_2015}.
+
+But not all nonprobability survey designs are equivalent. YouGov emerged on the scene using a different method. They drew early attention after outperforming traditional telephone pollsters in several U.K. parliamentary elections, including the 2001 and 2005 contests \parencite{coleman_online_2001, noauthor_track_2005}. Following its 2007 acquisition of Polimetrix, YouGov entered the U.S. market and adopted Polimetrix’s sample matching methodology. Ahead of the 2008 presidential election, the firm emphasized its ability to deliver rapid, low-cost survey estimates while maintaining accuracy, positioning sample matching as a potential solution to the limitations of opt-in panels \parencite{crampton_about_2007, bradshaw_yougov_2008}. 
+
+This accuracy claim received notable support in a 2016 Pew Research Center evaluation. In a head-to-head comparison of eight nonprobability vendors and a probability sample fielded on the same questionnaire, YouGov outperformed all other opt-in samples and also exceeded the accuracy of Pew’s probability sample \parencite{kennedy_evaluating_2016}. YouGov exhibited the lowest measurement error across 20 benchmark variables and performed especially well among Black and Hispanic respondents, populations for which survey error is typically higher \parencite{hopkins_getting_2024}. Earlier studies likewise found YouGov samples to produce accurate estimates \parencite{ansolabehere_cooperative_2013, ansolabehere_does_2014, rivers_inference_2009, vavreck_2006_2008}. Therefore, perhaps sample matching represents a substantive advance in nonprobability survey design.
+
+However, these past evaluations did not assess the independent impacts of matching and weighting. Each study examined data where both matching and weighting had been done. The confounding is most problematic for the offices used to demonstrate accuracy. Since 2014, the CES has incorporated statewide U.S. Senate and gubernatorial election outcomes in its weights, mechanically minimizing error for precisely the races used to demonstrate accuracy. Another limitation of past studies is reliance on a single survey year, which can mislead given the higher variance of nonprobability samples \parencite{macinnis_accuracy_2018}. These limitations motivate a broader, systematic evaluation of YouGov's accuracy and whether conventional demographic post-stratification improves accuracy in nonprobability matched samples independent of YouGov's weighting choices. The investigation described in this paper presents the most comprehensive such assessment to date, using multiple election-year surveys administered by YouGov for the Cooperative Election Study.
+
+% Subsequent work has evaluated YouGov using election outcomes. \textcite{ansolabehere_cooperative_2013} compared CES vote intentions to state-level election returns from 2006 to 2010, reporting RMSEs between 3.4\% and 4.0 percent across statewide offices. Similarly, \textcite{rivers_inference_2009} found that a CES subsample from 2008 outperformed contemporaneous probability and nonprobability surveys in estimating state-level presidential vote shares.
+
+% (excluded pre jon edit)
+% \textcite{rivers_inference_2009} compared a 3,000-respondent CES subsample for the 2008 U.S. presidential election to the ANES Internet Panel, the USA Today–Gallup final pre-election poll, and a Pew Research Center poll, finding that CES had the lowest standardized RMSE (0.06) on state-level estimated party vote share, compared to the ANES panel (0.10), Gallup (0.10), and Pew (0.07). 
+
+% YouGov’s accuracy has not been uniformly high. A 2023 YouGov poll reported unusually high rates of Holocaust denial and opposition to legal abortion among young adults, estimates that diverged sharply from those obtained using probability samples. A replication using a probability-based design attributed these discrepancies to a high prevalence of inattentive or “bogus” respondents in YouGov’s panel \parencite{mercer_online_2024}.
+
+ 
+
+% In the early 2000s, prior to its acquisition of Polimetrix, YouGov built its reputation by conducting election polls in the United Kingdom. Twyman (2008) compares the average error of YouGov to other established agencies in predicting the number of seats allocated to each major party across various parliamentary elections. In the 2004 European Parliament election and the 2005 British general election, YouGov performs equivalently to other companies, or marginally better by just about half a percentage point in average error. However, in the 2007 Scottish Parliament election, YouGov's results were slightly less accurate than two other polling agencies by 0.8 and 1.5 percentage points, respectively. Until YouGov, opt-in web surveys were viewed with much skepticism by pollsters and academics. Robert Worcester even called open-access internet surveys "voodoo" polls in \textit{The Independent} in 1985. But these results were viewed favorably, especially given the substantially lower per-respondent cost that YouGov was able to offer. 
+
+\section*{The Cooperative Election Study}
+The CES describes its survey samples as representative of U.S. citizens ages 18 and older. The questionnaires have measured an array of variables, including political opinions, demographics, and candidate choices in federal and state elections, including for President, U.S. Senate and House, Governor, Attorney General, Secretary of State, State Senator, and State Representative. Table~\ref{tab:states_respondents_by_office} reports, for each office and year, the number of states with CES respondents and the average number of respondents per state. YouGov has conducted CES data collection in collaboration with a consortium of university and organizational research teams.
+
+Fielded in every federal election year since 2006, the CES involved two online waves of data collection each year: a pre-election survey administered before Election Day and a post-election survey administered afterward.\footnote{This paper focuses on surveys done in federal election years. The CES has also collected data in other, odd-numbered years using a different design, and we do not consider those data.} The exact field dates varied across years (see Table~\ref{tab:sample_description}). All respondents who completed the pre-election wave were re-invited to the post-election wave.
+
+Table~\ref{tab:sample_description} reports what the CES guides label AAPOR Response Rate 1, which divides completed interviews by all sampled cases not known to be ineligible. We label it instead as a completion rate, following AAPOR's standard definitions for survey outcomes \parencite[78]{aapor2023}, which note that the population of interest for an opt-in panel is not well defined. The number of people exposed to a recruitment invitation is unknown, and the narrower quantity that can be measured---how many invited panel members completed a given survey---should not be called a response rate, because unlike in a probability sample a high value does not imply reduced risk of nonresponse bias. Completion rates ranged from 13.9 percent in 2016 to 61.2 percent in 2020, with no monotonic trend, largely because the reporting base changed between years: the 2014 and 2016 figures pooled YouGov panelists with respondents from external vendors, whose completion rates were far lower (41.9 versus 8.2 percent in 2016), while the 2018 figure covered YouGov panelists only. The participation rate from the general population was unobserved and presumably far lower.
+
+\input{output/states_respondents_by_office}
+\input{output/sample_description}
+
+\subsection*{CES Sample Matching and Weighting Procedure}
+Sample matching is possible when a large but unrepresentative ``reservoir'' of respondents, typically members of an opt-in survey panel, is available \parencite{cochran_sampling_1977}. A \textit{target sample} is drawn randomly from a large probability sample, and for each person in the target sample, a ``matching'' individual in the reservoir is selected, based on shared characteristics. When the reservoir is sufficiently large and diverse, and the number of variables used to identify matches is large, the matched sample can have joint distributions of the matching variables similar to those in the target sample. \textcite{rivers_sample_2006} suggested that a matched sample can thus effectively be treated as a random sample.
+
+The CES sample was produced in five stages. Table~\ref{tab:ces_terms} defines the terms used below, and Table~\ref{tab:ces_stages} reports the variables used at each stage in each year. YouGov first constructed a synthetic sampling frame from the American Community Survey (ACS) and drew a stratified target sample from it. Panelists from YouGov and other opt-in providers were then invited to complete the questionnaire. From among those who did, a matching function selected the respondents closest to the target cases, termed the \textit{matched sample}. Finally, the matched sample was weighted in two steps: first to the frame, by propensity score weighting or entropy balancing, and then by post-stratification to demographic and political margins. 
+
+\input{output/ces_stage_rows}
+
+% In the case of the CES, the matching function relied on overlapping auxiliary information in both the sampling frame and the reservoir, generally demographic variables and sometimes political attitudes and religiosity. Panelists from the reservoir were invited to complete the survey. From the set of respondents who completed the questionnaire, the matching function identified those whose characteristics most closely aligned with the target sample. 
+
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.35}
+\caption{CES Sample Matching Terms}
+\label{tab:ces_terms}
+\begin{tabular}{p{4cm} p{10cm}}
+\toprule
+\textbf{Term} & \textbf{Definition} \\
+\midrule
+Population of Interest &
+All U.S. citizens ages 18 and older. The population about which the CES seeks to draw conclusions. \\[8pt]
+
+Target Sample &
+A stratified random sample drawn from the ACS. Serves as the probability sample that the matched sample attempts to replicate. \\[8pt]
+
+Panel Reservoir &
+The full set of panelists from YouGov and other potential respondents who have agreed to take surveys with other companies. \\[8pt]
+
+Invited \newline Respondents &
+Potential respondents selected for invitation to complete the pre-election questionnaire, typically chosen using a cross-classification on demographic variables.  \\[8pt]
+
+Participating \newline Respondents &
+People who completed the pre-election questionnaire (or both the pre-election and post-election questionnaires).  \\[8pt]
+
+Matched Sample &
+The subset of participating respondents whose characteristics most closely matched the target sample according to YouGov’s matching function.  \\[8pt]
+
+Frame-Weighted \newline Sample &
+The matched sample after weighting to the sampling frame, by propensity score weighting (2008--2012) or entropy balancing (2014--2022). \\[8pt]
+
+Final Weighted \newline Sample &
+The frame-weighted sample after post-stratification to demographic and political margins, trimming, and normalization. These are the weights released with the CES. \\[8pt]
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{The Sampling Frame and Target Sample}
+
+The 2006 CES documentation does not describe how its frame was constructed, but 2008 onward, CES documentation describes the sampling frame as a stratified sample drawn from the full sample of the prior year's ACS, with records selected within strata by weighted sampling with replacement. The variables defining these strata are not named. YouGov then imputed political and religious variables onto each frame record, using models developed from the CPS Voting Supplement, the National Election Pool, the Pew Religious Landscape Survey, and prior CES data collections; the imputation models have not been publicly disclosed. 
+
+The target sample was then drawn from the frame. From 2008 through 2016, the guides describe stratification by age, race, gender, and education, with simple random sampling within strata; voter registration status was added as a stratifying variable in 2014 and 2016. The 2006 target sample was stratified on registration status, state size, and congressional district competitiveness, as well as age, race, and gender. The 2018--2022 guides continue to describe the ACS-based frame but not the draw of the target sample from it, so the target strata for those years are unknown (Table~\ref{tab:ces_stages}).
+
+\subsubsection*{Sourcing Panel Members}
+YouGov maintains a large opt-in, nonprobability panel recruited in a variety of ways, including via standard advertising and strategic partnerships with websites. At registration, new panelists provided socio-demographic information. Panelists have then been invited to complete questionnaires in exchange for points redeemable for small monetary rewards at selected vendors \parencite{yougov_methodology}.
+
+For the CES, respondents were drawn both from YouGov's panel and from potential respondents supplied by other companies (Table~\ref{tab:externalproviders}). In 2016, for example, the matched sample was selected from among 106,382 people who completed questionnaires, roughly half of whom were YouGov panelists. The CES guides do not describe how panelists were selected to receive invitations.\footnote{An inquiry about the selection process has been made but has not yet been answered.} \textcite{rivers_sample_2006} describes the general procedure YouGov developed for this purpose, in which invitations are allocated using a cross-classification on age, gender, race, education, region, and sample source, with the number of invitations per target case set from estimated completion probabilities so as to yield at least one completed interview per case. Whether the CES followed this procedure in a given year is not documented.
+
+\begin{table}[!htbp] 
+  \centering
+  \begin{threeparttable}
+    \caption{Non-YouGov Panelist Providers}
+    \label{tab:externalproviders}
+    \begin{tabular}{l>{\raggedright\arraybackslash}p{10cm}} % Adjust the width as needed
+      \toprule
+      Year & External Providers \\ 
+      \midrule
+      2006 & None \\ 
+      2008 & E-Rewards, Western Wats \\ 
+      2010 & E-Rewards, Western Wats \\ 
+      2012 & E-Rewards, Western Wats \\ 
+      2014 & MyPoints, Research Now, Survey Sampling International \\ 
+      2016 & MyPoints, Research Now, Survey Sampling International, Global Market Insights \\ 
+      2018 & Dynata, Prodege, Critical Mix \\ 
+      2020 & Dynata, Prodege, Critical Mix \\ 
+      2022 & Dynata, Prodege, Disqo, Generation Lab  \\ 
+      \bottomrule
+    \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+\subsubsection*{Matching}
+The pool of completed pre-election questionnaires exceeded the desired sample size. From it, the matched sample was constructed by selecting the $N$ respondents who most closely resembled the $N$ cases in the target sample \parencite{rivers_sampling_2007}. Similarity was measured with a weighted distance metric rather than by exact or propensity score matching \parencite{stuart_matching_2010}. The distance between target case $t$ and respondent $i$ was
+
+\[
+D(t,i) = \sum_{k=1}^{K} w_{k} \, d_{k}(t_{k}, i_{k}),
+\]
+
+where $d_{k}$ measures dissimilarity on matching variable $k$ and $w_{k}$ sets that variable's importance, with larger weights demanding closer agreement. For unordered categorical variables, YouGov specified distance matrices between pairs of categories.
+ 
+The guides for 2008 through 2016 print the matching function in full. In these years, matching drew on political as well as demographic information; the variables generally included gender, age, race, education, political interest, employment status, church attendance, and party identification, with small variations across years. From 2018, the guides describe the function in prose rather than printing it, and the matching variables are demographic only.
+
+Matching brings the joint distribution of the matching variables in the matched sample close to that of the target sample, but it does not constrain any margin explicitly. Remaining imbalance is addressed by the two weighting steps.
+
+\subsubsection*{Weighting, Step 1: Weighting to the Frame}
+The first weighting step adjusted the matched sample toward the sampling frame. From 2008 to 2012, this was done by propensity score weighting. A logistic regression predicted membership in the frame, as against the matched sample, from age, education, gender, and turnout in the previous election; for frame records, turnout was the CPS-reported value attached to the synthetic record. Matched respondents were grouped into deciles of the estimated propensity score and weighted to the frame's distribution across those deciles. The 2006 guide does not describe a weighting procedure.
+ 
+From 2014 through 2022, the matched sample was weighted to the frame by entropy balancing \parencite{hainmueller_entropy_2012}. This method assigns each matched respondent a weight such that the weighted sample reproduces specified moments of the frame while departing as little as possible from uniform weights. In 2014 and 2016, the balancing conditions included political as well as demographic variables. In 2018 and 2020 they were purely demographic, and in 2022 presidential vote was added. 
+
+
+\subsubsection*{Weighting, Step 2: Post-Stratification}
+The frame-weighted sample was then post-stratified. In every documented year, the adjustment included age, gender, education, and race. Voter registration status was added in 2014, and born-again status and prior presidential vote were added in 2018. Weights for the common content were additionally adjusted across states and, from 2014, to the outcomes of that year's gubernatorial and Senate elections. Where these outcomes also serve as benchmarks, their agreement with weighted CES estimates partly reflects the weighting itself, a point we return to in the results. The guides describe this step as post-stratification without specifying the algorithm. Weights were trimmed at 7 in the propensity-weighting years and at 15 from 2014 onward, and final weights were normalized to the sample size.
+
+\section{Benchmarks}
+\subsection{Demographics}
+Population targets were drawn primarily from  Current Population Survey (CPS) data provided by IPUMS \parencite{flood_ipums_2024}. The CPS is a monthly probability sample survey conducted by the U.S. Census Bureau since 1940. Sampled households have been interviewed once a month for four months, then given four months off, and again once a month for four additional months. Initial interviews were conducted in person, and subsequent interviews were conducted in person or by telephone. Interviewers attempted to collect data from all household members and accepted proxy reports from one household member about another household member when necessary. Household response rates for the CPS between 2006 and 2022 ranged from 71 percent to 92 percent \parencite{uscensus_cpsnov2006, uscensus_cpsnov2022}. CPS data are weighted to account for sampling design, nonresponse, and undercoverage, using population controls derived from the decennial census, which are updated annually.   
+
+% Population targets were primarily drawn from the CPS \parencite{flood_ipums_2024}, generally considered one of the most reliable sources of population statistics \parencite{hur_coding_2013}. The CPS is a probability monthly survey conducted by the U.S. Census Bureau. Each month, approximately 60,000 households are interviewed. CPS data are weighted using a multistage stratified sampling design that adjusts for undercoverage, nonresponse, and demographic characteristics. The weighting process incorporates population controls that are projected from the most recent decennial census and are updated annually. The survey employs a rotation scheme where each household is interviewed for four consecutive months, then dropped from the sample for eight months before potentially being re-interviewed. The interviewing process starts in person, and can be transitioned to telephone after a few months of interviewing. The CPS uses proxy reporting, where one person speaks on behalf of the whole household. 
+
+% Although the response rate has slowly declined over the past two decades, it still remains high at over 70\% (see Table \ref{tab:cesandcps} for annual sample sizes and response rates).
+
+
+\subsection*{Election Returns and Turnout}
+
+State and federal election returns were compiled for all 50 states and the District of Columbia from 2006 to 2022. Presidential election returns were obtained from the MIT Election Data and Science Lab \parencite{mit_election_data_and_science_lab_us_2017-1}; U.S. House and Senate returns were obtained from the Federal Election Commission; gubernatorial returns were obtained from CQ Press; and returns for other statewide offices were obtained from Ballotpedia. Voter turnout data were drawn from the University of Florida Election Lab \parencite{mcdonald_voter_nodate}. Any remaining data were obtained through correspondence with state election offices.
+
+% \indent Comprehensive election returns at both the state and federal levels were compiled from a variety of reputable sources for all 50 states and the District of Columbia for the years 2006 to 2022. Returns for Presidential elections were obtained from open source datasets compiled by the \textcite{mit_election_data_and_science_lab_us_2017-1}. Returns for the U.S. Senate and House of Representatives were sourced from the Federal Election Commission.\footnote{Available at\\ \href{https://www.fec.gov/introduction-campaign-finance/election-results-and-voting-information/}{https://www.fec.gov/introduction-campaign-finance/election-results-and-voting-information/}} Gubernatorial returns were acquired from CQ Press.\footnote{Available with subscription at \href{https://library.cqpress.com/elections/advsearch/election-results.php}{https://library.cqpress.com/elections/advsearch/election-results.php}} Returns for state senate, state representative, secretary of state, and attorney general elections were purchased from Ballotpedia. Voter turnout was compiled by the University of Florida Election Lab \parencite{uf_electionlab_turnout}. Any remaining election results were collected manually from official state websites or the by calling the relevant secretary of state offices.
+
+
+\section{Methods}
+\subsection*{Measuring Error}
+CES error was assessed by comparing survey estimates to external benchmarks. For demographics, turnout, and voting method, error was computed as the difference between the CES-estimated share of the modal category and the benchmark share of that category, where the modal category is the one with the largest share in the benchmark. For example, because women make up the largest share of the adult population, we compared the CES-estimated female share to the benchmark female share.
+
+With the exception of U.S. House elections, the unit of analysis is the state. For each statewide race, we compared the CES estimate of vote share in the state to the certified share from that state's official election returns. For U.S. House contests, each respondent was assigned to a congressional district based on address, and error was computed at the district level.
+
+Vote choice was measured analogously: we compared the CES-estimated share of the vote won by the modal candidate—the candidate who received the most votes in the actual election—to that candidate's certified vote share in the official returns. Prior CES evaluations have measured vote-choice accuracy using Democratic vote share. We instead use the vote share of a specific candidate wherever possible.
+
+The wording of the CES vote-choice question changed over time. In earlier years respondents were asked which \textit{party} they voted for, and in later years which \textit{candidate}, with party labels provided alongside candidate names. In reviewing election returns, we identified numerous cases in which party-level reporting could not be cleanly mapped to survey responses, including contests with multiple candidates sharing a party label, candidates appearing on multiple party lines, ballots without party labels, and candidates switching party affiliation between the primary and general election. Thus, candidate-level comparison avoids mismeasurement that party-level aggregation can introduce, and we prefer candidate-level returns whenever possible and relied on party-level comparisons only when candidate-level information was unavailable. Candidate vote choice was available for all presidential contests in all years, for U.S. Senate and House elections beginning in 2008, for all gubernatorial elections beginning in 2010, and for attorney general and secretary of state races beginning in 2018. State legislative contests were evaluated using party vote share in all years.
+
+Below, we report the root mean squared error (RMSE):
+
+\[
+\text{RMSE}_{v,w} = 
+\sqrt{\frac{1}{N} \sum_{i=1}^{N} 
+\left( \widehat{P}_{\text{CES},\, i,\, w} - P_{\text{true},\, i} \right)^{2}},
+\]
+ 
+where \(v\) indexes the benchmark variable being evaluated (e.g., the proportion of college graduates, Donald Trump’s vote share, etc.); 
+\(\widehat{P}_{\text{CES},i,w}\) is the CES estimate for a variable \(v\) in state (or, for congressional races, district) \(i\) under weighting scheme \(w\); 
+\(P_{\text{true},i}\) is the corresponding benchmark value; 
+and \(N\) is the number of distinct benchmark comparisons included in the calculation (i.e., the number of errors). Table \ref{tab:observation_counts} lists the number of error observations for each variable and year.
+
+\input{output/observation_counts.tex}
+RMSE penalizes large deviations more heavily than small ones, making it a useful summary measure of survey accuracy: surveys that are consistently close to benchmark values across states have lower RMSE than those with similar average accuracy but occasional large errors. Following \textcite{macinnis_accuracy_2018} and \textcite{yeager_comparing_2011}, we report error separately for variables used to construct survey weights, since these are explicitly constrained to match population benchmarks. Accordingly, we distinguish between \textit{primary} variables, those used in either step of the CES weighting (weighting to the frame or post-stratification), and \textit{secondary} variables, which were not. Because the CES weighting scheme changed across waves, status is assigned separately for each variable in each year (see Table~\ref{tab:ces_stages}). Beginning in 2014, statewide U.S. Senate and gubernatorial outcomes were used in constructing the weights, so estimates for these offices in those years are not independent tests of accuracy.
+
+\subsection{Weighting Scenarios}
+Comparing CES accuracy across weighting scenarios allows us to separate the contributions of sample matching and post-survey adjustment. Because sample matching is intended to approximate a random sample, error in the unweighted CES reflects the performance of matching alone, while differences between weighted and unweighted estimates capture the incremental accuracy provided by weighting.
+
+CES weights reflect design choices specific to YouGov, including the incorporation of known U.S. Senate and gubernatorial outcomes. To assess whether conventional demographic post-stratification improves accuracy in nonprobability matched samples independent of these choices, we evaluated accuracy under an alternative weighting scheme applied consistently across years. 
+
+To this end, we generated an additional set of weights designed to minimize divergence between the CES and a set of demographic and turnout benchmarks drawn from the CPS and administrative sources. Only CES variables with strictly comparable CPS counterparts—identical or fully collapsible response categories measuring the same underlying construct—were eligible for inclusion in the weighting process. Notably, race was excluded because CPS race categories could not be exhaustively mapped to CES categories. As a result, although 29 CES variables had conceptual CPS counterparts across years, only 9–11 per year were used for weight generation (Table \ref{tab:vars_used_by_anesrake}). 
+
+\input{output/vars_used_by_anesrake}
+
+Weights were then constructed following the procedures proposed by \textcite{debell_computing_2009} using anesrake \parencite{pasek_anesrake_2018}. In order from the most to least discrepant category, categories whose weighted CES proportions differed from CPS benchmarks by at least 5 percent were updated sequentially. At each step, current weights were multiplied by the ratio of the population proportion to the weighted sample proportion. Weights were capped at 5 and re-centered to maintain a mean of 1. Iteration continued until no benchmark category exceeded the 5 percent tolerance or until convergence. 
+
+\section{Results}\label{sec:results}
+We first document the error in CES estimates produced by sample matching alone. We then ask how much the CES weights reduce that error, and whether the reduction depends on how a variable entered the design: through matching, through weighting, or through neither. Next, we ask whether accuracy changed across the seventeen-year period when data were collected, and we document the distribution of errors to show how often CES errors were sizable. We then ask whether increasing sample size is associated with decreased error, as statistical theory anticipates for probability samples. Finally, we ask whether error is smaller in blow-out races than in knife-edge races, and whether conventionally computed post-stratification weights perform differently than the weights YouGov provides with CES data.
+
+\subsection{Error with Matching Only}
+\input{output/rmse_matching_only}
+Table~\ref{tab:rmse_matching_only} reports CES accuracy across all available measures using YouGov's matched sample, but \textit{not} the CES weights. Pooling RMSE estimates across the nine survey waves yields 9,540 individual error observations. The average RMSE across waves was 9.4 percentage points, ranging from 7.2 in 2008 to 11.1 in 2022; excluding turnout, the average was 7.6. Accuracy varied by variable class. Demographic variables had the lowest average error (6.9), followed by candidate choice (8.7), while voting-administration measures had far higher error (22.1), driven by turnout, whose RMSE averaged 38.7 and exceeded 30 points in every wave.
+
+Among demographic measures, the CES exhibited the highest error for employment status (11.6) and the lowest for family income (4.4). Among offices, error was lowest for governor (6.5), U.S. Senate (7.0), and president (7.1), and highest for attorney general (11.0), secretary of state, and state senator (both 10.5).
+
+Demographic error was stable across waves, with the class average varying by about one point. Turnout error varied the most (SD = 5.9). Candidate-choice error was steady through 2018, between 6.7 and 8.8 points, and then rose to 11.1 in 2020 and 13.1 in 2022, a change we return to below.
+
+
+\subsection{Error with Matching and CES Weights}
+Table~\ref{tab:rmse_ces_weighted_all} reports error under the weights YouGov provides, which reflects the error users of the CES would typically encounter.
+ 
+\input{output/rmse_ces_weighted_all.tex}
+
+The weights reduced average error from 9.4 to 7.9 percentage points, and from 7.6 to 6.1 when turnout is excluded. Substantial error remains in the version of the survey most researchers use. Turnout was still in error by 37.1 points on average, and employment status remained the least accurate demographic measure (11.8). The largest improvements were in candidate choice, whose average fell from 8.7 to 6.7; in 2020, it fell from 11.1 to 4.6.
+
+These averages combine variables that were used to construct the weights with variables that were not. The remaining tables separate the two. They classify each variable separately in each year by whether it was used in matching, in either weighting step, or in neither, and pool the underlying estimates across the years in which it held that status. Because the 2006 documentation does not permit this classification, these tables cover 2008--2022.
+
+\subsection{Matching Status, CES Weights, and Error}
+\input{output/rmse_by_matching_status}
+Table~\ref{tab:rmse_by_matching_status} groups variables by whether they were used in matching. Before weighting, variables used in matching had lower error than those that were not (7.5 versus 10.1), although much of this gap reflects turnout, which was never a matching variable. Matching on a variable did not ensure that it was measured accurately: employment status was a matching variable yet had an RMSE of 11.7, and the weights made it slightly worse.
+ 
+The CES weights reduced error by similar amounts in both groups (1.9 points for matched variables, 1.5 for the rest), suggesting that variable inclusion in the matching process was less consequential than variable inclusion in the weighting process. 
+
+\subsection{Weighting Status, CES Weights, and Error}
+\input{output/rmse_by_weighting_status}
+Weighting should, by design, reduce error for the variables used to construct the weights. The more informative test is whether those improvements extend to variables outside the weights, as they generally would in a probability sample. Table~\ref{tab:rmse_by_weighting_status} groups variables by whether they were used in either weighting step. Variables that changed status across years appear twice, with each row pooling only the years in which the variable held the indicated status. Negative values of $\Delta$ RMSE indicate that weighting reduced error.
+ 
+Weighting reduced RMSE by 3.4 percentage points for variables used in the weights, compared with 1.3 points for variables that were not, a gain roughly 2.6 times as large. All eight rows for weighting variables improved. Among the 16 rows for non-weighting variables, 12 improved and four got worse: family income, employment status, union membership, and U.S. House vote.
+ 
+Variables that switched status show the same pattern. Hispanic origin, turnout, president, U.S. Senate, and governor each improved more in the years they were weighting variables than in the years they were not; for president, the reduction was 7.7 points versus 3.4. Turnout improved little under either status (1.2 versus 0.6 points), which is consistent with how turnout entered the design: where it was used, it was prior-election turnout in the frame weighting, never the survey-year turnout we benchmark against. Because turnout error is so large, it also pulls up the average for weighting variables, which is why both groups average 8.4 after weighting despite the difference in improvement. For governor and Senate, some of the gain in weighting years is mechanical, because from 2014 the weights were post-stratified to the same election outcomes that serve as benchmarks. 
+
+\subsection{Error for Variables Used in Neither Matching nor Weighting}
+
+\input{output/rmse_neither_matching_nor_weighting}
+The cleanest test of whether the CES design improves accuracy beyond its own targets comes from variables that entered neither matching nor weighting in a given year (Table~\ref{tab:rmse_neither_matching_nor_weighting}). For these, weighting reduced average error by 1.3 points, from 9.8 to 8.5.
+ 
+The gains were concentrated in candidate choice. Every office except the U.S. House improved, by between 1.6 and 3.4 points. Weighted error for president (2.8) and U.S. Senate (3.4) was comparable to their error in years when they were weighting targets (2.4 and 4.1), although the two sets of years differ. Demographic variables outside the design mostly did not improve: family income, employment status, and union membership got worse, and Hispanic origin was essentially unchanged. Veteran status was the exception, improving by 3.0 points. Turnout improved by 0.6 points and remained in error by 37.1.
+ 
+Separating the effects of weighting by office, as in Figure~\ref{fig:rmse_reduction_by_office}, reveals a similar descriptive pattern: offices included in the weights generally exhibit lower overall error and larger apparent reductions in error attributable to weighting.
+ 
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{output/rmse_reduction_by_office.png}
+    \caption{RMSE Reduction from CES Weighting by Office}
+    \caption*{\footnotesize \dag~marks an office in the years it was a CES weighting target. Bars show matching-only RMSE and the RMSE remaining after CES weighting, averaged across years.}
+    \label{fig:rmse_reduction_by_office}
+\end{figure}
+
+ These results suggest that the CES weights provided some benefits beyond the variables used to construct them, but those benefits were substantially smaller and less consistent, and they were concentrated in candidate choice, not demographics.
+ 
+% The preceding results combine primary and secondary variables. Post-stratification should, by design, reduce error for primary variables (since they are used to construct the weights in the first place). The more informative test is whether those gains extend to secondary variables in the matched sample, as they generally would in a probability sample. 
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{output/primary_secondary_matching_vs_weighting.png}
+%     \caption{Effect of CES Post-Stratification on Primary and Secondary Variable Error}
+%     \caption*{\footnotesize
+%     Bars show mean RMSE for matching-only and matching + post-stratification estimates by year. Panel A includes Primary variables used to construct the CES weights; Panel B includes Secondary variables not used to construct the weights. Labels report $\Delta$ RMSE, calculated as post-stratified RMSE minus matching-only RMSE, so negative values indicate improved accuracy after weighting. Only variables consistently classified as Primary or Secondary and present in every CES wave from 2008 through 2022 are included.}
+%     \label{fig:primary_secondary_weighting_comparison}
+% \end{figure}
+
+% \input{output/primary_secondary_weighting_comparison}
+
+
+% Illustrated in Figure~\ref{fig:primary_secondary_weighting_comparison}, post-stratification reduced average primary-variable error from 6.9 to 3.7 percentage points on average, a 46 percent reduction, and it did so in every year. Average error on secondary variables fell from 7.7 to 7.0 points, a 10 percent reduction, and in six of eight years the improvement was less than a single percentage point. Averaged across years, weighting improved primary variables by 3.2 points and secondary variables by 0.8 — a fourfold difference (Table~\ref{tab:primary_secondary_weighting_comparison}). The benefits of post-stratification  did not extend to variables outside the weighting scheme, consistent with other types of nonprobability sampling. Before post-stratification, primary and secondary variables were estimated with comparable accuracy; afterward, error for the variables used to construct the weights was roughly half the error for those that were not — 3.7 percent versus 7.0.
+
+% This gap does not appear to be explained by primary variables having started further from the benchmark. Unweighted error was in fact slightly higher for secondary variables (7.7) than for primary ones (6.9), so the set that improved less began, if anything, with more error to correct.
+
+% Nor does it appear to reflect variable composition. The consistently primary variables are three demographics — age group, education, and sex — while the secondary set mixes demographic and candidate-choice measures. We therefore repeated the comparison two ways. Within demographic variables alone, which begin at nearly identical unweighted error (6.9 and 7.0 points), post-stratification reduced primary error by 3.2 points and secondary error by 0.2. For candidate choice, we can look at governor and U.S. Senate, which swapped status: they were secondary from 2008 through 2012 and primary thereafter. Post-stratification reduced their error by 3.7 points in the years they were primary and by 1.8 points in the years they were secondary. Both comparisons are reported in Appendix Table~\ref{tab:demographic_candidate_choice_weighting_comparison_vertical}.
+%% PREVIOUS VERSION AS OF 9/5/26 ENDS HERE
+
+% Variables included in CES post-stratification (primary variables) exhibited lower error than variables that were not (secondary variables; see Table~\ref{tab:finalpoststratvars}). As shown in Figure~\ref{fig:primary_vs_secondary_consistent_excl_2006} and Table~\ref{tab:primary_secondary_rmse_by_year}, average RMSE for primary variables was 3.7 percent, compared to 7.0 percent for secondary variables, yielding an average within-year gap of 3.2 percentage points (Figure~\ref{fig:primary_vs_secondary_delta_by_year}). These calculations include only those variables that were either primary or secondary in each of the nine survey years examined and excludes any variable that changed primary/secondary status. These calculations include only variables that held the same status—primary or secondary—in all nine survey years examined. Candidate choice for governor and U.S. Senate, along with voting turnout, is therefore excluded, since each changed status in 2014.
+
+% \footnote{Because the errors for turnout were so much larger than all the other errors, and because turnout was a primary variable in some CES years and a secondary variable in other years, turnout was excluded from these calculations.}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{output/primary_vs_secondary_consistent_excl_2006.png}
+%     \caption{Primary vs. Secondary Variable RMSE}\label{fig:primary_vs_secondary_consistent_excl_2006}
+%      \caption*{\footnotesize Primary variables (3): Age Group, Education, Sex. Secondary variables (8): Family Income, Employment Status, State Representative, State Senator, U.S. House, Union Membership, Veteran Status, and Voting Method. Only variables consistently classified as Primary or Secondary across all years and present in every CES wave are included. 2006 is excluded because the CES does not report post-stratification variables for that year.   
+%     }
+% \end{figure}
+
+% \input{output/primary_secondary_rmse_by_year.tex}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{output/primary_vs_secondary_delta_by_year.png}
+%     \caption{Difference between Primary and Secondary by Year} 
+%     \caption*{\footnotesize Positive values indicate Secondary variables had higher RMSE than Primary variables.}
+%     \label{fig:primary_vs_secondary_delta_by_year}
+% \end{figure}
+
+\subsubsection{Distribution of Errors}
+Prior work has shown that a hallmark of nonprobability samples is wide variation across measures in the amount of error observed. It has further shown that post-stratification, which corrects known imbalances in probability samples, produces smaller and less consistent gains in nonprobability ones \parencite{yeager_comparing_2011, macinnis_accuracy_2018, chang_national_2009, lavrakas_comparing_2022, walker_foundations_2009, mercer_for_2018}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{output/error_distribution_matching_vs_weighting.png}
+    \caption{Distribution of CES Absolute Error Before and After Weighting}
+    \caption*{\footnotesize Each histogram shows the share of all errors at each level of percentage-point absolute error, pooling 9,540 observations across 19 variables and nine CES waves. Panel A reports matching-only estimates; Panel B reports estimates using YouGov's weights. Weighting concentrated more estimates near their benchmarks but left the overall dispersion of errors essentially unchanged (SD = 8.66 and 8.64, respectively).}
+    \label{fig:error_distribution_matching_vs_weighting}
+\end{figure}
+
+Figure~\ref{fig:error_distribution_matching_vs_weighting} shows both patterns across the 2006–2022 CES waves. Under matching alone, absolute error was not concentrated near zero: 10.2\% of estimates were within one percentage point of their benchmark, 28.3\% were within three points, and 55.4\% missed their benchmark by more than five points. The CES weights shifted the distribution toward the origin, increasing the share of estimates within three points from 28.3\% to 39.6\%. Mean absolute error declined from 8.00 to 6.87 percentage points, and the median declined from 5.71 to 4.06 points. The standard deviation of absolute error, however, was nearly unchanged at 8.66 points under matching alone and 8.64 points after weighting, suggesting that weighting improved the typical estimate without producing a comparable contraction in the extreme tail.
+
+The effect of applying the CES weights was smaller for larger errors. The proportion of errors exceeding 15 points declined only from 11.3\% to 10.2\% after weighting, while the proportion exceeding 20 points changed from 6.56\% to 6.36\%. In total, 5.23\% of estimates exceeded 20 points under both methods. Of the 626 estimates whose matching-only errors exceeded 20 points, 127 moved below that threshold after weighting and 499 remained above it. At the same time, 108 estimates that had previously been below 20 points crossed above the threshold, leaving 607 weighted estimates above it. The CES weighting procedure therefore changed the composition of the extreme-error tail but produced little change in its overall frequency.
+
+\subsubsection{Error Across Time}
+Advocates of nonprobability samples have sometimes argued that their accuracy has improved over years opt-in online panels expand, recruitment methods mature, and post-stratification and weighting procedures become more sophisticated. The CES provides an opportunity to test this claim: across survey waves, it has repeatedly revised its weighting scheme and drawn respondents from multiple panel providers.
+
+Contrary to this expectation, CES accuracy did not improve over the 17 years studied. In fact, error increased over the years. In a variable fixed-effects regression predicting year-by-variable RMSE—including only variables that were secondary in all years and observed in every survey wave, with the undocumented 2006 wave treated as secondary (Figure~\ref{fig:rmse_trend_fe_permutation}, Panel A)—RMSE increased by approximately 0.075 percentage points per year, a marginally statistically significant trend (HC3 robust SE = 0.045, p = 0.092; 95\% CI: [-0.012, 0.163]). A permutation test that randomly reassigned year labels supported the same conclusion (p = 0.066). The point estimate corresponds to roughly 0.15 RMSE points per survey wave, or an estimated increase of approximately 1.2 RMSE points from 2006 to 2022.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{output/rmse_trend_fe_permutation.png}
+    \caption{Secondary Variable RMSE Trends Over Time}
+    \caption*{\footnotesize RMSE trends over time for secondary variables that were observed in every survey wave and classified as secondary in all years. The 2006 CES guide does not document which variables were used in matching or weighting, so 2006 variables are assumed secondary. Eight variables are included: Employment Status, Family Income, Union Membership, Veteran Status, State Representative, State Senator, U.S. House, and Voting Method. \textbf{Panel A}: Each point represents the average RMSE across included variables in a given year. The dashed line shows the estimated linear trend from a variable fixed-effects regression estimated on year-by-variable RMSE, with HC3 heteroskedasticity-robust standard errors. The estimated coefficient indicates the average change in RMSE percentage points per calendar year, net of baseline differences across variables. \textbf{Panel B}: RMSE trends disaggregated by variable class. Reported coefficients come from the same fixed-effects specification estimated separately within each class, except for Voting Administration, which contains only one variable and therefore reduces to a year trend for Voting Method. Significance indicated by * $p < 0.05$, ** $p < 0.01$, *** $p < 0.001$.}
+    \label{fig:rmse_trend_fe_permutation}
+\end{figure}
+
+Figure~\ref{fig:rmse_trend_fe_permutation} Panel B  disaggregates these trends by variable class, and Table~\ref{tab:rmse_trend_tests} reports model results. Demographic variables show a positive, marginally significant increase in error over time (0.112 RMSE points per year; SE = 0.061; p = 0.067). The single voting administration variable, Voting Method, shows a larger and statistically significant upward trend (0.135; SE = 0.048; p = 0.005). Candidate-choice variables show no temporal trend in error (0.006; SE = 0.092; p = 0.949).
+
+\input{output/rmse_trend_tests.tex}
+
+% \subsubsection{The Relationship Between Error and Sample Size}
+% Comparing the sample size gradient respondent-count gradient in the CES to the $1/\sqrt{N}$ pattern from probability sampling indicates how much of the observed benchmark error was plausibly reducible through larger samples, as opposed to error that persisted even after sampling variability should have declined.
+
+% Table~\ref{tab:respondent_count_error_by_variable} reports separate OLS regressions, estimated for each variable, of absolute percentage-point benchmark error on $1/\sqrt{N}$, where $N$ is the number of CES respondents. The unit of observation is a state-year for statewide measures and a district-year for district-level measures; all regressions include state and year fixed effects.
+
+% This specification evaluates whether CES error follows the rate implied by ordinary probability-sample sampling error. Under that benchmark, error should increase approximately linearly with $1/\sqrt{N}$: estimates based on fewer respondents should have larger errors.
+
+% \input{output/respondent_count_error_by_variable.tex}
+
+% The results show that respondent count matters, but unevenly. The clearest relationships appear for candidate-choice variables, especially offices whose estimates are built from small geographic or contest-specific respondent pools. U.S. House and State Representative estimates show statistically significant respondent-count gradients under both specifications, and several other candidate-choice offices have coefficients in the expected direction. Demographic variables, by contrast, show weak, inconsistent, and generally insignificant relationships with respondent count. 
+
+% Figure~\ref{fig:respondent_count_sqrt_fit} visualizes the same question, plotting observed RMSE across sample size bins and overlaying a fitted curve of the form
+% \[
+%     \text{RMSE}(N) = \alpha + \frac{\beta}{\sqrt{N}}.
+% \]
+% Here $\alpha$ is the estimated error floor: because $\beta/\sqrt{N} \to 0$ as $N$ grows, the curve approaches $\alpha$ at large respondent counts. The parameter $\beta$ governs the sample-size-scaling component, with larger values implying that RMSE falls more steeply as respondent count increases. The curve is descriptive rather than structural: it asks whether the empirical pattern resembles the conventional sampling-error relationship while allowing error to flatten at a nonzero floor. Accordingly, $\alpha$ should be read as an empirical residual-error floor, not a theoretical lower bound.
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{output/observed_rmse_vs_inverse_sqrt_n_shape_by_class_excl_turnout_unweighted.png}
+%     \caption{Observed and Extrapolated RMSE by Sample Size, Compared to Theoretical Probability Sample}
+%     \caption*{\footnotesize
+%     Points show observed RMSE across sample-size bins for all variables except turnout. The solid gold curve shows the fitted relationship $\alpha + \beta/\sqrt{N}$ over the observed sample-size range, while the dashed gold segment extrapolates that relationship to $N=25{,}000$. The gray dash-dot curve shows the theoretical $1/\sqrt{N}$ decline expected under probability sampling, calibrated to the same RMSE at $N=50$; the dotted horizontal line marks the fitted nonzero error floor. Sample size is displayed on a logarithmic scale. Results use unweighted CES estimates. Turnout is excluded because its substantially higher error exhibits little relationship with sample size, suggesting that systematic factors predominate and causing the pooled $1/\sqrt{N}$ relationship to collapse.}
+%     \label{fig:respondent_count_sqrt_fit}
+% \end{figure}
+
+
+% A larger sample size was associated with lower error, but the relationship was noisy and bounded. RMSE declined as respondent count increased and mirrored the $1/\sqrt{N}$ shape expected under probability sampling, but the relationship flattened well above zero, with a fitted floor of approximately 6.6 percentage points. 
+
+\subsection{Sample Size and Estimation Error}
+According to statistical theory, the error attributable to sampling variability should decline in proportion to $1/\sqrt{N}$ \parencite{cochran_sampling_1977}. That is, as sample size grows, error shrinks nonlinearly, with diminishing returns: the expected improvement in accuracy from increasing sample size becomes minimal after even a few hundred units have been sampled from the population.
+
+Absent assumptions sufficient to identify and adjust for selection, simply increasing the size of a nonprobability sample does not necessarily reduce total error, because selection and other nonsampling biases need not diminish with sample size \parencite{bethlehem_selection_2010,baker_report_2013,meng_statistical_2018}. Nevertheless, the ability to obtain large samples quickly and cheaply has repeatedly been presented as an advantage of online nonprobability samples \parencites[p.~12]{baker_report_2013}[p.~24]{yougov_annual_2012}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{output/ces_error_sample_size_distribution_categorical.png}
+    \caption{Distribution of CES Error Observations by Sample-Size Range}
+    \caption*{\footnotesize
+    Bars report the distribution of sample sizes. Each observation is an estimate-specific comparison between a CES estimate and an external benchmark. The same underlying respondents can therefore contribute multiple error observations because the CES sample is used to estimate multiple variables. Sample size is the number of respondents contributing to the relevant estimate: the state--year respondent count for statewide estimates and the district--year respondent count for U.S. House estimates. Results use unweighted CES estimates.}
+    \label{fig:ces_error_estimate_sample_size_distribution}
+\end{figure}
+
+We leverage variation in the number of CES respondents underlying each estimate to assess whether estimation error declines with sample size. Nearly two-thirds of the estimates are based on fewer than 500 respondents, but sample sizes range from 8 to 4,883, sufficient variation to examine observed error as a function of sample size (Figure~\ref{fig:ces_error_estimate_sample_size_distribution}).
+
+Figure~\ref{fig:respondent_count_sqrt_fit} provides a descriptive visualization of the relationship between error and sample size for variables other than turnout. It plots observed RMSE across sample-size bins and overlays a curve of the form
+\[
+    \operatorname{RMSE}(N)
+    =
+    a+\frac{b}{\sqrt{N}}.
+\]
+The curve is constrained to begin at the observed RMSE for the first bin, approximately 10.8 percentage points at $N=50$. Under this constraint, $a$ is estimated from the binned data and $b$ is implied by the common starting point. Because $b/\sqrt{N}\rightarrow 0$ as $N$ increases, the fitted curve approaches $a$ at large sample sizes, making $a$ a descriptive residual-error floor for these matched, nonprobability samples. 
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{output/observed_rmse_vs_inverse_sqrt_n_shape_by_class_excl_turnout_unweighted.png}
+    \caption{Observed and Extrapolated RMSE by Sample Size Relative to the Probability-Sampling Benchmark}
+    \caption*{\footnotesize
+    Points show observed RMSE across sample-size bins for all variables except turnout. The solid gold curve shows the fitted relationship $a+b/\sqrt{N}$ over the observed sample-size range, while the dashed gold segment extrapolates that relationship beyond the available data to $N=25{,}000$. The gray dash-dot curve shows the theoretical $1/\sqrt{N}$ decline expected under probability sampling, calibrated to the same RMSE at $N=50$. The dotted horizontal line marks the fitted residual-error floor. Sample size is displayed on a logarithmic scale. Results use unweighted CES estimates. Turnout is excluded from this visualization because it has substantially higher error, an estimated error floor of approximately 39.1 percentage points, and no detectable decline under the variable-specific $1/\sqrt{N}$ specification. Including it would cause turnout to dominate the binned RMSE and obscure the relationship among the remaining variables.}
+    \label{fig:respondent_count_sqrt_fit}
+\end{figure}
+
+Observed RMSE initially declined with sample size, but the fitted relationship flattened at approximately 6.2 percentage points. This suggests that, whereas the probability-sampled curve continues toward zero, sample size in these nonprobability matched samples reduces error only up to a point.
+
+\subsubsection{Error as a Function of Contest Competitiveness}
+% The analysis so far pools respondents within state-years. Because U.S. House estimates are constructed at the level of the congressional district rather than the state, they let us check whether the same respondent-count relationship holds at a finer level of aggregation. Figure~\ref{fig:us_house_error_density_combined} plots district-level U.S. House mean absolute error against per-district respondent count, alongside the distribution of respondents across districts. The district-level pattern mirrors the state-level one: error declines as the number of respondents per district rises.
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{output/us_house_error_density_combined.png}
+%     \caption{U.S. House Mean Absolute Error and Respondent Density by District}
+%     \label{fig:us_house_error_density_combined}
+% \end{figure}
+
+Beyond sample size, CES error also varied with contest competitiveness. As the winning candidate's benchmark vote share moved farther from 50 percent---that is, as races became less competitive---RMSE generally increased, even though sampling variance alone, which is largest at an even split, predicts the reverse. The increase was most pronounced in the least competitive races, including contests where a major-party candidate dropped out or only one major-party candidate appeared on the ballot. In these cases the benchmark winning share could approach or exceed 90 percent, while the survey-implied Democratic/Republican split remained much closer to parity.
+
+Table~\ref{tab:office_rmse_less_competitive_races} and Figure~\ref{fig:office_rmse_progressive_race_exclusion} trace this pattern by recalculating RMSE while progressively retaining races with higher winning vote shares. For most offices, RMSE is relatively stable through moderate cutoffs but rises once high winning-share races are included, most visibly for Attorney General, Secretary of State, and State Senator contests.
+
+\input{output/office_rmse_progressive_race_exclusion.tex}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{output/office_rmse_progressive_race_exclusion.png}
+    \caption{Sensitivity of Office-Level RMSE to Less Competitive Races}
+    \caption*{\footnotesize
+    Each point recalculates office-level RMSE using only races where the winning candidate's benchmark vote share is at or below the x-axis cutoff. For example, 100 percent includes all contests for that office in the RMSE calculation, whereas 80 percent excludes races where the winning candidate received more than 80 percent of the vote. Moving from left to right progressively includes less competitive races. Error generally increases as less competitive contests are retained, with the sharpest increases occurring after very high winning-share races are included.}
+    \label{fig:office_rmse_progressive_race_exclusion}
+\end{figure}
+
+This compression toward parity contrasts with prior work, which has documented systematic overstatement of winners, incumbents, and frontrunners in both post-election reports and pre-election polls \parencite{wright1993errors, mattei1998winning, hopkins2009wilder, chen2025electoral}. Among the possible mechanisms for this are that respondents may have reported their party's candidate rather than a crossover vote for a strong winner, less salient contests may have invited weaker recall, and turnout overreporting added vote choices from people who did not vote.
+
+U.S. House races let us examine sample size and competitiveness jointly. Because the unit of inference was the district and many districts contained relatively few CES respondents, House contests combined both sources of error in a way that state-level estimates for other offices did not. Table~\ref{tab:us_house_rmse_grid} presents presents a two-way RMSE matrix that stratifies U.S. House races by the winner's vote share and by minimum district-level respondent thresholds, showing how competitiveness and district sample size interact.
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{output/rmse_by_competitiveness_histogram.png}
+%     \caption{RMSE Across Different Bins of Race Competitiveness, All Races}
+%     \caption*{\footnotesize
+%     Competitiveness refers to the distance from the winning candidate receiving 50\% of the vote. Results are matching + CES post-stratification. Includes all races: President(n=204), U.S. Senate (n=303), U.S. House (n=2,888), Governor (n=225), Attorney General (n=175), Secretary of State (n=146), State Rep. (n=397), State Senator (n=367)}  
+%     \label{fig:rmse_by_competitiveness_histogram}
+% \end{figure}
+
+% CES-weighted accuracy varied based on the competitiveness of the race. The CES was less accurate across all races than when only competitive races were considered. Figure \ref{fig:rmsebyracecomp} compares the accuracy of the CES for all non-weight-generation races to those non-weight-generation races for which the actual Democratic vote share was between 40 and 60 percent, indicating a tighter election. The deltas correspond to the difference between the all-inclusive average and the close-race average. In all years, it was the case that the close-race RMSE was lower than the all-inclusive average. Across years, the RMSE was 2.3\% greater across all races than only in more competitive races. 
+
+% This is perhaps counterintuitive. One might reasonably expect it to be harder to accurately measure closer races because the smaller margin of difference makes outcomes more uncertain and sample variations potentially more impactful. However, non-competitive races are typically less visible to voters. When respondents are asked about vote choices for constitutional offices such as secretary of state or attorney general, they may have been less familiar with the candidates and more likely to report having voted along party lines. In races where candidates ran unopposed, many respondents still reported voting for a party, inducing large errors in these states since around half of the respondents claimed to vote for a party that received no votes.
+\subsubsection{Comparison to Prior Evaluations of Error in the CES}
+
+CES documentation reported accuracy metrics for selected offices and years, though these are narrower in scope and do not distinguish between primary and secondary variables. Table~\ref{tab:ces_comparison} compares the RMSEs reported in the guides with those computed in this study.
+
+\input{output/ces_comparison}
+
+Our RMSEs are generally higher than the reported values. The difference is small for President (+0.3 points on average) and negligible for U.S. Senate ($-0.1$), but larger for Attorney General (+4.0) and Secretary of State (+3.0). Averaged across years, our estimates exceed the reported values by 1.5 points.
+
+We cannot determine with certainty what accounts for this difference, but can name a few possible sources. First, as mentioned in the methods section, the guides measured error in the Democratic share of the two-party vote, whereas we compare the modal candidate's share of all votes cast with the corresponding CES share. This number should be identical in cases where only one Democratic candidate ran, which is most cases, but nonetheless candidate-level comparisons register errors that party-level aggregation can offset, such as misestimation of independent or minor-party candidates. Second, from 2018 onward the CES guides computed error among validated voters using validated-voter weights, and earlier guides did not clearly specify the weights used. Third, the 2006 and 2010 guides include only states with at least 200 respondents, whereas we apply no minimum, so our estimates absorb more sampling error in small states. Finally, certified vote shares for the same race vary somewhat across sources, so benchmark values may differ.
+% \begin{sidewaystable}[p]
+% \centering
+% \caption{CES-Reported RMSEs vs. RMSEs Calculated in This Study}
+% \label{tab:ces_comparison}
+% \input{output/ces_comparison.tex}
+% \end{sidewaystable}
+
+\subsection{Effect of Conventional Post-Stratification on CES Error}
+Finally, we evaluated how closely standard best-practice post-stratification applied to the nonprobability sample approached the accuracy achieved by YouGov’s bespoke weighting scheme. We constructed a single national set of calibration weights using \texttt{anesrake}. To ensure a fair comparison, we evaluated accuracy only on variables that were used in neither YouGov's weighting nor anesrake post-stratification.
+
+As a validation of the anesrake procedure, we assessed accuracy on the variables used to construct the calibration weights. Averaged across years, RMSE on these variables was 0.0 percentage points (Table~\ref{tab:national_anesrake_variables_accuracy}), indicating that the calibration successfully aligned the weighted sample with national benchmarks. However, this accuracy did not extend to variables excluded from both weighting schemes—State Representative, State Senator, and U.S. House races (Figure~\ref{fig:rmse_anesrake_full_by_year}). For these outcomes, anesrake generally performed worse than both matching alone and matching plus the CES weights, with the partial exception of 2020 and 2022, where it improved on matching alone but still underperformed YouGov’s weights. As reported in Table \ref{tab:rmse_anesrake_full}, while YouGov's weights reduced RMSE by an average of 1.3 percentage points across the three variables not used for weighting, anesrake weights increased error by 1.2 percentage points.
+
+Thus, while traditional post-stratification effectively reduced error for variables directly included in the weighting scheme, it did not generally improve accuracy for other outcomes in the nonprobability matched sample, replicating prior findings that best-practice demographic weighting alone does not generalize to unconstrained variables in nonprobability surveys \parencite{yeager_comparing_2011, macinnis_accuracy_2018}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{output/rmse_anesrake_full_by_year.png}
+    \caption{Comparison of Weighting Techniques Across Years}
+    \caption*{\footnotesize
+    Includes U.S.\ House, State House, and State Senate—the only variables observed in all years and not used in either YouGov or anesrake weighting.
+    }
+
+    \label{fig:rmse_anesrake_full_by_year}
+\end{figure}
+
+\input{output/rmse_anesrake_full_table.tex}
+
+
+\section{Discussion}\label{sec:discussion}
+This study provides the most comprehensive evaluation to date of the accuracy of matched-sample surveys. Across nine waves of the CES and 9,540 comparisons with external benchmarks, error averaged 9.4 percentage points under matching alone and 7.9 with the CES weights. Accuracy did not improve over the 17 years studied; for variables never used in the weights, error, if anything, rose slightly, although this trend is only marginally significant. The absence of improvement is notable because the period spanned several changes of panel providers and substantial revisions to YouGov's matching and weighting procedures. The most extensive of these, in 2018, moved political information out of matching and the first weighting step and into post-stratification; it changed where that information enters the procedure, but the trend analysis shows no corresponding gain in accuracy.
+
+A central finding is that the accuracy of the CES depends more on YouGov's weights than on sample matching. The theoretical case for matching is that, if selection into the panel is ignorable given the matching variables, a matched sample can be treated as a random sample \parencite{rivers_sample_2006, rivers_sampling_2007}. In the CES, variables outside matching were estimated with substantial error, which suggests that the matching variables did not fully account for how respondents differed from the population \parencite{mercer_theory_2017}. Matching also did not ensure accuracy for the variables it used: employment status was a matching variable in most years yet remained among the least accurate measures in the study, and whether a variable was used in matching made little difference to how much the weights improved it. In practice, matching in the CES appears to function less as a substitute for random selection than as a first-stage adjustment whose shortcomings the weights must then correct.
+
+The CES weights, in turn, improved accuracy most for the variables used to construct them. Their benefits did extend beyond those targets, but selectively: among variables used in neither matching nor weighting, candidate choice improved for nearly every office, while income, employment, and union membership did not improve and in some cases got worse. This pattern is consistent with prior work showing that weighting improves an outcome mainly insofar as the outcome is related to the weighting variables \parencite{mercer_for_2018}. The CES weights draw on political information, including prior presidential vote and, from 2014, statewide election results, which may explain why their benefits reached other vote choices but not demographic characteristics. By contrast, conventional post-stratification with anesrake was effective at aligning the sample with the national benchmarks it constrained, reproducing them almost exactly, but it did not improve accuracy for outcomes outside the weighting set and increased error for the three offices excluded from both weighting schemes. This result replicates a broader pattern observed in prior work: demographic post-stratification does not generalize well to unconstrained variables in nonprobability samples \parencite{yeager_comparing_2011, macinnis_accuracy_2018, dutwin_apples_2017}. The comparison should be read with the caveat that our anesrake weights were national, whereas the CES weights also adjust across states.
+
+These findings align with, and in some respects extend, a growing literature documenting the limits of nonprobability survey accuracy. Prior studies have shown that average error in nonprobability samples is often only modestly worse than in probability samples, but that nonprobability designs tend to exhibit substantially greater variance, including a nontrivial share of large errors \parencite{yeager_comparing_2011, chang_national_2009, macinnis_accuracy_2018, cornesse_review_2020}. Our results are consistent with this pattern. Under matching alone, more than half of all estimates missed their benchmarks by more than five points. The weights improved the typical estimate, but they left the dispersion of errors essentially unchanged, and roughly one estimate in ten remained in error by more than 15 points after weighting. For a researcher analyzing a single state or office, the relevant risk is therefore not the average error but the chance that a particular estimate is badly wrong. Errors were also largest in the least competitive races, where CES estimates were compressed toward an even split, the opposite of the overstatement of winners documented in earlier election surveys \parencite{wright1993errors, mattei1998winning}. If, as seems plausible in low-salience contests, reported vote choice partly reflects respondents' partisanship rather than their actual votes, CES measures of down-ballot vote choice may understate candidate-specific voting, such as split-ticket voting and support for strong candidates of the opposing party.
+
+The results on sample size point in the same direction. In probability samples, the standard error of an estimate falls in proportion to $1/\sqrt{n}$, so error from sampling variability approaches zero as samples grow \parencite{cochran_sampling_1977}. In the CES, error declined as the number of respondents behind an estimate increased, but it leveled off at about 6.2 percentage points for variables other than turnout, and near 39 points for turnout. The fitted curve implies that most of the reducible error is gone early: by roughly 500 respondents, predicted error is within about 1.5 points of the floor. This is the pattern expected when the remaining error is bias, which larger samples do not remove \parencite{meng_statistical_2018, bethlehem_selection_2010}. For comparison, a simple random sample estimating a proportion near one half would have an expected error of 6.2 points at about 65 respondents. The distinction matters because large samples are exactly what nonprobability designs make cheap \parencite{baker_report_2013}, which raises the question of whether a large nonprobability sample is preferable to a smaller probability sample of the same population.
+
+Nonprobability sampling is now a permanent feature of the survey research landscape. YouGov occupies a prominent position in academic and applied research, and its use of sample matching has been presented as a solution to the limitations of opt-in panels \parencite{rivers_sampling_2007, crampton_about_2007}. Our evidence challenges that interpretation. Sample matching, as implemented in the CES, does not appear to deliver accuracy gains that distinguish it meaningfully from other nonprobability methods. Instead, its accuracy depends heavily on weights that incorporate outcome-adjacent information, such as prior vote and election results, an approach that is unavailable for many research applications that lack benchmarks. For those applications, our results for variables used in neither matching nor weighting are the more relevant guide to expected accuracy.
+
+This distinction also bears on how the accuracy of the CES has been assessed. Prior evaluations, including those in the CES guides, have largely documented accuracy through comparisons with election outcomes \parencite{ansolabehere_cooperative_2013, ansolabehere_does_2014, rivers_inference_2009, vavreck_2006_2008}. We reproduce lower error estimates in some cases as well. However, we show that these conclusions are sensitive to which variables are evaluated and whether those variables were used in weighting. From 2014 onward, statewide Senate and gubernatorial results were themselves used to construct the weights, so agreement with those outcomes is not independent evidence of sample quality. Consistent with this, our estimates and those reported in the guides agree most closely for Senate and diverge most for attorney general and secretary of state, which were never weighting targets. Computational choices, including how vote shares are defined and which respondents and states are included, account for some of the remaining difference. The distinction between variables used in the weights and variables outside them is crucial for interpreting CES performance, and it has been largely absent from prior evaluations.
+
+Several limitations qualify these conclusions. First, because the CES weighting scheme changed across waves, variables had to be classified year by year from documentation that is incomplete in places: the 2006 wave could not be classified and its variables are treated as secondary where the distinction is required, and the 2012 classifications rely on that guide's repetition of the 2010 description. Only a limited set of variables fell outside the weights in every wave, many of them candidate-choice measures. Second, measurement of candidate choice is itself imperfect. Special elections, fusion voting, and changes in ballot structure sometimes make it difficult to determine which contest a respondent had in mind, and our candidate-level comparisons and choice of benchmark sources may produce somewhat larger errors than party-level alternatives. Third, self-reported turnout is overstated in probability surveys as well, through overreporting and the underrepresentation of nonvoters \parencite{debell_turnout_2020, hammer_experiments_2014}, so part of the turnout error is not specific to nonprobability designs; for this reason we also report results excluding turnout. These limitations reflect real constraints faced by researchers using CES data, and we do not believe they account for the broader patterns we observe.
+
+Our results point toward several directions for research and practice. The high variance of nonprobability samples implies that single-year evaluations, still common in the literature, can be misleading; multi-year designs are essential for assessing stability, trends, and the frequency of large errors. Evaluations of nonprobability surveys should report error separately for variables inside and outside the weights, and producers of matched-sample surveys could support this by documenting the variables used at each stage of each wave. Understanding why weighting that reproduces national margins fails to improve state- and district-level estimates may shed light on the underlying sources of error. Finally, comparative evaluations across vendors remain rare; the Pew Research Center's comparison of nonprobability vendors \parencite{kennedy_evaluating_2016} is one of the few that includes YouGov, and additional work of this kind would be valuable.
+
+In sum, our findings challenge the view of sample matching as a solution to the accuracy problems of nonprobability surveys. Combined with YouGov's weights, matched samples perform best on the variables the weights target and somewhat better on related political measures, but they remain subject to the constraints that characterize nonprobability designs: bias that larger samples do not remove, a persistent share of large errors, and limited generalizability to outcomes the weights do not target. Researchers using CES data should interpret results with caution, particularly for variables not targeted by the weighting process.
+
+% In probability samples, the standard error of an estimate falls in proportion to $1/\sqrt{n}$ as $n$ increases. In nonprobability samples such as the CES, a larger $n$ still reduces random variability, but it does not necessarily reduce selection bias, coverage bias, bogus-response bias, or adjustment-model error \parencite{elliott_inference_2017, mercer_theory_2017}. This distinction matters because nonprobability samples are precisely the ones for which large $n$ is cheap to obtain, which raises the question of whether a large nonprobability sample is preferable to a smaller probability sample of the same population.
+
+% This study provides the most comprehensive evaluation to date of the accuracy of matched-sample surveys using YouGov data from the Cooperative Election Study. Across nine survey waves spanning 2006–2022, CES estimates exhibited an average RMSE of approximately 8 percent, with errors reaching 10–15 percent in some years and for some variables. We find no evidence that CES accuracy has systematically improved over time, despite substantial changes to YouGov’s matching, weighting, and panel recruitment practices. In substantive terms, CES accuracy appears broadly comparable to—and in some cases worse than—what has been documented for other nonprobability survey designs.
+
+% A central finding is that accuracy gains in the CES are increasingly driven by YouGov’s bespoke post-stratification weights rather than by sample matching alone. When CES data are analyzed without weights, error increases meaningfully, indicating that matching by itself does not reliably approximate a probability sample. Conversely, applying YouGov’s proprietary weights reduces error, particularly for variables directly incorporated into the post-stratification scheme. In contrast, best-practice calibration weighting using anesrake—while effective at aligning the sample to national benchmarks on the variables it constrains—does not systematically improve accuracy for outcomes outside the weighting set. This result replicates a broader pattern observed in prior work: traditional demographic post-stratification does not generalize well to unconstrained variables in nonprobability samples.
+
+% These findings align with, and in some respects extend, a growing literature documenting the limits of nonprobability survey accuracy. Prior studies have shown that average error in nonprobability samples is often only modestly worse than in probability samples, but that nonprobability designs tend to exhibit substantially greater variance, including a nontrivial share of large errors. Our results are consistent with this pattern. Even when average RMSE appears moderate, the distribution of errors is highly skewed, with sizable deviations in particular years, offices, and states. In this sense, CES performance looks no better—and at times worse—than what has been reported for other nonprobability samples using simpler recruitment or weighting strategies. While YouGov’s approach is often described as exceptional, our results suggest that it remains subject to similar limitations to those other nonprobability sampling methods face.
+
+% Nonprobability sampling is now a permanent feature of the survey research landscape. YouGov, in particular, occupies a dominant position in academic and applied research, and its use of sample matching has been widely interpreted as a methodological breakthrough. Our evidence challenges that interpretation. Sample matching, as implemented in the CES, does not appear to deliver accuracy gains that distinguish it meaningfully from other nonprobability methods. Instead, accuracy improvements depend heavily on post-stratification choices that incorporate outcome-adjacent information—an approach that may be infeasible for many research applications that lack benchmarks. For those cases, our secondary-variable results are the more relevant guide to expected accuracy.
+
+% At the same time, our findings help reconcile apparent contradictions in the literature. Some prior evaluations of the CES report lower error in selected years or offices. We reproduce lower error estimates in some cases as well. However, we show that these conclusions are sensitive to which variables are evaluated and whether those variables were used in weighting. When considering the most informative outcomes—secondary variables that were not weighted and that appear consistently across years—accuracy remains persistently low and no evidence of improvement over time. This distinction between primary and secondary variables is crucial for interpreting CES performance and has been largely absent from prior evaluations.
+
+% The first of several limitations of this study is that because YouGov’s weighting scheme has evolved over time, only a limited set of variables can be classified as consistently secondary across all survey waves, many of which involve candidate choice. Measurement of these outcomes is itself imperfect: special elections, fusion voting, and changes in ballot structure sometimes make it difficult to determine precisely which contest a respondent had in mind. These sources of noise likely inflate error estimates to some degree. That said, such limitations reflect real-world constraints faced by researchers using CES data and do not undermine the broader patterns we observe.
+
+% Our results also point toward important directions for future research. First, the high variance of nonprobability samples implies that the single-year evaluations still common in the literature can be misleading. Multi-year designs are essential for assessing stability, trends, and tail risk in survey accuracy. Second, the sharp contrast between the effectiveness of weighting at the national level and its breakdown at the state level warrants closer investigation. Understanding why calibration succeeds for national margins but fails to generalize across subnational units may shed light on the underlying sources of error in nonprobability samples. Finally, comparative evaluations across multiple vendors remain rare. The Pew study remains one of the few head-to-head assessments of YouGov relative to other providers; additional work of this kind would be valuable.
+
+% In sum, our findings challenge the narrative of sample matching as a final solution to the accuracy problems of nonprobability surveys. While matched samples combined with bespoke post-stratification can improve performance on selected variables, they do not escape the fundamental constraints that characterize nonprobability designs: substantial variance, sensitivity to weighting choices, and limited generalizability to unconstrained outcomes. Researchers relying on CES data should therefore interpret results with caution, particularly when drawing inferences about variables not explicitly targeted by the weighting process.
+
+\printbibliography
+\clearpage
+
+% ==========================================================================
+%  APPENDIX
+% ==========================================================================
+\appendix
+
+% Number appendix tables, figures, and equations A1, A2, ...
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\setcounter{equation}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+\renewcommand{\thefigure}{A\arabic{figure}}
+\renewcommand{\theequation}{A\arabic{equation}}
+
+\section*{Appendix}
+\phantomsection
+\addcontentsline{toc}{section}{Appendix}
+
+% ---- Supplementary tables ------------------------------------------------
+% Cite each table by the \label inside its own file, e.g.
+% Table~\ref{tab:us_house_rmse_grid}. Do not add bare \label commands here:
+% after an unnumbered heading they pick up the last section number, which is
+% how the body text came to read "Appendix 4".
+\input{output/national_anesrake_variables_accuracy}   % Table A1: tab:national_anesrake_variables_accuracy
+\input{output/cps_sample_description}                 % Table A2: tab:cps_sample_description
+\input{output/us_house_rmse_grid}                     % Table A3: tab:us_house_rmse_grid
+\input{output/data_sources}                           % Table A4: tab:data_sources
+\input{output/rmse_demographic_candidate_choice_weighting_comparison_vertical} % Table A5
+
+% ---- Figure A1 -------------------------------------------------------------
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth, height=0.70\textheight, keepaspectratio]{output/rmse_demographic_candidate_choice_weighting_comparison_vertical.png}
+    \caption{Weighting and RMSE by Variable Type}
+    \caption*{\footnotesize
+    Bars compare matching-only and weighted RMSE. $\Delta$ is weighted minus matching-only RMSE, so negative values indicate improvement. Panels A and B contain Primary demographics (Age Group, Education, and Sex) and Secondary demographics (Employment Status, Family Income, Union Membership, and Veteran Status), respectively. Panels C and D contain Governor and U.S. Senate, which were Secondary in 2008--2012 and Primary in 2014--2022; blank years indicate the other classification. Weighting improves Primary demographics more than Secondary demographics and produces larger reductions for the candidate-choice variables during their Primary years, although the latter comparison is confounded with time.}
+    \label{fig:demographic_candidate_choice_weighting_comparison_vertical}
+\end{figure}
+
+% Place Tables A1--A5 and Figure A1 before the text sections begin.
+\clearpage
+
+% ---- Text sections ---------------------------------------------------------
+% Unnumbered headings. \ref to these labels would print a stale section
+% number, and pandoc drops \nameref, so refer to them by name in the text.
+% The labels stay as link anchors (they become the Word bookmarks).
+
+\subsection*{Entropy Balancing Procedure}
+\label{app:entropy_balancing}
+
+Beginning in 2014, the Cooperative Election Study (CES) weighted the matched sample to the target sample using entropy balancing \parencite{hainmueller_entropy_2012}. Entropy balancing is a multivariate reweighting method that assigns scalar weights to individual observations such that the reweighted sample exactly satisfies a set of covariate balance constraints while remaining as close as possible to a set of base weights.
+
+Formally, weights were obtained by minimizing Kullback--Leibler divergence \parencite{kullback_information_1959} between the final weights \( w_i \) and base weights \( q_i \):
+\[
+\min H(w) = \sum_{i} w_{i} \log\!\left(\frac{w_{i}}{q_{i}}\right),
+\]
+subject to the following constraints:
+\begin{gather}
+    \sum_{i \in S} w_{i} c_{ri}(X_i) = \mu_{r}, \label{eq:ebalance1} \\
+    \sum_{i \in S} w_{i} = 1, \label{eq:ebalance2} \\
+    w_{i} \ge 0 \quad \forall i. \label{eq:ebalance3}
+\end{gather}
+
+Here, \( S \) indexes the matched sample, \( w_i \) denotes the entropy-balanced weight assigned to respondent \( i \), and \( q_i \) denotes the base weight. In settings where base weights are unavailable—as is typical in nonprobability samples—base weights were set uniformly such that \( q_i = 1/N \), where \( N \) is the matched sample size.
+
+Constraint~\eqref{eq:ebalance1} enforces balance on the \( r \)-th moment of covariate \( X \) in the target sample, where \( \mu_r \) denotes the corresponding target-sample moment. In the CES implementation, moment functions were specified as
+\[
+c_{ri}(X_{ij}) = X_{ij} - \mu_j,
+\]
+where \( X_{ij} \) denotes the value of covariate \( j \) for respondent \( i \), and \( \mu_j \) is the target-sample mean of covariate \( j \). Constraints~\eqref{eq:ebalance2} and~\eqref{eq:ebalance3} ensure that the resulting weights form a valid probability distribution.
+
+Minimizing Kullback--Leibler divergence subject to these constraints yields a set of weights that deviate minimally from the base weights while achieving exact balance on the specified covariates. This property ensures that weights vary smoothly across observations and preserves their interpretation as probability weights.
+
+
+\subsection*{Inconsistencies and Intricacies of Election Information Reporting}
+\label{app:inconsistencies_election_info}
+
+Candidate names occasionally differed in format between the CES questionnaire and official election returns. Jaro–Winkler fuzzy string matching \parencite{jaro_advances_1989, winkler_string_1990} was used to map CES candidates to those in the election returns, and all matches were manually reviewed.
+
+Some states did not report candidate party affiliation in official election returns, even when candidates were formally affiliated with a party. In these cases, candidates were manually assigned to their affiliated party to avoid artificially inflating CES error, as such candidates would otherwise have been treated as unaffiliated despite being identified by CES respondents as Democrats or Republicans.
+
+In states such as New York and Vermont, candidates endorsed by multiple parties appeared multiple times on the ballot—once for each party line. For example, a candidate may have received votes under the Democratic Party, Working Families Party, and Progressive Party. In these cases, all votes in the election returns were aggregated to the candidate’s major-party affiliation (Democratic or Republican).
+
+When a state held a special election on the same day as a general election, those votes were included. When both a special and a general election for the same office occurred on the same day, only the general election was counted.
+
+
+\subsection*{Race Salience}
+\label{app:race_salience}
+
+We report a supplementary analysis examining whether CES accuracy varies with race salience. Prior work in election polling suggests that higher-salience contests are typically measured more accurately than down-ballot races. Although the CES captures retrospective vote reports rather than pre-election intentions, it is useful to assess whether a similar pattern appears in these data.
+
+To minimize potential confounds, the analysis used unweighted data measured at the party level. This specification avoids the influence of CES weights and ensures comparability across offices by holding the measurement scale constant.
+
+Under this specification, RMSE was lowest for high-salience contests (7.4 percent). Error was higher for down-ballot offices, though the pattern was not strictly monotonic: medium-salience races had the highest average RMSE (10.4 percent), while low-salience offices averaged 9.8 percent. Figure~\ref{fig:rmse_by_office_salience_party} presents these results by salience category.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{output/rmse_by_office_salience_party.png}
+    \caption{RMSE by Office Salience, Yearly Average}
+    \label{fig:rmse_by_office_salience_party}
+\end{figure}
+
+
+% ---- Supplementary sample-size figures ----------------------------------
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{output/ces_error_sample_size_distribution_variable_width_frequency.png}
+    \caption{Distribution of Sample Sizes Underlying CES Error Estimates}
+    \caption*{\footnotesize
+    Sample size is the number of CES respondents contributing to the survey estimate whose error is measured against an external benchmark. For statewide estimates, this is the relevant state--year respondent count; for U.S. House, which is a district-specific estimate, it is the relevant district--year respondent count. Bars represent unequal sample-size intervals: their heights report the number of estimate-level observations in each interval, their widths reflect the range of sample sizes covered, and their labels report the percentage of all included estimates. The figure includes unweighted CES estimates.}
+    % CHECK: these bars sum to 9,090 estimates, not the 9,540 in Figure 4.
+    % The 450-estimate gap equals the turnout count, so turnout looks excluded.
+    % If so, say so in the caption above.
+    \label{fig:app_sample_size_distribution}   % was a duplicate of Figure 4's label
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{output/sample_size_distribution_rmse_state_year_pools.png}
+    \caption{Sample-Size Distribution and RMSE Across State-Year Respondent Pools}
+    \caption*{\footnotesize
+    This figure provides a sample-level counterpart to the estimate-level sample-size distribution reported in Figure~\ref{fig:ces_error_estimate_sample_size_distribution}. In that figure, each variable-specific comparison with an external benchmark is an error observation. Consequently, the same underlying state-year respondent pool appears repeatedly because its respondents are used to estimate multiple variables and, where applicable, multiple district-specific outcomes. Here, each state-year respondent pool appears only once. Its sample size is defined as the largest valid respondent count observed for that state-year; smaller variable-specific counts may result from item nonresponse or geographically restricted estimates. Bar heights report the percentage of state-year pools in each sample-size range, and labels report the number and percentage of pools. RMSE is calculated hierarchically so that variables producing more observations and pools producing more error rows do not receive disproportionate weight. Squared percentage-point errors are first averaged within each state-year-variable combination. Those variable-level mean squared errors are then averaged within each state-year pool, giving every variable equal weight. Within each sample-size range, the pool-level mean squared errors are averaged across state-year pools and the square root is taken, giving every pool equal weight. The overall equal-pool RMSE shown in the figure is calculated analogously across all state-year pools. Results use unweighted CES estimates and exclude turnout to match the corresponding main-text analysis.}
+    \label{fig:sample_size_distribution_rmse_state_year_pools}
+
+    
+\end{figure}
+
+
+% \listoffigures
+% \listoftables
+
+
+\end{document}
