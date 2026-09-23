@@ -608,7 +608,7 @@ The curve is constrained to begin at the observed RMSE for the first bin, approx
     \includegraphics[width=\linewidth]{output/observed_rmse_vs_inverse_sqrt_n_shape_by_class_excl_turnout_unweighted.png}
     \caption{Observed and Extrapolated RMSE by Sample Size Relative to the Probability-Sampling Benchmark}
     \caption*{\footnotesize
-    Points show observed RMSE across sample-size bins for all variables except turnout. The solid gold curve shows the fitted relationship $a+b/\sqrt{N}$ over the observed sample-size range, while the dashed gold segment extrapolates that relationship beyond the available data to $N=25{,}000$. The gray dash-dot curve shows the theoretical $1/\sqrt{N}$ decline expected under probability sampling, calibrated to the same RMSE at $N=50$. The dotted horizontal line marks the fitted residual-error floor. Sample size is displayed on a logarithmic scale. Results use unweighted CES estimates. Turnout is excluded from this visualization because it has substantially higher error, an estimated error floor of approximately 39.1 percentage points, and no detectable decline under the variable-specific $1/\sqrt{N}$ specification. Including it would cause turnout to dominate the binned RMSE and obscure the relationship among the remaining variables.}
+    Points show observed RMSE across sample-size bins for all variables except turnout. Bins are sample-size quantiles of roughly 650 error observations each. Each point is a single RMSE over all observations in its bin, pooled across waves and variables rather than averaged across wave-variable cells, so a wave or variable contributes in proportion to its number of observations; many wave-variable cells within a bin contain only one or two observations, too few for a stable RMSE. The solid gold curve shows the fitted relationship $a+b/\sqrt{N}$ over the observed sample-size range, while the dashed gold segment extrapolates that relationship beyond the available data to $N=25{,}000$. The gray dash-dot curve shows the theoretical $1/\sqrt{N}$ decline expected under probability sampling, calibrated to the same RMSE at $N=50$. The dotted horizontal line marks the fitted residual-error floor. Sample size is displayed on a logarithmic scale. Results use unweighted CES estimates. Turnout is excluded from this visualization because it has substantially higher error, an estimated error floor of approximately 39.1 percentage points, and no detectable decline under the variable-specific $1/\sqrt{N}$ specification. Including it would cause turnout to dominate the binned RMSE and obscure the relationship among the remaining variables.}
     \label{fig:respondent_count_sqrt_fit}
 \end{figure}
 
@@ -641,7 +641,7 @@ Table~\ref{tab:office_rmse_less_competitive_races} and Figure~\ref{fig:office_rm
 
 This compression toward parity contrasts with prior work, which has documented systematic overstatement of winners, incumbents, and frontrunners in both post-election reports and pre-election polls \parencite{wright1993errors, mattei1998winning, hopkins2009wilder, chen2025electoral}. Among the possible mechanisms for this are that respondents may have reported their party's candidate rather than a crossover vote for a strong winner, less salient contests may have invited weaker recall, and turnout overreporting added vote choices from people who did not vote.
 
-U.S. House races let us examine sample size and competitiveness jointly. Because the unit of inference was the district and many districts contained relatively few CES respondents, House contests combined both sources of error in a way that state-level estimates for other offices did not. Table~\ref{tab:us_house_rmse_grid} presents presents a two-way RMSE matrix that stratifies U.S. House races by the winner's vote share and by minimum district-level respondent thresholds, showing how competitiveness and district sample size interact.
+U.S. House races let us examine sample size and competitiveness jointly. Because the unit of inference was the district and many districts contained relatively few CES respondents, House contests combined both sources of error in a way that state-level estimates for other offices did not. Table~\ref{tab:us_house_rmse_grid} presents a two-way RMSE matrix that stratifies U.S. House races by the winner's vote share and by minimum district-level respondent thresholds, showing how competitiveness and district sample size interact.
 % \begin{figure}
 %     \centering
 %     \includegraphics[width=\linewidth]{output/rmse_by_competitiveness_histogram.png}
@@ -816,6 +816,19 @@ Some states did not report candidate party affiliation in official election retu
 In states such as New York and Vermont, candidates endorsed by multiple parties appeared multiple times on the ballot—once for each party line. For example, a candidate may have received votes under the Democratic Party, Working Families Party, and Progressive Party. In these cases, all votes in the election returns were aggregated to the candidate’s major-party affiliation (Democratic or Republican).
 
 When a state held a special election on the same day as a general election, those votes were included. When both a special and a general election for the same office occurred on the same day, only the general election was counted.
+
+
+\subsection*{U.S. House Sample Size and Competitiveness}
+\label{app:us_house_grid}
+
+Table~\ref{tab:us_house_rmse_grid} stratifies U.S. House races by the winner's vote share and by
+minimum district-level respondent thresholds. Two patterns stand out. Among competitive and
+moderately uncompetitive races, RMSE generally declines as the minimum respondent threshold rises,
+consistent with district-level sample size contributing to House vote-choice error. In very safe
+districts, by contrast, error remains elevated and the respondent-count gradient weakens, suggesting
+that some of the error in lopsided races reflects factors other than finite-sample variability. The
+highest-threshold cells in the 90--100 percent column rest on very few district-years and should be
+read with caution.
 
 
 \subsection*{Race Salience}
