@@ -239,7 +239,7 @@ Sample size is another proposed remedy for the error in nonprobability samples. 
 
 A handful of studies have examined error in sample matched surveys, specifically, and have found that matching alone provides little or no consistent advantage over conventional post-stratification or raking \parencite{brick_weighting_2015, buskirk_probability_2015, mercer_for_2018}. Evidence from specialized populations similarly indicates that matching can improve sample comparability without necessarily eliminating selection bias \parencite{disogra_matching_2015}.
 
-But not all nonprobability survey designs are equivalent. YouGov emerged on the scene using a different method. They drew early attention after outperforming traditional telephone pollsters in several U.K. parliamentary elections, including the 2001 and 2005 contests \parencite{coleman_online_2001, noauthor_track_2005}. Following its 2007 acquisition of Polimetrix, YouGov entered the U.S. market and adopted Polimetrix’s sample matching methodology. Ahead of the 2008 presidential election, the firm emphasized its ability to deliver rapid, low-cost survey estimates while maintaining accuracy, positioning sample matching as a potential solution to the limitations of opt-in panels \parencite{crampton_about_2007, bradshaw_yougov_2008}. 
+But not all nonprobability survey designs are equivalent. YouGov emerged on the scene using a different method. They drew early attention after outperforming traditional telephone pollsters in several U.K. parliamentary elections, including the 2001 and 2005 contests \parencite{coleman_online_2001, electoralcalculus_2005}. Following its 2007 acquisition of Polimetrix, YouGov entered the U.S. market and adopted Polimetrix’s sample matching methodology. Ahead of the 2008 presidential election, the firm emphasized its ability to deliver rapid, low-cost survey estimates while maintaining accuracy, positioning sample matching as a potential solution to the limitations of opt-in panels \parencite{crampton_about_2007, bradshaw_yougov_2008}. 
 
 This accuracy claim received notable support in a 2016 Pew Research Center evaluation. In a head-to-head comparison of eight nonprobability vendors and a probability sample fielded on the same questionnaire, YouGov outperformed all other opt-in samples and also exceeded the accuracy of Pew’s probability sample \parencite{kennedy_evaluating_2016}. YouGov exhibited the lowest measurement error across 20 benchmark variables and performed especially well among Black and Hispanic respondents, populations for which survey error is typically higher \parencite{hopkins_getting_2024}. Earlier studies likewise found YouGov samples to produce accurate estimates \parencite{ansolabehere_cooperative_2013, ansolabehere_does_2014, rivers_inference_2009, vavreck_2006_2008}. Therefore, perhaps sample matching represents a substantive advance in nonprobability survey design.
 
@@ -281,6 +281,8 @@ The CES sample was produced in five stages. Table~\ref{tab:ces_terms} defines th
 \renewcommand{\arraystretch}{1.35}
 \caption{CES Sample Matching Terms}
 \label{tab:ces_terms}
+\makebox[\textwidth][c]{%
+\begin{threeparttable}
 \begin{tabular}{p{4cm} p{10cm}}
 \toprule
 \textbf{Term} & \textbf{Definition} \\
@@ -310,6 +312,8 @@ Final Weighted \newline Sample &
 The frame-weighted sample after post-stratification to demographic and political margins, trimming, and normalization. These are the weights released with the CES. \\[8pt]
 \bottomrule
 \end{tabular}
+\end{threeparttable}%
+}
 \end{table}
 
 \subsubsection*{The Sampling Frame and Target Sample}
@@ -323,11 +327,13 @@ YouGov maintains a large opt-in, nonprobability panel recruited in a variety of 
 
 For the CES, respondents were drawn both from YouGov's panel and from potential respondents supplied by other companies (Table~\ref{tab:externalproviders}). In 2016, for example, the matched sample was selected from among 106,382 people who completed questionnaires, roughly half of whom were YouGov panelists. The CES guides do not describe how panelists were selected to receive invitations.\footnote{An inquiry about the selection process has been made but has not yet been answered.} \textcite{rivers_sample_2006} describes the general procedure YouGov developed for this purpose, in which invitations are allocated using a cross-classification on age, gender, race, education, region, and sample source, with the number of invitations per target case set from estimated completion probabilities so as to yield at least one completed interview per case. Whether the CES followed this procedure in a given year is not documented.
 
-\begin{table}[!htbp] 
+\begin{table}[!htbp]
   \centering
+  \footnotesize
+  \caption{Non-YouGov Panelist Providers}
+  \label{tab:externalproviders}
+  \makebox[\textwidth][c]{%
   \begin{threeparttable}
-    \caption{Non-YouGov Panelist Providers}
-    \label{tab:externalproviders}
     \begin{tabular}{l>{\raggedright\arraybackslash}p{10cm}} % Adjust the width as needed
       \toprule
       Year & External Providers \\ 
@@ -343,7 +349,8 @@ For the CES, respondents were drawn both from YouGov's panel and from potential 
       2022 & Dynata, Prodege, Disqo, Generation Lab  \\ 
       \bottomrule
     \end{tabular}
-  \end{threeparttable}
+  \end{threeparttable}%
+  }
 \end{table}
 
 \subsubsection*{Matching}
@@ -370,7 +377,7 @@ The frame-weighted sample was then post-stratified. In every documented year, th
 
 \section{Benchmarks}
 \subsection{Demographics}
-Population targets were drawn primarily from  Current Population Survey (CPS) data provided by IPUMS \parencite{flood_ipums_2024}. The CPS is a monthly probability sample survey conducted by the U.S. Census Bureau since 1940. Sampled households have been interviewed once a month for four months, then given four months off, and again once a month for four additional months. Initial interviews were conducted in person, and subsequent interviews were conducted in person or by telephone. Interviewers attempted to collect data from all household members and accepted proxy reports from one household member about another household member when necessary. Household response rates for the CPS between 2006 and 2022 ranged from 71 percent to 92 percent \parencite{uscensus_cpsnov2006, uscensus_cpsnov2022}. CPS data are weighted to account for sampling design, nonresponse, and undercoverage, using population controls derived from the decennial census, which are updated annually.   
+Population targets were drawn primarily from  Current Population Survey (CPS) data provided by IPUMS \parencite{flood_ipums_2024}. The CPS is a monthly probability sample survey conducted by the U.S. Census Bureau since 1940. Sampled households have been interviewed once a month for four months, then given four months off, and again once a month for four additional months. Initial interviews were conducted in person, and subsequent interviews were conducted in person or by telephone. Interviewers attempted to collect data from all household members and accepted proxy reports from one household member about another household member when necessary. Annual CPS household response rates in the survey years studied ranged from 72.9 percent (2022) to 92.0 percent (2010) (Table~\ref{tab:cps_sample_description}) \parencite{bls_cps_response_rates}. CPS data are weighted to account for sampling design, nonresponse, and undercoverage, using population controls derived from the decennial census, which are updated annually.   
 
 % Population targets were primarily drawn from the CPS \parencite{flood_ipums_2024}, generally considered one of the most reliable sources of population statistics \parencite{hur_coding_2013}. The CPS is a probability monthly survey conducted by the U.S. Census Bureau. Each month, approximately 60,000 households are interviewed. CPS data are weighted using a multistage stratified sampling design that adjusts for undercoverage, nonresponse, and demographic characteristics. The weighting process incorporates population controls that are projected from the most recent decennial census and are updated annually. The survey employs a rotation scheme where each household is interviewed for four consecutive months, then dropped from the sample for eight months before potentially being re-interviewed. The interviewing process starts in person, and can be transitioned to telephone after a few months of interviewing. The CPS uses proxy reporting, where one person speaks on behalf of the whole household. 
 
@@ -767,7 +774,7 @@ In sum, our findings challenge the view of sample matching as a solution to the 
     \includegraphics[width=\linewidth, height=0.70\textheight, keepaspectratio]{output/rmse_demographic_candidate_choice_weighting_comparison_vertical.png}
     \caption{Weighting and RMSE by Variable Type}
     \caption*{\footnotesize
-    Bars compare matching-only and weighted RMSE. $\Delta$ is weighted minus matching-only RMSE, so negative values indicate improvement. Panels A and B contain Primary demographics (Age Group, Education, and Sex) and Secondary demographics (Employment Status, Family Income, Union Membership, and Veteran Status), respectively. Panels C and D contain Governor and U.S. Senate, which were Secondary in 2008--2012 and Primary in 2014--2022; blank years indicate the other classification. Weighting improves Primary demographics more than Secondary demographics and produces larger reductions for the candidate-choice variables during their Primary years, although the latter comparison is confounded with time.}
+    Bars compare matching-only and weighted RMSE. $\Delta$ is weighted minus matching-only RMSE, so negative values indicate improvement. Panels A and B contain primary demographics (Age Group, Education, and Sex) and secondary demographics (Employment Status, Family Income, Union Membership, and Veteran Status), respectively. Panels C and D contain Governor and U.S. Senate, which were secondary in 2008--2012 and primary in 2014--2022; blank years indicate the other classification. Weighting improves primary demographics more than secondary demographics and produces larger reductions for the candidate-choice variables during their primary years, although the latter comparison is confounded with time.}
     \label{fig:demographic_candidate_choice_weighting_comparison_vertical}
 \end{figure}
 
@@ -858,7 +865,7 @@ Under this specification, RMSE was lowest for high-salience contests (7.4 percen
     \includegraphics[width=\linewidth]{output/ces_error_sample_size_distribution_variable_width_frequency.png}
     \caption{Distribution of Sample Sizes Underlying CES Error Estimates}
     \caption*{\footnotesize
-    Sample size is the number of CES respondents contributing to the survey estimate whose error is measured against an external benchmark. For statewide estimates, this is the relevant state--year respondent count; for U.S. House, which is a district-specific estimate, it is the relevant district--year respondent count. Bars represent unequal sample-size intervals: their heights report the number of estimate-level observations in each interval, their widths reflect the range of sample sizes covered, and their labels report the percentage of all included estimates. The figure includes unweighted CES estimates.}
+    Sample size is the number of CES respondents contributing to the survey estimate whose error is measured against an external benchmark. For statewide estimates, this is the relevant state--year respondent count; for U.S. House, which is a district-specific estimate, it is the relevant district--year respondent count. Bars represent unequal sample-size intervals: their heights report the number of estimate-level observations in each interval, their widths reflect the range of sample sizes covered, and their labels report the percentage of all included estimates. The figure includes unweighted CES estimates and excludes turnout (450 estimates), so the bars total 9,090 rather than the 9,540 in Figure~\ref{fig:ces_error_estimate_sample_size_distribution}.}
     % CHECK: these bars sum to 9,090 estimates, not the 9,540 in Figure 4.
     % The 450-estimate gap equals the turnout count, so turnout looks excluded.
     % If so, say so in the caption above.
