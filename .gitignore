@@ -84,3 +84,6 @@ tables_and_figures/output/*
 .png
 
 .positai
+
+# Claude session outputs
+Claude outputs/
