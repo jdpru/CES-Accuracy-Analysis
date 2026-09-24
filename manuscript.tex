@@ -476,7 +476,7 @@ Separating the effects of weighting by office, as in Figure~\ref{fig:rmse_reduct
     \centering
     \includegraphics[width=\linewidth]{output/rmse_reduction_by_office.png}
     \caption{RMSE Reduction from CES Weighting by Office}
-    \caption*{\footnotesize \dag~marks an office in the years it was a CES weighting target. Bars show matching-only RMSE and the RMSE remaining after CES weighting, averaged across years.}
+    \caption*{\footnotesize Bars show matching-only RMSE and the RMSE remaining after CES weighting, averaged across the 2008--2022 waves. An office appears among primary offices in the years it was a CES weighting target and among secondary offices otherwise. The 2006 wave is excluded because matching and weighting classifications are unavailable.}
     \label{fig:rmse_reduction_by_office}
 \end{figure}
 
@@ -549,7 +549,7 @@ Contrary to this expectation, CES accuracy did not improve over the 17 years stu
     \centering
     \includegraphics[width=\linewidth]{output/rmse_trend_fe_permutation.png}
     \caption{Secondary Variable RMSE Trends Over Time}
-    \caption*{\footnotesize RMSE trends over time for secondary variables that were observed in every survey wave and classified as secondary in all years. The 2006 CES guide does not document which variables were used in matching or weighting, so 2006 variables are assumed secondary. Eight variables are included: Employment Status, Family Income, Union Membership, Veteran Status, State Representative, State Senator, U.S. House, and Voting Method. \textbf{Panel A}: Each point represents the average RMSE across included variables in a given year. The dashed line shows the estimated linear trend from a variable fixed-effects regression estimated on year-by-variable RMSE, with HC3 heteroskedasticity-robust standard errors. The estimated coefficient indicates the average change in RMSE percentage points per calendar year, net of baseline differences across variables. \textbf{Panel B}: RMSE trends disaggregated by variable class. Reported coefficients come from the same fixed-effects specification estimated separately within each class, except for Voting Administration, which contains only one variable and therefore reduces to a year trend for Voting Method. Significance indicated by * $p < 0.05$, ** $p < 0.01$, *** $p < 0.001$.}
+    \caption*{\footnotesize RMSE trends over time for secondary variables that were observed in every survey wave and classified as secondary in all years. Eight variables are included: Employment Status, Family Income, Union Membership, Veteran Status, State Representative, State Senator, U.S. House, and Voting Method. \textbf{Panel A}: Each point represents the average RMSE across included variables in a given year. The dashed line shows the estimated linear trend from a variable fixed-effects regression estimated on year-by-variable RMSE, with HC3 heteroskedasticity-robust standard errors. The estimated coefficient indicates the average change in RMSE percentage points per calendar year, net of baseline differences across variables. \textbf{Panel B}: RMSE trends disaggregated by variable class. Reported coefficients come from the same fixed-effects specification estimated separately within each class, except for Voting Administration, which contains only one variable and therefore reduces to a year trend for Voting Method. Significance indicated by * $p < 0.05$, ** $p < 0.01$, *** $p < 0.001$.}
     \label{fig:rmse_trend_fe_permutation}
 \end{figure}
 
@@ -615,7 +615,7 @@ The curve is constrained to begin at the observed RMSE for the first bin, approx
     \includegraphics[width=\linewidth]{output/observed_rmse_vs_inverse_sqrt_n_shape_by_class_excl_turnout_unweighted.png}
     \caption{Observed and Extrapolated RMSE by Sample Size Relative to the Probability-Sampling Benchmark}
     \caption*{\footnotesize
-    Points show observed RMSE across sample-size bins for all variables except turnout. Bins are sample-size quantiles of roughly 650 error observations each. Each point is a single RMSE over all observations in its bin, pooled across waves and variables rather than averaged across wave-variable cells, so a wave or variable contributes in proportion to its number of observations; many wave-variable cells within a bin contain only one or two observations, too few for a stable RMSE. The solid gold curve shows the fitted relationship $a+b/\sqrt{N}$ over the observed sample-size range, while the dashed gold segment extrapolates that relationship beyond the available data to $N=25{,}000$. The gray dash-dot curve shows the theoretical $1/\sqrt{N}$ decline expected under probability sampling, calibrated to the same RMSE at $N=50$. The dotted horizontal line marks the fitted residual-error floor. Sample size is displayed on a logarithmic scale. Results use unweighted CES estimates. Turnout is excluded from this visualization because it has substantially higher error, an estimated error floor of approximately 39.1 percentage points, and no detectable decline under the variable-specific $1/\sqrt{N}$ specification. Including it would cause turnout to dominate the binned RMSE and obscure the relationship among the remaining variables.}
+    Points show observed RMSE across sample-size bins for all variables except turnout. Bins are sample-size quantiles of roughly 650 error observations each. Each point is a single RMSE over all observations in its bin, pooled across waves and variables. The solid gold curve shows the fitted relationship $a+b/\sqrt{N}$ over the observed sample-size range, while the dashed gold segment extrapolates that relationship beyond the available data to $N=25{,}000$. The gray dash-dot curve shows the theoretical $1/\sqrt{N}$ decline expected under probability sampling, calibrated to the same RMSE at $N=50$. The dotted horizontal line marks the fitted residual-error floor. Results use unweighted CES estimates. Turnout is excluded from this visualization because it has substantially higher error.}
     \label{fig:respondent_count_sqrt_fit}
 \end{figure}
 
@@ -689,7 +689,7 @@ Thus, while traditional post-stratification effectively reduced error for variab
     \includegraphics[width=\linewidth]{output/rmse_anesrake_full_by_year.png}
     \caption{Comparison of Weighting Techniques Across Years}
     \caption*{\footnotesize
-    Includes U.S.\ House, State House, and State Senate—the only variables observed in all years and not used in either YouGov or anesrake weighting.
+    Each bar is the mean RMSE across three variables in one wave, computed from the same respondents under three weighting scenarios: matching only, with no weights; matching plus the weights YouGov releases with the CES; and matching plus national calibration weights we constructed with anesrake to CPS and administrative demographic and voting benchmarks (Table~\ref{tab:vars_used_by_anesrake}). The three variables, U.S.\ House, State Senator, and State Representative vote choice, are the only ones observed in every wave and used in neither the CES weights nor anesrake, so neither weighting scheme was fit to them.
     }
 
     \label{fig:rmse_anesrake_full_by_year}
