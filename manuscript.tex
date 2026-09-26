@@ -790,12 +790,19 @@ In sum, our findings challenge the view of sample matching as a solution to the 
 % ==========================================================================
 %  APPENDIX A: DISCLOSURE ELEMENTS
 % ==========================================================================
+
 \section*{Appendix A: AAPOR-Required Disclosure Elements}
 \phantomsection
 \addcontentsline{toc}{section}{Appendix A: AAPOR-Required Disclosure Elements}
 \label{app:disclosure}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+\renewcommand{\thefigure}{A\arabic{figure}}
+\renewcommand{\theHtable}{A\arabic{table}}
+\renewcommand{\theHfigure}{A\arabic{figure}}
 
-This study analyzes three existing data sources and collected no new data. For each source, the elements required by the AAPOR Code are given below; where an element is described in permanently archived, study-specific documentation, we link to it, and where an element does not apply, we say so and why.
+This study analyzes three existing data sources and collected no new data. For each source, the elements required by the AAPOR Code are given below. Where an element is described in permanently archived, study-specific documentation, we link to it; where an element is not documented or does not apply, we say so and why. Year-specific details for the CES are collected in Table~\ref{tab:disclosure_by_year}.
 
 \subsection*{Data Source 1: Cooperative Election Study (CES), 2006--2022}
 
@@ -811,42 +818,117 @@ This study analyzes three existing data sources and collected no new data. For e
 2020, \url{https://doi.org/10.7910/DVN/E9N6PH};
 2022, \url{https://doi.org/10.7910/DVN/PR4L8P}.
 
-\item[Data collection strategy:] Online surveys, with a pre-election and a post-election wave in each year.
+\item[Data collection strategy:] Online surveys, with a pre-election and a post-election wave in each year. In 2006, additional profile information was collected in a separate survey in August 2006.
 
-\item[Research sponsor and conductor:] The CES is sponsored by a consortium of universities and research teams, with support from the National Science Foundation, and was conducted by YouGov. This analysis was funded by the Department of Communication, Stanford University.
+\item[Research sponsor and conductor:] The CES is sponsored by a consortium of universities and research teams, with support from the National Science Foundation. Data were collected by Polimetrix (2006), YouGov/Polimetrix (2008--2012), and YouGov (2014--2022). Funding for the present analysis is withheld for blind review and disclosed on the title page.
 
-\item[Measurement tools/instruments:] The exact wording, response options, and instructions for every question analyzed are in each year's questionnaire and codebook, archived with the data above. The variables analyzed are listed in Table~\ref{tab:observation_counts}; how each was compared with its benchmark is described in ``Measuring Error'' in the main text.
+\item[Measurement tools/instruments:] The exact wording, response options, and instructions for every question analyzed are in each year's questionnaire and guide, archived with the data above. Table~\ref{tab:ces_variable_map} lists, for each benchmarked item and year, the CES variable used, verified against the variable labels in the released data files. In 2008 the union item (\texttt{CC329}) asks about union membership in the household rather than the respondent's own membership. Vote-choice items asked respondents to choose among parties in earlier years and among named candidates, shown with party labels, in later years; see ``Measuring Error'' in the main text.
 
-\item[Population under study:] The CES describes its samples as representative of U.S. citizens ages 18 and older. Estimates are evaluated for states and, for U.S. House, congressional districts, in each election year.
+\item[Population under study:] The CES describes its samples as representative of U.S. adults, and its sampling frames are drawn from U.S. citizens ages 18 and older. Estimates are evaluated for the 50 states and the District of Columbia and, for U.S. House, congressional districts, in each election year. Respondents were not excluded on citizenship; in the years that include a direct citizenship item (\texttt{cit1}), 1,134 (2018), 1,010 (2020), and 624 (2022) respondents reported not being U.S. citizens. CPS benchmarks, by contrast, are restricted to citizens (Data Source 2).
 
-\item[Methods used to generate and recruit the sample:] The samples are non-probability samples. Respondents came from opt-in online panels: YouGov's own panel and panels supplied by other companies (Table~\ref{tab:externalproviders}). Coverage is therefore limited to people who joined those panels. From 2008 onward, YouGov drew a target sample from a sampling frame built from the American Community Survey and selected the matched sample from completed questionnaires by sample matching (Table~\ref{tab:ces_stages}); in 2006, the target sample was drawn from consumer databases and matched to PollingPoint panelists. The guides do not describe how panelists were selected to receive invitations or document any quotas; the general procedure YouGov developed is described in ``Sourcing Panel Members'' in the main text. Panelists receive points redeemable for small monetary rewards \parencite{yougov_methodology}. Data collection was not in person.
+\item[Methods used to generate and recruit the sample:]
+The samples are non-probability samples drawn from opt-in online panels: the Polimetrix/YouGov panel (PollingPoint through 2012) and, from 2008, panels supplied by other companies (Tables~\ref{tab:externalproviders} and \ref{tab:disclosure_by_year}). Coverage is limited to people who joined those panels.
 
-\item[Method(s) and mode(s) of data collection:] Self-administered web questionnaires. The languages offered are documented in each year's guide.
+In every year, a target sample was drawn from a sampling frame and matched to completed interviews from the panels by sample matching (Table~\ref{tab:ces_stages}). In 2006, the target population was enumerated from commercial consumer databases, and the target sample was stratified by registration status, state size, and district competitiveness (16 strata), and further by age, race, and gender; more than 150,000 PollingPoint respondents formed the pool from which matches were drawn, and Polimetrix used multiple matching and rematching to handle nonresponse. From 2008 through 2020, frames were constructed by stratified sampling from American Community Survey (ACS) citizen records, with political and religious variables attached from the Current Population Survey (CPS), exit polls, and the Pew Religious Landscape Survey as documented in each guide. In 2022, the frame was a ``politically representative modeled frame'' based on the 2019 ACS, with political variables modeled from voter files, the 2020 CPS Voting and Registration Supplement, the 2020 National Election Pool exit poll, and the 2020 CES.
+
+Panelists were selected for invitation using a five-way cross-classification (age $\times$ gender $\times$ race $\times$ education $\times$ state) from 2008 through 2016, and a six-way cross-classification (age $\times$ gender $\times$ race $\times$ education $\times$ region $\times$ sample source) from 2018. No other quotas are documented. All pre-election respondents were re-invited to the post-election wave. The guides do not describe the incentives offered to panelists, except that in 2006 ``inducements'' were offered late in October to increase participation among low-income and low-interest respondents; YouGov currently describes its panel incentive as points redeemable for small rewards \parencite{yougov_methodology}, and incentives offered by external providers are not documented. Data collection was not in person.
+
+\item[Method(s) and mode(s) of data collection:] Self-administered web questionnaires. The guides do not report the languages in which the questionnaires were offered.
 
 \item[Dates of data collection:] Field periods for each year are in Table~\ref{tab:sample_description}. Guides through 2014 report them only at monthly or relative precision.
 
-\item[Sample sizes and discussion of precision:] Sample sizes for each year are in Table~\ref{tab:sample_description}. Because the samples are not probability samples, we report no margins of sampling error. Instead, this study measures total error directly, as the RMSE of CES estimates against external benchmarks.
+\item[Sample sizes and discussion of precision:] Released sample sizes, the number of completed pre-election interviews in the matching pool, and post-election completes are in Tables~\ref{tab:sample_description} and \ref{tab:disclosure_by_year}. Because the samples are not probability samples, we report no margins of sampling error; this study instead measures total error directly, as the RMSE of CES estimates against external benchmarks. The trend analysis (Table~\ref{tab:rmse_trend_tests}) reports model-based HC3 standard errors and permutation $p$-values; these describe uncertainty in the fitted trend across variable-years, not sampling error in the CES estimates.
 
-\item[Whether and how the data were weighted:] Estimates are analyzed unweighted (matching only), with the CES-provided weights, and with anesrake calibration weights we constructed. The CES weights were computed in two steps, weighting to the frame and post-stratification, using the variables in Table~\ref{tab:ces_stages} (see ``CES Sample Matching and Weighting Procedure'' in the main text and Appendix C). The anesrake weights and the variables used for them are described in ``Weighting Scenarios'' and Table~\ref{tab:vars_used_by_anesrake}.
+\item[Whether and how the data were weighted:] Estimates are analyzed unweighted (matching only), with the CES-provided weights, and with anesrake calibration weights we constructed. The CES weights were computed by weighting the matched sample to the frame (propensity-score subclassification in 2008--2012; entropy balancing from 2014) and then post-stratifying (raking in 2022), using the variables in Table~\ref{tab:ces_stages}; weights were trimmed at 7 (2008--2012) or 15 (2014--2022) and normalized to the sample size (see ``CES Sample Matching and Weighting Procedure'' and Appendix~C). The CES weight variable used in each year is listed in Table~\ref{tab:disclosure_by_year}. Where the CES provides a separate post-election weight (2016--2022), that weight is applied to every item, including demographics measured in the pre-election wave, so that all estimates in a year rest on the same respondents and weights. In 2014 the released file contains a single weight. The anesrake weights, their targets (CPS and administrative benchmarks), and their parameters are described in ``Weighting Scenarios'' and Table~\ref{tab:vars_used_by_anesrake}.
 
-\item[How the data were processed and procedures to ensure data quality:] YouGov's respondent-level quality procedures are described, where documented, in each year's guide. Our processing, including recoding CES responses to benchmark categories and matching candidate names to official returns with fuzzy string matching, is described in ``Measuring Error'' and Appendix D. Candidate-name matching was done by software, with party affiliations assigned manually where official returns omitted them.
+\item[How the data were processed and procedures to ensure data quality:] The guides state that pre-election interviews entered the matching pool ``after quality controls were applied'' but do not describe those controls. Our processing, including recoding CES responses to benchmark categories, is described in ``Measuring Error.'' Responses of ``don't know,'' ``not sure,'' ``did not vote in this race,'' and ``I did not vote,'' along with skipped, not-asked, and no-race responses, were set to missing and dropped item by item; ``other'' responses were retained in the denominator. No filter on reported turnout was applied to vote-choice items.
 
-\item[Panel description:] Panel recruitment and incentives are described in ``Sourcing Panel Members'' in the main text. Procedures for managing panel membership, participation, and attrition are not described in the CES guides.
+State-level estimates from 2008 onward use the state recorded in the post-election wave, so respondents who completed only the pre-election wave are excluded from all state-level estimates; the 2006 estimates use the pre-election state variable (\texttt{v1002}). U.S. House estimates exclude respondents without a post-election congressional district; in 2020, a further 774 North Carolina respondents flagged in the CES data were excluded from House estimates. In 2018, respondents in eight states (Texas, Pennsylvania, Indiana, South Carolina, Alabama, Kentucky, Oklahoma, and Utah) who reported voting a straight party ticket (\texttt{CC18\_408} $= 2$; $n = 4{,}021$) were not asked about individual statewide and U.S. House contests. Following the procedure described in the 2018 guide, we assigned each of these respondents the candidate of their ticket's party for U.S. Senate, governor, U.S. House, attorney general, and secretary of state; respondents whose ticket party fielded no candidate, who reported a minor-party ticket, or whose ticket party was not recorded were left missing. Their state legislative vote choices were taken directly from \texttt{CC18\_413c} and \texttt{CC18\_413d}. Also in 2018, the post-election questionnaire displayed Kansas's attorney general and secretary of state candidates to Kentucky respondents, where neither office was on the ballot, and displayed no candidates to Kansas respondents, none of whom has a recorded response to either item. The 2018 guide does not mention this error. Kentucky has no benchmark for these offices and Kansas has no responses, so both states are absent from the 2018 estimates for these offices (see the note to Table~\ref{tab:states_respondents_by_office}).
 
-\item[Interviewer details:] Not applicable. The questionnaires were self-administered, and no human coders were used.
+CES candidate names were matched to official returns first by exact, case-insensitive comparison and otherwise by Jaro string distance (R package \texttt{stringdist} 0.9.15, method \texttt{"jw"} with $p = 0$), taking the closest candidate with no threshold. Of 3,612 candidate contests, 2,530 matched exactly and 1,082 by string distance (maximum distance 0.48). All 1,082 distance-based matches were reviewed manually; one was overridden, and party affiliations were assigned manually where official returns omitted them (Appendix~D).
 
-\item[Screening criteria and process:] Not documented in the CES guides.
+\item[Panel description:] Panel recruitment is described in ``Sourcing Panel Members'' in the main text. Procedures for managing panel membership, participation, and attrition are not described in the CES guides.
+
+\item[Interviewer details:] No interviewers were used; the questionnaires were self-administered. Human coding in this study was limited to the manual review of distance-based candidate matches, one override, and party assignments described above, all performed by the authors.
+
+\item[Screening criteria and process:] The frames were restricted to U.S. citizens ages 18 and older. The guides do not document any other eligibility screening or whether respondents were routed from other surveys.
 
 \item[Study stimuli:] None beyond the questionnaires archived with the data.
 
-\item[Dispositions or response or participation rates:] Case dispositions are not published. Table~\ref{tab:sample_description} reports the rates the guides label AAPOR Response Rate 1, which we report as completion rates; a participation rate for the general population cannot be computed. The main text discusses this limitation.
+\item[Dispositions or response or participation rates:] Case dispositions and the rates the guides label AAPOR Response Rate 1 are reported in Table~\ref{tab:disclosure_by_year} for 2008--2022; the 2006 guide reports none. The reporting base differs across years: 2014 and 2016 report YouGov and external-panel cases separately and combined, 2018 reports YouGov panelists only, and the remaining years do not specify. Because the number of people exposed to recruitment is unknown, these figures are completion rates among invited panelists, not response or participation rates for the population (see the main text); a participation rate for the population cannot be computed.
 
 \item[Sample sizes:] The number of respondents underlying each estimate is shown in Figure~\ref{fig:ces_error_estimate_sample_size_distribution}, respondents per state in Table~\ref{tab:states_respondents_by_office}, and the number of estimates by variable and year in Table~\ref{tab:observation_counts}. Variable-years excluded from particular analyses, and why, are stated in the main text and table notes.
 
 \item[Measurement and model specification:] RMSE is defined in ``Measuring Error.'' The trend models are specified in Table~\ref{tab:rmse_trend_tests} and Figure~\ref{fig:rmse_trend_fe_permutation}, the sample-size model in Figure~\ref{fig:respondent_count_sqrt_fit}, and the anesrake weights in ``Weighting Scenarios.''
 
-\item[Limitations:] The CES samples are non-probability samples, so their error cannot be characterized by sampling theory. Documentation is incomplete for some waves: the 2006 guide does not name the matching variables or describe weighting, the 2012 guide repeats the 2010 description, and the 2018--2022 guides do not describe the draw of the target sample. Some benchmark outcomes (U.S. Senate and gubernatorial results from 2014 onward, and the 2020 presidential vote) were used in the CES weights, so weighted estimates for them are not independent tests of accuracy.
+\item[Limitations:] The CES samples are non-probability samples, so their error cannot be characterized by sampling theory. Turnout, voting method, and vote choice are self-reports, so measured error includes misreporting as well as sample composition. The turnout benchmark uses the voting-age population as its denominator, which includes noncitizens and others ineligible to vote, whereas the CES population is adult citizens. CES estimates include self-reported noncitizens, whereas CPS benchmarks are restricted to citizens. Documentation is incomplete for some waves: the 2006 guide does not describe a weighting procedure, the 2012 guide repeats the 2010 description, several guides repeat identical figures for the size of the matching pool, and no guide describes the quality controls applied. Some benchmark outcomes (U.S. Senate and gubernatorial results from 2014 onward, and presidential vote in 2020) were used in the CES weights, so weighted estimates for them are not independent tests of accuracy.
 \end{description}
+
+\begin{table}[htbp]
+\centering
+\caption{CES Disclosure Details by Year}
+\label{tab:disclosure_by_year}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.7cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{4.7cm}>{\raggedright\arraybackslash}p{1.7cm}>{\raggedright\arraybackslash}p{1.6cm}>{\raggedright\arraybackslash}p{2.9cm}@{}}
+\toprule
+Year & Panels & Dispositions of invited cases (I / P / R / UH / NE) & RR1 & Post-election completes & CES weight used \\
+\midrule
+2006 & PollingPoint & Not reported ($>$150,000 in matching pool) & -- & 28,757 & \texttt{v1001} \\
+2008 & PollingPoint; E-Rewards; Western Wats & 49,043 / 13,137 / 627 / 42,007 / 1,082 & .468 & 27,021 & \texttt{V201} \\
+2010 & PollingPoint; E-Rewards; Western Wats & 75,450 / 27,155 / 4,645 / 79,723 / 9,262 & .404 & 46,684 & \texttt{V101} \\
+2012 & PollingPoint; E-Rewards; Western Wats & 83,583 / 20,229 / 7,754 / 138,624 / 14,267$^a$ & .334$^a$ & 45,018$^d$ & \texttt{V103} \\
+2014 & YouGov; MyPoints; Research Now; SSI & YouGov: 43,203 / 6,480 / 1,897 / 29,448 / 1,442 \newline External: 52,383 / 28,773 / 7,392 / 238,639 / 19,643 & .533 / .160 / .234$^b$ & 48,853 & \texttt{weight} \\
+2016 & YouGov; MyPoints; Research Now; SSI; GMI & YouGov: 53,939 / 7,177 / 2,519 / 64,997 / 982 \newline External: 52,443 / 22,692 / 5,210 / 557,367 / 43,822 & .419 / .082 / .139$^b$ & 52,899 & \texttt{commonweight\_post} \\
+2018 & YouGov; Dynata; Critical Mix; Prodege & YouGov only: 63,301 / 8,341 / 125 / 139,374 / -- & .300$^c$ & 51,808 & \texttt{commonpostweight} \\
+2020 & YouGov; Dynata; Critical Mix; Prodege & 60,466 / 7,900 / 1,591 / 28,922 / 1,606 \newline (74,099 in matching pool) & .612 & 51,551 & \texttt{commonpostweight} \\
+2022 & YouGov; Dynata; Disqo; Prodege; Generation Lab & 64,957 / 10,771 / 3,102 / 57,676 / 3,017 \newline (80,233 in matching pool) & .476 & 50,981 & \texttt{commonpostweight} \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+\textit{Note:} I = complete; P = partial; R = refusal and breakoff; UH = unknown eligibility; NE = not eligible. Dispositions and RR1 are as reported in each year's CES guide; RR1 is reported in the main text as a completion rate. $^a$Common Content sample only; the 2012 guide also reports separate panel and NES samples. $^b$YouGov / external / combined. $^c$YouGov panelists only. The 2014, 2016, and 2018 guides each give the matching pool as ``approximately 87,389''; because the figure is identical across years and the 2016 disposition table reports 106,382 completes, we do not report it. Post-election completes are counts of respondents coded as completing the post-election wave in each year's data file (\texttt{v4001}, \texttt{V400}, \texttt{V403}, or \texttt{tookpost}). $^d$The 2012 file has no post-election disposition variable; the count is the number of respondents with a non-missing post-election state (\texttt{inputstate\_post}), the variable used to assign respondents to states.
+\end{minipage}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{CES Variables Used for Each Benchmarked Item, by Year}
+\label{tab:ces_variable_map}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllllllll}
+\toprule
+Item & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 \\
+\midrule
+Age Group & \texttt{v2020}$^a$ & \texttt{V207}$^a$ & \texttt{V207}$^a$ & \texttt{birthyr}$^a$ & \texttt{birthyr}$^a$ & \texttt{birthyr}$^a$ & \texttt{birthyr}$^a$ & \texttt{birthyr}$^a$ & \texttt{birthyr}$^a$ \\
+Sex & \texttt{v2004} & \texttt{V208} & \texttt{V208} & \texttt{gender} & \texttt{gender} & \texttt{gender} & \texttt{gender} & \texttt{gender} & \texttt{gender4} \\
+Education & \texttt{v2018} & \texttt{V213} & \texttt{V213} & \texttt{educ} & \texttt{educ} & \texttt{educ} & \texttt{educ} & \texttt{educ} & \texttt{educ} \\
+Hispanic Origin & -- & -- & \texttt{V290} & \texttt{hispanic} & \texttt{hispanic} & \texttt{hispanic} & \texttt{hispanic} & \texttt{hispanic} & \texttt{hispanic} \\
+Employment Status & \texttt{v2030} & \texttt{V209} & \texttt{V209} & \texttt{employ} & \texttt{employ} & \texttt{employ} & \texttt{employ} & \texttt{employ} & \texttt{employ} \\
+Family Income & \texttt{v2032} & \texttt{V246} & \texttt{V246} & \texttt{faminc} & \texttt{faminc} & \texttt{faminc} & \texttt{faminc\_new} & \texttt{faminc\_new} & \texttt{faminc\_new} \\
+Union Membership & \texttt{v2082} & \texttt{CC329} & \texttt{V264} & \texttt{union} & \texttt{union} & \texttt{union} & \texttt{union} & \texttt{union} & \texttt{union} \\
+Veteran Status & \texttt{v3083} & \texttt{CC328\_3} & \texttt{V254} & \texttt{milstat\_3} & \texttt{milstat\_3} & \texttt{milstat\_3} & \texttt{milstat\_3} & \texttt{milstat\_3} & \texttt{milstat\_3} \\
+Residence Duration & -- & \texttt{CC334} & \texttt{CC351} & \texttt{CC351} & \texttt{CC351} & \texttt{CC16\_361} & -- & \texttt{CC20\_361} & \texttt{CC22\_361} \\
+Voting Turnout & \texttt{v4004} & \texttt{CC403} & \texttt{CC401} & \texttt{CC401} & \texttt{CC401} & \texttt{CC16\_401} & \texttt{CC18\_401} & \texttt{CC20\_401} & \texttt{CC22\_401} \\
+Voting Method & \texttt{v4006} & \texttt{CC405} & \texttt{CC403} & \texttt{CC403} & \texttt{CC403} & \texttt{CC16\_403} & \texttt{CC18\_403} & \texttt{CC20\_403} & \texttt{CC22\_403} \\
+President & -- & \texttt{CC410} & -- & \texttt{CC410a} & -- & \texttt{CC16\_410a} & -- & \texttt{CC20\_410} & -- \\
+U.S. Senate & \texttt{v4014} & \texttt{CC411} & \texttt{CC410a} & \texttt{CC410b} & \texttt{CC410b} & \texttt{CC16\_410b} & \texttt{CC18\_410b} & \texttt{CC20\_411} & \texttt{CC22\_411} \\
+U.S. House & \texttt{v4015} & \texttt{CC412} & \texttt{CC412} & \texttt{CC412} & \texttt{CC412} & \texttt{CC16\_412} & \texttt{CC18\_412} & \texttt{CC20\_412} & \texttt{CC22\_412} \\
+Governor & \texttt{v4013} & \texttt{CC413} & \texttt{CC411} & \texttt{CC411} & \texttt{CC411} & \texttt{CC16\_411} & \texttt{CC18\_411} & \texttt{CC20\_413} & \texttt{CC22\_413} \\
+Attorney General & \texttt{v4017} & -- & \texttt{CC413a} & \texttt{CC413a} & \texttt{CC413a} & \texttt{CC16\_413a} & \texttt{CC18\_420a} & \texttt{CC20\_414a} & \texttt{CC22\_414a} \\
+Secretary of State & \texttt{v4018} & -- & \texttt{CC413b} & \texttt{CC413b} & \texttt{CC413b} & \texttt{CC16\_413b} & \texttt{CC18\_420b} & \texttt{CC20\_414b} & \texttt{CC22\_414b} \\
+State Senator & \texttt{v4021} & \texttt{CC414\_2} & \texttt{CC413c} & \texttt{CC413c} & \texttt{CC413c} & \texttt{CC16\_413c} & \texttt{CC18\_413c} & \texttt{CC20\_415c} & \texttt{CC22\_415c} \\
+State Representative & \texttt{v4020} & \texttt{CC414\_1} & \texttt{CC413d} & \texttt{CC413d} & \texttt{CC413d} & \texttt{CC16\_413d} & \texttt{CC18\_413d} & \texttt{CC20\_415d} & \texttt{CC22\_415d} \\
+\midrule
+State assignment & \texttt{v1002}$^b$ & \texttt{V259} & \texttt{V206\_post} & \texttt{inputstate\_post} & \texttt{inputstate\_post} & \texttt{inputstate\_post} & \texttt{inputstate\_post} & \texttt{inputstate\_post} & \texttt{inputstate\_post} \\
+Congressional district & \texttt{v1003} & \texttt{V264} & \texttt{V276\_post} & \texttt{cdid113\_post} & \texttt{cdid\_post} & \texttt{cdid115\_post} & \texttt{cdid116\_post} & \texttt{cdid116\_post} & \texttt{cdid118\_post} \\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+\textit{Note:} Variable names are as they appear in each year's released Common Content file and were verified against the variable labels in those files; question wording is in the corresponding guide and questionnaire on Dataverse. Dashes indicate that the item was not measured, or the office was not on the ballot, that year. Vote-choice items are from the post-election wave. $^a$Age group is derived from year of birth. $^b$The 2006 file has no post-election state variable; the pre-election state is used. In 2008, \texttt{CC329} asks about union membership in the household, not the respondent's own membership.
+\end{minipage}
+\end{table}
 
 \subsection*{Data Source 2: Current Population Survey (CPS)}
 
@@ -855,21 +937,25 @@ This study analyzes three existing data sources and collected no new data. For e
 
 \item[Data collection strategy, sponsor, and conductor:] A monthly household survey sponsored by the U.S. Census Bureau and the Bureau of Labor Statistics and conducted by the Census Bureau. Methodology, questionnaires, and sampling are documented at \url{https://www.bls.gov/cps/documentation.htm} and \url{https://cps.ipums.org/cps/}.
 
-\item[Population, sample, mode, and dates:] A monthly probability sample of U.S. households, interviewed in person or by telephone, as described in ``Benchmarks'' in the main text; data from 2006 through 2022 were used.
+\item[Measurement tools/instruments:] Benchmarks come from the CPS basic monthly files, with all twelve months pooled within each year (the March file used is the basic monthly March sample, not the Annual Social and Economic Supplement), obtained through the IPUMS API (IPUMS CPS version 13.0). Sex, education, age, Hispanic origin, veteran status, employment status, and family income are from the basic monthly items; union membership is from the earnings (outgoing rotation) items; residence duration and voting method are from the November Voting and Registration Supplement. Questionnaires are documented at the links above.
 
-\item[Sample sizes, response rates, and weighting:] Annual sample sizes and household response rates are in Table~\ref{tab:cps_sample_description}. Benchmarks use the CPS weights, which account for sampling design, nonresponse, and undercoverage.
+\item[Population, sample, mode, and dates:] A monthly probability sample of U.S. households, interviewed in person or by telephone, as described in ``Benchmarks'' in the main text; data from 2006 through 2022 were used. Benchmarks are restricted to respondents ages 18 and older who are U.S. citizens (IPUMS \texttt{CITIZEN} codes 1--4).
+
+\item[Sample sizes, response rates, and weighting:] Annual sample sizes and household response rates are in Table~\ref{tab:cps_sample_description}; sample sizes count person-month records, not unique persons. Benchmarks use the CPS weights, which account for sampling design, nonresponse, and undercoverage (\texttt{WTFINL} for basic monthly items, \texttt{EARNWT} for union membership, and \texttt{VOSUPPWT} for Voting and Registration Supplement items).
 
 \item[Other elements:] Interviewer procedures, screening, processing, and panel rotation are documented by the Census Bureau and BLS at the links above.
 
-\item[Limitations:] CPS benchmarks carry their own sampling and nonsampling error, including proxy reports, and are treated here as fixed. Race was not evaluated because CPS race categories could not be mapped exhaustively onto CES categories; Hispanic origin, measured comparably in both, was evaluated from 2010 onward.
+\item[Limitations:] CPS benchmarks carry their own sampling and nonsampling error, including proxy reports and, for voting method, self-report error; they are treated here as fixed, so part of the measured CES error may reflect benchmark error, particularly in small states. Race was not evaluated because CPS race categories could not be mapped exhaustively onto CES categories; Hispanic origin, measured comparably in both, was evaluated from 2010 onward.
 \end{description}
 
 \subsection*{Data Source 3: Election Returns and Turnout}
 
 \begin{description}[style=unboxed, leftmargin=0pt, font=\normalfont\bfseries]
-\item[Data source:] Government records: official election returns compiled by the MIT Election Data and Science Lab, the Federal Election Commission, CQ Press, Ballotpedia, and state election offices, and turnout compiled by the University of Florida Election Lab (Table~\ref{tab:data_sources}).
+\item[Data source:] Government records. Official election returns, compiled by the MIT Election Data and Science Lab, the Federal Election Commission, CQ Press, Ballotpedia, and state election offices, and turnout compiled by the University of Florida Election Lab (Table~\ref{tab:data_sources}).
 
-\item[Processing:] Matching of candidates and parties to CES responses, and the handling of multi-party endorsements and special elections, are described in Appendix D.
+\item[Measurement:] Turnout is total ballots counted divided by the voting-age population (VAP), from the United States Elections Project (\url{https://www.electproject.org}). In 22 state-years for which total ballots are not reported, the numerator is votes cast for the highest office on the ballot: Alabama 2006 and 2012; Connecticut 2008; Delaware 2012; Maine 2006; Mississippi 2006--2014; Missouri 2012; New Mexico 2014; Oklahoma 2006 and 2012; Pennsylvania 2006 and 2012; Rhode Island 2012; Texas 2006, 2008, 2012, and 2014; and West Virginia 2012. National turnout is summed ballots divided by summed VAP across the 50 states and the District of Columbia. State-level turnout benchmarks cover the 50 states; the District of Columbia is excluded. Vote shares are each candidate's share of all votes cast in the contest. Each contest is compared on the candidate who received the most votes, except in nine contests whose winner was not among the candidates offered in the CES item (independent or write-in winners, and the 2016 Louisiana Senate race); there the major-party nominee offered by the CES is used instead. These contests are listed in Appendix~D.
+
+\item[Processing:] Matching of candidates and parties to CES responses, and the handling of multi-party endorsements and special elections, are described in Appendix~D.
 
 \item[Elements that do not apply:] These are official counts rather than samples, so sampling, mode, response rates, weighting, interviewers, and sampling precision do not apply.
 \end{description}

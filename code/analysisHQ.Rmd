@@ -227,22 +227,6 @@ NC_flag_df <- read.csv("data/misc./NC_responents_incorrect_CD.csv") %>%
 skip_conditions <- read.xlsx("data/misc./skip_conditions_final.xlsx")
 ```
 
-## CPS Datasets
-```{r}
-# # Set IPUMS API Key (specific to user, free to acquire on IPUMS site)
-# USER_IPUMS_API_KEY = ""
-# 
-# 
-# if (USER_IPUMS_API_KEY == "") {
-#   stop(
-#     "USER_IPUMS_API_KEY is blank. Create a free IPUMS API key at https://developer.ipums.org/docs/v2/get-started/, then paste it into USER_IPUMS_API_KEY and re-run from this point",
-#     call. = FALSE
-#   )
-# }
-# 
-# set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
-```
-
 #### Optional local CPS load
 #<!--
 This block is intentionally commented out.
@@ -312,6 +296,24 @@ list2env(cps_raw_list, envir = .GlobalEnv)
 ```
 #-->
 
+<!--
+## CPS Datasets
+```{r}
+# # Set IPUMS API Key (specific to user, free to acquire on IPUMS site)
+# USER_IPUMS_API_KEY = ""
+# 
+# 
+# if (USER_IPUMS_API_KEY == "") {
+#   stop(
+#     "USER_IPUMS_API_KEY is blank. Create a free IPUMS API key at https://developer.ipums.org/docs/v2/get-started/, then paste it into USER_IPUMS_API_KEY and re-run from this point",
+#     call. = FALSE
+#   )
+# }
+# 
+# set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
+```
+
+
 ### Prep monthly sample codes and variables
 This is necessary to use the IPUMS API to download CPS data.
 ```{r}
@@ -368,6 +370,7 @@ for (df_name in names(extract_codes)) {
   assign(df_name, eval(parse(text = extract_codes[[df_name]])), envir = .GlobalEnv)
 }
 ```
+-->
 
 ## Subset datasets --------------
 Subset CES to only include relevant variables
@@ -459,7 +462,13 @@ Subset CES to be citizens only
 ```{r}
 # Drop self-reported noncitizens (immigration item, code 2). The CES doesn't match
 # on citizenship, but every benchmark (CPS, election returns, VEP turnout) is citizens only.
+EXCLUDE_NONCITIZENS <- TRUE
 
+ces_citizenship_var <- c(
+  "06" = "v3086", "08" = "CC332", "10" = "V263",
+  "12" = "immstat", "14" = "immstat", "16" = "immstat",
+  "18" = "immstat", "20" = "immstat", "22" = "immstat"
+)
 noncitizen_counts <- tibble()
 
 for (yy in names(ces_citizenship_var)) {
