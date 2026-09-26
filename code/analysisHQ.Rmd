@@ -371,38 +371,39 @@ for (df_name in names(extract_codes)) {
 
 ## Subset datasets --------------
 Subset CES to only include relevant variables
+
 ```{r}
 CES_06_subset_vars <- c(
-  "v1000", "v1001", "v1002", "v1003", "v1004", "v2004", "v2018", "v2020", "v3081", "v3083", "v1006", "v2030", "v2073", "v2082", "v2033", "v2032", "v3004", "v4004", "v4006", "v4005", "v4014", "v4015", "v4013", "v4017", "v4018", "v4019", "v4020", "v4021", "v5009", "v5010", "v5011", "v5012", "v5005", "v5006", "v5007", "v5008", "v5001", "v5002", "v5003", "v5004")
+  "v1000", "v1001", "v1002", "v1003", "v1004", "v2004", "v2018", "v2020", "v3081", "v3083", "v1006", "v2030", "v2073", "v2082", "v2033", "v2032", "v3004", "v3086", "v4004", "v4006", "v4005", "v4014", "v4015", "v4013", "v4017", "v4018", "v4019", "v4020", "v4021", "v5009", "v5010", "v5011", "v5012", "v5005", "v5006", "v5007", "v5008", "v5001", "v5002", "v5003", "v5004")
 
 CES_08_subset_vars <- c(
-  "V100", "V201", "V206", "V207", "V208", "V250", "V251", "V202", "V205", "V204", "V213", "V252", "V253", "V258", "V257", "V247", "V259", "V264", "V501", "V502", "V553", "V555", "V601", "V602", "V603", "V612", "V653", "V655", "V657", "V672", "CC328_1", "CC328_3", "CC334", "CC410", "CC411", "CC411b", "CC412", "CC413", "CC414_2", "CC414_1", "V209", "CC329", "CC333", "V246", "V203", "CC403", "CC405", "CC404", "CC326b", "CC337", "CC337S2", "CC340", "CC338", "V618", "V619", "US_Senate_Democrat_Name", "US_Senate_Republican_Name", "US_Senate_Other_Name", "US_House_Democrat_Name", "US_House_Republican_Name", "US_House_Other_Name")
+  "V100", "V201", "V206", "V207", "V208", "V250", "V251", "V202", "V205", "V204", "V213", "V252", "V253", "V258", "V257", "V247", "V259", "V264", "V501", "V502", "V553", "V555", "V601", "V602", "V603", "V612", "V653", "V655", "V657", "V672", "CC328_1", "CC328_3", "CC332", "CC334", "CC410", "CC411", "CC411b", "CC412", "CC413", "CC414_2", "CC414_1", "V209", "CC329", "CC333", "V246", "V203", "CC403", "CC405", "CC404", "CC326b", "CC337", "CC337S2", "CC340", "CC338", "V618", "V619", "US_Senate_Democrat_Name", "US_Senate_Republican_Name", "US_Senate_Other_Name", "US_House_Democrat_Name", "US_House_Republican_Name", "US_House_Other_Name")
 
 CES_10_subset_vars <- c(
-  "V100", "V101", "V202_post", "V204_post", "V205_post", "V206", "V206_post", "V207", "V208", "V213", "V252", "V254", "V276", "V276_post", "V539_post", "V564_post", "V567_post", "V548_post", "V551_post", "V533_post", "V536_post", "V545_post", "V554_post", "V556_post", "V570_post", "V572_post","V574_post", "V576_post", "CC351", "V209", "V264", "V250", "V246", "V290", "CC401", "V203", "CC403", "CC402a", "CC410a", "CC410b", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d")
+  "V100", "V101", "V202_post", "V204_post", "V205_post", "V206", "V206_post", "V207", "V208", "V213", "V252", "V254", "V276", "V276_post", "V539_post", "V564_post", "V567_post", "V548_post", "V551_post", "V533_post", "V536_post", "V545_post", "V554_post", "V556_post", "V570_post", "V572_post","V574_post", "V576_post", "CC351", "V209", "V264", "V250", "V246", "V263", "V290", "CC401", "V203", "CC403", "CC402a", "CC410a", "CC410b", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d")
 
 CES_12_subset_vars <- c(
-  "V101", "V103", "inputzip", "votereg_f", "regzip", "inputstate", "inputstate_post", "cdid113", "cdid113_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC351", "votereg", "employ", "employercat", "union", "ownhome", "faminc",
+  "V101", "V103", "inputzip", "votereg_f", "regzip", "inputstate", "inputstate_post", "cdid113", "cdid113_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC351", "votereg", "employ", "employercat", "union", "ownhome", "faminc", "immstat",
   "hispanic", "CC401", "CC402a", "CC403", "CC410a", "CC410b", "CC355", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post")
 
 
 CES_14_subset_vars <- c(
   "V101", "weight", "inputzip_post", "votereg_f_post", "regzip_post", "inputstate", "inputstate_post", "cdid", "cdid_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC351", 
-  "votereg", "employ", "union", "ownhome", "faminc",
+  "votereg", "employ", "union", "ownhome", "faminc", "immstat",
   "hispanic", "CC401", "CC402a", "CC403", "CC410b", "CC355x", "CC412", "CC411", "CC413a", "CC413b", "CC413c", "CC413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post")
 
 CES_16_subset_vars <- c(
-  "V101", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight_vv", "commonweight_vv_post", "commonweight_vv_lgbt", "commonweight", "commonweight_post", "inputstate", "inputstate_post", "cdid115", "cdid115_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC16_361", "votereg", "employ", "union", "ownhome", "faminc", "hispanic", "CC16_401", "CC16_402a", "CC16_410a", "CC16_403", "CC16_410b", "CC16_412", "CC16_411", "CC16_413a", "CC16_413b", "CC16_413c", "CC16_413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "SenCand4Name_post", "SenCand4Party_post", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post", "HouseCand9Name_post", "HouseCand9Party_post", "HouseCand10Name_post", "HouseCand10Party_post", "HouseCand11Name_post", "HouseCand11Party_post")
+  "V101", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight_vv", "commonweight_vv_post", "commonweight_vv_lgbt", "commonweight", "commonweight_post", "inputstate", "inputstate_post", "cdid115", "cdid115_post", "gender", "educ", "birthyr", "milstat_1", "milstat_3", "CC16_361", "votereg", "employ", "immstat", "union", "ownhome", "faminc", "hispanic", "CC16_401", "CC16_402a", "CC16_410a", "CC16_403", "CC16_410b", "CC16_412", "CC16_411", "CC16_413a", "CC16_413b", "CC16_413c", "CC16_413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "SenCand4Name_post", "SenCand4Party_post", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post", "HouseCand9Name_post", "HouseCand9Party_post", "HouseCand10Name_post", "HouseCand10Party_post", "HouseCand11Name_post", "HouseCand11Party_post")
 
 CES_18_subset_vars <- c(
-  "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "vvweight", "vvweight_post", "inputstate", "inputstate_post", "cdid116", "cdid116_post", "gender", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC18_401", "CC18_402a", "CC18_403", "CC18_410b", "CC18_410bx", "CC18_412", "CC18_353x", "CC18_411", "CC18_352x", "CC18_420a", "CC18_420b", "CC18_420c", "CC18_413c", "CC18_413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post")
+  "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "vvweight", "vvweight_post", "inputstate", "inputstate_post", "cdid116", "cdid116_post", "gender", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "immstat", "hispanic", "CC18_401", "CC18_402a", "CC18_403", "CC18_408", "CC18_409", "CC18_410b", "CC18_410bx", "CC18_412", "CC18_353x", "CC18_411", "CC18_352x", "CC18_420a", "CC18_420b", "CC18_420c", "CC18_413c", "CC18_413d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post")
 
 
 CES_20_subset_vars <- c(
-  "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "vvweight", "vvweight_post", "inputstate", "inputstate_post", "cdid116", "cdid116_post", "gender", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "CC20_361", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC20_401", "CC20_402a", "CC20_403", "CC20_410", "CC20_411", "CC20_365_voted", "CC20_411b", "CC20_365b_voted", "CC20_412", "CC20_413", "CC20_414a", "CC20_414b", "CC20_415c", "CC20_415d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "AttCand3Name", "AttCand3Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "SecCand3Name", "SecCand3Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post", "HouseCand9Name_post", "HouseCand9Party_post")
+  "caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "vvweight", "vvweight_post", "inputstate", "inputstate_post", "cdid116", "cdid116_post", "gender", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "CC20_361", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "immstat", "hispanic", "CC20_401", "CC20_402a", "CC20_403", "CC20_410", "CC20_411", "CC20_365_voted", "CC20_411b", "CC20_365b_voted", "CC20_412", "CC20_413", "CC20_414a", "CC20_414b", "CC20_415c", "CC20_415d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "AttCand3Name", "AttCand3Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "SecCand3Name", "SecCand3Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post", "HouseCand9Name_post", "HouseCand9Party_post")
 
 CES_22_subset_vars <- c(
-"caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "inputstate", "inputstate_post", "cdid118", "cdid118_post", "gender4", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "CC22_361", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "hispanic", "CC22_401", "CC22_402a", "CC22_403", "CC22_411", "CC22_365_voted", "CC22_411b", "CC22_365b_voted", "CC22_412", "CC22_413", "CC22_414a", "CC22_414b", "CC22_415c", "CC22_415d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "SenCand4Name_post", "SenCand4Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "AttCand3Name", "AttCand3Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "SecCand3Name", "SecCand3Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post")
+"caseid", "inputzip_post", "votereg_f_post", "regzip_post", "commonweight", "commonpostweight", "inputstate", "inputstate_post", "cdid118", "cdid118_post", "gender4", "educ", "birthyr", "cit1", "milstat_1", "milstat_3", "CC22_361", "region", "votereg", "employ", "union", "ownhome", "faminc_new", "immstat", "hispanic", "CC22_401", "CC22_402a", "CC22_403", "CC22_411", "CC22_365_voted", "CC22_411b", "CC22_365b_voted", "CC22_412", "CC22_413", "CC22_414a", "CC22_414b", "CC22_415c", "CC22_415d", "GovCand1Name_post", "GovCand1Party_post", "GovCand2Name_post", "GovCand2Party_post", "GovCand3Name_post", "GovCand3Party_post", "SenCand1Name_post", "SenCand1Party_post", "SenCand2Name_post", "SenCand2Party_post", "SenCand3Name_post", "SenCand3Party_post", "SenCand4Name_post", "SenCand4Party_post", "AttCand1Name", "AttCand1Party", "AttCand2Name", "AttCand2Party", "AttCand3Name", "AttCand3Party", "SecCand1Name", "SecCand1Party", "SecCand2Name", "SecCand2Party", "SecCand3Name", "SecCand3Party", "HouseCand1Name_post", "HouseCand1Party_post", "HouseCand2Name_post", "HouseCand2Party_post", "HouseCand3Name_post", "HouseCand3Party_post", "HouseCand4Name_post", "HouseCand4Party_post", "HouseCand5Name_post", "HouseCand5Party_post", "HouseCand6Name_post", "HouseCand6Party_post", "HouseCand7Name_post", "HouseCand7Party_post", "HouseCand8Name_post", "HouseCand8Party_post")
 
 CES_06_raw_subset <- CES_06_raw[, CES_06_subset_vars]
 CES_08_raw_subset <- CES_08_raw[, CES_08_subset_vars]
@@ -414,6 +415,80 @@ CES_18_raw_subset <- CES_18_raw[, CES_18_subset_vars]
 CES_20_raw_subset <- CES_20_raw[, CES_20_subset_vars]
 CES_22_raw_subset <- CES_22_raw[, CES_22_subset_vars]
 ```
+
+Correction for 2018 Straight-Ticket voters
+```{r}
+# 2018 straight-ticket fill-in
+# Respondents who chose a straight party ticket (CC18_408 == 2) skipped the
+# candidate-slot vote items. Following the CCES 2018 guide (fn. 2), assign each
+# race the slot whose party matches CC18_409. CC18_413c/d were asked directly
+# and are left unchanged. Uncontested races and "another party" tickets stay NA.
+st18_races <- list(
+  CC18_410b = c(`1`="SenCand1Party_post", `2`="SenCand2Party_post", `3`="SenCand3Party_post"),
+  CC18_411  = c(`1`="GovCand1Party_post", `2`="GovCand2Party_post", `3`="GovCand3Party_post"),
+  CC18_412  = c(`1`="HouseCand1Party_post", `2`="HouseCand2Party_post", `3`="HouseCand3Party_post",
+                `4`="HouseCand4Party_post", `10`="HouseCand5Party_post",
+                `11`="HouseCand6Party_post", `12`="HouseCand7Party_post"),
+  CC18_420a = c(`1`="AttCand1Party", `2`="AttCand2Party"),
+  CC18_420b = c(`1`="SecCand1Party", `2`="SecCand2Party")
+)
+
+st_party <- dplyr::case_when(
+  CES_18_raw_subset$CC18_408 == 2 & CES_18_raw_subset$CC18_409 == 1 ~ "Democratic",
+  CES_18_raw_subset$CC18_408 == 2 & CES_18_raw_subset$CC18_409 == 2 ~ "Republican",
+  TRUE ~ NA_character_
+)
+
+st18_filled <- c()
+for (v in names(st18_races)) {
+  vote  <- CES_18_raw_subset[[v]]
+  slots <- st18_races[[v]]
+  n0 <- sum(!is.na(vote))
+  for (code in names(slots)) {
+    slot_party <- trimws(as.character(CES_18_raw_subset[[slots[[code]]]]))
+    hit <- !is.na(st_party) & is.na(vote) & slot_party == st_party
+    vote[hit %in% TRUE] <- as.numeric(code)
+  }
+  CES_18_raw_subset[[v]] <- vote
+  st18_filled[v] <- sum(!is.na(vote)) - n0
+}
+print(st18_filled)
+```
+
+Subset CES to be citizens only
+```{r}
+# Drop self-reported noncitizens (immigration item, code 2). The CES doesn't match
+# on citizenship, but every benchmark (CPS, election returns, VEP turnout) is citizens only.
+
+noncitizen_counts <- tibble()
+
+for (yy in names(ces_citizenship_var)) {
+  df_name <- paste0("CES_", yy, "_raw_subset")
+  cit_var <- ces_citizenship_var[[yy]]
+  df      <- get(df_name)
+  cit     <- as.numeric(df[[cit_var]])  # strips haven labels
+
+  if (EXCLUDE_NONCITIZENS) {
+    # keep NA explicitly: filter(cit != 2) would silently drop skipped cases
+    assign(df_name, df[is.na(cit) | cit != 2, ], envir = .GlobalEnv)
+  }
+
+  cit_after <- as.numeric(get(df_name)[[cit_var]])
+
+  noncitizen_counts <- bind_rows(noncitizen_counts, tibble(
+    year          = 2000 + as.integer(yy),
+    variable      = cit_var,
+    n_before      = length(cit),
+    noncit_before = sum(cit == 2, na.rm = TRUE),
+    n_after       = length(cit_after),
+    noncit_after  = sum(cit_after == 2, na.rm = TRUE),
+    n_missing     = sum(is.na(cit_after))
+  ))
+}
+
+noncitizen_counts
+```
+
 
 Subset CPS to exclude respondents below 18 because the CES is limited to 18+
 ```{r}
