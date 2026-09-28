@@ -206,3 +206,14 @@ add_location_vars <- function(ces_rc_datasets, pre_post_location_vars) {
     print(paste("CES", year, "location variables created"))
   }
 }
+
+#' Normalize congressional district codes to one key across CES years and returns.
+#' CES: "01" text (2008/2010, at-large "00"), "1" text (2012-2020, "-1" in 2020),
+#' 1.0 numeric (2022), 0 at-large (2006). Returns: numeric, at-large 0.
+#' Integer on both sides; at-large 0 -> 1; negatives -> NA.
+normalize_cd <- function(x) {
+  k <- suppressWarnings(as.integer(as.character(x)))
+  k[!is.na(k) & k < 0]  <- NA
+  k[!is.na(k) & k == 0] <- 1L
+  as.character(k)
+}

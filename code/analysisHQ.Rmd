@@ -19,7 +19,6 @@ source("code/utilities/recoding_utilities.R")
 source("code/utilities/data_structures.R")
 source("code/utilities/election_return_utilities.R")
 source("code/utilities/accuracy_utilities.R")
-source("code/utilities/accuracy_utilities.R")
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -130,7 +129,8 @@ Senate_0622 <- read_excel("data/Benchmarks/Election Returns/US_Senate_Returns_20
 # These cases are excluded because the CES typically asks about only one Senate race, 
 # making it ambiguous which election respondents are reporting on.
 # If there was only a single election (even if special), it would still be captured.
-House_0622 <- read_excel("data/Benchmarks/Election Returns/US_House_Returns_2006_2022.xlsx", guess_max = 20000)
+House_0622 <- read_excel("data/Benchmarks/Election Returns/US_House_Returns_2006_2022.xlsx", guess_max = 20000) %>%
+  mutate(district = normalize_cd(district))
 
 # State Senate, State House, Attorney General, Secretary of State
 State_legislative_0623_raw <- read_excel("data/benchmarks/Election Returns/State_Legislative_and_Constitutional_Offices_2006_2023.xlsx", guess_max = 20000) %>% mutate(year = year(election_date))
@@ -155,7 +155,7 @@ Secretary_of_state_full <- State_legislative_0623 %>%
 
 ### Turnout
 ```{r}
-turnout_national <- read_excel("data/Benchmarks/VAP_Turnout_Rates.xlsx", sheet="National")
+turnout_national <- read_excel("data/Benchmarks/VEP_including_ineligible_felons.xlsx", sheet="National")
 turnout_statewide <- read_excel("data/Benchmarks/VAP_Turnout_Rates.xlsx", 
                                 sheet = "Statewide", 
                                 skip = 1, 
@@ -241,6 +241,7 @@ this commented out and use the normal IPUMS remote-download workflow instead.
 
 ```{r}
 # Path to the CPS Artifacts folder from this repo. Something like
+cps_vars_all <- c("WTFINL", "EARNWT", "VOSUPPWT", "STATEFIP", "SEX", "EDUC", "AGE", "CITIZEN", "HISPAN", "OCC", "VETSTAT", "REGION", "EMPSTAT", "CLASSWKR", "UNION", "FAMINC", "VOTERES", "VOREG", "VOTED", "VOWHYNOT", "VOTEHOW")
 cps_artifact_dir <- ""
 cps_artifact_dir <- "/Users/jdpruett/Repos/CES Accuracy Analysis/data/IPUMS CPS Artifacts"
 
@@ -673,15 +674,15 @@ CES_20_rc$REGION_rc <- as.factor(state_to_region[fips(CES_20_rc$inputstate, to =
 CES_22_rc$REGION_rc <- as.factor(state_to_region[fips(CES_22_rc$inputstate, to = "abbreviation")])
 
 # Rename congressional district column
-CES_06_rc$CDID_post_rc <- CES_06_rc$v1003
-CES_08_rc$CDID_post_rc <- CES_08_rc$V264
-CES_10_rc$CDID_post_rc <- CES_10_rc$V276_post
-CES_12_rc$CDID_post_rc <- CES_12_rc$cdid113_post
-CES_14_rc$CDID_post_rc <- CES_14_rc$cdid_post
-CES_16_rc$CDID_post_rc <- CES_16_rc$cdid115_post
-CES_18_rc$CDID_post_rc <- CES_18_rc$cdid116_post
-CES_20_rc$CDID_post_rc <- CES_20_rc$cdid116_post
-CES_22_rc$CDID_post_rc <- CES_22_rc$cdid118_post
+CES_06_rc$CDID_post_rc <- normalize_cd(CES_06_rc$v1003)
+CES_08_rc$CDID_post_rc <- normalize_cd(CES_08_rc$V264)
+CES_10_rc$CDID_post_rc <- normalize_cd(CES_10_rc$V276_post)
+CES_12_rc$CDID_post_rc <- normalize_cd(CES_12_rc$cdid113_post)
+CES_14_rc$CDID_post_rc <- normalize_cd(CES_14_rc$cdid_post)
+CES_16_rc$CDID_post_rc <- normalize_cd(CES_16_rc$cdid115_post)
+CES_18_rc$CDID_post_rc <- normalize_cd(CES_18_rc$cdid116_post)
+CES_20_rc$CDID_post_rc <- normalize_cd(CES_20_rc$cdid116_post)
+CES_22_rc$CDID_post_rc <- normalize_cd(CES_22_rc$cdid118_post)
 
 # Add pre- and post- questionnaire state
 update_ces_rc_datasets()
@@ -698,7 +699,7 @@ CES_16_rc$POST_STATE_rc <- as.factor(CES_16_rc$POST_STATE_rc)
 CES_18_rc$POST_STATE_rc <- as.factor(CES_18_rc$POST_STATE_rc)
 CES_20_rc$POST_STATE_rc <- as.factor(CES_20_rc$POST_STATE_rc)
 CES_22_rc$POST_STATE_rc <- as.factor(CES_22_rc$POST_STATE_rc)
-                                     
+                                  
                                      
 cps_rc_datasets <- list(CPS_06_rc, CPS_08_rc, CPS_10_rc, CPS_12_rc, CPS_14_rc, CPS_16_rc, CPS_18_rc, CPS_20_rc, CPS_22_rc)
 
@@ -984,8 +985,24 @@ House_0622_party_accuracy <- House_0622 %>%
   filter(!(year == 2014 & state == "FLORIDA" & as.character(district) == "23"))
 
 House_0622_clean_fixed <- recalculate_total_votes(House_0622_party_accuracy, "statewide")
-house_prop_table <- calculate_state_level_party_proportions(House_0622_clean_fixed)
-house_prop_table$Office <- "US House"
+
+# 2006 U.S. House at the district level. 2006 vote choice is party-only, so House
+# can't use the candidate (district) path. Reuse the statewide party function by
+# temporarily keying `state` on state + district, so party assignment (fusion
+# lines, write-ins -> OTHER) follows exactly the same rules as the statewide table.
+house_district_prop_table_2006 <- House_0622_party_accuracy %>%
+  filter(year == 2006) %>%
+  mutate(state = paste(state, as.integer(district), sep = "||")) %>%
+  calculate_state_level_party_proportions() %>%
+  tidyr::separate(State, into = c("State", "District"), sep = "\\|\\|") %>%
+  mutate(Office = "US House")
+
+# Statewide House party shares for all years (District = NA), plus the 2006
+# district rows. calculate_party_errors() uses the district rows only for
+# years in config$house_district_party_years, and the statewide rows otherwise.
+house_prop_table <- calculate_state_level_party_proportions(House_0622_clean_fixed) %>%
+  mutate(Office = "US House") %>%
+  bind_rows(house_district_prop_table_2006)
 
 # US Senate
 Senate_0622_clean_fixed <- recalculate_total_votes(Senate_0622, "statewide")
@@ -1104,7 +1121,7 @@ collapse_proportion_table <- function(df) {
 }
 
 collapsed_merged_prop_table <- collapse_proportion_table(merged_prop_tables)
-merged_prop_tables_combined <- rbind(collapsed_merged_prop_table, house_prop_table)
+merged_prop_tables_combined <- bind_rows(collapsed_merged_prop_table, house_prop_table)
 ```
 
 ## Create Candidate-Level Election Return Prop Tables
@@ -1406,6 +1423,10 @@ Update list_all_years, then create targets for each year for all variables that 
 ```{r}
 update_list_all_years()
 all_targets <- create_targets(list_all_years, cps_wtvar_dict)
+
+# Make post-stratification only demographic variables
+anesrake_exclude_vars <- c("VOTED_rc", "VOTEHOW_rc")
+demographic_targets <- lapply(all_targets, function(t) t[setdiff(names(t), anesrake_exclude_vars)])
 ```
 
 # Create ANESRake Weights
@@ -1497,7 +1518,7 @@ run_weighting <- function(year_list,
 
 Create weights for all years
 ```{r}
-weighting_results_all <- run_weighting(c(2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022), all_targets)
+weighting_results_all <- run_weighting(c(2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022), demographic_targets)
 ```
 
 
@@ -1554,7 +1575,7 @@ Table shows which variables were selected by anesrake for weighting in each year
 # ------------------------------------------------------------
 # 1) Define the universe of variables across all years
 # ------------------------------------------------------------
-all_vars <- sort(unique(unlist(lapply(all_targets, names))))
+all_vars <- sort(unique(unlist(lapply(demographic_targets, names))))
 
 # ------------------------------------------------------------
 # 2) Build long table with 3-level status
@@ -1565,7 +1586,7 @@ vars_status_long <- do.call(
 
     y <- as.character(y_chr)
 
-    proposed <- names(all_targets[[y]])
+    proposed <- names(demographic_targets[[y]])
     used     <- weighting_results_all[[y]]$vars_used
 
     data.frame(
@@ -1689,10 +1710,6 @@ CES error is measured in the following ways:
   - Demographic and voting variables ("demoplus"): compare true population proportions to CES proportions for demographic and voting behavior variables (e.g., union membership, voter turnout, etc.).
 
 ```{r}
-
-```
-
-```{r}
 # CES Weighting vars for each year
 yearly_ces_wt_vars <- list(
   "2006" = c("v1001", "anesrake_weight_full", "anesrake_weight_restricted"),
@@ -1717,6 +1734,8 @@ config <- create_accuracy_config(
   anesrake_restricted_results = weighting_results_restricted,
   selected_weighting_vars = selected_weighting_vars
 )
+
+config$house_district_party_years <- 2006
 ```
 
 ## Calculate party-level election errors
@@ -1931,7 +1950,11 @@ demovote_errors_national_modal_long <- demovote_errors_national_modal %>%
 ## Keep modal category only, combine, pivot
 ```{r}
 # Candidate is already modal
-party_errors_modal <- keep_modal_only(party_errors)
+#party_errors_modal <- keep_modal_only(party_errors)
+party_errors_modal <- keep_modal_only(
+  party_errors, group_vars = c("Year", "State", "District", "Variable")
+)
+
 demovote_errors_modal <- keep_modal_only(demovote_errors)
 
 # Combined

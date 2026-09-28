@@ -124,7 +124,7 @@ calculate_party_errors <- function(year_data_list, election_results_df, config) 
     
     pb$tick(tokens = list(year = year_data$year))
     year  <- year_data$year
-
+    
     ces_df <- year_data$CES
     
     year_elec <- election_results_df %>% filter(Year == year)
@@ -157,91 +157,134 @@ calculate_party_errors <- function(year_data_list, election_results_df, config) 
         }
         
         state_survey <- ces_filtered %>% filter(POST_STATE_rc == state)
-        n_resp <- sum(!is.na(state_survey[[race_col]]))
-        if (n_resp == 0) next
         
-        # ---- Benchmark ----
-        state_returns <- year_elec %>%
-          filter(State == state, Office == office_label)
+        # House is scored by district in years where party is the only vote
+        # measure (config$house_district_party_years; NULL = never). All other
+        # offices and years use a single statewide unit, as before.
+        by_district <- office_label == "US House" &&
+          year %in% config$house_district_party_years
         
-        if (nrow(state_returns) == 0) {
-          stop(glue::glue(
-            "No election results for {office_label}, {state}, {year}"
-          ))
+        districts <- if (by_district) {
+          get_districts_for_office(office_label, state_survey)
+        } else {
+          "statewide"
         }
         
-        benchmark <- c(
-          Democrat   = state_returns$DEM_Proportion,
-          Republican = state_returns$REP_Proportion,
-          Other      = state_returns$OTHER_Proportion
-        )
-        
-        # ---- CES proportions (ALL schemes) ----
-        ces_props <- calculate_all_weight_proportions(
-          survey_df     = state_survey,
-          var_col       = race_col,
-          year          = year,
-          config        = config,
-          ensure_parties = TRUE
-        )
-        
-        # ---- Variable metadata ----
-        var_meta <- determine_variable_metadata(
-          var_name = race_col,
-          year     = year,
-          config   = config
-        )
-        
-        # ---- One row per party ----
-        for (party in names(benchmark)) {
+        for (district in districts) {
           
-          year_results <- bind_rows(
-            year_results,
-            tibble(
-              Year     = year,
-              State    = state,
-              Class    = "Candidate Choice",
-              Variable = office_label,
-              Category = party,
-              
-              # ---- Metadata ----
-              Variable_Type = var_meta$variable_type,
-              
-              Used_in_ANESRake_Full       = var_meta$used_in_anesrake_full,
-              Used_in_ANESRake_Restricted = var_meta$used_in_anesrake_restricted,
-              
-              Valid_for_Accuracy_Full       = var_meta$valid_for_accuracy_full,
-              Valid_for_Accuracy_Restricted = var_meta$valid_for_accuracy_restricted,
-              
-              # ---- Benchmark ----
-              Benchmark = benchmark[party] * 100,
-              
-              # ---- Estimates ----
-              CES_Unweighted = ces_props$unweighted[party] * 100,
-              CES_Weighted   = ces_props$ces_weight[party] * 100,
-              
-              CES_ANESRake_Full =
-                ces_props$anes_full[party] * 100,
-              
-              CES_ANESRake_Restricted =
-                ces_props$anes_restricted[party] * 100,
-              
-              # ---- Errors (CES - Benchmark) ----
-              Error_Unweighted =
-                (ces_props$unweighted[party] - benchmark[party]) * 100,
-              
-              Error_CES_Weighted =
-                (ces_props$ces_weight[party] - benchmark[party]) * 100,
-              
-              Error_ANESRake_Full =
-                (ces_props$anes_full[party] - benchmark[party]) * 100,
-              
-              Error_ANESRake_Restricted =
-                (ces_props$anes_restricted[party] - benchmark[party]) * 100,
-              
-              n_respondents = n_resp
-            )
+          # filter_by_district() returns state_survey unchanged for "statewide"
+          survey <- filter_by_district(state_survey, office_label, district)
+          n_resp <- sum(!is.na(survey[[race_col]]))
+          if (n_resp == 0) next
+          
+          # ---- Benchmark ----
+          state_returns <- year_elec %>%
+            filter(State == state, Office == office_label)
+          
+          state_returns <- if (by_district) {
+            state_returns %>% filter(District == as.character(as.integer(district)))
+          } else {
+            state_returns %>% filter(is.na(District))
+          }
+          
+          if (nrow(state_returns) == 0) {
+            if (by_district) {
+              # Mirrors the candidate path: districts without returns
+              # (e.g., unopposed seats a state didn't report) are skipped
+              message(glue::glue(
+                "No returns for {office_label} {state}-{district}, {year}; skipped"
+              ))
+              next
+            }
+            stop(glue::glue(
+              "No election results for {office_label}, {state}, {year}"
+            ))
+          }
+          
+          if (nrow(state_returns) > 1) {
+            stop(glue::glue(
+              "Multiple benchmark rows for {office_label}, {state}, {district}, {year}"
+            ))
+          }
+          
+          benchmark <- c(
+            Democrat   = state_returns$DEM_Proportion,
+            Republican = state_returns$REP_Proportion,
+            Other      = state_returns$OTHER_Proportion
           )
+          
+          # ---- CES proportions (ALL schemes) ----
+          ces_props <- calculate_all_weight_proportions(
+            survey_df      = survey,
+            var_col        = race_col,
+            year           = year,
+            config         = config,
+            ensure_parties = TRUE
+          )
+          
+          # ---- Variable metadata ----
+          var_meta <- determine_variable_metadata(
+            var_name = race_col,
+            year     = year,
+            config   = config
+          )
+          
+          # ---- One row per party ----
+          for (party in names(benchmark)) {
+            
+            year_results <- bind_rows(
+              year_results,
+              tibble(
+                Year     = year,
+                State    = state,
+                Class    = "Candidate Choice",
+                Variable = office_label,
+                District = if (by_district) {
+                  paste0("District ", as.integer(district))
+                } else {
+                  NA_character_
+                },
+                Category = party,
+                
+                # ---- Metadata ----
+                Variable_Type = var_meta$variable_type,
+                
+                Used_in_ANESRake_Full       = var_meta$used_in_anesrake_full,
+                Used_in_ANESRake_Restricted = var_meta$used_in_anesrake_restricted,
+                
+                Valid_for_Accuracy_Full       = var_meta$valid_for_accuracy_full,
+                Valid_for_Accuracy_Restricted = var_meta$valid_for_accuracy_restricted,
+                
+                # ---- Benchmark ----
+                Benchmark = benchmark[party] * 100,
+                
+                # ---- Estimates ----
+                CES_Unweighted = ces_props$unweighted[party] * 100,
+                CES_Weighted   = ces_props$ces_weight[party] * 100,
+                
+                CES_ANESRake_Full =
+                  ces_props$anes_full[party] * 100,
+                
+                CES_ANESRake_Restricted =
+                  ces_props$anes_restricted[party] * 100,
+                
+                # ---- Errors (CES - Benchmark) ----
+                Error_Unweighted =
+                  (ces_props$unweighted[party] - benchmark[party]) * 100,
+                
+                Error_CES_Weighted =
+                  (ces_props$ces_weight[party] - benchmark[party]) * 100,
+                
+                Error_ANESRake_Full =
+                  (ces_props$anes_full[party] - benchmark[party]) * 100,
+                
+                Error_ANESRake_Restricted =
+                  (ces_props$anes_restricted[party] - benchmark[party]) * 100,
+                
+                n_respondents = n_resp
+              )
+            )
+          }
         }
       }
     }
@@ -251,6 +294,149 @@ calculate_party_errors <- function(year_data_list, election_results_df, config) 
   
   bind_rows(result_list)
 }
+#' this function before i edited to make it district aware
+# calculate_party_errors <- function(year_data_list, election_results_df, config) {
+#   race_map <- config$race_maps$party
+#   result_list <- list()
+#   
+#   pb <- progress_bar$new(
+#     format = "Party-level [:year] [:bar] :percent eta: :eta",
+#     total = length(year_data_list),
+#     clear = FALSE,
+#     width = 60
+#   )
+#   
+#   for (year_data in year_data_list) {
+#     
+#     pb$tick(tokens = list(year = year_data$year))
+#     year  <- year_data$year
+# 
+#     ces_df <- year_data$CES
+#     
+#     year_elec <- election_results_df %>% filter(Year == year)
+#     available_races <- intersect(names(ces_df), names(race_map))
+#     
+#     year_results <- tibble()
+#     
+#     for (race_col in available_races) {
+#       
+#       ces_filtered <- filter_nc_if_needed(
+#         ces_df, year, race_col, config$NC_flag_df
+#       )
+#       
+#       office_label <- race_map[[race_col]]
+#       
+#       # Exclude FL-23 from 2014 House party accuracy because CES appears to have
+#       # shown Debbie Wasserman Schultz with the wrong party label. That label error
+#       # may have affected both candidate-choice and derived party-choice responses.
+#       if (
+#         year == "2014" && race_col == "HOUSE_PARTY_rc"
+#       ) {
+#         ces_filtered <- ces_filtered %>%
+#           filter(!(POST_STATE_rc == "FLORIDA" & CDID_post_rc == "23"))
+#       }
+#       
+#       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
+#         
+#         if (should_skip_race(state, year, race_col, config$skip_conditions)) {
+#           next
+#         }
+#         
+#         state_survey <- ces_filtered %>% filter(POST_STATE_rc == state)
+#         n_resp <- sum(!is.na(state_survey[[race_col]]))
+#         if (n_resp == 0) next
+#         
+#         # ---- Benchmark ----
+#         state_returns <- year_elec %>%
+#           filter(State == state, Office == office_label)
+#         
+#         if (nrow(state_returns) == 0) {
+#           stop(glue::glue(
+#             "No election results for {office_label}, {state}, {year}"
+#           ))
+#         }
+#         
+#         benchmark <- c(
+#           Democrat   = state_returns$DEM_Proportion,
+#           Republican = state_returns$REP_Proportion,
+#           Other      = state_returns$OTHER_Proportion
+#         )
+#         
+#         # ---- CES proportions (ALL schemes) ----
+#         ces_props <- calculate_all_weight_proportions(
+#           survey_df     = state_survey,
+#           var_col       = race_col,
+#           year          = year,
+#           config        = config,
+#           ensure_parties = TRUE
+#         )
+#         
+#         # ---- Variable metadata ----
+#         var_meta <- determine_variable_metadata(
+#           var_name = race_col,
+#           year     = year,
+#           config   = config
+#         )
+#         
+#         # ---- One row per party ----
+#         for (party in names(benchmark)) {
+#           
+#           year_results <- bind_rows(
+#             year_results,
+#             tibble(
+#               Year     = year,
+#               State    = state,
+#               Class    = "Candidate Choice",
+#               Variable = office_label,
+#               Category = party,
+#               
+#               # ---- Metadata ----
+#               Variable_Type = var_meta$variable_type,
+#               
+#               Used_in_ANESRake_Full       = var_meta$used_in_anesrake_full,
+#               Used_in_ANESRake_Restricted = var_meta$used_in_anesrake_restricted,
+#               
+#               Valid_for_Accuracy_Full       = var_meta$valid_for_accuracy_full,
+#               Valid_for_Accuracy_Restricted = var_meta$valid_for_accuracy_restricted,
+#               
+#               # ---- Benchmark ----
+#               Benchmark = benchmark[party] * 100,
+#               
+#               # ---- Estimates ----
+#               CES_Unweighted = ces_props$unweighted[party] * 100,
+#               CES_Weighted   = ces_props$ces_weight[party] * 100,
+#               
+#               CES_ANESRake_Full =
+#                 ces_props$anes_full[party] * 100,
+#               
+#               CES_ANESRake_Restricted =
+#                 ces_props$anes_restricted[party] * 100,
+#               
+#               # ---- Errors (CES - Benchmark) ----
+#               Error_Unweighted =
+#                 (ces_props$unweighted[party] - benchmark[party]) * 100,
+#               
+#               Error_CES_Weighted =
+#                 (ces_props$ces_weight[party] - benchmark[party]) * 100,
+#               
+#               Error_ANESRake_Full =
+#                 (ces_props$anes_full[party] - benchmark[party]) * 100,
+#               
+#               Error_ANESRake_Restricted =
+#                 (ces_props$anes_restricted[party] - benchmark[party]) * 100,
+#               
+#               n_respondents = n_resp
+#             )
+#           )
+#         }
+#       }
+#     }
+#     
+#     result_list[[as.character(year)]] <- year_results
+#   }
+#   
+#   bind_rows(result_list)
+# }
 
 #' Calculate candidate-level election errors
 #'
@@ -272,9 +458,9 @@ calculate_candidate_errors <- function(year_data_list,
                                        config,
                                        return_party_review = FALSE) {
   
-# calculate_candidate_errors <- function(year_data_list,
-#                                        candidate_returns_df,
-#                                        config) {
+  # calculate_candidate_errors <- function(year_data_list,
+  #                                        candidate_returns_df,
+  #                                        config) {
   
   race_map <- config$race_maps$candidate
   result_list <- list()
@@ -290,7 +476,7 @@ calculate_candidate_errors <- function(year_data_list,
     
     # Skip since no candidate data
     if (current_year %in% c("2006")) next
-
+    
     ces_df <- year_data$CES
     ces_cols <- intersect(names(ces_df), names(race_map))
     year_results <- tibble()
@@ -307,7 +493,7 @@ calculate_candidate_errors <- function(year_data_list,
         #   print("arrived at error")
         #   browser()
         # }
-
+        
         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
           next
         }
@@ -343,13 +529,30 @@ calculate_candidate_errors <- function(year_data_list,
           if (is.null(top_cand)) next
           
           # ---- Fuzzy match CES → benchmark ----
+          # Pass the benchmark party so fuzzy matching only considers CES
+          # options of that party (fixes nickname mismatches such as
+          # "David 'Dan' Boren" being matched to his opponent).
           match_result <- match_candidate_fuzzy(
-            survey, race_col, top_cand$Candidate
+            survey, race_col, top_cand$Candidate,
+            true_party = top_cand$Party_Simplified
           )
           
           ces_party <- get_candidate_party(
             survey, race_col, match_result$matched_ces
           )
+          
+          # Guard: the matched CES candidate must share the benchmark
+          # candidate's party (Democrat/Republican benchmarks only; President
+          # is excluded because its party column is the candidate column).
+          expected_party <- standardize_major_party(top_cand$Party_Simplified)
+          if (race_col != "PRES_CANDIDATE_rc" && !is.na(expected_party) &&
+              !identical(as.character(ces_party), expected_party)) {
+            stop(glue::glue(
+              "Party mismatch: {office_label} {state} {district} {current_year}: ",
+              "benchmark {top_cand$Candidate} ({expected_party}) matched to CES ",
+              "'{match_result$matched_ces}' ({ces_party})"
+            ))
+          }
           
           # ---- Proportions (ALL weighting schemes) ----
           ces_props <- calculate_all_weight_proportions(
@@ -424,6 +627,161 @@ calculate_candidate_errors <- function(year_data_list,
   }
   bind_rows(result_list)
 }
+# version below: before we changed fuzzy match block to add true_party for district level US House. 
+# 
+# calculate_candidate_errors <- function(year_data_list,
+#                                        candidate_returns_df,
+#                                        config,
+#                                        return_party_review = FALSE) {
+#   
+#   race_map <- config$race_maps$candidate
+#   result_list <- list()
+#   
+#   pb <- progress_bar$new(
+#     format = "Candidate-level [:year] [:bar] :percent eta: :eta",
+#     total = length(year_data_list), clear = FALSE, width = 60
+#   )
+#   
+#   for (year_data in year_data_list) {
+#     pb$tick(tokens = list(year = year_data$year))
+#     current_year <- year_data$year
+#     
+#     # Skip since no candidate data
+#     if (current_year %in% c("2006")) next
+# 
+#     ces_df <- year_data$CES
+#     ces_cols <- intersect(names(ces_df), names(race_map))
+#     year_results <- tibble()
+#     
+#     for (race_col in ces_cols) {
+#       ces_filtered <- filter_nc_if_needed(
+#         ces_df, current_year, race_col, config$NC_flag_df
+#       )
+#       office_label <- race_map[[race_col]]
+#       
+#       for (state in unique(na.omit(ces_filtered$POST_STATE_rc))) {
+#         # Uncomment for helpful debug line
+#         # if (current_year == "2014" & state == "FLORIDA" & office_label == "US House") {
+#         #   print("arrived at error")
+#         #   browser()
+#         # }
+# 
+#         if (should_skip_race(state, current_year, race_col, config$skip_conditions)) {
+#           next
+#         }
+#         
+#         state_df <- ces_filtered %>% filter(POST_STATE_rc == state)
+#         districts <- get_districts_for_office(office_label, state_df)
+#         
+#         # Skip FL-23 in 2014 because the benchmark data correctly identifies
+#         # Debbie Wasserman Schultz as a Democrat, but the CES candidate label
+#         # appears to identify her as a Republican. Respondents may have seen the
+#         # incorrect party label, which could have affected candidate-choice responses.
+#         for (district in districts) {
+#           if (
+#             current_year == "2014" && state == "FLORIDA" && office_label == "US House" && district == "23"
+#           ) {
+#             next
+#           }
+#           
+#           # Uncomment for helpful debug line
+#           # if (current_year == "2014" & state == "FLORIDA" & office_label == "US House" & district == "23") {
+#           #   print("arrived at error")
+#           #   browser()
+#           # }
+#           
+#           survey <- filter_by_district(state_df, office_label, district)
+#           n_resp <- sum(!is.na(survey[[race_col]]))
+#           if (n_resp == 0) next
+#           
+#           # ---- Benchmark candidate ----
+#           top_cand <- get_top_candidate(
+#             candidate_returns_df, current_year, state, office_label, district
+#           )
+#           if (is.null(top_cand)) next
+#           
+#           # ---- Fuzzy match CES → benchmark ----
+#           match_result <- match_candidate_fuzzy(
+#             survey, race_col, top_cand$Candidate
+#           )
+#           
+#           ces_party <- get_candidate_party(
+#             survey, race_col, match_result$matched_ces
+#           )
+#           
+#           # ---- Proportions (ALL weighting schemes) ----
+#           ces_props <- calculate_all_weight_proportions(
+#             survey, race_col, current_year, config, ensure_parties = FALSE
+#           )
+#           
+#           benchmark_pct <- top_cand$Proportion * 100
+#           
+#           ces_unwt <- ces_props$unweighted[match_result$matched_ces] * 100
+#           ces_wt   <- ces_props$ces_weight[match_result$matched_ces] * 100
+#           
+#           anes_full <- ces_props$anes_full[match_result$matched_ces] * 100
+#           anes_res  <- ces_props$anes_restricted[match_result$matched_ces] * 100
+#           
+#           # ---- Variable metadata (NOW TWO VALIDITY FLAGS) ----
+#           var_metadata <- determine_variable_metadata(
+#             race_col, current_year, config
+#           )
+#           
+#           district_display <- if (district %in% c("statewide", "nationwide")) {
+#             district
+#           } else {
+#             paste0("District ", district)
+#           }
+#           
+#           year_results <- bind_rows(
+#             year_results,
+#             tibble(
+#               Year     = current_year,
+#               State    = state,
+#               Class    = "Candidate Choice",
+#               Variable = office_label,
+#               District = district_display,
+#               Category = ces_party,
+#               
+#               # ---- Variable classification ----
+#               Variable_Type = var_metadata$variable_type,
+#               
+#               Used_in_ANESRake_Full       = var_metadata$used_in_anesrake_full,
+#               Used_in_ANESRake_Restricted = var_metadata$used_in_anesrake_restricted,
+#               
+#               Valid_for_Accuracy_Full       = var_metadata$valid_for_accuracy_full,
+#               Valid_for_Accuracy_Restricted = var_metadata$valid_for_accuracy_restricted,
+#               
+#               # ---- Matching diagnostics ----
+#               CES_Candidate  = str_to_title(match_result$matched_ces),
+#               True_Candidate = str_to_title(top_cand$Candidate),
+#               Match_Score    = match_result$score,
+#               
+#               Benchmark = benchmark_pct,
+#               
+#               # ---- Estimates ----
+#               CES_Unweighted             = ces_unwt,
+#               CES_Weighted               = ces_wt,
+#               CES_ANESRake_Full           = anes_full,
+#               CES_ANESRake_Restricted     = anes_res,
+#               
+#               # ---- Errors (CES − Benchmark) ----
+#               Error_Unweighted            = ces_unwt - benchmark_pct,
+#               Error_CES_Weighted          = ces_wt   - benchmark_pct,
+#               Error_ANESRake_Full         = anes_full - benchmark_pct,
+#               Error_ANESRake_Restricted   = anes_res  - benchmark_pct,
+#               
+#               n_respondents = n_resp
+#             )
+#           )
+#         }
+#       }
+#     }
+#     
+#     result_list[[as.character(current_year)]] <- year_results
+#   }
+#   bind_rows(result_list)
+# }
 
 
 #' Calculate demovote errors (CES vs CPS/State Turnout/State Populations)
@@ -1307,9 +1665,21 @@ validate_candidate_benchmark_overrides <- function(candidate_returns,
 #'   }
 #' }
 
+#' Map benchmark party labels (DEM/REP or Democrat/Republican) to CES labels
+standardize_major_party <- function(p) {
+  p <- toupper(trimws(as.character(p)))
+  if (length(p) != 1 || is.na(p)) return(NA_character_)
+  if (p %in% c("DEM", "DEMOCRAT", "DEMOCRATIC")) return("Democrat")
+  if (p %in% c("REP", "REPUBLICAN")) return("Republican")
+  NA_character_
+}
+
+
 #' Fuzzy match candidate name
 #' @keywords internal
-match_candidate_fuzzy <- function(survey_df, race_col, true_cand) {
+#' Fuzzy match candidate name
+#' @keywords internal
+match_candidate_fuzzy <- function(survey_df, race_col, true_cand, true_party = NA_character_) {
   
   ces_vals <- unique(na.omit(survey_df[[race_col]]))
   
@@ -1323,13 +1693,31 @@ match_candidate_fuzzy <- function(survey_df, race_col, true_cand) {
   exact_match <- any(stri_trans_tolower(true_cand) == stri_trans_tolower(ces_vals))
   
   if (!exact_match) {
+    # Party-aware pool. Nickname formats such as "David 'Dan' Boren" can make
+    # an opponent or "Other" the closest string. When the benchmark candidate
+    # is a Democrat or Republican, only consider CES options of that party
+    # (fall back to all options if none). President is excluded: its party
+    # column is the candidate column.
+    pool         <- ces_vals
+    target_party <- standardize_major_party(true_party)
+    party_col    <- sub("_CANDIDATE_rc$", "_PARTY_rc", race_col)
+    
+    if (!is.na(target_party) && race_col != "PRES_CANDIDATE_rc" &&
+        party_col %in% names(survey_df)) {
+      same_party <- survey_df[[race_col]][
+        !is.na(survey_df[[party_col]]) & survey_df[[party_col]] == target_party
+      ]
+      same_party <- unique(na.omit(same_party))
+      if (length(same_party) > 0) pool <- ces_vals[ces_vals %in% same_party]
+    }
+    
     # Fuzzy match using Jaro-Winkler
     scores <- stringdist::stringdist(
       stri_trans_tolower(true_cand),
-      stri_trans_tolower(ces_vals),
+      stri_trans_tolower(pool),
       method = "jw"
     )
-    matched_ces <- ces_vals[which.min(scores)]
+    matched_ces <- pool[which.min(scores)]
     score <- min(scores)
   } else {
     matched_ces <- ces_vals[stri_trans_tolower(ces_vals) == stri_trans_tolower(true_cand)][1]
@@ -1338,6 +1726,85 @@ match_candidate_fuzzy <- function(survey_df, race_col, true_cand) {
   
   list(matched_ces = matched_ces, score = score)
 }
+
+#' Fuzzy match candidate name
+#' @keywords internal
+match_candidate_fuzzy <- function(survey_df, race_col, true_cand, true_party = NA_character_) {
+  
+  ces_vals <- unique(na.omit(survey_df[[race_col]]))
+  
+  # Manual fix for Robert/Bob Menendez mismatch
+  if (stri_trans_toupper(true_cand) == "ROBERT MENENDEZ" &&
+      "Bob Menendez" %in% ces_vals) {
+    return(list(matched_ces = "Bob Menendez", score = 0))
+  }
+  
+  # Case-insensitive exact match
+  exact_match <- any(stri_trans_tolower(true_cand) == stri_trans_tolower(ces_vals))
+  
+  if (!exact_match) {
+    # Party-aware pool. Nickname formats such as "David 'Dan' Boren" can make
+    # an opponent or "Other" the closest string. When the benchmark candidate
+    # is a Democrat or Republican, only consider CES options of that party
+    # (fall back to all options if none). President is excluded: its party
+    # column is the candidate column.
+    pool         <- ces_vals
+    target_party <- standardize_major_party(true_party)
+    party_col    <- sub("_CANDIDATE_rc$", "_PARTY_rc", race_col)
+    
+    if (!is.na(target_party) && race_col != "PRES_CANDIDATE_rc" &&
+        party_col %in% names(survey_df)) {
+      same_party <- survey_df[[race_col]][
+        !is.na(survey_df[[party_col]]) & survey_df[[party_col]] == target_party
+      ]
+      same_party <- unique(na.omit(same_party))
+      if (length(same_party) > 0) pool <- ces_vals[ces_vals %in% same_party]
+    }
+    
+    # Fuzzy match using Jaro-Winkler
+    scores <- stringdist::stringdist(
+      stri_trans_tolower(true_cand),
+      stri_trans_tolower(pool),
+      method = "jw"
+    )
+    matched_ces <- pool[which.min(scores)]
+    score <- min(scores)
+  } else {
+    matched_ces <- ces_vals[stri_trans_tolower(ces_vals) == stri_trans_tolower(true_cand)][1]
+    score <- 0
+  }
+  
+  list(matched_ces = matched_ces, score = score)
+}
+# match_candidate_fuzzy <- function(survey_df, race_col, true_cand) {
+#   
+#   ces_vals <- unique(na.omit(survey_df[[race_col]]))
+#   
+#   # Manual fix for Robert/Bob Menendez mismatch
+#   if (stri_trans_toupper(true_cand) == "ROBERT MENENDEZ" &&
+#       "Bob Menendez" %in% ces_vals) {
+#     return(list(matched_ces = "Bob Menendez", score = 0))
+#   }
+#   
+#   # Case-insensitive exact match
+#   exact_match <- any(stri_trans_tolower(true_cand) == stri_trans_tolower(ces_vals))
+#   
+#   if (!exact_match) {
+#     # Fuzzy match using Jaro-Winkler
+#     scores <- stringdist::stringdist(
+#       stri_trans_tolower(true_cand),
+#       stri_trans_tolower(ces_vals),
+#       method = "jw"
+#     )
+#     matched_ces <- ces_vals[which.min(scores)]
+#     score <- min(scores)
+#   } else {
+#     matched_ces <- ces_vals[stri_trans_tolower(ces_vals) == stri_trans_tolower(true_cand)][1]
+#     score <- 0
+#   }
+#   
+#   list(matched_ces = matched_ces, score = score)
+# }
 
 #' Get party for matched candidate
 #' @keywords internal
