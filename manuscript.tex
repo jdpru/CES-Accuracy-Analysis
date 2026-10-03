@@ -352,9 +352,9 @@ The frame-weighted sample after post-stratification to demographic and political
 
 \subsubsection*{The Sampling Frame and Target Sample}
 
-From 2008 onward, CES documentation describes the sampling frame as a stratified sample drawn from the full sample of a previous year's ACS, with records selected within strata by weighted sampling with replacement. The variables defining these strata are not named. YouGov then imputed political and religious variables onto each frame record, using models developed from the CPS Voting Supplement, the National Election Pool, the Pew Religious Landscape Survey, and prior CES data collections; the imputation models have not been publicly disclosed. 
+From 2008 onward, CES documentation describes the sampling frame as a stratified sample drawn from the full sample of a previous year's ACS, with records selected within strata by weighted sampling with replacement. The variables defining these strata are not named. YouGov then imputed political and religious variables onto each frame record, using models developed from external surveys and prior CES data collections (Appendix~A); the imputation models have not been publicly disclosed. 
 
-The target sample was then drawn from the frame. From 2008 through 2016, the guides describe stratification by age, race, gender, and education, with simple random sampling within strata; voter registration status was added as a stratifying variable in 2014 and 2016. The 2018--2022 guides continue to describe the ACS-based frame but not the draw of the target sample from it, so the target strata for those years are unknown (Table~\ref{tab:ces_stages}).
+The target sample was then drawn from the frame. From 2008 through 2016, the guides describe stratification, with simple random sampling within strata, on the variables shown in Table~\ref{tab:ces_stages}. The 2018--2022 guides continue to describe the ACS-based frame but not the draw of the target sample from it, so the target strata for those years are unknown.
 
 \subsubsection*{Sourcing Respondents}
 YouGov maintains a large opt-in, nonprobability panel recruited in a variety of ways, including via standard advertising and strategic partnerships with websites. At registration, new panelists provided socio-demographic information. Panelists have then been invited to complete questionnaires in exchange for points redeemable for small monetary rewards at selected vendors \parencite{yougov_methodology}.
@@ -396,7 +396,7 @@ D(t,i) = \sum_{k=1}^{K} w_{k} \, d_{k}(t_{k}, i_{k}),
 
 where $d_{k}$ measures dissimilarity on matching variable $k$ and $w_{k}$ sets that variable's importance, with larger weights demanding closer agreement. For unordered categorical variables, YouGov specified distance matrices between pairs of categories.
  
-The guides for 2008 through 2016 print the matching function in full. In these years, matching drew on political as well as demographic information; the variables always included gender, age, race, education, party identification, ideology, and political interest; church attendance and region were also used in 2008--2012, and employment status in 2014--2016 (Table~\ref{tab:ces_stages}). From 2018, the guides describe the function in prose rather than printing it, and the matching variables are limited to demographics and voter registration; party identification, ideology, and political interest are no longer used. The 2006 matched sample was selected from more than 150,000 PollingPoint panelists, but the guide does not name the matching variables.
+The guides for 2008 through 2016 print the matching function in full. In these years, matching drew on political as well as demographic information, including party identification, ideology, and political interest (Table~\ref{tab:ces_stages}). From 2018, the political variables are no longer used. The 2006 guide does not name the matching variables.
 
 Matching brings the joint distribution of the matching variables in the matched sample close to that of the target sample, but it does not constrain any margin explicitly. Remaining imbalance is addressed by the two weighting steps.
 
@@ -407,7 +407,7 @@ From 2014 through 2022, the matched sample was weighted to the frame by entropy 
 
 
 \subsubsection*{Weighting, Step 2: Post-Stratification}
-The frame-weighted sample was then post-stratified. In every documented year, the adjustment included age, gender, education, and race. Voter registration status was added in 2014, and born-again status and prior presidential vote were added in 2018. Weights for the common content were additionally adjusted across states, to the outcomes of that year's gubernatorial and Senate elections from 2014 onward, and to the presidential vote in 2020. Where these outcomes also serve as benchmarks, their agreement with weighted CES estimates partly reflects the weighting itself, a point we return to in the results. Weights were trimmed at 7 in 2008 and 2010, at 20 in 2012, and at 15 from 2014 onward, and final weights were normalized to the sample size.
+The frame-weighted sample was then post-stratified on the variables listed in Table~\ref{tab:ces_stages}. Weights for the common content were additionally adjusted across states, to the outcomes of that year's gubernatorial and Senate elections from 2014 onward, and to the presidential vote in 2020. Where these outcomes also serve as benchmarks, their agreement with weighted CES estimates partly reflects the weighting itself, a point we return to in the results. Weight trimming and normalization are described in Appendix~A.
 
 \section{Benchmarks}
 \subsection{Demographics}
