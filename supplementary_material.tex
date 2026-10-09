@@ -1,0 +1,758 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{sectsty}
+\usepackage{titlesec}
+\usepackage{rotating}
+\usepackage{lipsum}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{authblk}
+\usepackage{etoolbox}
+\usepackage{changepage}
+\usepackage{xpatch}
+\usepackage{threeparttable}
+\usepackage{array}
+\usepackage{booktabs}
+% POQ table style: every rule (top, header, spanner, bottom) the same thin weight
+\setlength{\heavyrulewidth}{0.5pt}
+\setlength{\lightrulewidth}{0.5pt}
+\setlength{\cmidrulewidth}{0.5pt}
+\usepackage{tabularx}
+\usepackage{marvosym}
+\usepackage[title]{appendix}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\graphicspath{ {figures/} }
+\usepackage{epigraph}
+\usepackage{titling}
+\usepackage{blindtext}
+\usepackage{float}
+\usepackage{amsmath,amssymb}
+\usepackage{pdflscape}
+\usepackage{multirow}
+\usepackage{adjustbox}
+\usepackage{xcolor}
+\usepackage[table]{xcolor}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{chngcntr}
+
+% --------------------------------------------------
+% Font & spacing
+% --------------------------------------------------
+\renewcommand{\familydefault}{\rmdefault}
+\doublespacing
+
+% --------------------------------------------------
+% Header / footer
+% --------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt} % no rule at the top of each page
+
+% Title page style (no headers or footers)
+\fancypagestyle{titlepage}{
+  \fancyhf{}
+}
+
+% Horizontal rule after title
+\newcommand{\HRule}{\noindent\rule{\linewidth}{0.5pt}}
+
+% Title, set flush left and bold as in POQ
+\newcommand{\papertitle}{The Accuracy of Matched Sample Surveys: Evidence from the Cooperative Election Study}
+\newcommand{\printtitle}{%
+  \begin{singlespace}\noindent{\raggedright\bfseries\Large\papertitle\par}\end{singlespace}}
+
+% Abstract envi
+\newenvironment{myabstract}
+  {%
+    \begin{adjustwidth}{4em}{0em} % left indent = 2em, right indent = 0em
+    \noindent\textbf{Abstract}\hspace{1em}%
+  }
+  {%
+    \end{adjustwidth}
+    \par
+  }
+
+% Table styling
+\definecolor{primarycell}{RGB}{255,235,205}
+  
+% Author footnote numbers
+\renewcommand\Authsep{, }
+\renewcommand\Authands{, }
+\renewcommand\Affilfont{\small}
+
+% --------------------------------------------------
+% Section headings (POQ style)
+% --------------------------------------------------
+% Level 1: centered, bold. Level 2: flush left, bold. Level 3: flush left,
+% italic. Serif throughout, unnumbered.
+\titleformat{\section}
+  {\normalfont\bfseries\large\centering}
+  {}
+  {0pt}
+  {}
+
+\titleformat{\subsection}
+  {\normalfont\bfseries\normalsize\raggedright}
+  {}
+  {0pt}
+  {}
+
+\titleformat{\subsubsection}
+  {\normalfont\itshape\normalsize\raggedright}
+  {}
+  {0pt}
+  {}
+
+% Level 4 (used only for the item headings in Supplementary Material
+% section F): italic, run in to the paragraph, followed by a period.
+\titleformat{\paragraph}[runin]
+  {\normalfont\itshape\normalsize}
+  {}
+  {0pt}
+  {}
+  [.]
+\titlespacing*{\paragraph}{0pt}{1.5ex plus .5ex minus .2ex}{0.5em}
+
+% --------------------------------------------------
+% Captions (POQ style)
+% --------------------------------------------------
+% Bold label followed by a period ("Table 1."), sentence-case text, flush
+% left. Table captions sit above the table, figure captions below it.
+\captionsetup{labelfont=bf, labelsep=period, justification=raggedright,
+  singlelinecheck=false, font=small}
+\captionsetup[table]{position=top}
+
+% Cross-references between manuscript.tex and supplementary_material.tex.
+% Compile each file once, then again, so each can read the other's .aux
+% (latexmkrc in this folder does this automatically, locally and on Overleaf).
+\usepackage{xr-hyper}
+\makeatletter
+\newcommand*{\addFileDependency}[1]{%
+  \typeout{(#1)}%
+  \@addtofilelist{#1}%
+  \IfFileExists{#1}{}{\typeout{No file #1.}}%
+}
+\makeatother
+\newcommand*{\myexternaldocument}[1]{%
+  \externaldocument{#1}%
+  \addFileDependency{#1.tex}%
+  \addFileDependency{#1.aux}%
+}
+\myexternaldocument{manuscript}
+
+% Bibliography
+\usepackage[colorlinks,
+            citecolor=blue,   % citations
+            linkcolor=blue,   % internal links (e.g. toc)
+            urlcolor=blue]{hyperref}
+\usepackage{xurl}
+
+% Chicago author-date, the style POQ uses: year after the names, volume:pages,
+% no issue numbers, publisher without city, DOIs as https://doi.org/ links.
+\usepackage[
+  authordate,
+  backend=biber,
+  compresspages=true,  % page ranges shortened as POQ prints them (307--29)
+  natbib=true,          % allow \citep / \citet if you like
+  sortcites=false,      % POQ orders multiple cites by year; the keys are written in that order
+  maxcitenames=3,       % in-text: show up to 3 names
+  mincitenames=1,       % if more than 3 authors, truncate to 1 + "et al."
+  maxbibnames=99,       % in bibliography: list every author
+  uniquename=false,     % never add first initials to disambiguate same-surname authors
+  uniquelist=false
+]{biblatex-chicago}
+% let biblatex break long URLs/DOIs at more points
+\setcounter{biburlnumpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
+\setcounter{biburllcpenalty}{9000}
+
+% make sure multiple keys in one \parencite are separated with "; "
+\DeclareDelimFormat{multicitedelim}{\addsemicolon\space}
+
+\AtEveryBibitem{%
+  % Print only the year, not months.
+  \clearfield{month}%
+  \clearfield{day}%
+  % Entries with a DOI print no URL either.
+  \iffieldundef{doi}{}{\clearfield{url}\clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}}%
+  % Access dates only for undated online sources (Chicago practice).
+  \iffieldundef{year}{}{\clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}}%
+  % POQ prints DOIs but no ISSNs or ISBNs.
+  \clearfield{issn}\clearfield{isbn}%
+  % POQ: journal articles as volume:pages, with no issue number.
+  \ifentrytype{article}{\clearfield{number}\clearfield{issue}}{}%
+  % POQ: books name the publisher without its city.
+  \ifboolexpr{test {\ifentrytype{book}} or test {\ifentrytype{incollection}}
+    or test {\ifentrytype{inbook}} or test {\ifentrytype{collection}}}
+    {\clearlist{location}}{}%
+}
+
+% Some entries store the DOI as a full URL, which then prints the prefix twice.
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map{
+      \step[fieldsource=doi, match=\regexp{\A\s*https?://(dx\.)?doi\.org/}, replace={}]
+    }
+  }
+}
+\addbibresource{CESBib.bib}
+
+% Numbers quoted in the text, captions, and alt text. Generated by the Prose
+% Numbers cell of tables_and_figures/figuresHQ.ipynb; do not type them by hand.
+\input{output/prose_numbers}
+
+
+% Supplementary tables, figures, equations and pages are numbered S.1, S.2, ...
+\renewcommand{\thetable}{S.\arabic{table}}
+\renewcommand{\thefigure}{S.\arabic{figure}}
+\renewcommand{\theequation}{S.\arabic{equation}}
+\renewcommand{\theHtable}{S.\arabic{table}}
+\renewcommand{\theHfigure}{S.\arabic{figure}}
+\renewcommand{\theHequation}{S.\arabic{equation}}
+\renewcommand{\thepage}{S\arabic{page}}
+
+\begin{document}
+
+% ==================================================
+% TITLE (blinded)
+% ==================================================
+\begin{singlespace}
+\noindent{\raggedright\bfseries\Large Supplementary Material\par}
+\vspace{0.4em}
+\noindent{\raggedright\large\papertitle\par}
+\end{singlespace}
+\vspace{0.4em}
+\HRule
+\vspace{1em}
+
+\noindent This document is the online Supplementary Material for the article. The article cites its sections as ``Supplementary Material section A'' through ``section G.'' Tables, figures, and equations here are numbered S.1, S.2, and so on; table and figure numbers without the ``S.'' prefix, and Appendix~A, refer to the article.
+
+% ==========================================================================
+%  SECTION A: SUPPLEMENTARY TABLES AND FIGURES
+% ==========================================================================
+\subsection*{Section A. Supplementary Tables and Figures}
+\phantomsection
+\addcontentsline{toc}{subsection}{Section A. Supplementary Tables and Figures}
+
+This section collects supplementary tables and figures that support the main text. Table~\ref{tab:national_anesrake_variables_accuracy} supports ``Effect of Conventional Post-Stratification on CES Error,'' reporting how closely the anesrake weights reproduced the CPS benchmarks used to build them. Table~\ref{tab:cps_sample_description} reports the CPS sample sizes and response rates behind the demographic benchmarks described in ``Benchmarks'' and in Appendix A's CPS disclosure. Table~\ref{tab:demographic_candidate_choice_weighting_comparison_vertical} and figure~\ref{fig:demographic_candidate_choice_weighting_comparison_vertical} compare how weighting affected primary and secondary demographic variables and the two candidate-choice offices, Governor and US Senate, that switched status in 2014. The remaining two figures extend the sample-size analysis in ``Sample Size and Estimation Error'': figure~\ref{fig:app_sample_size_distribution} reports the distribution of respondent counts underlying every error estimate; about two-thirds rest on 500 or fewer respondents, though the range is wide. Figure~\ref{fig:sample_size_distribution_rmse_state_year_pools} reports the corresponding distribution, and RMSE, at the level of state-year respondent pools rather than individual estimates.
+
+% ---- Supplementary tables ------------------------------------------------
+% Cite each table by the \label inside its own file, e.g.
+% Table~\ref{tab:us_house_rmse_grid}. Do not add bare \label commands here:
+% after an unnumbered heading they pick up the last section number, which is
+% how the body text came to read "Appendix 4".
+\input{output/national_anesrake_variables_accuracy}   % Table S.1: tab:national_anesrake_variables_accuracy
+\input{output/cps_sample_description}                 % Table S.2: tab:cps_sample_description
+\input{output/rmse_demographic_candidate_choice_weighting_comparison_vertical} % Table S.3
+
+% ---- Figure S.1 -------------------------------------------------------------
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth, height=0.66\textheight, keepaspectratio]{output/rmse_demographic_candidate_choice_weighting_comparison_vertical.png}
+    \caption[Weighting and RMSE by variable type]{Weighting and RMSE by variable type. Bars compare matching-only and weighted RMSE. $\Delta$ is weighted minus matching-only RMSE, so negative values indicate improvement. Panels A and B contain primary demographics (Age Group, Education, and Sex) and secondary demographics (Employment Status, Family Income, Union Membership, and Veteran Status), respectively. Panels C and D contain Governor and US Senate, which were secondary in 2008--2012 and primary in 2014--2022; blank years indicate the other classification. Weighting improves primary demographics more than secondary demographics and produces larger reductions for the candidate-choice variables during their primary years, although the latter comparison is confounded with time.}
+    \par\smallskip
+    \noindent\begin{minipage}{\linewidth}\footnotesize\textit{Alt text:} Four panels of paired bars comparing error before and after weighting, 2008 to 2022. Weighting lowered error in every year for primary demographics, Governor, and United States Senate, but changed it little for secondary demographics.\end{minipage}
+    \label{fig:demographic_candidate_choice_weighting_comparison_vertical}
+\end{figure}
+
+% ---- Supplementary sample-size figures ----------------------------------
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{output/ces_error_sample_size_distribution_variable_width_frequency.png}
+    \caption[Distribution of sample sizes underlying CES error estimates]{Distribution of sample sizes underlying CES error estimates. Sample size is the number of CES respondents contributing to the survey estimate whose error is measured against an external benchmark. For statewide estimates, this is the relevant state--year respondent count; for US House, which is a district-specific estimate, it is the relevant district--year respondent count. Bars represent unequal sample-size intervals: their heights report the number of estimate-level observations in each interval, their widths reflect the range of sample sizes covered, and their labels report the percentage of all included estimates. The figure includes all \NObsTotal{} unweighted CES estimates.}
+    \par\smallskip
+    \noindent\begin{minipage}{\linewidth}\footnotesize\textit{Alt text:} Histogram of error estimates by sample size, with an inset for ranges up to 500 respondents. About two-thirds rest on 500 or fewer respondents, and the 51 to 100 range holds \FigBTwoShareFiftyToHundred{} percent.\end{minipage}
+    \label{fig:app_sample_size_distribution}   % Figure S.2
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{output/sample_size_distribution_rmse_state_year_pools.png}
+    \caption[Sample-size distribution and RMSE across state-year respondent pools]{Sample-size distribution and RMSE across state-year respondent pools. This figure provides a sample-level counterpart to the estimate-level sample-size distribution reported in figure~\ref{fig:app_sample_size_distribution}. In that figure, each variable-specific comparison with an external benchmark is an error observation. Consequently, the same underlying state-year respondent pool appears repeatedly because its respondents are used to estimate multiple variables and, where applicable, multiple district-specific outcomes. Here, each state-year respondent pool appears only once. Its sample size is defined as the largest valid respondent count observed for that state-year; smaller variable-specific counts may result from item nonresponse or geographically restricted estimates. Bar heights report the percentage of state-year pools in each sample-size range, and labels report the number and percentage of pools. RMSE is calculated hierarchically so that variables producing more observations and pools producing more error rows do not receive disproportionate weight. Squared percentage-point errors are first averaged within each state-year-variable combination. Those variable-level mean squared errors are then averaged within each state-year pool, giving every variable equal weight. Within each sample-size range, the pool-level mean squared errors are averaged across state-year pools and the square root is taken, giving every pool equal weight. The overall equal-pool RMSE shown in the figure is calculated analogously across all state-year pools. Results use unweighted CES estimates and exclude turnout to match the corresponding main-text analysis.}
+    \par\smallskip
+    \noindent\begin{minipage}{\linewidth}\footnotesize\textit{Alt text:} Bar chart of \NStateYearPools{} state and year respondent pools by sample size, with a line for error. Error is about \PoolRmseSmallest{} percentage points for the smallest pools and \PoolRmseAboveHundredMin{} to \PoolRmseAboveHundredMax{} above 100 respondents, with no steady decline.\end{minipage}
+    \label{fig:sample_size_distribution_rmse_state_year_pools}
+
+    
+\end{figure}
+
+% Place all section A floats before section B begins.
+\clearpage
+
+% ---- Text sections ---------------------------------------------------------
+% Unnumbered headings. \ref to these labels would print a stale section
+% number, and pandoc drops \nameref, so refer to them by name in the text.
+% The labels stay as link anchors (they become the Word bookmarks).
+
+\subsection*{Section B. Weighting Procedures}
+\phantomsection
+\addcontentsline{toc}{subsection}{Section B. Weighting Procedures}
+\label{app:entropy_balancing}
+
+This section describes the entropy balancing used in the CES weights from 2014 and the settings of the anesrake calibration weights we constructed.
+
+\subsubsection*{Entropy Balancing}
+
+This section reconstructs the entropy-balancing procedure used in the first weighting step described in ``CES Sample Matching and Weighting Procedure,'' since the CES guides report the method's balancing conditions only in general terms.
+
+Beginning in 2014, the Cooperative Election Study (CES) weighted the matched sample to the sampling frame using entropy balancing \parencite{hainmueller_entropy_2012}. Entropy balancing is a multivariate reweighting method that assigns scalar weights to individual observations such that the reweighted sample exactly satisfies a set of covariate balance constraints while remaining as close as possible to a set of base weights.
+
+Formally, weights were obtained by minimizing Kullback--Leibler divergence \parencite{kullback_information_1959} between the final weights \( w_i \) and base weights \( q_i \):
+\[
+\min H(w) = \sum_{i} w_{i} \log\!\left(\frac{w_{i}}{q_{i}}\right),
+\]
+subject to the following constraints:
+\begin{gather}
+    \sum_{i \in S} w_{i} c_{ri}(X_i) = 0, \label{eq:ebalance1} \\
+    \sum_{i \in S} w_{i} = 1, \label{eq:ebalance2} \\
+    w_{i} \ge 0 \quad \forall i. \label{eq:ebalance3}
+\end{gather}
+
+Here, \( S \) indexes the matched sample, \( w_i \) denotes the entropy-balanced weight assigned to respondent \( i \), and \( q_i \) denotes the base weight. In the standard formulation, base weights are uniform, \( q_i = 1/N \), where \( N \) is the matched sample size \parencite{hainmueller_entropy_2012}.
+
+Constraint~\eqref{eq:ebalance1} requires the weighted sample to reproduce the frame value of the $r$-th balance condition. The CES guides for 2014--2022 report that first-stage weights were obtained by entropy balancing the matched cases to the sampling frame on ``multiple moment conditions'' in a listed set of covariates ``plus their interactions,'' but they do not report the functional form of those conditions. Following \textcite{hainmueller_entropy_2012}, we assume first-moment constraints of the form
+\[
+c_{ri}(X_i) = X_{ri} - \mu_r ,
+\]
+where $X_{ri}$ is the value of the $r$-th balancing term for respondent $i$ (a main-effect indicator or an interaction of indicators) and $\mu_r$ is its mean in the sampling frame. With categorical covariates coded as indicators, these constraints reproduce the frame's marginal and joint proportions, consistent with the 2018--2022 guides' description of weighting ``to match the distributions'' of the frame. The guides do not indicate whether higher-order moments were also balanced. Constraints~\eqref{eq:ebalance2} and~\eqref{eq:ebalance3} ensure that the resulting weights form a valid probability distribution.
+
+Minimizing Kullback--Leibler divergence subject to these constraints yields a set of weights that deviate minimally from the base weights while achieving exact balance on the specified covariates. This property ensures that weights vary smoothly across observations and preserves their interpretation as probability weights.
+
+\subsubsection*{Calibration Weights (anesrake)}
+The anesrake weights and their targets (CPS demographic benchmarks) are described in ``Weighting Scenarios'' and table~\ref{tab:vars_used_by_anesrake}. We used the R package anesrake with \texttt{type = "pctlim"}, \texttt{pctlim = 5}, and \texttt{choosemethod = "total"} and otherwise default settings. A variable was selected for raking if the absolute differences between its weighted CES category proportions and the CPS benchmark proportions, summed across its categories, totaled at least 5 percentage points; this rule decides which variables are used, not when raking stops. Selected variables were raked by iterative proportional fitting, in a fixed order, until the weights converged; any variable whose discrepancy then reached 5 points was added and raking was repeated. Weights were capped at 5 and re-centered to a mean of 1. Variables provided to anesrake but not selected are marked in table~\ref{tab:vars_used_by_anesrake}.
+
+
+\subsection*{Section C. Inconsistencies and Intricacies of Election Information Reporting}
+\phantomsection
+\addcontentsline{toc}{subsection}{Section C. Inconsistencies and Intricacies of Election Information Reporting}
+\label{app:inconsistencies_election_info}
+
+This section details the judgment calls involved in matching CES-reported vote choice to official election returns, which underlie the candidate-level comparisons described in ``Measuring Error'' and are cited in Appendix A's disclosure for the election-returns data. It covers candidate-name matching, the assignment of unaffiliated candidates to a party, the aggregation of multiply-endorsed candidacies, the treatment of simultaneous special and general elections, and the eight contests benchmarked against a major-party nominee rather than the top vote-getter.
+
+The change in the wording of the CES vote-choice question, and the comparison rule that followed from it, are described in ``Measuring Error.'' Party-level reporting could not be cleanly mapped to survey responses in contests with multiple candidates sharing a party label, candidates appearing on multiple party lines, ballots without party labels, and candidates switching party affiliation between the primary and general election. Candidate vote choice was available for all presidential contests in all years, for US Senate and House elections beginning in 2008, for all gubernatorial elections beginning in 2010, and for attorney general and secretary of state races beginning in 2018. State legislative contests were evaluated using party vote share in all years.
+
+Candidate names occasionally differed in format between the CES questionnaire and official election returns. CES candidate names were matched to official returns first by exact, case-insensitive comparison and otherwise by Jaro string distance \parencite{jaro_advances_1989} (R package stringdist 0.9.15, method \texttt{"jw"} with $p = 0$), taking the closest candidate with no threshold. For offices other than president, when the benchmark candidate was a Democrat or Republican, distance matching considered only CES candidates of that party, and every match was checked for agreement with the party in the official returns. Of 4,185 candidate contests, 2,874 matched exactly and 1,309 by string distance (maximum distance 0.52); in the remaining two (US Senate in New Jersey, 2012 and 2018), Robert Menendez was matched to ``Bob Menendez'' by manual override. All 1,309 distance-based matches were reviewed manually and none required correction.
+
+Some states did not report candidate party affiliation in official election returns, even when candidates were formally affiliated with a party. In these cases, candidates were manually assigned to their affiliated party to avoid artificially inflating CES error, as such candidates would otherwise have been treated as unaffiliated despite being identified by CES respondents as Democrats or Republicans.
+
+In states such as New York and Vermont, candidates endorsed by multiple parties appeared multiple times on the ballot—once for each party line. For example, a candidate may have received votes under the Democratic Party, Working Families Party, and Progressive Party. In these cases, all votes in the election returns were aggregated to the candidate’s major-party affiliation (Democratic or Republican).
+
+If the only election for an office in a year was a special election, that special election was used as the contest. If a state held both a regular and a special election for the same office on the same day, as happened for US Senate, the special election was excluded and only the regular election was used, because the CES typically asks about a single race for that office and it is ambiguous which one respondents reported.
+
+In eight contests, CES vote choice is compared with the benchmark share of a major-party nominee rather than that of the top vote-getter: US Senate in Alaska (2010), Maine (2012 and 2018), Vermont (2012 and 2018), and Louisiana (2016); governor of Rhode Island (2010); and secretary of state of North Dakota (2018). In all but Louisiana, the winner was an independent or write-in candidate; the major-party nominee is used so that these candidate-level comparisons align with the party-level comparisons, in which independent and write-in votes fall into the ``Other'' category. In Louisiana, the leading candidate was not offered in the CES item. In each of the eight contests, the nominee used finished second.
+
+
+\subsection*{Section D. US House Sample Size and Competitiveness}
+\phantomsection
+\addcontentsline{toc}{subsection}{Section D. US House Sample Size and Competitiveness}
+\label{app:us_house_grid}
+
+Table~\ref{tab:us_house_rmse_grid} supplements the main-text section ``Error as a Function of Contest Competitiveness'' by using US House races. House estimates are made by congressional district, and districts vary in how many CES respondents they contain, so these races let us examine sample size and competitiveness together. Columns give ranges of the winner's share of the vote. Rows give a minimum number of respondents per district, and each row keeps only district-years at or above that threshold. The upper panel reports RMSE in percentage points for the district-years in each cell, and the lower panel reports the number of district-years in each cell, both pooled over 2006--2022 and estimated with matching plus the CES weights.
+
+\input{output/us_house_rmse_grid}                     % Table S.4: tab:us_house_rmse_grid
+
+% Keep table S.4 inside section D.
+\clearpage
+
+
+% ==========================================================================
+%  SECTION E: YEAR-SPECIFIC DETAILS OF THE CES PROCEDURE
+% ==========================================================================
+\clearpage
+\subsection*{Section E. Year-Specific Details of the CES Sampling and Weighting Procedure}
+\phantomsection
+\addcontentsline{toc}{subsection}{Section E. Year-Specific Details of the CES Sampling and Weighting Procedure}
+\label{app:ces_procedure_by_year}
+
+This section records the year-to-year differences in the procedure described in ``CES Sample Matching and Weighting Procedure,'' as documented in each year's CES guide. Trimming thresholds are given in Appendix~A, and the variables used at each stage in table~\ref{tab:ces_stages}; they are not repeated here.
+
+\subsubsection*{The 2006 Wave}
+The 2006 study, conducted by Polimetrix before its acquisition by YouGov, followed a different order from later waves. For general-population studies, the 2006 guide describes the target population as adults enumerated in consumer databases maintained by commercial vendors (Acxiom, Experian, and InfoUSA). Later waves used the ACS. The target sample was stratified by registration status, state size, and district competitiveness (16 strata), and further by age, race, and gender. Panelists came from a pool of more than 150,000 PollingPoint panelists, and selection had two steps. First, before fielding, several panelists were matched to each target case, until the expected number of responses per case was at least one, using a model of each panelist's probability of responding. Second, when a panelist began the interview, they were assigned to their own target case if it was still open, and otherwise to the closest open target case across all studies then in the field. The matching was thus set up before data collection, but final assignment happened as panelists began the interview. Cases were not matched to a pool of completed interviews. The 2006 guide does not list the matching variables or describe how the released weight (\texttt{v1001}) was built.
+
+\subsubsection*{Sampling Frame}
+Table~\ref{tab:frame_sources_by_year} lists, for each year from 2008, the ACS file from which the frame was drawn and the sources from which political and religious variables were attached. For the CPS data in 2008--2016, the guides state that the data were attached ``using a weighted Euclidean distance metric''; for the other sources, they say only that the data were ``matched.'' The 2022 guide instead describes a ``modeled frame,'' whose political variables were modeled from voter files, the 2020 CPS Voting and Registration Supplement, the 2020 National Election Pool exit poll, and the 2020 CES.
+
+Some of these frame descriptions appear to have been carried forward from earlier guides (section F, items 1 and 12).
+
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\begin{threeparttable}
+\caption{Sampling frame sources by year, as described in the CES guides.}
+\label{tab:frame_sources_by_year}
+\begin{tabular}{l >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{4.4cm} >{\raggedright\arraybackslash}p{5.2cm}}
+\toprule
+Year & ACS file & Registration and turnout & Other attached variables \\
+\midrule
+2008 & 2006 & November 2004 CPS & 2007 Pew Religious Landscape Survey$^a$ \\
+2010 & 2008 & November 2008 CPS & 2007 Pew Religious Landscape Survey$^a$ \\
+2012 & 2008$^b$ & November 2008 CPS$^b$ & 2007 Pew Religious Landscape Survey$^a$ \\
+2014 & 2010 & November 2010 and 2008 CPS & 2007 Pew Religious Landscape Survey$^a$ \\
+2016 & 2012 and 2010$^c$ & 2012 CPS (2012 frame); November 2010 and 2008 CPS (2010 frame) & Vote choice from 2012 national and state exit polls (2012 frame); 2007 Pew Religious Landscape Survey$^a$ (2010 frame) \\
+2018 & 2017 & 2018 CPS (registration only) & None described \\
+2020 & 2019 & 2018 and 2020 CPS (registration only) & None described \\
+2022 & 2019 & Modeled$^d$ & Modeled$^d$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}\footnotesize
+\item \textit{Note:} $^a$Religion, church attendance, born-again or evangelical status, news interest, party identification, and ideology. $^b$Identical to the 2010 guide. $^c$Two frames; the guide does not describe how they were combined. $^d$From voter files, the 2020 CPS Voting and Registration Supplement, the 2020 National Election Pool exit poll, and the 2020 CES.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsubsection*{Invitations}
+Panelists were selected for invitation using a five-way cross-classification (age $\times$ gender $\times$ race $\times$ education $\times$ state) from 2008 through 2016, and a six-way cross-classification (age $\times$ gender $\times$ race $\times$ education $\times$ region $\times$ sample source) from 2018. No other quotas are documented, and the guides do not describe how the pool of panelists eligible for invitation was determined. \textcite{rivers_sample_2006} describes the general procedure YouGov developed for this purpose, in which invitations are allocated using a cross-classification on age, gender, race, education, region, and sample source, with the number of invitations per target case set from estimated completion probabilities so as to yield at least one completed interview per case. All pre-election respondents were re-invited to the post-election wave. The guides do not describe the incentives offered to panelists, except that in 2006 ``inducements'' were offered late in October to increase participation among low-income and low-interest respondents; YouGov currently describes its panel incentive as points redeemable for small rewards \parencite{yougov_methodology}, and incentives offered by external providers are not documented. Data collection was not in person.
+
+\subsubsection*{Target Sample}
+From 2008 through 2012, the target sample was stratified by age, race, gender, and education; in 2014 and 2016, voter registration was added. The 2018--2022 guides state that a target sample was drawn and that completed interviews were ``matched to the target frame,'' but do not describe how the target sample was drawn (section F, item 11).
+
+\subsubsection*{Selection from the Pool}
+The guides for 2008 through 2016 print the distance function in full. The 2008, 2010, and 2012 functions are identical and combine gender, age, race, region, education, political interest, marital status, party identification, ideology, religion, church attendance, family income, voter registration, and metropolitan residence. The 2014 and 2016 functions combine age, race, education, gender, employment status, ideology, party identification measured in a baseline survey, born-again status, and voter registration, with interaction terms (several in 2014, one in 2016) and different weights in the two years. Both also include whether the respondent completed the post-election questionnaire, which implies that selection in those years took place after the post-election wave had been fielded (section F, item 14). The guides' lists of matching variables for those years also include political interest (section F, item 4). The 2018--2022 guides do not print a function; they describe selection as ``conditioning on registration status $\times$ age $\times$ race $\times$ gender $\times$ education.'' The guides call the metric a ``weighted Euclidean distance,'' but the printed functions are weighted sums of absolute differences and mismatch indicators, the form given in the main text (section F, item 16).
+
+\subsubsection*{Weighting to the Frame}
+In 2014 and 2016, the entropy-balancing conditions were age, gender, education, race, voter registration, ideology, baseline party identification, born-again status, and political interest, with their interactions. In 2018--2022, the guides list age, gender, education, race, and Hispanic origin as the frame distributions the sample was weighted to, plus 2020 presidential vote and turnout in 2022. The moment conditions they list omit Hispanic origin and, in 2022, turnout (section F, item 5). The 2018--2022 guides are unclear about whether the completed cases or the matched cases were weighted to the frame, and we assume the matched cases, as in earlier years (section F, item 10).
+
+\subsubsection*{Post-Stratification}
+From 2008 through 2012, the frame-weighted sample was post-stratified by gender, race, education, and age; in 2014 and 2016, voter registration was added. In 2018, the variables were age, gender, education, race, born-again status, voter registration, and 2016 presidential vote, and in 2020 the same variables plus 2020 presidential vote. In 2022, the weights were instead raked (iterative proportional fitting) on age, gender, education, race, born-again status, voter registration, 2020 presidential vote, and some joint distributions of these. The guides' descriptions of the additional state-level adjustment, and the offices it covered, are discussed in section F, item 8.
+
+\subsubsection*{Post-Election Weights}
+The 2016 file includes pre-election and post-election weights, each in versions computed before and after vote validation. From 2018, the files include \texttt{commonweight} for all respondents and \texttt{commonpostweight} for respondents who completed both questionnaires, along with weights for respondents matched to a validated registration record. The guides describe the target population of each weight but not how the post-election weights were computed (section F, item 17). The weight used in each year of this study is listed in table~\ref{tab:disclosure_by_year}.
+
+\subsubsection*{Case Dispositions and Completion Rates}
+Case dispositions and the rates the guides label AAPOR Response Rate 1, which divides completed interviews by all sampled cases not known to be ineligible, are reported in table~\ref{tab:disclosure_by_year} for 2008--2022; the 2006 guide reports none. The population of interest for an opt-in panel is not well defined \parencite[78]{aapor2023}, and the number of people exposed to a recruitment invitation is unknown. These figures are therefore completion rates among invited panelists, not response or participation rates for the population. Unlike a response rate in a probability sample, a high completion rate does not imply reduced risk of nonresponse bias. The 2014 and 2016 guides report YouGov and external-panel cases separately and combined, and the completion rates of external vendors were far lower (\GuideCompletionYouGov{} versus \GuideCompletionExternal{} in 2016). The 2018 guide says explicitly that its figures cover YouGov panelists only. The 2020 and 2022 guides do not, but they appear to, because their disposition tables count fewer completes (60,466 and 64,957) than the pooled YouGov and vendor interviews that entered matching (74,099 and 80,233). Even among these YouGov-only years, completion rates ranged from \CompletionRateRecentMin{} to \CompletionRateRecentMax{} percent, so the change in reporting base does not account for all of the variation. The 2008--2012 guides do not state which respondents the rate covers. Their sampling sections name external panels alongside YouGov's, and none of their disposition tables separates respondents by sample source. The 2008 table counts slightly fewer completes (49,043) than the roughly 50,800 pre-election interviews that entered matching, the same pattern as in 2020 and 2022; the 2010 guide gives no count of completed interviews entering matching, only a pool of ``over 150,000'' respondents; and the 2012 table is divided by study component rather than by sample source. A participation rate for the population cannot be computed.
+
+\begin{table}[htbp]
+\centering
+\caption{CES disclosure details by year.}
+\label{tab:disclosure_by_year}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.7cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{4.7cm}>{\raggedright\arraybackslash}p{1.7cm}>{\raggedright\arraybackslash}p{1.6cm}>{\raggedright\arraybackslash}p{2.9cm}@{}}
+\toprule
+Year & Panels & Dispositions of invited cases (I / P / R / UH / NE) & RR1 & Post-election completes & CES weight used \\
+\midrule
+2006 & PollingPoint & Not reported & -- & 28,757 & \texttt{v1001} \\
+2008 & PollingPoint; E-Rewards; Western Wats & 49,043 / 13,137 / 627 / 42,007 / 1,082 & 0.468 & 27,021 & \texttt{V201} \\
+2010 & PollingPoint; E-Rewards; Western Wats & 75,450 / 27,155 / 4,645 / 79,723 / 9,262 & 0.404 & 46,684 & \texttt{V101} \\
+2012 & PollingPoint; E-Rewards; Western Wats & 83,583 / 20,229 / 7,754 / 138,624 / 14,267$^a$ & 0.334$^a$ & 45,018 & \texttt{V103} \\
+2014 & YouGov; MyPoints; Research Now; SSI & YouGov: 43,203 / 6,480 / 1,897 / 29,448 / 1,442 \newline External: 52,383 / 28,773 / 7,392 / 238,639 / 19,643 \newline (87,389 in matching pool) & 0.533 / 0.160 / 0.234$^b$ & 48,853 & \texttt{weight} \\
+2016 & YouGov; MyPoints; Research Now; SSI; GMI & YouGov: 53,939 / 7,177 / 2,519 / 64,997 / 982 \newline External: 52,443 / 22,692 / 5,210 / 557,367 / 43,822 & 0.419 / 0.082 / 0.139$^b$ & 52,899 & \texttt{commonweight\_post} \\
+2018 & YouGov; Dynata; Critical Mix; Prodege & YouGov only: 63,301 / 8,341 / 125 / 139,374 / -- & 0.300$^c$ & 51,808 & \texttt{commonpostweight} \\
+2020 & YouGov; Dynata; Critical Mix; Prodege & 60,466 / 7,900 / 1,591 / 28,922 / 1,606 \newline (74,099 in matching pool) & 0.612 & 51,551 & \texttt{commonpostweight} \\
+2022 & YouGov; Dynata; Disqo; Prodege; Generation Lab & 64,957 / 10,771 / 3,102 / 57,676 / 3,017 \newline (80,233 in matching pool) & 0.476 & 50,981 & \texttt{commonpostweight} \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+\textit{Note:} I = complete; P = partial; R = refusal and breakoff; UH = unknown eligibility; NE = not eligible. Dispositions and RR1 are as reported in each year's CES guide; RR1 is reported in the main text as a completion rate. $^a$Common Content sample only; the 2012 guide also reports separate panel and NES samples. $^b$YouGov / external / combined. $^c$YouGov panelists only. The 2014, 2016, and 2018 guides each give the matching pool as ``approximately 87,389.'' We report the figure only for 2014, where it first appears, and treat the 2016 and 2018 figures as incorrectly carried forward without updating (Supplementary Material section F, item 3). Post-election completes are counts of respondents coded as completing the post-election wave (\texttt{v4001}, \texttt{V400}, \texttt{V403}, or \texttt{tookpost}). The 2012 file has no such variable, so its count is respondents with a non-missing post-election state (\texttt{inputstate\_post}).
+\end{minipage}
+\end{table}
+
+\clearpage
+
+% ==========================================================================
+%  SECTION F: PROBLEMS IN THE CES GUIDES' SAMPLING AND WEIGHTING DOCUMENTATION
+% ==========================================================================
+% Screenshots of the guides are in guide_evidence/ (tables_and_figures/guide_evidence
+% in the repository); they are cited in the text as Evidence 1--12.
+\newcommand{\guideevidence}[3]{%
+  \par\medskip\noindent
+  \begin{minipage}{\linewidth}\centering
+  \includegraphics[width=#2]{guide_evidence/#1}\par\smallskip
+  \begin{singlespace}\raggedright\small\textit{#3}\par\end{singlespace}
+  \end{minipage}\par\medskip}
+
+\clearpage
+\subsection*{Section F. Problems in the CES Guides' Sampling and Weighting Documentation}
+\phantomsection
+\addcontentsline{toc}{subsection}{Section F. Problems in the CES Guides' Sampling and Weighting Documentation}
+\label{app:guide_documentation_problems}
+
+This section describes instances in which the CES guides' sampling-and-weighting documentation appears to be incorrect or incomplete, across the eight waves from 2008 to 2022. For each item, we offer the evidence of a possible problem. Table~\ref{tab:guide_problems_summary} summarizes the items.
+
+Page numbers refer to the PDF pages of each CES guide.
+
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\begin{threeparttable}
+\caption{Possible problems in the CES guides' sampling and weighting documentation.}
+\label{tab:guide_problems_summary}
+\begin{tabular}{l >{\raggedright\arraybackslash}p{10.2cm} >{\raggedright\arraybackslash}p{2.4cm}}
+\toprule
+Item & Problem & Years affected \\
+\midrule
+1 & The 2012 sampling-and-weighting section is a copy of the 2010 sampling-and-weighting section with no revision. & 2012 \\
+2 & The 2014 codebook entry for the common content weight is identical to the 2012 codebook entry for the common content weight. & 2014 \\
+3 & The 2014 pool figure ``approximately 87,389'' is repeated in the 2016 and 2018 guides. & 2016, 2018 \\
+4 & The variables listed as used for matching disagree with the variables that appear in the reported distance functions. & 2014, 2016 \\
+5 & Hispanic origin (and, in 2022, turnout) is listed as a weighting target but not as a moment condition. & 2018--2022 \\
+6 & The interaction terms in the moment conditions are not specified. & 2014--2022 \\
+7 & Turnout is added to the 2014 frame but not used in any later step. & 2014 \\
+8 & The offices in the statewide-races adjustment were not named. & 2014, 2016 \\
+9 & No source is given for the born-again target. & 2018--2022 \\
+10 & Which cases were weighted to the frame is unclear. & 2018--2022 \\
+11 & The target-sample strata were not described. & 2018--2022 \\
+12 & How the two frames were combined is never described, and the second frame is not described at all in 2018 and 2020. & 2016, 2018, 2020 \\
+13 & How the modeled frame was built is not described. & 2022 \\
+14 & The printed distance functions include completion of the post-election wave, which implies selection after the election, although the guides describe matching completed pre-election interviews. & 2014, 2016 \\
+15 & The 2018 and 2020 guides cite CPS registration data that were released after each election. & 2018, 2020 \\
+16 & The distance metric is mislabeled as a weighted Euclidean distance. & 2008--2016 \\
+17 & How the post-election weights were computed is not described. & 2016--2022 \\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table}
+
+% --------------------------------------------------------------------------
+\subsubsection*{Text Possibly Carried Forward from an Earlier Guide without Being Updated}
+
+For each issue below, duplicated text or statistics suggest that the description was copied from an earlier guide without being updated, which raises the possibility that key information, such as which variables were used to construct the weights, might be incorrect.
+
+\paragraph*{1. The 2012 sampling-and-weighting section is a copy of the 2010 section (year with possible errors: 2012)}
+The 2012 guide's sampling-and-weighting section (pp.~15--17) describes using a 2008 ACS frame and states, ``Weights larger than 7 were trimmed'' (p.~17).
+
+\guideevidence{evidence01.png}{5.6in}{Evidence 1. 2012 guide, p. 17. Weights larger than 7 were trimmed.}
+
+The 2010 weight seems to be capped at 7 (max 7.03, 2010 guide, p.~22), matching the yellow text above. But the 2012 codebook entry for the common content weight V103 (p.~27) reports a maximum of 20.00044. So the cap in 2012 appears not to be 7, meaning the yellow text is not correct for 2012.
+
+\guideevidence{evidence02.png}{5.6in}{Evidence 2. 2012 guide, p. 27. The V103 codebook entry, with a maximum of 20.00044.}
+
+Apart from this, the 2012 sampling and weighting section is word-for-word identical to the 2010 section (2010 guide, pp.~13--15), with no differences other than heading capitalization, bullet glyphs, page numbers, and one hyphenation, which suggests the section was copied over and not updated.
+
+If that is correct, we cannot tell which parts of the section (frame, strata, panels, matching function, weighting variables) accurately describe the 2012 data and which describe the 2010 and should have been updated for 2012.
+
+We describe the 2012 procedure as printed in the 2012 guide, because it is the only description available, and table~\ref{tab:ces_stages} gives 2012 the same entries as 2010.
+
+\paragraph*{2. The 2014 codebook summary of the common content weight is the 2012 summary (year with possible errors: 2014)}
+The 2014 guide's codebook summary of the common content weight V103 (p.~21) reports $N = 54{,}535$, mean 1, SD 1.31757, min 0.00001, max 20.00044.
+
+This entry describes the 2012 common content weight, not the 2014 common content weight.
+
+Every statistic in the 2014 guide matches the corresponding 2012 entry (2012 guide, p.~27); only the labels differ (e.g., ``Number of Observations'' vs.\ ``Number of Valid Observations''). This entry also cannot describe 2014 accurately. Its $N$ (54,535) is the 2012 sample size, whereas the 2014 guide states that the 2014 common content sample is 56,200 (pp.~7, 12), and its maximum (20.00044) exceeds the 2014 stated common-content trim threshold of 15 (p.~16). Table~\ref{tab:guide_v103_2012_2014} compares the two entries.
+
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\begin{threeparttable}
+\caption{The V103 codebook entries in the 2012 and 2014 guides.}
+\label{tab:guide_v103_2012_2014}
+\begin{tabular}{lll}
+\toprule
+Statistic & 2012 guide, V103 (p.~27) & 2014 guide, V103 (p.~21) \\
+\midrule
+$N$ & 54,535 & 54,535 \\
+Mean & 1 & 1 \\
+SD & 1.31757 & 1.31757 \\
+Minimum & 0.00001 & 0.00001 \\
+Maximum & 20.00044 & 20.00044 \\
+Stated common content sample & 54,535 (p.~7) & 56,200 (pp.~7, 12) \\
+Stated trimming threshold & 7 (p.~17) & 15 common content; 7 team (p.~16) \\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table}
+
+\guideevidence{evidence03.png}{5.6in}{Evidence 3. 2014 guide, p. 21. Compare the 2012 entry in Evidence 2.}
+
+The 2014 methods text itself appears to have been revised. Only the codebook entry seems to require updating. The error does not affect our analysis, which uses the weight in the released 2014 file (\texttt{weight}).
+
+\paragraph*{3. The matching-pool size ``approximately 87,389'' is repeated in three guides (2014, 2016, 2018)}
+The 2014 (p.~14), 2016 (p.~15), and 2018 (p.~13) guides each say the final set of completed pre-election interviews, after quality controls, was approximately 87,389, and that these were matched to the target frame.
+
+\guideevidence{evidence04.png}{4.6in}{Evidence 4. 2014 guide, p. 14.}
+
+\guideevidence{evidence05.png}{4.6in}{Evidence 5. 2016 guide, p. 15.}
+
+\guideevidence{evidence06.png}{4.6in}{Evidence 6. 2018 guide, p. 13.}
+
+An identical pool size in three different years is unlikely, which suggests the figure was carried forward.
+
+We report the figure only for 2014, where it first appears, and treat the 2016 and 2018 figures as incorrectly carried forward without updating.
+
+\paragraph*{4. The 2014 and 2016 lists of variables used for matching are not the same as the variables shown in the printed distance functions (2014, 2016)}
+The 2008--2016 guides each provide the distance function and, beneath it, a list of variables used for matching. In each of 2008, 2010, and 2012, the variables in the list are the same as the variables in the function. In 2014 and 2016, the variable list and the function disagree in two ways. Newsint (interest in politics) is in the list but not in the function, and voter registration is in the function (weight 15) but not in the list. So at least one of the two is wrong in each year, and the guides do not say which.
+
+\guideevidence{evidence07.png}{5.6in}{Evidence 7. 2014 guide, p. 15. The distance function; voter registration enters with weight 15; no Newsint term.}
+
+\guideevidence{evidence08.png}{5.6in}{Evidence 8. 2014 guide, p. 15. The listed matching variables; Newsint listed, registration not; Pid5b described as ``from July 2012''.}
+
+We think the function is more likely to be correct. Between 2014 and 2016, the function was revised: five cross-product terms were dropped (voter registration $\times$ gender, race $\times$ age, race $\times$ education, ideology $\times$ gender, gender $\times$ age), and some weights changed (the weight for age changed from 3 to 25; the weight for education indicators changed from 25 to 10 for each one; the weight for ``took both waves'' changed from 2 to 25). Yet the 2016 list of variables is word-for-word the same as the 2014 list of variables, including the description of Pid5b as baseline party ID ``from July 2012'' (2016 guide, p.~15). This suggests the function was updated for 2016 and the list was not.
+
+Because we cannot verify which source is correct, we make the conservative choice and count both political interest and voter registration as matching variables in 2014 and 2016 (the union of the list and the function).
+
+% --------------------------------------------------------------------------
+\subsubsection*{Unclear Variables and Targets Used to Compute the Weights}
+
+The guides describe weighting in two steps. In the first step, the matched sample is weighted to resemble the sampling frame, using propensity scores in 2008--2012 and entropy balancing in 2014--2022. Entropy balancing chooses weights so that the weighted sample reproduces specified features of the frame, such as the proportion of women or the proportion with a college degree. These features are called ``moment conditions.'' A variable affects the first-step weights only if it appears among the moment conditions.
+
+In the second step, called ``post-stratification'' in most guides and ``raking'' in 2022, the weights are adjusted so that the sample matches population distributions on a second list of variables. This requires a population figure (a ``target'') for each of those variables.
+
+\paragraph*{5. Hispanic origin (and, in 2022, turnout) is listed as a weighting target but not as a moment condition (2018--2022)}
+The 2018, 2020, and 2022 guides each describe the first weighting step in two consecutive sentences. The first sentence lists the frame distributions the sample was weighted to match. The second lists the moment conditions. Hispanic origin appears in the first list but not the second in all three years (2018 guide, p.~14; 2020 guide, p.~16; 2022 guide, pp.~15--16). In 2022, the same is true of turnout, which is also absent from the raking list (Evidence 9).
+
+\guideevidence{evidence09.png}{5.6in}{Evidence 9. 2022 guide, p. 16. The first sentence begins at the foot of p. 15. Hispanic origin and turnout appear among the frame distributions but not among the moment conditions. The raking list follows.}
+
+Because entropy balancing adjusts only for the moment conditions, one of the two sentences must be wrong about these variables. We cannot tell whether the sample was actually weighted on Hispanic origin in 2018--2022, or on turnout in 2022. We assume the first sentence is correct, so that Hispanic origin (2018--2022) and turnout (2022) were used in the first weighting step; table~\ref{tab:ces_stages} classifies them this way.
+
+\paragraph*{6. The interaction terms in the moment conditions are not specified (2014--2022)}
+The 2014--2022 guides say the moment conditions included a listed set of variables ``plus their interactions'' (e.g., 2014 guide, p.~16; 2020 guide, p.~16). They do not say which interactions were used, or whether the weights matched only the proportions in each category (first moments) or also higher moments.
+
+We assume first-moment constraints on main-effect and interaction indicators, following \textcite{hainmueller_entropy_2012}. Table~\ref{tab:ces_stages} marks ``interactions among the above'' as used in stage-one weighting for 2014--2022, without naming the specific interaction terms.
+
+\paragraph*{7. Turnout is added to the 2014 frame but not used in any later step (2014)}
+The 2014 guide says that turnout data from the November 2010 and November 2008 CPS were added to the frame (p.~14; Evidence 10). But turnout does not appear in any later step (matching on pp.~14--15, weighting on p.~16, or post-stratification on p.~16). This suggests the turnout sentence may have been carried forward from the 2008--2012 guides, when turnout was used in the propensity-score weighting. If so, it raises the possibility that the 2014 frame was described incorrectly.
+
+\guideevidence{evidence10.png}{5.6in}{Evidence 10. 2014 guide, p. 14. Two turnout variables attached to the frame; target strata include registration, not turnout.}
+
+We assume turnout was carried on the frame and simply unused. We record turnout as documented non-use at every stage in 2014, and in 2016--2020.
+
+\paragraph*{8. The offices in the statewide-races adjustment are not named (2014, 2016)}
+In 2014 and 2016, the guides say that the common content weights were post-stratified across states and statewide political races, without saying which races. Brian Schaffner's research assistant at Tufts confirmed to us by email that these were the governor and US Senate races, but this is not in the documentation.
+
+We treat the 2014 and 2016 adjustment as using governor and US Senate results, as table~\ref{tab:ces_stages} shows, consistent with the 2018--2022 guides.
+
+\paragraph*{9. No source is given for the born-again target (2018--2022)}
+Born-again status is a post-stratification variable in 2018--2022 (2018 guide, p.~14; 2020 guide, p.~16; 2022 guide, p.~16; Evidence 9), but the guides do not say where its population target came from. It cannot come from the ACS, which does not ask about religion. And unlike the 2014 and 2016 guides, which say religion was attached to the frame from the 2007 Pew Religious Landscape Survey (2014 guide, p.~14; 2016 guide, p.~14), the 2018--2022 guides do not describe attaching religion from any source.
+
+We count born-again status as a post-stratification variable in 2018--2022, with its target unknown.
+
+\paragraph*{10. The guides are unclear about which cases were weighted to the frame (2018--2022)}
+The 2018, 2020, and 2022 guides describe the first weighting step as weighting the ``completed cases'' to the frame (2018 guide, p.~14; 2020 guide, p.~16; 2022 guide, pp.~15--16). The preceding sentence in each guide describes the ``matched cases'' and the frame being combined. All completed interviews and the matched sample are different sets of respondents. The guides are therefore unclear about which set was weighted. In 2008--2016 the guides describe weighting the matched cases.
+
+We assume that, as in earlier years, the matched cases were weighted.
+
+% --------------------------------------------------------------------------
+\subsubsection*{Steps That Are Not Documented}
+
+The issues below are steps in the sampling and weighting process that the guides do not describe, or describe only in part, for the years listed.
+
+\paragraph*{11. Target-sample strata (2018--2022)}
+The 2008--2016 guides state that the target sample was drawn from the frame by stratified random sampling on age, race, gender, and education. Voter registration was added as a stratification variable in 2014 and also appears in 2016 (2014 guide, p.~14; 2016 guide, p.~14).
+
+The 2018, 2020, and 2022 guides do not describe the target-sample strata, and do not state that the target sample was drawn by stratified sampling in those years.
+
+We mark target strata as undocumented for 2018--2022 and state that the strata are unknown.
+
+\paragraph*{12. How the two frames were combined (2016, 2018, 2020)}
+The 2016 (p.~14), 2018 (p.~13), and 2020 (p.~15) guides each say that YouGov ``employed a combination of two frames.'' None of the three says how the two frames were combined. The 2016 guide describes both frames, one built from the 2012 ACS and the other from the 2010 ACS. The 2016 guide's description of its second frame, drawn from the 2010 ACS, repeats the 2014 guide's frame description, which suggests that it was carried forward from the earlier guide. The 2018 and 2020 guides describe only one of the two frames. In contrast, the 2022 guide describes a single modeled frame.
+
+\guideevidence{evidence11.png}{5.6in}{Evidence 11. 2016 guide, p. 14. Two frames, the first from the 2012 ACS and the second from the 2010 ACS.}
+
+\guideevidence{evidence12.png}{5.6in}{Evidence 12. 2020 guide, p. 15. The 2018 guide, p. 13, opens the same way.}
+
+As a result, it is unclear how the two frames were combined into the frame that the sample was matched and weighted to, and, for 2018 and 2020, what the second frame was.
+
+For 2016, we report both frames as the guide describes them (section E, table~\ref{tab:frame_sources_by_year}). For 2018 and 2020, we report the one frame each guide describes. For none of these years do we say how the frames were combined.
+
+\paragraph*{13. How the 2022 modeled frame was built (2022)}
+The 2022 guide says YouGov used a politically representative ``modeled frame'' based on the 2019 ACS, ``with modeled political variables, such as voter registration and 2020 Presidential vote,'' drawing on voter files, the 2020 CPS, the 2020 exit poll, and the 2020 CES (p.~15). The guide does not indicate how these variables were modeled or what makes the frame ``politically representative.''
+
+We describe the 2022 frame as based on the 2019 ACS but do not attempt to describe the modeling process.
+
+\paragraph*{14. When cases were selected in 2014 and 2016 (2014, 2016)}
+The 2014 and 2016 guides say that completed pre-election interviews were matched to the target sample. But the printed distance functions include a term for whether the respondent took both waves, with weight 2 in 2014 (2014 guide, p.~15) and 25 in 2016 (2016 guide, [p.~?]). A respondent's completion of the post-election wave is not known until after the election. Either selection occurred after the post-election wave, or the function is misprinted.
+
+\paragraph*{15. CPS registration data in the 2018 and 2020 frames (2018, 2020)}
+The 2018 guide says voter registration on the frame was matched from ``the 2018 CPS'' (p.~13), and the 2020 guide says ``the 2018 and 2020 Current Population Survey (CPS)'' (p.~15; Evidence 12). The November CPS Voting and Registration Supplement for 2018 was released on April 23, 2019, and the one for 2020 on April 29, 2021. Both dates are after the election and after the target sample would have been drawn. Unless ``CPS'' refers to something other than the November supplement, these frames cite data that were not available when the frames were built. The descriptions may instead refer to data attached at a later stage; for example, the 2020 vote-validation weights, which were released later, also cite the 2020 CPS.
+
+We report the frame sources as the guides state them (table~\ref{tab:frame_sources_by_year}) and do not use the frame's registration source in any analysis.
+
+\paragraph*{16. The distance metric is mislabeled (2008--2016)}
+The 2008--2016 guides call the matching metric a ``weighted Euclidean distance.'' The functions they print are weighted sums of absolute differences and mismatch indicators. They have no squared terms and no square root, so they are not Euclidean distances. The main text describes the metric in the form the guides print it (``Selecting Cases from the Pool of Completed Interviews'').
+
+We follow the printed functions.
+
+\paragraph*{17. How the post-election weights were computed is not described (2016--2022)}
+The 2016 file includes pre-election and post-election weights, each in versions computed before and after vote validation. From 2018, the files include \texttt{commonweight} for all respondents and \texttt{commonpostweight} for respondents who completed both questionnaires. They also include weights for respondents matched to a validated registration record. The guides describe the target population of each weight but not how the post-election weights were computed.
+
+We use the post-election weight for every item in 2016--2022 (Appendix~A, table~\ref{tab:disclosure_by_year}).
+
+% ==========================================================================
+%  SECTION G: CES VARIABLES, RESPONSE PROCESSING, AND BENCHMARK SOURCES
+% ==========================================================================
+\clearpage
+\subsection*{Section G. CES Variables, Response Processing, and Benchmark Sources}
+\phantomsection
+\addcontentsline{toc}{subsection}{Section G. CES Variables, Response Processing, and Benchmark Sources}
+\label{app:variables_processing_sources}
+
+This section gives the details behind Appendix~A's disclosure for the three data sources: the CES variables used, how CES responses were processed, and how the CPS and election benchmarks were constructed.
+
+\subsubsection*{CES Variables}
+Table~\ref{tab:ces_variable_map} lists, for each benchmarked item and year, the CES variable used, verified against the variable labels in the released data files. Wording and response options for several items differ across waves; each year's responses were recoded to the benchmark categories as described in ``Measuring Error.''
+
+\begin{table}[htbp]
+\centering
+\caption{CES variables used for each benchmarked item, by year.}
+\label{tab:ces_variable_map}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllllllll}
+\toprule
+Item & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 \\
+\midrule
+Age group & \texttt{v2020}$^a$ & \texttt{V207}$^a$ & \texttt{V207}$^a$ & \texttt{birthyr}$^a$ & \texttt{birthyr}$^a$ & \texttt{birthyr}$^a$ & \texttt{birthyr}$^a$ & \texttt{birthyr}$^a$ & \texttt{birthyr}$^a$ \\
+Sex & \texttt{v2004} & \texttt{V208} & \texttt{V208} & \texttt{gender} & \texttt{gender} & \texttt{gender} & \texttt{gender} & \texttt{gender} & \texttt{gender4} \\
+Education & \texttt{v2018} & \texttt{V213} & \texttt{V213} & \texttt{educ} & \texttt{educ} & \texttt{educ} & \texttt{educ} & \texttt{educ} & \texttt{educ} \\
+Hispanic origin & -- & -- & \texttt{V290} & \texttt{hispanic} & \texttt{hispanic} & \texttt{hispanic} & \texttt{hispanic} & \texttt{hispanic} & \texttt{hispanic} \\
+Employment status & \texttt{v2030} & \texttt{V209} & \texttt{V209} & \texttt{employ} & \texttt{employ} & \texttt{employ} & \texttt{employ} & \texttt{employ} & \texttt{employ} \\
+Family income & \texttt{v2032} & \texttt{V246} & \texttt{V246} & \texttt{faminc} & \texttt{faminc} & \texttt{faminc} & \texttt{faminc\_new} & \texttt{faminc\_new} & \texttt{faminc\_new} \\
+Union membership & \texttt{v2082} & \texttt{CC329} & \texttt{V264} & \texttt{union} & \texttt{union} & \texttt{union} & \texttt{union} & \texttt{union} & \texttt{union} \\
+Veteran status & \texttt{v3083} & \texttt{CC328\_3} & \texttt{V254} & \texttt{milstat\_3} & \texttt{milstat\_3} & \texttt{milstat\_3} & \texttt{milstat\_3} & \texttt{milstat\_3} & \texttt{milstat\_3} \\
+Residence duration & -- & \texttt{CC334} & \texttt{CC351} & \texttt{CC351} & \texttt{CC351} & \texttt{CC16\_361} & -- & \texttt{CC20\_361} & \texttt{CC22\_361} \\
+Voting turnout & \texttt{v4004} & \texttt{CC403} & \texttt{CC401} & \texttt{CC401} & \texttt{CC401} & \texttt{CC16\_401} & \texttt{CC18\_401} & \texttt{CC20\_401} & \texttt{CC22\_401} \\
+Voting method & \texttt{v4006} & \texttt{CC405} & \texttt{CC403} & \texttt{CC403} & \texttt{CC403} & \texttt{CC16\_403} & \texttt{CC18\_403} & \texttt{CC20\_403} & \texttt{CC22\_403} \\
+President & -- & \texttt{CC410} & -- & \texttt{CC410a} & -- & \texttt{CC16\_410a} & -- & \texttt{CC20\_410} & -- \\
+US Senate & \texttt{v4014} & \texttt{CC411} & \texttt{CC410a} & \texttt{CC410b} & \texttt{CC410b} & \texttt{CC16\_410b} & \texttt{CC18\_410b} & \texttt{CC20\_411} & \texttt{CC22\_411} \\
+US House & \texttt{v4015} & \texttt{CC412} & \texttt{CC412} & \texttt{CC412} & \texttt{CC412} & \texttt{CC16\_412} & \texttt{CC18\_412} & \texttt{CC20\_412} & \texttt{CC22\_412} \\
+Governor & \texttt{v4013} & \texttt{CC413} & \texttt{CC411} & \texttt{CC411} & \texttt{CC411} & \texttt{CC16\_411} & \texttt{CC18\_411} & \texttt{CC20\_413} & \texttt{CC22\_413} \\
+Attorney general & \texttt{v4017} & -- & \texttt{CC413a} & \texttt{CC413a} & \texttt{CC413a} & \texttt{CC16\_413a} & \texttt{CC18\_420a} & \texttt{CC20\_414a} & \texttt{CC22\_414a} \\
+Secretary of state & \texttt{v4018} & -- & \texttt{CC413b} & \texttt{CC413b} & \texttt{CC413b} & \texttt{CC16\_413b} & \texttt{CC18\_420b} & \texttt{CC20\_414b} & \texttt{CC22\_414b} \\
+State senator & \texttt{v4021} & \texttt{CC414\_2} & \texttt{CC413c} & \texttt{CC413c} & \texttt{CC413c} & \texttt{CC16\_413c} & \texttt{CC18\_413c} & \texttt{CC20\_415c} & \texttt{CC22\_415c} \\
+State representative & \texttt{v4020} & \texttt{CC414\_1} & \texttt{CC413d} & \texttt{CC413d} & \texttt{CC413d} & \texttt{CC16\_413d} & \texttt{CC18\_413d} & \texttt{CC20\_415d} & \texttt{CC22\_415d} \\
+\midrule
+Citizenship & \texttt{v3086} & \texttt{CC332} & \texttt{V263} & \texttt{immstat} & \texttt{immstat} & \texttt{immstat} & \texttt{immstat} & \texttt{immstat} & \texttt{immstat} \\
+State assignment & \texttt{v1002}$^b$ & \texttt{V259} & \texttt{V206\_post} & \texttt{inputstate\_post} & \texttt{inputstate\_post} & \texttt{inputstate\_post} & \texttt{inputstate\_post} & \texttt{inputstate\_post} & \texttt{inputstate\_post} \\
+Congressional district & \texttt{v1003} & \texttt{V264} & \texttt{V276\_post} & \texttt{cdid113\_post} & \texttt{cdid\_post} & \texttt{cdid115\_post} & \texttt{cdid116\_post} & \texttt{cdid116\_post} & \texttt{cdid118\_post} \\
+\bottomrule
+\end{tabular}}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+\textit{Note:} Variable names are as they appear in each year's released Common Content file and were verified against the variable labels in those files; question wording is in the corresponding guide and questionnaire on Dataverse. Dashes indicate that the item was not measured, or the office was not on the ballot, that year. Vote-choice items are from the post-election wave. $^a$Age group is derived from year of birth. $^b$The 2006 file has no post-election state variable; the pre-election state is used.
+\end{minipage}
+\end{table}
+
+\subsubsection*{Processing of CES Responses}
+Respondents who reported being non-citizen immigrants were excluded in every year (302 in 2006, 339 in 2008, 543 in 2010, 692 in 2012, 1,003 in 2014, 1,368 in 2016, 1,134 in 2018, 1,010 in 2020, and 624 in 2022), so CES estimates, like the CPS benchmarks, refer to citizens; respondents who skipped the item were retained.
+
+Responses of ``don't know,'' ``not sure,'' ``did not vote in this race,'' and ``I did not vote,'' along with skipped, not-asked, and no-race responses, were set to missing and dropped item by item; ``other'' responses were retained in the denominator. No filter on reported turnout was applied to vote-choice items.
+
+State-level estimates from 2008 onward use the state recorded in the post-election wave, so respondents who completed only the pre-election wave are excluded from all state-level estimates; the 2006 estimates use the pre-election state variable (\texttt{v1002}). US House estimates exclude respondents without a post-election congressional district; in 2020, a further 774 North Carolina respondents flagged in the CES data were excluded from House estimates. In 2018, respondents in eight states (Texas, Pennsylvania, Indiana, South Carolina, Alabama, Kentucky, Oklahoma, and Utah) who reported voting a straight party ticket (\texttt{CC18\_408} $= 2$; $n = 4{,}021$) were not asked about individual statewide and US House contests. Following the procedure described in the 2018 guide, we assigned each of these respondents the candidate of their ticket's party for US Senate, governor, US House, attorney general, and secretary of state; respondents whose ticket party fielded no candidate, who reported a minor-party ticket, or whose ticket party was not recorded were left missing. Their state legislative vote choices were taken directly from \texttt{CC18\_413c} and \texttt{CC18\_413d}. Also in 2018, the post-election questionnaire displayed Kansas's attorney general and secretary of state candidates to Kentucky respondents, where neither office was on the ballot, and displayed no candidates to Kansas respondents, none of whom has a recorded response to either item. The 2018 guide does not mention this error. Kentucky has no benchmark for these offices and Kansas has no responses, so both states are absent from the 2018 estimates for these offices.
+
+\subsubsection*{CPS Benchmarks}
+Benchmarks come from the CPS basic monthly files, with all 12 months pooled within each year (the March file used is the basic monthly March sample, not the Annual Social and Economic Supplement), obtained through the IPUMS API (IPUMS CPS version 13.0). Sex, education, age, Hispanic origin, veteran status, employment status, and family income are from the basic monthly items; union membership is from the earnings (outgoing rotation) items; residence duration and voting method are from the November Voting and Registration Supplement. Questionnaires are documented at the links above.
+
+A monthly probability sample of US households conducted by the US Census Bureau since 1940. Sampled households have been interviewed once a month for four months, then given eight months off, and again once a month for four additional months. Initial interviews were conducted in person, and subsequent interviews were conducted in person or by telephone. Interviewers attempted to collect data from all household members and accepted proxy reports from one household member about another household member when necessary. Data from 2006 through 2022 were used. Benchmarks are restricted to respondents ages 18 and older who are US citizens (IPUMS \texttt{CITIZEN} codes 1--4).
+
+Annual sample sizes and household response rates are in table~\ref{tab:cps_sample_description}; sample sizes count person-month records, not unique persons. Benchmarks use the CPS weights (\texttt{WTFINL} for basic monthly items, \texttt{EARNWT} for union membership, and \texttt{VOSUPPWT} for Voting and Registration Supplement items), which account for sampling design, nonresponse, and undercoverage using population controls derived from the decennial census and updated annually.
+
+\subsubsection*{Election Returns and Turnout}
+Turnout is total ballots counted divided by the voting-eligible population (VEP) with ineligible felons added back, from McDonald's 1980--2022 General Election Turnout Rates, version 1.2 \parencite{mcdonald_voter_nodate}. This denominator is McDonald's estimate of the citizen voting-age population: it excludes noncitizens but, unlike the standard VEP, retains people disenfranchised by a felony conviction, matching the CES population of adult citizens. In 28 state-years for which total ballots are not reported, the numerator is votes cast for the highest office on the ballot: Alabama 2006 and 2012; Connecticut 2008; Delaware 2012; Maine 2006; Mississippi 2006--2016; Missouri 2012; New Mexico 2014; Oklahoma 2006, 2012, and 2016; Pennsylvania 2006, 2012, and 2016; Rhode Island 2012; Texas 2006, 2008, 2012, and 2014; Virginia 2016; West Virginia 2012 and 2016; and Wisconsin 2016. National turnout is summed ballots divided by the summed denominator across the 50 states and the District of Columbia. State-level turnout benchmarks cover the 50 states; the District of Columbia is excluded. Vote shares are each candidate's share of all votes cast in the contest. Each contest is compared on the candidate who received the most votes, except in eight contests, listed in Supplementary Material section C, where the second-place major-party nominee is used instead.
+
+\input{output/data_sources}
+
+\clearpage
+\begin{singlespace}
+\setlength{\bibitemsep}{0pt}
+\printbibliography
+\end{singlespace}
+
+\end{document}
