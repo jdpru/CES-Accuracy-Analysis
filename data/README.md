@@ -29,7 +29,7 @@ Cooperative Election Study common-content files, one per year. Required for the 
 | 2016 | `CCES16_Common_OUTPUT_Feb2018_VV.dta` |
 | 2018 | `cces18_common_vv.dta` |
 | 2020 | `CES20_Common_OUTPUT_vv.dta` |
-| 2022 | `CES_2022_Common_Output.dta` |
+| 2022 | `CCES22_Common_OUTPUT_vv_topost.dta` |
 
 CES sometimes releases updated versions; if filenames change, update the paths in `analysisHQ.Rmd` to match.
 
