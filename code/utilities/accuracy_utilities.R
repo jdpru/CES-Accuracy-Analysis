@@ -1677,8 +1677,6 @@ standardize_major_party <- function(p) {
 
 #' Fuzzy match candidate name
 #' @keywords internal
-#' Fuzzy match candidate name
-#' @keywords internal
 match_candidate_fuzzy <- function(survey_df, race_col, true_cand, true_party = NA_character_) {
   
   ces_vals <- unique(na.omit(survey_df[[race_col]]))
@@ -1726,85 +1724,6 @@ match_candidate_fuzzy <- function(survey_df, race_col, true_cand, true_party = N
   
   list(matched_ces = matched_ces, score = score)
 }
-
-#' Fuzzy match candidate name
-#' @keywords internal
-match_candidate_fuzzy <- function(survey_df, race_col, true_cand, true_party = NA_character_) {
-  
-  ces_vals <- unique(na.omit(survey_df[[race_col]]))
-  
-  # Manual fix for Robert/Bob Menendez mismatch
-  if (stri_trans_toupper(true_cand) == "ROBERT MENENDEZ" &&
-      "Bob Menendez" %in% ces_vals) {
-    return(list(matched_ces = "Bob Menendez", score = 0))
-  }
-  
-  # Case-insensitive exact match
-  exact_match <- any(stri_trans_tolower(true_cand) == stri_trans_tolower(ces_vals))
-  
-  if (!exact_match) {
-    # Party-aware pool. Nickname formats such as "David 'Dan' Boren" can make
-    # an opponent or "Other" the closest string. When the benchmark candidate
-    # is a Democrat or Republican, only consider CES options of that party
-    # (fall back to all options if none). President is excluded: its party
-    # column is the candidate column.
-    pool         <- ces_vals
-    target_party <- standardize_major_party(true_party)
-    party_col    <- sub("_CANDIDATE_rc$", "_PARTY_rc", race_col)
-    
-    if (!is.na(target_party) && race_col != "PRES_CANDIDATE_rc" &&
-        party_col %in% names(survey_df)) {
-      same_party <- survey_df[[race_col]][
-        !is.na(survey_df[[party_col]]) & survey_df[[party_col]] == target_party
-      ]
-      same_party <- unique(na.omit(same_party))
-      if (length(same_party) > 0) pool <- ces_vals[ces_vals %in% same_party]
-    }
-    
-    # Fuzzy match using Jaro-Winkler
-    scores <- stringdist::stringdist(
-      stri_trans_tolower(true_cand),
-      stri_trans_tolower(pool),
-      method = "jw"
-    )
-    matched_ces <- pool[which.min(scores)]
-    score <- min(scores)
-  } else {
-    matched_ces <- ces_vals[stri_trans_tolower(ces_vals) == stri_trans_tolower(true_cand)][1]
-    score <- 0
-  }
-  
-  list(matched_ces = matched_ces, score = score)
-}
-# match_candidate_fuzzy <- function(survey_df, race_col, true_cand) {
-#   
-#   ces_vals <- unique(na.omit(survey_df[[race_col]]))
-#   
-#   # Manual fix for Robert/Bob Menendez mismatch
-#   if (stri_trans_toupper(true_cand) == "ROBERT MENENDEZ" &&
-#       "Bob Menendez" %in% ces_vals) {
-#     return(list(matched_ces = "Bob Menendez", score = 0))
-#   }
-#   
-#   # Case-insensitive exact match
-#   exact_match <- any(stri_trans_tolower(true_cand) == stri_trans_tolower(ces_vals))
-#   
-#   if (!exact_match) {
-#     # Fuzzy match using Jaro-Winkler
-#     scores <- stringdist::stringdist(
-#       stri_trans_tolower(true_cand),
-#       stri_trans_tolower(ces_vals),
-#       method = "jw"
-#     )
-#     matched_ces <- ces_vals[which.min(scores)]
-#     score <- min(scores)
-#   } else {
-#     matched_ces <- ces_vals[stri_trans_tolower(ces_vals) == stri_trans_tolower(true_cand)][1]
-#     score <- 0
-#   }
-#   
-#   list(matched_ces = matched_ces, score = score)
-# }
 
 #' Get party for matched candidate
 #' @keywords internal

@@ -133,7 +133,7 @@ House_0622 <- read_excel("data/Benchmarks/Election Returns/US_House_Returns_2006
   mutate(district = normalize_cd(district))
 
 # State Senate, State House, Attorney General, Secretary of State
-State_legislative_0623_raw <- read_excel("data/benchmarks/Election Returns/State_Legislative_and_Constitutional_Offices_2006_2023.xlsx", guess_max = 20000) %>% mutate(year = year(election_date))
+State_legislative_0623_raw <- read_excel("data/Benchmarks/Election Returns/State_Legislative_and_Constitutional_Offices_2006_2023.xlsx", guess_max = 20000) %>% mutate(year = year(election_date))
 # Ballotpedia mislabeled some elections as general elections that were actually special in their initial data query. This is a list of candidates that should be removed from State_legislative_0623 to avoid mixing in special general elections.
 special_candidates_to_remove <- read_excel("data/misc./mixed_in_special_election_candidates.xlsx")
 State_legislative_0623 <- State_legislative_0623_raw %>%

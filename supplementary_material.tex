@@ -232,8 +232,6 @@
 \HRule
 \vspace{1em}
 
-\noindent This document is the online Supplementary Material for the article. The article cites its sections as ``Supplementary Material section A'' through ``section G.'' Tables, figures, and equations here are numbered S.1, S.2, and so on; table and figure numbers without the ``S.'' prefix, and Appendix~A, refer to the article.
-
 % ==========================================================================
 %  SECTION A: SUPPLEMENTARY TABLES AND FIGURES
 % ==========================================================================
@@ -372,7 +370,7 @@ Table~\ref{tab:us_house_rmse_grid} supplements the main-text section ``Error as 
 \addcontentsline{toc}{subsection}{Section E. Year-Specific Details of the CES Sampling and Weighting Procedure}
 \label{app:ces_procedure_by_year}
 
-This section records the year-to-year differences in the procedure described in ``CES Sample Matching and Weighting Procedure,'' as documented in each year's CES guide. Trimming thresholds are given in Appendix~A, and the variables used at each stage in table~\ref{tab:ces_stages}; they are not repeated here.
+This section records the year-to-year differences in the procedure described in ``CES Sample Matching and Weighting Procedure,'' as documented in each year's CES guide. The largest weight in each year is given in Appendix~A, and the variables used at each stage in table~\ref{tab:ces_stages}; they are not repeated here.
 
 \subsubsection*{The 2006 Wave}
 The 2006 study, conducted by Polimetrix before its acquisition by YouGov, followed a different order from later waves. For general-population studies, the 2006 guide describes the target population as adults enumerated in consumer databases maintained by commercial vendors (Acxiom, Experian, and InfoUSA). Later waves used the ACS. The target sample was stratified by registration status, state size, and district competitiveness (16 strata), and further by age, race, and gender. Panelists came from a pool of more than 150,000 PollingPoint panelists, and selection had two steps. First, before fielding, several panelists were matched to each target case, until the expected number of responses per case was at least one, using a model of each panelist's probability of responding. Second, when a panelist began the interview, they were assigned to their own target case if it was still open, and otherwise to the closest open target case across all studies then in the field. The matching was thus set up before data collection, but final assignment happened as panelists began the interview. Cases were not matched to a pool of completed interviews. The 2006 guide does not list the matching variables or describe how the released weight (\texttt{v1001}) was built.
@@ -422,9 +420,6 @@ In 2014 and 2016, the entropy-balancing conditions were age, gender, education, 
 
 \subsubsection*{Post-Stratification}
 From 2008 through 2012, the frame-weighted sample was post-stratified by gender, race, education, and age; in 2014 and 2016, voter registration was added. In 2018, the variables were age, gender, education, race, born-again status, voter registration, and 2016 presidential vote, and in 2020 the same variables plus 2020 presidential vote. In 2022, the weights were instead raked (iterative proportional fitting) on age, gender, education, race, born-again status, voter registration, 2020 presidential vote, and some joint distributions of these. The guides' descriptions of the additional state-level adjustment, and the offices it covered, are discussed in section F, item 8.
-
-\subsubsection*{Post-Election Weights}
-The 2016 file includes pre-election and post-election weights, each in versions computed before and after vote validation. From 2018, the files include \texttt{commonweight} for all respondents and \texttt{commonpostweight} for respondents who completed both questionnaires, along with weights for respondents matched to a validated registration record. The guides describe the target population of each weight but not how the post-election weights were computed (section F, item 17). The weight used in each year of this study is listed in table~\ref{tab:disclosure_by_year}.
 
 \subsubsection*{Case Dispositions and Completion Rates}
 Case dispositions and the rates the guides label AAPOR Response Rate 1, which divides completed interviews by all sampled cases not known to be ineligible, are reported in table~\ref{tab:disclosure_by_year} for 2008--2022; the 2006 guide reports none. The population of interest for an opt-in panel is not well defined \parencite[78]{aapor2023}, and the number of people exposed to a recruitment invitation is unknown. These figures are therefore completion rates among invited panelists, not response or participation rates for the population. Unlike a response rate in a probability sample, a high completion rate does not imply reduced risk of nonresponse bias. The 2014 and 2016 guides report YouGov and external-panel cases separately and combined, and the completion rates of external vendors were far lower (\GuideCompletionYouGov{} versus \GuideCompletionExternal{} in 2016). The 2018 guide says explicitly that its figures cover YouGov panelists only. The 2020 and 2022 guides do not, but they appear to, because their disposition tables count fewer completes (60,466 and 64,957) than the pooled YouGov and vendor interviews that entered matching (74,099 and 80,233). Even among these YouGov-only years, completion rates ranged from \CompletionRateRecentMin{} to \CompletionRateRecentMax{} percent, so the change in reporting base does not account for all of the variation. The 2008--2012 guides do not state which respondents the rate covers. Their sampling sections name external panels alongside YouGov's, and none of their disposition tables separates respondents by sample source. The 2008 table counts slightly fewer completes (49,043) than the roughly 50,800 pre-election interviews that entered matching, the same pattern as in 2020 and 2022; the 2010 guide gives no count of completed interviews entering matching, only a pool of ``over 150,000'' respondents; and the 2012 table is divided by study component rather than by sample source. A participation rate for the population cannot be computed.
@@ -726,12 +721,12 @@ Congressional district & \texttt{v1003} & \texttt{V264} & \texttt{V276\_post} & 
 \end{tabular}}
 \par\smallskip
 \begin{minipage}{\linewidth}\footnotesize
-\textit{Note:} Variable names are as they appear in each year's released Common Content file and were verified against the variable labels in those files; question wording is in the corresponding guide and questionnaire on Dataverse. Dashes indicate that the item was not measured, or the office was not on the ballot, that year. Vote-choice items are from the post-election wave. $^a$Age group is derived from year of birth. $^b$The 2006 file has no post-election state variable; the pre-election state is used.
+\textit{Note:} Variable names are as they appear in each year's released Common Content file and were verified against the variable labels in those files; question wording is in the corresponding year's Data Guide. Dashes indicate that the item was not measured, or the office was not on the ballot, that year. Vote-choice items are from the post-election wave. $^a$Age group is derived from year of birth. $^b$The 2006 file has no post-election state variable; the pre-election state is used.
 \end{minipage}
 \end{table}
 
 \subsubsection*{Processing of CES Responses}
-Respondents who reported being non-citizen immigrants were excluded in every year (302 in 2006, 339 in 2008, 543 in 2010, 692 in 2012, 1,003 in 2014, 1,368 in 2016, 1,134 in 2018, 1,010 in 2020, and 624 in 2022), so CES estimates, like the CPS benchmarks, refer to citizens; respondents who skipped the item were retained.
+Respondents who reported being non-citizens were excluded in every year (302 in 2006, 339 in 2008, 543 in 2010, 692 in 2012, 1,003 in 2014, 1,368 in 2016, 1,134 in 2018, 1,010 in 2020, and 624 in 2022), so CES estimates, like the CPS benchmarks, refer to citizens; respondents who skipped the item were retained.
 
 Responses of ``don't know,'' ``not sure,'' ``did not vote in this race,'' and ``I did not vote,'' along with skipped, not-asked, and no-race responses, were set to missing and dropped item by item; ``other'' responses were retained in the denominator. No filter on reported turnout was applied to vote-choice items.
 
@@ -748,11 +743,5 @@ Annual sample sizes and household response rates are in table~\ref{tab:cps_sampl
 Turnout is total ballots counted divided by the voting-eligible population (VEP) with ineligible felons added back, from McDonald's 1980--2022 General Election Turnout Rates, version 1.2 \parencite{mcdonald_voter_nodate}. This denominator is McDonald's estimate of the citizen voting-age population: it excludes noncitizens but, unlike the standard VEP, retains people disenfranchised by a felony conviction, matching the CES population of adult citizens. In 28 state-years for which total ballots are not reported, the numerator is votes cast for the highest office on the ballot: Alabama 2006 and 2012; Connecticut 2008; Delaware 2012; Maine 2006; Mississippi 2006--2016; Missouri 2012; New Mexico 2014; Oklahoma 2006, 2012, and 2016; Pennsylvania 2006, 2012, and 2016; Rhode Island 2012; Texas 2006, 2008, 2012, and 2014; Virginia 2016; West Virginia 2012 and 2016; and Wisconsin 2016. National turnout is summed ballots divided by the summed denominator across the 50 states and the District of Columbia. State-level turnout benchmarks cover the 50 states; the District of Columbia is excluded. Vote shares are each candidate's share of all votes cast in the contest. Each contest is compared on the candidate who received the most votes, except in eight contests, listed in Supplementary Material section C, where the second-place major-party nominee is used instead.
 
 \input{output/data_sources}
-
-\clearpage
-\begin{singlespace}
-\setlength{\bibitemsep}{0pt}
-\printbibliography
-\end{singlespace}
 
 \end{document}
