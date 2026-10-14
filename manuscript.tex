@@ -337,13 +337,35 @@ The CES documentation describes its survey samples as representative of US citiz
 \input{output/states_respondents_by_office}
 
 \subsection*{CES Sample Matching and Weighting Procedure}
-Sample matching selects respondents from a large opt-in reservoir to resemble a randomly drawn target sample on specified characteristics. For each person in the target sample, the most similar available individual is selected. A sufficiently large, diverse reservoir can approximate the target's joint distribution on those characteristics, which \textcite{rivers_sample_2006} has argued yields a sample that can be treated as random.
+CES sample matching selected respondents from a large opt-in panel to resemble a randomly drawn target sample on specified characteristics. For each person in the target sample, the most similar available individual was selected. A sufficiently large, diverse panel can yield a matched sample that closely approximates the target's joint distribution on those characteristics, which \textcite{rivers_sample_2006} has argued constitutes a sample that can be treated as random.
 
-Before data collection, YouGov constructed a synthetic sampling frame from the American Community Survey (ACS) and drew a stratified target sample from it. It then invited members of its own opt-in panel and of other companies' panels to complete the CES questionnaire. After data collection, YouGov selected from the pool of completed pre-election interviews the cases that most closely resembled the target sample, a group termed the \textit{matched sample}. The matched sample was then weighted in two steps: first to the sampling frame, by propensity-score weighting (2008--2012) or entropy balancing (2014--2022), and then by post-stratification. The 2006 wave, conducted by Polimetrix, followed a different procedure (Supplementary Material section E). Table~\ref{tab:ces_terms} defines the terms used below and table~\ref{tab:ces_stages} reports the variables used at each stage in each year, as documented in each year's guide (see Supplementary Material section~F for a discussion of documentation errors and inconsistencies).
+Before data collection, YouGov constructed a synthetic sampling frame from the American Community Survey (ACS) and drew a stratified target sample from it. It then invited members of its own opt-in panel and of other companies' panels (table~\ref{tab:externalproviders}) to complete the CES questionnaire. After data collection, YouGov selected from the pool of completed pre-election interviews the cases who most closely resembled cases in the target sample, a group called the \textit{matched sample}. The matched sample was then weighted in two steps: first to the sampling frame, by propensity-score weighting (2008--2012) or entropy balancing (2014--2022), and then by post-stratification. The 2006 survey followed a different procedure (Supplementary Material section~E). Table~\ref{tab:ces_terms} defines the terms used below, and table~\ref{tab:ces_stages} reports the variables used at each stage in each year, as documented in each year's guide (see Supplementary Material section~F for a discussion of documentation errors and inconsistencies).
 
-\input{output/ces_stage_rows}
-
-% In the case of the CES, the matching function relied on overlapping auxiliary information in both the sampling frame and the reservoir, generally demographic variables and sometimes political attitudes and religiosity. Panelists from the reservoir were invited to complete the survey. From the set of respondents who completed the questionnaire, the matching function identified those whose characteristics most closely aligned with the target sample. 
+\begin{table}[!htbp]
+  \centering
+  \footnotesize
+  \makebox[\textwidth][c]{%
+  \begin{threeparttable}
+  \caption{Non-YouGov respondent providers.}
+  \label{tab:externalproviders}
+    \begin{tabular}{l>{\raggedright\arraybackslash}p{10cm}} % Adjust the width as needed
+      \toprule
+      Year & External providers \\ 
+      \midrule
+      2006 & None \\ 
+      2008 & E-Rewards, Western Wats \\ 
+      2010 & E-Rewards, Western Wats \\ 
+      2012 & E-Rewards, Western Wats \\ 
+      2014 & MyPoints, Research Now, Survey Sampling International \\ 
+      2016 & MyPoints, Research Now, Survey Sampling International, Global Market Insights \\ 
+      2018 & Dynata, Prodege, Critical Mix \\ 
+      2020 & Dynata, Prodege, Critical Mix \\ 
+      2022 & Dynata, Prodege, Disqo, Generation Lab  \\ 
+      \bottomrule
+    \end{tabular}
+  \end{threeparttable}%
+  }
+\end{table}
 
 \begin{table}[!htbp]
 \centering
@@ -389,45 +411,23 @@ The frame-weighted sample after post-stratification to demographic and political
 }
 \end{table}
 
+\input{output/ces_stage_rows}
+
+% In the case of the CES, the matching function relied on overlapping auxiliary information in both the sampling frame and the reservoir, generally demographic variables and sometimes political attitudes and religiosity. Panelists from the reservoir were invited to complete the survey. From the set of respondents who completed the questionnaire, the matching function identified those whose characteristics most closely aligned with the target sample. 
+
 \subsubsection*{The Sampling Frame and Target Sample}
 
-The sampling frame was a stratified sample of citizen records drawn from an earlier year's ACS, with records selected within strata by weighted sampling with replacement. The variables defining these strata are not documented. YouGov then attached political variables, and in some years religious variables, to each frame record. In most years, the guides describe this as linking each frame record to a similar respondent in another survey, such as the Current Population Survey (CPS) or the Pew Religious Landscape Survey, and taking that respondent's values. The sources differed by year (Supplementary Material section E), and the linking process for the CPS data was described as using a weighted distance metric, but its variables and weights were not disclosed.
+The sampling frame was a stratified sample of people who said they were US citizens, drawn from a previous year's ACS, with records selected within strata by weighted sampling with replacement. The variables defining the strata were not specified in CES documentation. YouGov then attached political variables in all years, and religion variables in some years, to each record in the frame. In most years, the CES guides describe this as matching each frame record to a similar respondent in another survey, such as the Current Population Survey (CPS) or the Pew Religious Landscape Survey, and importing that respondent's values into the frame. The sources differed by year (Supplementary Material section~E). For the CPS, the linking was described as using a weighted distance metric, but as with the strata, no documentation reports the variables or weights used.\footnote{This linking of records from another survey to the frame is distinct from the matching of CES respondents to target sample cases, described below.}
 
-The target sample was then drawn from the frame by stratification on the variables shown in table~\ref{tab:ces_stages}, with simple random sampling within strata. At this point, YouGov had collected no data; it had only defined the target sample to which CES respondents would later be matched.
+The target sample was then drawn from the frame by stratification on the variables shown in table~\ref{tab:ces_stages}, with simple random sampling within strata. At this point, YouGov had collected no data; it had only defined the target sample that the selected respondents would later be chosen to resemble.
 
 \subsubsection*{Panels and Invitations}
-Respondents were drawn from opt-in online panels. YouGov has recruited its own panel through advertising and website partnerships, collecting demographics at registration and offering points redeemable for rewards \parencite{yougov_methodology}. From 2008 onward, members of panels run by other companies were also invited (table~\ref{tab:externalproviders}). Invitations were generally allocated across a cross-classification of demographic variables, geography, and sample source, but documentation does not describe how the pool of panelists from which invitees were drawn was determined (Appendix~A, ``Methods Used to Generate and Recruit the Sample'').\footnote{An inquiry about the selection process has been made but has not yet been answered.}
-
-\begin{table}[!htbp]
-  \centering
-  \footnotesize
-  \makebox[\textwidth][c]{%
-  \begin{threeparttable}
-  \caption{Non-YouGov respondent providers.}
-  \label{tab:externalproviders}
-    \begin{tabular}{l>{\raggedright\arraybackslash}p{10cm}} % Adjust the width as needed
-      \toprule
-      Year & External providers \\ 
-      \midrule
-      2006 & None \\ 
-      2008 & E-Rewards, Western Wats \\ 
-      2010 & E-Rewards, Western Wats \\ 
-      2012 & E-Rewards, Western Wats \\ 
-      2014 & MyPoints, Research Now, Survey Sampling International \\ 
-      2016 & MyPoints, Research Now, Survey Sampling International, Global Market Insights \\ 
-      2018 & Dynata, Prodege, Critical Mix \\ 
-      2020 & Dynata, Prodege, Critical Mix \\ 
-      2022 & Dynata, Prodege, Disqo, Generation Lab  \\ 
-      \bottomrule
-    \end{tabular}
-  \end{threeparttable}%
-  }
-\end{table}
+Respondents were drawn from opt-in online panels. YouGov has recruited its own panel through advertising and website partnerships, collecting demographics at registration and offering points redeemable for rewards \parencite{yougov_methodology}. From 2008 onward, members of panels run by other companies were also invited to complete the CES questionnaire. Invitees were selected using a cross-classification of variables that differed from year to year and included demographic variables, geography, and sample source. Documentation does not describe how the pool of panelists from which invitees were drawn was determined (Appendix~A, ``Methods Used to Generate and Recruit the Sample'').\footnote{An inquiry about the selection process has been made but has not yet been answered.}
 
 \subsubsection*{Data Collection}
-In every federal election year since 2006, invited panelists completed a questionnaire before the election, and all who completed it were invited to complete another questionnaire after the election. Field dates appear in table~\ref{tab:sample_description}. Completed pre-election interviews were subjected to quality controls, which the guides do not describe, before entering the pool from which cases were selected.
+In every federal election year since 2006, potential respondents were invited to complete a questionnaire before the election, and all people who completed that questionnaire were invited to complete another questionnaire after the election. Field dates appear in table~\ref{tab:sample_description}. Completed pre-election interviews were subjected to ``quality controls,'' which the CES guides do not describe, before entering the pool from which the matched sample was selected.
 
-Table~\ref{tab:sample_description} reports what the CES guides label AAPOR Response Rate 1, which we call a completion rate following AAPOR's standard definitions \parencite[78]{aapor2023}, because the population of interest for an opt-in panel is not well defined. Completion rates ranged from \CompletionRateMin{} percent in \CompletionRateMinYear{} to \CompletionRateMax{} percent in \CompletionRateMaxYear{}, with no monotonic trend, partly because the reporting base changed between years (Supplementary Material section E).
+Table~\ref{tab:sample_description} reports what the CES guides label AAPOR Response Rate 1, which we call a completion rate following AAPOR's standard definitions \parencite[78]{aapor2023}, because the population of interest for an opt-in panel is not well defined. Completion rates ranged from \CompletionRateMin{} percent in \CompletionRateMinYear{} to \CompletionRateMax{} percent in \CompletionRateMaxYear{}, with no monotonic trend, partly because the reporting base changed between years (Supplementary Material section~E).
 
 \input{output/sample_description}
 
@@ -441,7 +441,7 @@ where $d_{k}$ measures dissimilarity on variable $k$ and $w_{k}$ sets that varia
 Selection brings the joint distribution of these variables in the matched sample close to that of the target sample, but it does not constrain any margin explicitly. Remaining imbalance is addressed by the two weighting steps.
 
 \subsubsection*{Weighting, Step 1: Weighting to the Frame}
-The first weighting step adjusted the matched sample toward the sampling frame. From 2008 to 2012, this was done by propensity score weighting. A logistic regression predicted membership in the frame, as against the matched sample, from age, education, gender, and turnout in the previous election; for frame records, turnout was the CPS-reported value attached to the synthetic record. Decile boundaries were set from the distribution of estimated scores in the frame, and matched respondents were weighted so that each decile held the same share of the weighted sample as of the frame.
+The first weighting step adjusted the matched sample toward the sampling frame. From 2008 to 2012, this was done by propensity score weighting. The matched cases (the survey respondents) and the frame records (YouGov's ACS-based stand-in for the population) were pooled, and a logistic regression predicted whether each record came from the frame rather than the matched sample, using age, education, gender, and turnout in the previous election. Decile boundaries were set from the distribution of estimated scores in the frame, and matched respondents were weighted so that each decile held the same share of the weighted sample as of the frame.
  
 From 2014 through 2022, the matched sample was weighted to the frame by entropy balancing (\cite{hainmueller_entropy_2012}; formal description in Supplementary Material section B). This method assigns each matched respondent a weight such that the weighted sample reproduces specified moments of the frame while departing as little as possible from uniform weights. The balancing conditions always included demographic variables and their interactions, and in some years also political variables (table~\ref{tab:ces_stages}).
 
@@ -464,11 +464,11 @@ State and federal election returns and voter turnout data were compiled for all 
 % \indent Comprehensive election returns at both the state and federal levels were compiled from a variety of reputable sources for all 50 states and the District of Columbia for the years 2006 to 2022. Returns for Presidential elections were obtained from open source datasets compiled by the \textcite{mit_election_data_and_science_lab_us_2017-1}. Returns for the U.S. Senate and House of Representatives were sourced from the Federal Election Commission.\footnote{Available at\\ \href{https://www.fec.gov/introduction-campaign-finance/election-results-and-voting-information/}{https://www.fec.gov/introduction-campaign-finance/election-results-and-voting-information/}} Gubernatorial returns were acquired from CQ Press.\footnote{Available with subscription at \href{https://library.cqpress.com/elections/advsearch/election-results.php}{https://library.cqpress.com/elections/advsearch/election-results.php}} Returns for state senate, state representative, secretary of state, and attorney general elections were purchased from Ballotpedia. Voter turnout was compiled by the University of Florida Election Lab \parencite{uf_electionlab_turnout}. Any remaining election results were collected manually from official state websites or the by calling the relevant secretary of state offices.
 
 
-\section{Methods}
+\section{Analytic Methods}
 \subsection*{Measuring Error}
-Error is the CES-estimated share minus the external benchmark share for the benchmark's modal category or, for vote choice, its winning candidate. The unit of analysis is the state, except for US House contests, which are analyzed by district. Each estimate is compared to the certified share in official election returns. Prior CES evaluations measured vote-choice accuracy using Democratic vote share. The CES asked which \textit{party} respondents voted for in earlier years and which \textit{candidate} in later years, so responses could often not be mapped cleanly to returns (e.g., multiple candidates per party or candidates on multiple party lines). For that reason, we instead use candidate-level comparisons wherever available and party-level comparisons otherwise (Supplementary Material section C lists some problem cases and the years each office had candidate-level data).
+Error for a variable is the absolute difference between the proportion of CES respondents in one category and the share in that same category in the benchmark. The unit of analysis is the state, except for US House contests, which are analyzed by district. For all variables other than vote choices, the category used is the benchmark's modal category. For the vote choice variables, the category used is the winner of the contest. In some years, the CES questionnaire sometimes asked which party a respondent voted for in a given race and sometimes named the candidates. When the CES asked which candidate respondents voted for, we compared the proportion of CES respondents who reported voting for the winning candidate with that candidate's share of the vote in official returns. When CES respondents were asked only which party they voted for, we compared the proportion of CES respondents who said they voted for the party that received the most votes with that party's share of the votes according to the benchmark (Supplementary Material section~C shows which applies to each office and year). Prior evaluations of the CES measured vote-choice accuracy using the Democratic candidate's share of the vote. Where possible, we instead used candidate-level comparisons, because some races had no Democratic candidate and because party totals often could not be mapped cleanly to survey responses, as when several candidates shared a party label or one candidate ran on more than one party line.
 
-Below, we report the root mean squared error (RMSE):
+Below, we report the root mean squared error (RMSE) for each variable, across states or districts within a year or, where noted, pooled across years:
 
 \[
 \text{RMSE}_{v,w} = 
@@ -476,30 +476,28 @@ Below, we report the root mean squared error (RMSE):
 \left( \widehat{P}_{\text{CES},\, i,\, w} - P_{\text{true},\, i} \right)^{2}}.
 \]
  
-Here, $v$ indexes variables, $w$ weighting schemes, and $i$ states or US House districts; $\widehat{P}_{\mathrm{CES},i,w}$ and $P_{\mathrm{true},i}$ are the CES and benchmark shares. $N$ is the number of comparisons. Table~\ref{tab:observation_counts} reports counts by variable and year.
+Here, $v$ indexes variables, $w$ indexes weighting schemes, and $i$ indexes states or US House districts (state-years or district-years where pooled across years); $\widehat{P}_{\mathrm{CES},i,w}$ and $P_{\mathrm{true},i}$ are the CES and benchmark proportions. $N$ is the number of comparisons. Table~\ref{tab:observation_counts} reports counts by variable and year.
 
 \input{output/observation_counts.tex}
-RMSE gives greater weight to large errors, making it a useful summary measure of survey accuracy: surveys that are consistently close to benchmark values across states have lower RMSE than those with similar average accuracy but occasional large errors. Following prior evaluations \parencite{yeager_comparing_2011, macinnis_accuracy_2018}, we distinguish \textit{primary} variables used in either CES weighting step from \textit{secondary} variables used in neither, assigning status by year (table~\ref{tab:ces_stages}). Senate and gubernatorial outcomes from 2014, and presidential vote in 2020, were themselves weighting targets, so estimates for these offices in those years are not independent tests of accuracy.
+RMSE gives greater weight to large errors, making it a useful summary measure of survey accuracy: surveys that are consistently close to benchmark values across states have lower RMSE than those with similar average accuracy but occasional large errors. Following prior evaluations \parencite{yeager_comparing_2011, macinnis_accuracy_2018}, we distinguish \textit{primary} variables used in either CES weighting step from \textit{secondary} variables used in neither, assigning status to primary or secondary by year (table~\ref{tab:ces_stages}). Beginning in 2014, Senate and gubernatorial election outcomes were used to compute weights, and in 2020, presidential election outcomes were also used, so those variables in those years were treated as primary variables.
 
 \subsection{Weighting Scenarios}
-Comparing CES accuracy across weighting scenarios allows us to distinguish the error remaining after sample matching from the incremental effect of post-survey adjustment. Because sample matching is intended to approximate a random sample, error in the unweighted CES reflects the performance of matching alone, while differences between weighted and unweighted estimates capture the incremental accuracy provided by weighting.
+Comparing CES accuracy across weighting scenarios allows us to distinguish the error present after sample matching from the effect of post-survey adjustment. Because sample matching is intended to approximate a random sample, error in the unweighted CES reflects the performance of matching alone, whereas differences between weighted and unweighted estimates capture the increment in accuracy provided by weighting.
 
-CES weights reflect design choices specific to YouGov, including the incorporation of known US Senate and gubernatorial outcomes. To assess whether conventional demographic post-stratification improves accuracy in nonprobability matched samples independent of these choices, we evaluated accuracy under an alternative weighting scheme applied consistently across years. 
+To assess whether conventional demographic post-stratification improves accuracy in nonprobability matched samples, we evaluated accuracy under an alternative weighting scheme applied consistently across years.
 
-To this end, we generated an additional set of weights that minimize divergence between the CES and demographic benchmarks from the CPS. Only CES variables with strictly comparable CPS counterparts (identical or fully collapsible categories measuring the same construct) were eligible. Race was excluded because CPS categories could not be exhaustively mapped to CES categories. Although 29 CES variables had conceptual CPS counterparts across years, only \AnesrakeUsedRange{} per year were used for weight generation (table~\ref{tab:vars_used_by_anesrake}). 
+To this end, we generated a set of weights that minimized divergence between the CES and demographic benchmarks from the CPS. Only CES variables with comparable CPS counterparts (nearly identical question wording and comparable response categories) were eligible. Race was excluded because CPS categories could not be mapped to CES categories. Although 29 CES variables had conceptual CPS counterparts across years, only \AnesrakeUsedRange{} per year were used for weight generation (table~\ref{tab:vars_used_by_anesrake}).
 
 \input{output/vars_used_by_anesrake}
 
-Weights were raked to the CPS benchmarks following \textcite{debell_computing_2009} using anesrake \parencite{pasek_anesrake_2018}; the tolerance, weight cap, and convergence criteria are described in Supplementary Material section B.
+Weights were raked to the CPS benchmarks following \textcite{debell_computing_2009} using anesrake \parencite{pasek_anesrake_2018}; the tolerance, weight cap, and convergence criteria are described in Supplementary Material section~B.
 
 \section{Results}\label{sec:results}
-We document the error from matching alone, how much the CES weights reduce it and whether that depends on how a variable entered the design (through matching, through weighting, or through neither), and then examine changes over time, the distribution of errors, sample size, contest competitiveness, and conventionally computed post-stratification weights.
+We document the error from matching alone, how much the CES weights reduce error, and whether that depends on how a variable entered the design (through matching, through weighting, or through neither), and then examine changes over time, the distribution of errors, sample size, contest competitiveness, and conventionally computed post-stratification weights.
 
 \subsection{Error with Matching Only}
 \input{output/rmse_matching_only}
-Table~\ref{tab:rmse_matching_only} reports CES accuracy across all available measures using YouGov's matched sample, but \textit{not} the CES weights. Pooling RMSE estimates across the nine survey waves yields \NObsTotal{} individual error observations. The average RMSE across waves was \MatchYearlyMean{} percentage points, ranging from \MatchYearlyMin{} in \MatchYearlyMinYear{} to \MatchYearlyMax{} in \MatchYearlyMaxYear{}.
-
-Demographic error was stable across waves; the class average had a standard deviation of \MatchDemoSD{} point across waves. Turnout error varied the most (SD = \MatchTurnoutSD{}). Candidate-choice error was steady through 2018, between \MatchCandPreMin{} and \MatchCandPreMax{} points, and then rose to \MatchCandTwentyTwenty{} in 2020 and \MatchCandTwentyTwentyTwo{} in 2022; the CES weights largely removed the 2020 increase (see below).
+Table~\ref{tab:rmse_matching_only} reports CES accuracy across all available measures using YouGov's matched sample, but \textit{not} the CES weights. Pooling RMSE estimates across the nine survey waves yields \NObsTotal{} individual error observations. The average RMSE across waves was \MatchYearlyMean{} percentage points. Turnout, whose RMSE averaged \MatchTurnoutMean{} points, enters every wave and accounts for much of that average; excluding turnout, the average was \MatchExclTurnoutMean{} points. Candidate-choice error was between \MatchCandPreMin{} and \MatchCandPreMax{} points in each wave through 2018, and then rose to \MatchCandTwentyTwenty{} in 2020 and \MatchCandTwentyTwentyTwo{} in 2022; the CES weights largely removed the 2020 increase (see below). Table~\ref{tab:rmse_matching_only} reports error for each variable and wave, and we test for change over time below.
 
 
 \subsection{Error with Matching and CES Weights}
@@ -601,13 +599,13 @@ The effect of applying the CES weights was smaller for larger errors. The propor
 \subsection{Error Across Time}
 Advocates of nonprobability samples have sometimes argued that their accuracy has improved as opt-in online panels expanded, recruitment methods matured, and weighting procedures became more sophisticated. The CES offers a natural test of this claim: over the period studied, it revised its weighting scheme repeatedly and drew respondents from multiple panel providers.
 
-We estimated linear trends for primary and secondary variables separately, to see whether error changed differently over time depending on whether a variable was used in weighting (figure~\ref{fig:rmse_trend_primary_secondary}; table~\ref{tab:rmse_trend_primary_secondary}). To keep each group's composition fixed, we used only variables whose status never changed: the three variables that were primary in every documented wave from 2008 through 2022 (age group, sex, and education) and the eight that were secondary in every wave from 2006 through 2022, with the undocumented 2006 wave treated as secondary. For each group, we regressed year-by-variable RMSE on calendar year with variable fixed effects, separately for matching-only and weighted estimates, using HC3 robust standard errors and a permutation test that randomly reassigned year labels.
+We estimated linear trends separately for primary and secondary variables (figure~\ref{fig:rmse_trend_primary_secondary}; table~\ref{tab:rmse_trend_primary_secondary}). To keep each group's composition fixed, we used only variables whose status never changed: the three variables that were primary in every documented wave from 2008 through 2022 (age group, sex, and education) and the eight that were secondary in every wave from 2006 through 2022, with the undocumented 2006 wave treated as secondary. For each group, we regressed year-by-variable RMSE on calendar year with variable fixed effects, separately for matching-only and weighted estimates, using HC3 robust standard errors and a permutation test that randomly reassigned year labels.
 
-For the primary variables, matching-only error showed no trend over the period (\TrendPrimMatchBeta{} percentage points per year; SE = \TrendPrimMatchSE{}, $p$ = \TrendPrimMatchP{}), so the matched samples did not become any more representative, over time, on the variables used to construct the weights. Weighting did produce an apparent decline (\TrendPrimWtdBeta{} points per year; SE = \TrendPrimWtdSE{}, $p$ = \TrendPrimWtdP{}; permutation $p$ = \TrendPrimWtdPermP{}), but it is concentrated early in the period. Mean weighted error was \TrendPrimWtdMeanFirst{} in 2008 and \TrendPrimWtdMeanTwentyTen{} in 2010, then settled between \TrendPrimWtdLateMin{} and \TrendPrimWtdLateMax{} in every wave from 2012 onward.
+For the primary variables, matching-only error showed no trend over the period (\TrendPrimMatchBeta{} percentage points per year; SE = \TrendPrimMatchSE{}, $p$ = \TrendPrimMatchP{}), so the matched samples did not become any more representative, over time, on the variables used to construct the weights. With weighting, the estimated trend was \TrendPrimWtdBeta{} points per year (SE = \TrendPrimWtdSE{}, $p$ = \TrendPrimWtdP{}; permutation $p$ = \TrendPrimWtdPermP{}).
 
-For the secondary variables, the pattern differed. Under matching alone, secondary-variable error rose by \TrendSecMatchBeta{} points per year (SE = \TrendSecMatchSE{}, $p$ = \TrendSecMatchP{}; permutation $p$ = \TrendSecMatchPermP{}), an estimated increase of about \TrendSecMatchFullPeriod{} points from 2006 to 2022. Weighting offset only part of this increase: with weighting, the trend was smaller (\TrendSecWtdBeta{} points per year) and no longer statistically significant (SE = \TrendSecWtdSE{}, $p$ = \TrendSecWtdP{}; 95 percent CI: [\TrendSecWtdCILow{}, \TrendSecWtdCIHigh{}]; permutation $p$ = \TrendSecWtdPermP{}), but the point estimate remained positive.
+For the secondary variables, matching-only error rose by \TrendSecMatchBeta{} points per year (SE = \TrendSecMatchSE{}, $p$ = \TrendSecMatchP{}; permutation $p$ = \TrendSecMatchPermP{}), an estimated increase of about \TrendSecMatchFullPeriod{} points from 2006 to 2022. With weighting, the estimated trend was \TrendSecWtdBeta{} points per year and not statistically significant (SE = \TrendSecWtdSE{}, $p$ = \TrendSecWtdP{}; 95 percent CI: [\TrendSecWtdCILow{}, \TrendSecWtdCIHigh{}]; permutation $p$ = \TrendSecWtdPermP{}).
 
-For the variables used to build the weights, matching-only error showed no improvement, and the apparent decline after weighting reflected the weights hitting their own targets more precisely, not a more representative sample underneath. For the variables not used to construct the weights, error from matching alone rose, and weighting offset only part of that increase. Our results suggest that the CES matched samples did not become more accurate over the 17-year period we studied.
+In neither group did matching-only error decline over the 17 years studied. Our results therefore provide no evidence that the CES matched samples became more accurate over this period.
 
 \begin{figure}
     \centering
@@ -681,7 +679,7 @@ Observed RMSE initially declined with sample size, but the fitted relationship f
 %     \label{fig:us_house_error_density_combined}
 % \end{figure}
 
-As the winning candidate's benchmark vote share moved farther from 50 percent---that is, as races became less competitive---RMSE generally increased, contrary to the prediction of sampling variance alone, which is largest at an even split. The increase was most pronounced in the least competitive races, including races where a major-party candidate dropped out or only one appeared on the ballot, where the benchmark winning share could approach or exceed 90 percent while the survey-implied split remained much closer to parity. For most offices, RMSE is relatively stable through moderate winning-share cutoffs but rises once high-share races are included, most visibly for Attorney General, Secretary of State, and State Senator (table~\ref{tab:office_rmse_less_competitive_races}; figure~\ref{fig:office_rmse_progressive_race_exclusion}).
+Table~\ref{tab:office_rmse_less_competitive_races} and figure~\ref{fig:office_rmse_progressive_race_exclusion} recompute each office's RMSE as races with progressively higher winning proportions are included. For most offices, RMSE was relatively stable through moderate winning-proportion cutoffs and rose once races with very high winning proportions were included. This is contrary to the prediction of sampling variance alone, which is largest at an even split. In the least competitive races, including those where a major-party candidate dropped out or only one appeared on the ballot, the benchmark winning proportion could approach or exceed 90 percent while the survey-implied split remained much closer to parity.
 
 \input{output/office_rmse_progressive_race_exclusion.tex}
 
@@ -715,7 +713,7 @@ CES documentation reported accuracy metrics for selected offices and years, thou
 
 \input{output/ces_comparison}
 
-Our RMSEs are generally higher than the reported values. The difference is small for President (\GuideGapPres{} points on average) and negligible for US Senate (\GuideGapSenate{}), but larger for Governor (\GuideGapGov{}), Secretary of State (\GuideGapSoS{}), and Attorney General (\GuideGapAG{}). Averaged across years, our estimates exceed the reported values by \GuideGapOverall{} points.
+Our RMSEs are generally higher than the reported values, by \GuideGapOverall{} percentage points when averaged across offices and years. Table~\ref{tab:ces_comparison} reports the difference for each office and year.
 
 We cannot determine with certainty what accounts for this difference, but several features of the guides' approach may contribute. The guides measured the Democratic share of the two-party vote, whereas we use the modal candidate's share of all votes cast; they used validated-voter weights from 2018 onward; and their 2006 and 2010 editions included only states with at least 200 respondents. In addition, certified vote shares for the same race differ somewhat across sources.
 % \begin{sidewaystable}[p]
@@ -822,7 +820,7 @@ This study analyzes three existing data sources and collected no new data.
 
 \item[Population Under Study:] The CES documentation describes its samples as representative of US citizens ages 18 and older. Estimates are evaluated for the 50 states and the District of Columbia and, for US House, congressional districts. Respondents who reported being non-citizens were excluded in every year (counts by year in Supplementary Material section G), so CES estimates, like the CPS benchmarks, refer to citizens; respondents who skipped the item were retained.
 
-\item[Methods Used to Generate and Recruit the Sample:] The samples are non-probability samples drawn from opt-in online panels: the Polimetrix/YouGov panel (PollingPoint through 2012) and, from 2008, panels supplied by other companies (table~\ref{tab:externalproviders}). Coverage is limited to people who joined those panels. From 2008, completed pre-election interviews were matched to a target sample drawn from a sampling frame built from American Community Survey records (a modeled frame in 2022; table~\ref{tab:ces_stages}). The 2006 wave followed a different procedure. Invitations were allocated by a cross-classification of demographics, geography, and, from 2018, sample source; the guides do not describe how the pool of panelists eligible for invitation was determined. All pre-election respondents were re-invited to the post-election wave. Incentives are largely undocumented. Data collection was not in person. The procedure is described in ``CES Sample Matching and Weighting Procedure'' (sampling frame, panels and invitations, data collection, selection of matched cases from completed interviews, and the two weighting steps) and, year by year, in Supplementary Material section E (frame sources, invitation cross-classifications and incentives, and the 2006 procedure).
+\item[Methods Used to Generate and Recruit the Sample:] The samples are non-probability samples drawn from opt-in online panels: the Polimetrix/YouGov panel (PollingPoint through 2012) and, from 2008, panels supplied by other companies (table~\ref{tab:externalproviders}). Coverage is limited to people who joined those panels. From 2008, cases were selected from the pool of completed pre-election interviews to resemble a target sample drawn from a sampling frame built from American Community Survey records (a modeled frame in 2022; table~\ref{tab:ces_stages}). The 2006 wave followed a different procedure. Invitations were allocated by a cross-classification of demographics, geography, and, from 2018, sample source; the guides do not describe how the pool of panelists eligible for invitation was determined. All pre-election respondents were re-invited to the post-election wave. Incentives are largely undocumented. Data collection was not in person. The procedure is described in ``CES Sample Matching and Weighting Procedure'' (sampling frame, panels and invitations, data collection, selection of matched cases from completed interviews, and the two weighting steps) and, year by year, in Supplementary Material section E (frame sources, invitation cross-classifications and incentives, and the 2006 procedure).
 
 \item[Method(s) and Mode(s) of Data Collection:] Self-administered web questionnaires, administered in English.
 
@@ -832,7 +830,7 @@ This study analyzes three existing data sources and collected no new data.
 
 \item[Whether and How the Data Were Weighted:] Estimates are analyzed unweighted (matching only), with the CES weights, and with our anesrake weights (``Weighting Scenarios''; table~\ref{tab:vars_used_by_anesrake}; Supplementary Material section B). The CES weights were computed by weighting the matched sample to the frame (propensity-score subclassification in 2008--2012; entropy balancing from 2014) and then post-stratifying (raking in 2022), using the variables in table~\ref{tab:ces_stages}. The largest value of the weight used in each released file was 2.9 (2006), 6.5 (2008), 7.0 (2010), 20.0 (2012), 15.0 (2014--2020), and 15.5 (2022). Weights were normalized to the sample size (see ``CES Sample Matching and Weighting Procedure''). The 2006, 2008, 2010, 2012, and 2014 files each contain a single common-content weight, which we use. The 2016--2022 files also contain a separate post-election weight; we apply it to every item, including demographics measured in the pre-election wave, so that all estimates in a year rest on the same respondents and weights. The weight variable used in each year is listed in table~\ref{tab:disclosure_by_year}.
 
-\item[How the Data Were Processed and Procedures to Ensure Data Quality:] The guides state that pre-election interviews entered the matching pool ``after quality controls were applied'' but do not describe those controls. Recoding is described in ``Measuring Error.'' Responses of ``don't know,'' ``not sure,'' ``did not vote in this race,'' and ``I did not vote,'' along with skipped, not-asked, and no-race responses, were set to missing and dropped item by item; ``other'' responses were retained in the denominator. No turnout filter was applied to vote-choice items. State and district assignment and the 2018 straight-ticket assignment and display error are in Supplementary Material section G; candidate-name matching and party assignment are in Supplementary Material section C.
+\item[How the Data Were Processed and Procedures to Ensure Data Quality:] The guides state that pre-election interviews entered the pool from which cases were selected ``after quality controls were applied'' but do not describe those controls. Recoding is described in ``Measuring Error.'' Responses of ``don't know,'' ``not sure,'' ``did not vote in this race,'' and ``I did not vote,'' along with skipped, not-asked, and no-race responses, were set to missing and dropped item by item; ``other'' responses were retained in the denominator. No turnout filter was applied to vote-choice items. State and district assignment and the 2018 straight-ticket assignment and display error are in Supplementary Material section G; candidate-name matching and party assignment are in Supplementary Material section C.
 
 \item[Panel Description:] Panel recruitment is described in ``Panels and Invitations'' in the main text. Procedures for managing panel membership, participation, and attrition are not described in the CES guides.
 
