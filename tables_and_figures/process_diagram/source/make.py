@@ -89,7 +89,7 @@ section {{ margin:0 0 56px; scroll-margin-top:24px; }}
 NOTES = {
     "a": "Eight steps in reading order, grouped under before, during, and after fieldwork. Each panel shows the mechanism of its step: a frame table with attached columns, stratified draws, invitations, the field calendar, nearest-neighbor pairing, weights as icon size, and margins pulled to targets.",
     "b": "A calendar runs along the bottom, so position on the page is time. The target sample is fixed before fieldwork and waits while respondents are recruited and interviewed; the two lanes meet at matching once fieldwork ends.",
-    "c": "One set of people, followed from the panel to the released file. Each column is a stage, with the same icons getting fewer and then heavier or lighter. The least text of the three.",
+    "c": "One set of people, followed from the panel to the released file. Each column is a stage, with the same icons getting fewer and then heavier or lighter (icon size shows the weight). The frame\u2019s ACS columns and the columns attached from other surveys are bracketed separately.",
 }
 
 if __name__ == "__main__":

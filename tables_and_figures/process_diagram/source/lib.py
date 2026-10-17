@@ -97,6 +97,10 @@ def defs():
   <marker id="ahm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto" markerUnits="userSpaceOnUse">
     <path d="M0,0.8 L9.5,5 L0,9.2 z" class="ahm"/>
   </marker>
+  <pattern id="hatchsoft" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <rect width="10" height="10" class="hatch-bg"/>
+    <line x1="0" y1="0" x2="0" y2="10" class="hatchline-soft"/>
+  </pattern>
   <pattern id="hatchp" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
     <rect width="8" height="8" class="hatch-bg"/>
     <line x1="0" y1="0" x2="0" y2="8" class="hatchline"/>
@@ -145,6 +149,30 @@ CSS = f"""
 .full .tb-rule {{ stroke:var(--rule); stroke-width:1; }}
 .full .tb-frame {{ fill:none; stroke:var(--node-line); stroke-width:1.2; }}
 .full .dot {{ fill:var(--pp); }}
+.full .row-sel {{ fill:var(--plate); stroke:var(--ink); stroke-width:1.6; }}
+.full .thread {{ stroke:var(--mo-line); stroke-width:1.1; fill:none; opacity:0.75; }}
+.full .inset {{ fill:var(--plate); stroke:var(--node-line); stroke-width:1.2; }}
+.full .dot-mo {{ fill:var(--mo); }}
+.full .dot-fade {{ fill:var(--pp); }}
+.full .cube-fill {{ fill:var(--plate); stroke:none; }}
+.full .cube-edge {{ stroke:var(--node-line); stroke-width:1.3; fill:none; }}
+.full .cube-back {{ stroke:var(--node-line); stroke-width:1; stroke-dasharray:4 4; fill:none; }}
+.full .dot-done {{ fill:var(--pp-done); }}
+.full .pair-strong {{ stroke:var(--mo-line); stroke-width:2.2; }}
+.full .leader {{ stroke:var(--mo-line); stroke-width:0.9; opacity:0.7; }}
+.full .halo {{ fill:var(--mo-fill); stroke:var(--mo-line); stroke-width:1; }}
+.full .beam {{ stroke:var(--ink); stroke-width:2; stroke-linecap:round; }}
+.full .string {{ stroke:var(--muted); stroke-width:1; }}
+.full .pan {{ fill:var(--node); stroke:var(--ink); stroke-width:1.4; }}
+.full .hatchline-soft {{ stroke:var(--mo); stroke-width:1.4; opacity:0.45; }}
+.full .panel-mo {{ fill:url(#hatchsoft); stroke:var(--mo-line); stroke-width:1.2; }}
+.full .panel-mw {{ fill:var(--mw-fill); stroke:var(--mw); stroke-width:1.6; }}
+.full .pp-onmw {{ fill:#ffffff; }}
+.full .dot-pick {{ fill:var(--ink); }}
+.full .card {{ fill:var(--plate); stroke:var(--node-line); stroke-width:1; }}
+.full .dot-att1 {{ fill:var(--att1); }}
+.full .dot-att2 {{ fill:var(--att2); }}
+.full .dot-att3 {{ fill:var(--att3); }}
 .full .ring {{ fill:var(--plate); stroke:var(--ink); stroke-width:2; }}
 .full .dot-sel {{ fill:var(--plate); stroke:var(--ink); stroke-width:1.6; }}
 .full .pp {{ fill:var(--pp); }}
@@ -175,13 +203,36 @@ LIGHT = """--bg:#edf0f3; --plate:#ffffff; --ink:#1b2631; --on-ink:#ffffff; --mut
   --node:#eef2f6; --node-line:#b9c4cf; --panel:#f7f9fb; --zone:#f1f5f9; --band:#f0f3f6; --band2:#e6ebf0; --attach:#e4edf4;
   --pp:#ccd4dc; --pp-inv:#8e9dab; --pp-done:#52697e;
   --mo:#6aa6c8; --mo-fill:#e3eff6; --mo-line:#5a95b8; --mo-text:#3d7194;
-  --mw:#17436b; --mw-text:#17436b; --accent:#a8742f; --wave:#c9dbe7; --wave2:#dfe7ee; --ghost:#ffffff; --bar-mid:#9fb0bf;"""
+  --mw:#17436b; --mw-text:#17436b; --accent:#a8742f; --wave:#c9dbe7; --wave2:#dfe7ee; --ghost:#ffffff; --bar-mid:#9fb0bf; --att1:#3f8a7e; --att2:#8a6aa0; --att3:#b4613f; --mw-fill:#d6e0ea;"""
 DARK = """--bg:#0e141a; --plate:#151d25; --ink:#e3e9ef; --on-ink:#0e141a; --muted:#93a1ae; --rule:#2c3742;
   --node:#1e2832; --node-line:#3d4b58; --panel:#18212a; --zone:#1a242e; --band:#1b252f; --band2:#222d38; --attach:#1f3242;
   --pp:#3a4652; --pp-inv:#6f7f8f; --pp-done:#a9bccd;
   --mo:#6aa6c8; --mo-fill:#1c3242; --mo-line:#6aa6c8; --mo-text:#8cc0de;
-  --mw:#4f86b8; --mw-text:#8db8e0; --accent:#d29a52; --wave:#244257; --wave2:#1f2c37; --ghost:#151d25; --bar-mid:#5f6f7e; color-scheme:dark;"""
+  --mw:#4f86b8; --mw-text:#8db8e0; --accent:#d29a52; --wave:#244257; --wave2:#1f2c37; --ghost:#151d25; --bar-mid:#5f6f7e; --att1:#6cbcae; --att2:#b597cb; --att3:#de8e6b; --mw-fill:#1c3550; color-scheme:dark;"""
 
 
 def rng(seed):
     return random.Random(seed)
+
+
+# ---- text measurement (IBM Plex Sans metrics) so blocks of left-aligned text can be centred
+_FONT_DIR = __import__("pathlib").Path(__file__).parent.parent / "node_modules/@fontsource/ibm-plex-sans/files"
+_METRICS = {}
+
+
+def text_width(s, cls="tn"):
+    """Approximate rendered width of s in viewBox units for the given text class."""
+    weight, size = {"tn": (400, F_SMALL), "tn-ink": (400, F_SMALL), "ts": (400, F_BODY),
+                    "tsb": (600, F_BODY)}.get(cls.split()[0], (400, F_SMALL))
+    if weight not in _METRICS:
+        try:
+            from fontTools.ttLib import TTFont
+            f = TTFont(str(_FONT_DIR / f"ibm-plex-sans-latin-{weight}-normal.woff2"))
+            _METRICS[weight] = (f.getBestCmap(), f["hmtx"].metrics, f["head"].unitsPerEm)
+        except Exception:
+            _METRICS[weight] = None
+    m = _METRICS[weight]
+    if m is None:
+        return len(s) * size * (0.56 if weight == 600 else 0.5)
+    cmap, hmtx, upm = m
+    return sum(hmtx.get(cmap.get(ord(ch), ".notdef"), (upm * 0.5, 0))[0] for ch in s) * size / upm

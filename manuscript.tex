@@ -339,7 +339,16 @@ The CES documentation describes its survey samples as representative of US citiz
 \subsection*{CES Sample Matching and Weighting Procedure}
 CES sample matching selected respondents from a large opt-in panel to resemble a randomly drawn target sample on specified characteristics. For each person in the target sample, the most similar available individual was selected. A sufficiently large, diverse panel can yield a matched sample that closely approximates the target's joint distribution on those characteristics, which \textcite{rivers_sample_2006} has argued constitutes a sample that can be treated as random.
 
-Before data collection, YouGov constructed a synthetic sampling frame from the American Community Survey (ACS) and drew a stratified target sample from it. It then invited members of its own opt-in panel and of other companies' panels (table~\ref{tab:externalproviders}) to complete the CES questionnaire. After data collection, YouGov selected from the pool of completed pre-election interviews the cases who most closely resembled cases in the target sample, a group called the \textit{matched sample}. The matched sample was then weighted in two steps: first to the sampling frame, by propensity-score weighting (2008--2012) or entropy balancing (2014--2022), and then by post-stratification. The 2006 survey followed a different procedure (Supplementary Material section~E). Table~\ref{tab:ces_terms} defines the terms used below, and table~\ref{tab:ces_stages} reports the variables used at each stage in each year, as documented in each year's guide (see Supplementary Material section~F for a discussion of documentation errors and inconsistencies).
+Before data collection, YouGov constructed a synthetic sampling frame from the American Community Survey (ACS) and drew a stratified target sample from it. It then invited members of its own opt-in panel and of other companies' panels (table~\ref{tab:externalproviders}) to complete the CES questionnaire. After data collection, YouGov selected from the pool of completed pre-election interviews the cases who most closely resembled cases in the target sample, a group called the \textit{matched sample}. The matched sample was then weighted in two steps: first to the sampling frame, by propensity-score weighting (2008--2012) or entropy balancing (2014--2022), and then by post-stratification. The 2006 survey followed a different procedure (Supplementary Material section~E). Table~\ref{tab:ces_terms} defines the terms used below, and table~\ref{tab:ces_stages} reports the variables used at each stage in each year, as documented in each year's guide (see Supplementary Material section~F for a discussion of documentation errors and inconsistencies). This procedure is illustrated in figure~\ref{fig:ces_process}.
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=\linewidth]{process_diagram/process_diagram.pdf}
+    \caption{Schematic of the CES sampling and weighting process.}
+    \par\smallskip
+    \noindent\begin{minipage}{\linewidth}\footnotesize\textit{Alt text:} Flow diagram: a sampling frame yields a target sample; invited opt-in panelists complete interviews; each target case is matched to its closest respondent; the matched sample is weighted to the frame, then post-stratified.\end{minipage}
+    \label{fig:ces_process}
+\end{sidewaysfigure}
 
 \begin{table}[!htbp]
   \centering

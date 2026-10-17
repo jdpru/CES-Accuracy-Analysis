@@ -1,11 +1,21 @@
-# CES process diagram (figure: fig:ces_process)
+# Process diagram (figure: fig:ces_process)
 
-One SVG drives both the web version and the paper PDF.
+`process_diagram.pdf` is the paper figure (9 in wide, full landscape page via `sidewaysfigure`).
+`manuscript.tex` includes it as `process_diagram/process_diagram.pdf`.
 
-    npm install @fontsource/ibm-plex-sans@5.0.20 @fontsource/ibm-plex-mono@5.0.13 playwright-core@1.47.2
-    python3 build.py      # writes index.html (web page) and export.html (paper version)
-    node render.js        # writes ces_matching_weighting_process.pdf (6.5 x 1.76 in, fonts embedded)
+## Rebuild
 
-render.js points at a headless Chromium path; change `executablePath` to your local Chrome
-(e.g. /Applications/Google Chrome.app/Contents/MacOS/Google Chrome). Copy the PDF to ../output/.
-caption.html is the web caption; the LaTeX caption is in "Claude outputs/ces_process_figure.tex".
+    cd tables_and_figures/process_diagram
+    npm install                     # playwright-core + IBM Plex fonts (package.json)
+    python3 source/make.py            # writes source/export_*.html and source/ces-process-full.html
+    CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" node source/render.js c
+
+`node source/render.js c` writes `process_diagram.pdf` here.
+
+## Layout
+
+- `source/vc.py`: the figure (Version C). `LEGEND_BG = True` draws the colored panels behind
+  Matched and post-stratified; `STYLE = "cube"` is the matching cube.
+- `source/lib.py`: shared drawing helpers, colors, and text measurement. `source/make.py`: page and export assembly.
+- `source/va.py`, `source/vb.py`: the two full-page versions that were not chosen.
+- `older/compact/`: the earlier one-row landscape diagram. `older/matplotlib/`: the first matplotlib version.
