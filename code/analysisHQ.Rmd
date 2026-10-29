@@ -156,13 +156,14 @@ Secretary_of_state_full <- State_legislative_0623 %>%
 ### Turnout
 ```{r}
 turnout_national <- read_excel("data/Benchmarks/VEP_including_ineligible_felons.xlsx", sheet="National")
-turnout_statewide <- read_excel("data/Benchmarks/VAP_Turnout_Rates.xlsx", 
+turnout_statewide <- read_excel("data/Benchmarks/VEP_including_ineligible_felons.xlsx", 
                                 sheet = "Statewide", 
                                 skip = 1, 
                                 .name_repair = "unique_quiet") %>% 
   select(1:11) %>%
   slice(-n()) %>%
   mutate(State = toupper(State))
+stopifnot(nrow(turnout_statewide) == 51, tail(turnout_statewide$State, 1) == "WYOMING")
 ```
 
 ### State Populations
@@ -1830,8 +1831,8 @@ calculate_demovote_errors_national <- function(year_data_list,
         categories <- c("Voted", "Did not vote")
         benchmark_voted <- turnout_national %>%
           filter(Year == year) %>%
-          select(-Year) %>%
-          unlist(use.names = FALSE)
+          pull(Rate)
+        stopifnot(length(benchmark_voted) == 1, !is.na(benchmark_voted))
 
 
         benchmark <- c(
