@@ -17,4 +17,4 @@
 - `source/vc.py`: the figure (Version C). `LEGEND_BG = True` draws the colored panels behind
   Matched and post-stratified; `STYLE = "cube"` is the matching cube.
 - `source/lib.py`: shared drawing helpers, colors, and text measurement. `source/make.py`: page and export assembly.
-- `source/va.py`, `source/vb.py`: the two full-page versions that were not chosen.
+- Versions A and B, the two full-page candidates not chosen, were removed on Oct 31, 2026 (`source/va.py`, `source/vb.py` in git history).

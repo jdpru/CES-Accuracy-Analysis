@@ -335,7 +335,7 @@ However, these past evaluations did not assess the independent impacts of matchi
 \section*{The Cooperative Election Study}
 The CES documentation describes its survey samples as representative of US citizens ages 18 and older. The questionnaires have measured an array of variables, including political opinions, demographics, and candidate choices in federal and state elections, including for President, US Senate and House, Governor, Attorney General, Secretary of State, State Senator, and State Representative. Table~\ref{tab:states_respondents_by_office} reports, for each office and year, the number of states with CES respondents and the average number of respondents per state.
 
-\input{output/states_respondents_by_office}
+\input{output/main/states_respondents_by_office}
 
 \subsection*{CES Sample Matching and Weighting Procedure}
 CES sample matching selected respondents from a large opt-in panel to resemble a randomly drawn target sample on specified characteristics. For each person in the target sample, the most similar available individual was selected. A sufficiently large, diverse panel can yield a matched sample that closely approximates the target's joint distribution on those characteristics, which \textcite{rivers_sample_2006} has argued constitutes a sample that can be treated as random.
@@ -421,7 +421,7 @@ The frame-weighted sample after post-stratification to demographic and political
 }
 \end{table}
 
-\input{output/ces_stage_rows}
+\input{output/main/ces_stage_rows}
 
 % In the case of the CES, the matching function relied on overlapping auxiliary information in both the sampling frame and the reservoir, generally demographic variables and sometimes political attitudes and religiosity. Panelists from the reservoir were invited to complete the survey. From the set of respondents who completed the questionnaire, the matching function identified those whose characteristics most closely aligned with the target sample. 
 
@@ -439,7 +439,7 @@ In every federal election year since 2006, potential respondents were invited to
 
 Table~\ref{tab:sample_description} reports what the CES guides label AAPOR Response Rate 1, which we call a completion rate following AAPOR's standard definitions \parencite[78]{aapor2023}, because the population of interest for an opt-in panel is not well defined. Completion rates ranged from \CompletionRateMin{} percent in \CompletionRateMinYear{} to \CompletionRateMax{} percent in \CompletionRateMaxYear{}, with no monotonic trend, partly because the reporting base changed between years (Supplementary Material section~E).
 
-\input{output/sample_description}
+\input{output/main/sample_description}
 
 \subsubsection*{Selecting Cases from the Pool of Completed Interviews}
 The pool of completed pre-election questionnaires exceeded the desired sample size in every year. From 2008 onward, YouGov selected the $N$ respondents from the pool of completed pre-election questionnaires who most closely resembled the $N$ cases in the target sample \parencite{rivers_sampling_2007}; the CES guides call this selected set the ``matched sample.'' The 2006 survey followed a different procedure, in which matching was done before the questionnaire was completed (described further in Supplementary Material section~E). Similarity was measured with a weighted distance metric rather than by exact or propensity score matching \parencite{stuart_matching_2010}. The distance between target case $t$ and respondent $i$ was:
@@ -488,7 +488,7 @@ Below, we report the root mean squared error (RMSE) for each variable, across st
  
 Here, $v$ indexes variables, $w$ indexes weighting schemes, and $i$ indexes states or US House districts (state-years or district-years where pooled across years); $\widehat{P}_{\mathrm{CES},i,w}$ and $P_{\mathrm{true},i}$ are the CES and benchmark proportions. $N$ is the number of comparisons. Table~\ref{tab:observation_counts} reports counts by variable and year.
 
-\input{output/observation_counts.tex}
+\input{output/main/observation_counts.tex}
 RMSE gives greater weight to large errors, making it a useful summary measure of survey accuracy: surveys that are consistently close to benchmark values across states have lower RMSE than those with similar average accuracy but occasional large errors. Following prior evaluations \parencite{yeager_comparing_2011, macinnis_accuracy_2018}, we distinguish \textit{primary} variables used in sample matching or in either CES weighting step from \textit{secondary} variables used in none of these, assigning status to primary or secondary by year (table~\ref{tab:ces_stages}). Beginning in 2014, Senate and gubernatorial election outcomes were used to compute weights, and in 2020, presidential election outcomes were also used, so those variables in those years were treated as primary variables.
 
 \subsection{Weighting Scenarios}
@@ -498,7 +498,7 @@ To assess whether conventional demographic post-stratification improves accuracy
 
 To this end, we generated a set of weights that minimized divergence between the CES and demographic benchmarks from the CPS. Only CES variables with comparable CPS counterparts (nearly identical question wording and comparable response categories) were eligible. Race was excluded because CPS categories could not be mapped to CES categories. Although 29 CES variables had conceptual CPS counterparts across years, only \AnesrakeUsedRange{} per year were used for weight generation (table~\ref{tab:vars_used_by_anesrake}).
 
-\input{output/vars_used_by_anesrake}
+\input{output/main/vars_used_by_anesrake}
 
 Weights were raked to the CPS benchmarks following \textcite{debell_computing_2009} using anesrake \parencite{pasek_anesrake_2018}; the tolerance, weight cap, and convergence criteria are described in Supplementary Material section~B.
 
@@ -506,7 +506,7 @@ Weights were raked to the CPS benchmarks following \textcite{debell_computing_20
 This section reports assessments of (1) the accuracy of the data before weights were applied, meaning accuracy based on matching only, (2) the impact of CES weights on accuracy, (3) the distribution of errors, (4) changes over the years in accuracy, (5) the impact of sample size on errors, (6) the impact of contest competitiveness on errors, (7) how our estimates compare with the accuracy assessments reported in the CES guides, and (8) the impact of conventionally constructed post-stratification weights on accuracy.
 
 \subsection{Secondary Variables: Error Without and With the CES Weights}
-\input{output/neither_by_year_paired}
+\input{output/main/neither_by_year_paired}
 Table~\ref{tab:neither_by_year_paired} reports error for the \NeitherNVars{} variables in the years in which they were used in neither YouGov's sample matching nor the CES weights (\NeitherNObs{} error observations, 2008--2022; 2006 is excluded because its documentation does not identify the matching and weighting variables).\footnote{The methods used for matching and weighting in 2006 are not well documented, so that year is excluded from this analysis.} For each variable, the table shows RMSE by year with matching only and with the CES weights. It also shows pooled RMSE, computed across all errors from all states and all years together (for US House votes, across all districts and years), and the change in accuracy due to weighting. Because the variables were not used in either matching or weighting, this analysis documents how well sample matching alone performed and how accuracy changed when the CES weights were applied.
 
 The pooled RMSE across years is \NeitherMeanBefore{} percentage points without the CES weights and \NeitherMeanAfter{} percentage points with them. Thus, the weights slightly improved accuracy when combining across all years, and that same improvement is apparent when each year is examined individually (as shown in the last three rows of table~\ref{tab:neither_by_year_paired}).
@@ -514,21 +514,21 @@ The pooled RMSE across years is \NeitherMeanBefore{} percentage points without t
 Note that without the CES weights, accuracy was better in the first three years (RMSE ranged from 6.0 to 8.1) than in the later years (RMSE ranged from 9.2 to 10.8). The CES weights improved accuracy the most in the last two years (2020 and 2022), but even with those weights, accuracy was slightly worse in those years than in the early years. Interestingly, examining the pairs of unweighted and weighted numbers throughout table~\ref{tab:neither_by_year_paired} illustrates that the weights did not consistently improve the accuracy of all variables in all years. In fact, weighting decreased accuracy for 32 variable-years (in the body of table~\ref{tab:neither_by_year_paired}), had no impact for 4, and improved accuracy for 61.
 
 \subsection{Primary Variables: Error Without and With the CES Weights}
-\input{output/used_by_year_paired}
+\input{output/main/used_by_year_paired}
 Table~\ref{tab:used_by_year_paired} reports the same comparison for variables in the years in which they were used in matching or weighting. Without the CES weights, RMSE was \UsedMeanBefore{} across all years. Again, weighting improved this to \UsedMeanAfter{}, and that improvement was apparent in all years (see the last three rows of table~\ref{tab:used_by_year_paired}). The weights reduced error in every year for all but four variables in table~\ref{tab:used_by_year_paired}.
 
 % The preceding results combine primary and secondary variables. Post-stratification should, by design, reduce error for primary variables (since they are used to construct the weights in the first place). The more informative test is whether those gains extend to secondary variables in the matched sample, as they generally would in a probability sample. 
 
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\linewidth]{output/primary_secondary_matching_vs_weighting.png}
+%     \includegraphics[width=\linewidth]{output/additional/primary_secondary_matching_vs_weighting.png}
 %     \caption{Effect of CES Post-Stratification on Primary and Secondary Variable Error}
 %     \caption*{\footnotesize
 %     Bars show mean RMSE for matching-only and matching + post-stratification estimates by year. Panel A includes Primary variables used to construct the CES weights; Panel B includes Secondary variables not used to construct the weights. Labels report $\Delta$ RMSE, calculated as post-stratified RMSE minus matching-only RMSE, so negative values indicate improved accuracy after weighting. Only variables consistently classified as Primary or Secondary and present in every CES wave from 2008 through 2022 are included.}
 %     \label{fig:primary_secondary_weighting_comparison}
 % \end{figure}
 
-% \input{output/primary_secondary_weighting_comparison}
+% \input{output/additional/primary_secondary_weighting_comparison}
 
 
 % Illustrated in Figure~\ref{fig:primary_secondary_weighting_comparison}, post-stratification reduced average primary-variable error from 6.9 to 3.7 percentage points on average, a 46 percent reduction, and it did so in every year. Average error on secondary variables fell from 7.7 to 7.0 points, a 10 percent reduction, and in six of eight years the improvement was less than a single percentage point. Averaged across years, weighting improved primary variables by 3.2 points and secondary variables by 0.8 — a fourfold difference (Table~\ref{tab:primary_secondary_weighting_comparison}). The benefits of post-stratification  did not extend to variables outside the weighting scheme, consistent with other types of nonprobability sampling. Before post-stratification, primary and secondary variables were estimated with comparable accuracy; afterward, error for the variables used to construct the weights was roughly half the error for those that were not — 3.7 percent versus 7.0.
@@ -544,17 +544,17 @@ Table~\ref{tab:used_by_year_paired} reports the same comparison for variables in
 
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\linewidth]{output/primary_vs_secondary_consistent_excl_2006.png}
+%     \includegraphics[width=\linewidth]{output/additional/primary_vs_secondary_consistent_excl_2006.png}
 %     \caption{Primary vs. Secondary Variable RMSE}\label{fig:primary_vs_secondary_consistent_excl_2006}
 %      \caption*{\footnotesize Primary variables (3): Age Group, Education, Sex. Secondary variables (8): Family Income, Employment Status, State Representative, State Senator, U.S. House, Union Membership, Veteran Status, and Voting Method. Only variables consistently classified as Primary or Secondary across all years and present in every CES wave are included. 2006 is excluded because the CES does not report post-stratification variables for that year.   
 %     }
 % \end{figure}
 
-% \input{output/primary_secondary_rmse_by_year.tex}
+% \input{output/additional/primary_secondary_rmse_by_year.tex}
 
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\linewidth]{output/primary_vs_secondary_delta_by_year.png}
+%     \includegraphics[width=\linewidth]{output/additional/primary_vs_secondary_delta_by_year.png}
 %     \caption{Difference between Primary and Secondary by Year} 
 %     \caption*{\footnotesize Positive values indicate Secondary variables had higher RMSE than Primary variables.}
 %     \label{fig:primary_vs_secondary_delta_by_year}
@@ -565,7 +565,7 @@ Prior work has shown that two hallmarks of nonprobability samples are (1) wide v
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{output/error_distribution_matching_vs_weighting.pdf}
+    \includegraphics[width=\linewidth]{output/main/error_distribution_matching_vs_weighting.pdf}
     \caption[Distribution of CES absolute error before and after weighting]{Distribution of CES absolute error before and after weighting. Each histogram shows the share of the \NeitherNObs{} errors for the \NeitherNVars{} variables in the years they were used in neither matching nor weighting (2008--2022) at each level of absolute error. Panel A shows matching-only estimates and Panel B shows estimates with YouGov's weights. The axis ends at the 99th percentile (\ErrHistCutoff{} points), and the last bar collects all larger errors.}
     \par\smallskip
     \noindent\begin{minipage}{\linewidth}\footnotesize\textit{Alt text:} Two histograms of absolute error before and after weighting. After weighting, more estimates sit near zero, but both distributions keep a long tail of errors above 20 percentage points.\end{minipage}
@@ -587,14 +587,14 @@ For the secondary variables, matching-only RMSE increased by \TrendSecMatchBeta{
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{output/rmse_trend_primary_secondary.pdf}
+    \includegraphics[width=\linewidth]{output/main/rmse_trend_primary_secondary.pdf}
     \caption[RMSE trends over time for primary and secondary variables]{RMSE trends over time for primary and secondary variables. Each point is the mean RMSE across a group's variables in one year. Open circles and dashed lines show matching-only estimates, and filled squares and solid lines show estimates with the CES weights. Fitted lines come from the variable fixed-effects regressions in table~\ref{tab:rmse_trend_primary_secondary}, and labels give each slope and its $p$-value. Panel A shows the three variables used in matching or weighting in every year from 2008 to 2022. Panel B shows the six variables used in neither from 2006 to 2022, with 2006 assumed secondary.}
     \par\smallskip
     \noindent\begin{minipage}{\linewidth}\footnotesize\textit{Alt text:} Two scatterplots of error by year with fitted trends. For primary variables, mean matching-only error goes from \TrendPrimMatchMeanFirst{} percentage points in 2008 to \TrendPrimMatchMeanLast{} in 2022, and weighted error from \TrendPrimWtdMeanFirst{} to \TrendPrimWtdMeanLast{}. For secondary variables, matching-only error goes from \TrendSecMatchMeanFirst{} in 2006 to \TrendSecMatchMeanLast{} in 2022, and weighted error from \TrendSecWtdMeanFirst{} to \TrendSecWtdMeanLast{}.\end{minipage}
     \label{fig:rmse_trend_primary_secondary}
 \end{figure}
 
-\input{output/rmse_trend_primary_secondary_tests.tex}
+\input{output/main/rmse_trend_primary_secondary_tests.tex}
 
 % \subsubsection{The Relationship Between Error and Sample Size}
 % Comparing the sample size gradient respondent-count gradient in the CES to the $1/\sqrt{N}$ pattern from probability sampling indicates how much of the observed benchmark error was plausibly reducible through larger samples, as opposed to error that persisted even after sampling variability should have declined.
@@ -603,7 +603,7 @@ For the secondary variables, matching-only RMSE increased by \TrendSecMatchBeta{
 
 % This specification evaluates whether CES error follows the rate implied by ordinary probability-sample sampling error. Under that benchmark, error should increase approximately linearly with $1/\sqrt{N}$: estimates based on fewer respondents should have larger errors.
 
-% \input{output/respondent_count_error_by_variable.tex}
+% \input{output/additional/respondent_count_error_by_variable.tex}
 
 % The results show that respondent count matters, but unevenly. The clearest relationships appear for candidate-choice variables, especially offices whose estimates are built from small geographic or contest-specific respondent pools. U.S. House and State Representative estimates show statistically significant respondent-count gradients under both specifications, and several other candidate-choice offices have coefficients in the expected direction. Demographic variables, by contrast, show weak, inconsistent, and generally insignificant relationships with respondent count. 
 
@@ -632,7 +632,7 @@ Figure~\ref{fig:respondent_count_sqrt_fit} provides a visualization of the relat
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=\linewidth]{output/observed_rmse_vs_inverse_sqrt_n_unweighted.pdf}
+    \includegraphics[width=\linewidth]{output/main/observed_rmse_vs_inverse_sqrt_n_unweighted.pdf}
     \caption[Observed RMSE by sample size]{Observed RMSE by sample size. Points show RMSE for sample-size bins of about \FitBinObs{} error observations each, pooled across years and variables. The dash-dot curve shows the $1/\sqrt{N}$ decline expected under probability sampling, starting from the same RMSE at $N=50$. The dotted line marks the RMSE of the smallest bin. Estimates are unweighted.}
     \par\smallskip
     \noindent\begin{minipage}{\linewidth}\footnotesize\textit{Alt text:} Line chart of error against sample size on a logarithmic scale. Observed error is \AnchorRmse{} percentage points at 50 respondents and stays between about 9.5 and 14 points as sample size grows, while the probability-sampling curve falls toward zero.\end{minipage}
@@ -646,18 +646,18 @@ RMSE was \AnchorRmse{} percentage points in the smallest bin. Under probability 
 
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\linewidth]{output/us_house_error_density_combined.png}
+%     \includegraphics[width=\linewidth]{output/additional/us_house_error_density_combined.png}
 %     \caption{U.S. House Mean Absolute Error and Respondent Density by District}
 %     \label{fig:us_house_error_density_combined}
 % \end{figure}
 
 Table~\ref{tab:office_rmse_less_competitive_races} displays each office's RMSE across races varying in the margin of victory. One might imagine that it is easier to accurately measure vote shares in races where the margins of victory are very large. Therefore, table~\ref{tab:office_rmse_less_competitive_races} begins with races in which the winning candidate's share of the vote was less than or equal to 60 percent, and moving to the right, the errors are generated including more and more races with larger and larger vote shares going to the winning candidate. As shown in the averages at the bottoms of the columns, the trend is in the opposite direction. Including races with larger and larger vote shares going to the winner led to larger errors. This disconfirms the prediction made by statistical theory regarding random samples that sampling error is greatest when the winning vote share is closer to 50 percent.
 
-\input{output/office_rmse_progressive_race_exclusion.tex}
+\input{output/main/office_rmse_progressive_race_exclusion.tex}
 
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\linewidth]{output/rmse_by_competitiveness_histogram.png}
+%     \includegraphics[width=\linewidth]{output/additional/rmse_by_competitiveness_histogram.png}
 %     \caption{RMSE Across Different Bins of Race Competitiveness, All Races}
 %     \caption*{\footnotesize
 %     Competitiveness refers to the distance from the winning candidate receiving 50\% of the vote. Results are matching + CES post-stratification. Includes all races: President(n=204), U.S. Senate (n=303), U.S. House (n=2,888), Governor (n=225), Attorney General (n=175), Secretary of State (n=146), State Rep. (n=397), State Senator (n=367)}  
@@ -671,7 +671,7 @@ Table~\ref{tab:office_rmse_less_competitive_races} displays each office's RMSE a
 
 CES documentation reported accuracy metrics for selected offices and years, though these are narrower in scope than the current investigation and do not distinguish between primary and secondary variables. Table~\ref{tab:ces_comparison} compares the RMSEs reported in the CES guides with those computed in this study.
 
-\input{output/ces_comparison}
+\input{output/main/ces_comparison}
 
 Our RMSEs are generally higher than the values in the CES guides, by \GuideGapOverall{} percentage points when averaged across offices and years. Table~\ref{tab:ces_comparison} reports the difference for each office and year.
 
@@ -679,7 +679,7 @@ Our RMSEs are generally higher than the values in the CES guides, by \GuideGapOv
 % \centering
 % \caption{CES-Reported RMSEs vs. RMSEs Calculated in This Study}
 % \label{tab:ces_comparison}
-% \input{output/ces_comparison.tex}
+% \input{output/main/ces_comparison.tex}
 % \end{sidewaystable}
 
 \subsection{Conventional Post-Stratification}
@@ -689,7 +689,7 @@ RMSE on the calibration variables averaged at most \AnesrakeFitMeanMax{} percent
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{output/rmse_anesrake_full_by_year.pdf}
+    \includegraphics[width=\linewidth]{output/main/rmse_anesrake_full_by_year.pdf}
     \caption[Comparison of weighting techniques across years]{Comparison of weighting techniques across years. Each bar is the mean RMSE across US House, State Senator, and State Representative vote choice in one year. The bars compare matching only, matching with the CES weights, and matching with anesrake weights we built from CPS demographic benchmarks (table~\ref{tab:vars_used_by_anesrake}), all for the same respondents. These three offices are the only variables measured in every year and used in neither set of weights. For 2006, whose guide does not list the CES weighting variables, we assume they were not used.}
     \par\smallskip
     \noindent\begin{minipage}{\linewidth}\footnotesize\textit{Alt text:} Grouped bar chart of mean error for three down-ballot offices by year under three weighting approaches. Anesrake weights gave the highest error in \AnesHighestYears{} of \ThreeVarYears{} years, and the Cooperative Election Study weights cut error most in 2020 and 2022.\end{minipage}
@@ -697,7 +697,7 @@ RMSE on the calibration variables averaged at most \AnesrakeFitMeanMax{} percent
     \label{fig:rmse_anesrake_full_by_year}
 \end{figure}
 
-\input{output/rmse_anesrake_full_table.tex}
+\input{output/main/rmse_anesrake_full_table.tex}
 
 
 \section{Discussion}\label{sec:discussion}

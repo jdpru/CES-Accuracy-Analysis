@@ -10,14 +10,8 @@
 
   <p align="center">
     Accuracy of the Cooperative Election Study (2006–2022) under multiple weighting scenarios, with analysis in R and figures in Python.
-    <br />
-    <a href="https://github.com/jdpru/CES-Accuracy-Analysis#readme"><strong>Explore the docs »</strong></a>
     <br /><br />
     <a href="https://github.com/jdpru/CES-Accuracy-Analysis">View Repo</a>
-    &middot;
-    <a href="https://github.com/jdpru/CES-Accuracy-Analysis/issues/new?labels=bug">Report Bug</a>
-    &middot;
-    <a href="https://github.com/jdpru/CES-Accuracy-Analysis/issues/new?labels=enhancement">Request Feature</a>
   </p>
 </div>
 
@@ -41,6 +35,7 @@
         <li><a href="#run">Run</a></li>
       </ul>
     </li>
+    <li><a href="#building-the-paper">Building the Paper</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -55,7 +50,21 @@
 
 This project calculated the accuracy of the Cooperative Election Study (CES) from 2006 to 2022 using election returns. It did so under various weighting scenarios: unweighted, using the CES-provided weights, and using a custom set of weights generated with ANESRake according to marginal demographic distributions from the Current Population Survey (CPS). 
 
-After cloning the repo (instructions below), you will see a top-level directory with the following sub-directories: `data`, `code`, `tables_and_figures`, and `renv`. The recoding and analysis are done in R Markdown; tables and figures are produced in Python via a Jupyter notebook. **analysisHQ.Rmd** can be run straight through to recreate the analysis. It writes summary tables (e.g. `metrics_base.xlsx`, `most_specific.xlsx`, `national_errors.xlsx`, `vars_used_by_anesrake.xlsx`) to **tables_and_figures/input_tables/**, which **figuresHQ.ipynb** then reads to produce all final figures and tables. 
+After cloning the repo (instructions below), you will see a top-level directory with the following sub-directories: `code`, `data`, `tables_and_figures`, and `renv`. The paper itself is two LaTeX documents at the top level, `manuscript.tex` and `supplementary_material.tex`.
+
+The pipeline has two stages, and the paper is built from their output:
+
+1. **`code/analysisHQ.Rmd`** (R Markdown) does the recoding and analysis. It can be run straight through, and it writes four summary tables to `tables_and_figures/input_tables/`: `metrics_base.xlsx`, `most_specific.xlsx`, `national_errors.xlsx`, and `vars_used_by_anesrake.xlsx`.
+2. **`tables_and_figures/figuresHQ.ipynb`** (Python, Jupyter) reads `input_tables/` and builds every table, figure, and in-text number the paper uses. Its cells follow the paper's order, and its headings use the paper's table and figure numbers. Output goes to `tables_and_figures/output/`:
+   - `output/main/`: tables and figures loaded by `manuscript.tex`.
+   - `output/supplementary/`: tables and figures loaded by `supplementary_material.tex`.
+   - `output/prose_numbers.tex`: LaTeX macros for the numbers quoted in the text. Both documents load it.
+
+`tables_and_figures/` also holds one more notebook and two folders:
+
+- **`additionalFiguresHQ.ipynb`** is optional and for reference only: exhibits dropped from the paper, earlier versions, robustness checks, and exploratory analyses. Nothing in the paper loads its output (see [Run](#run)).
+- **`process_diagram/`** holds `process_diagram.pdf` (Figure 1, the CES sampling and weighting schematic) and the source to rebuild it. It has its own README.
+- **`guide_evidence/`** holds `evidence01.png` through `evidence12.png`, screenshots from CES guides used in the Supplementary Material.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -96,15 +105,43 @@ knitr::opts_knit$set(root.dir = '/path/to/your/CES Accuracy Analysis')
 ```
 
 ### Run
-Once the environment is set up, you can run the entire analysis as follows:
-9. **`analysisHQ.Rmd`** (in `code/`) can be run from top to bottom. It writes summary tables to `tables_and_figures/input_tables/`.
+Once the environment is set up, run the pipeline in this order:
 
-10. **`figuresHQ.ipynb`** (in `tables_and_figures/`) can then be run from top to bottom. It reads from `input_tables/` and saves figures and tables to `tables_and_figures/output/`.
+9. **`analysisHQ.Rmd`** (in `code/`) can be run from top to bottom. It writes four tables to `tables_and_figures/input_tables/`.
+
+10. **`figuresHQ.ipynb`** (in `tables_and_figures/`) can then be run from top to bottom. It reads from `input_tables/` and writes the paper's tables, figures, and in-text number macros to `tables_and_figures/output/` (`main/`, `supplementary/`, and `prose_numbers.tex`). Running it creates the `output/` subfolders. `output/` is git-ignored, so it will not appear in a fresh clone.
+
+11. Optional: **`additionalFiguresHQ.ipynb`** (in `tables_and_figures/`) is for reference only. Its first cell runs `figuresHQ.ipynb`, so the requirements for step 10 apply. It then writes everything to `tables_and_figures/output/additional/`. Nothing in the paper loads these files.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- BUILDING THE PAPER -->
+## Building the Paper
+
+The paper is `manuscript.tex` and `supplementary_material.tex`, both at the repo root. They cross-reference each other with the `xr-hyper` package, so each needs the other's `.aux` file. The `latexmkrc` at the root makes `latexmk` build the other document first, so build with `latexmk`. The bibliography is `CESBib.bib` (biblatex).
+
+To compile (for example on Overleaf), the project root needs:
+
+- `manuscript.tex`
+- `supplementary_material.tex`
+- `CESBib.bib`
+- `latexmkrc`
+- `output/prose_numbers.tex`
+- `output/main/`
+- `output/supplementary/`
+- `process_diagram/process_diagram.pdf`
+- `guide_evidence/`
+
+In the repo, `output/`, `process_diagram/`, and `guide_evidence/` live under `tables_and_figures/`. Copy them to the root of the compile directory. `output/additional/` is not needed.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -132,5 +169,4 @@ Sarah Flood, Miriam King, Renae Rodgers, Steven Ruggles, J. Robert Warren, Danie
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
