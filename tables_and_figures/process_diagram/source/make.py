@@ -1,23 +1,14 @@
-"""Assemble the comparison page and per-version export pages."""
+"""Assemble the export page for the process diagram (Version C) and a preview page."""
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from lib import CSS, LIGHT, DARK
-import va
-try:
-    import vb
-except ImportError:
-    vb = None
-try:
-    import vc
-except ImportError:
-    vc = None
+import vc
 
 HERE = pathlib.Path(__file__).parent
 FONTS = HERE.parent / "node_modules/@fontsource"
 
-VERSIONS = [("a", "Version A", "Eight-panel plate", va)]
-if vb: VERSIONS.append(("b", "Version B", "Calendar with two lanes", vb))
-if vc: VERSIONS.append(("c", "Version C", "Follow the respondents", vc))
+# Versions A and B (va.py, vb.py) were the candidates not chosen; they are in git history.
+VERSIONS = [("c", "Version C", "Follow the respondents", vc)]
 
 
 def export(svg):
@@ -49,7 +40,7 @@ def page(sections):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@1,400&display=swap">
 <style>
-/* Layout: a contact sheet of full-page figure candidates, each on its own plate at landscape-page proportions. */
+/* Layout: the full-page figure on a plate at landscape-page proportions. */
 :root {{ {LIGHT}
   --sans:"IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
@@ -77,9 +68,9 @@ section {{ margin:0 0 56px; scroll-margin-top:24px; }}
 {CSS}
 </style>
 <div class="wrap">
-  <p class="eyebrow">Cooperative Election Study · Full-page figure candidates</p>
+  <p class="eyebrow">Cooperative Election Study · Full-page figure</p>
   <h1>How a CES sample is selected and weighted</h1>
-  <p class="dek">Three ways to fill a landscape page (9 × 5.6 in, leaving room for a caption). All illustrations are schematic: the icons, bars, and shares show how each step works, not real CES values. Dates and counts are from the 2022 guide.</p>
+  <p class="dek">A landscape page (9 × 5.6 in, leaving room for a caption). All illustrations are schematic: the icons, bars, and shares show how each step works, not real CES values. Dates and counts are from the 2022 guide.</p>
   <nav>{"".join(f'<a href="#{k}">{lab} · {name}</a>' for k, lab, name, _ in VERSIONS)}</nav>
 {sections}
 </div>
@@ -87,8 +78,6 @@ section {{ margin:0 0 56px; scroll-margin-top:24px; }}
 
 
 NOTES = {
-    "a": "Eight steps in reading order, grouped under before, during, and after fieldwork. Each panel shows the mechanism of its step: a frame table with attached columns, stratified draws, invitations, the field calendar, nearest-neighbor pairing, weights as icon size, and margins pulled to targets.",
-    "b": "A calendar runs along the bottom, so position on the page is time. The target sample is fixed before fieldwork and waits while respondents are recruited and interviewed; the two lanes meet at matching once fieldwork ends.",
     "c": "One set of people, followed from the panel to the released file. Each column is a stage, with the same icons getting fewer and then heavier or lighter (icon size shows the weight). The frame\u2019s ACS columns and the columns attached from other surveys are bracketed separately.",
 }
 

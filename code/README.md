@@ -44,4 +44,4 @@ Helper scripts are sourced at the start of **analysisHQ.Rmd**. Paths are relativ
 - `national_errors.xlsx`
 - `vars_used_by_anesrake.xlsx`
 
-Those files are the inputs for **figuresHQ.ipynb** in `../tables_and_figures/`, which produces figures and tables in `../tables_and_figures/output/`.
+Those files are the inputs for **figuresHQ.ipynb** in `../tables_and_figures/`, which builds every table, figure, and in-text number the paper uses and writes them to `../tables_and_figures/output/` (`main/`, `supplementary/`, and `prose_numbers.tex`). See the [main README](../README.md#overview) for what each part is and how the paper is built.

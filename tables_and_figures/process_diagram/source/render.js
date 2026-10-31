@@ -1,4 +1,4 @@
-// Export each version to a 9-inch-wide vector PDF, plus PNG previews.
+// Export the process diagram (Version C) to a 9-inch-wide vector PDF, plus a PNG preview.
 const { chromium } = require('../node_modules/playwright-core');
 const path = require('path');
 const fs = require('fs');
@@ -8,7 +8,7 @@ const fs = require('fs');
   const exe = process.env.CHROME || '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell';
   const browser = await chromium.launch({ executablePath: exe });
   const only = process.argv[2];
-  for (const k of ['a', 'b', 'c']) {
+  for (const k of ['c']) {
     if (only && only !== k) continue;
     const f = path.join(dir, `export_${k}.html`);
     if (!fs.existsSync(f)) continue;
