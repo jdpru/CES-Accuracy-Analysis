@@ -80,10 +80,18 @@ tables_and_figures/output/*
 *.dta
 *.dat
 
-# Figures
-.png
-
 .positai
 
 # Claude session outputs
 Claude outputs/
+
+# LaTeX build files
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+*.bbl
+*.blg
+*.out
+tmp*.tmp

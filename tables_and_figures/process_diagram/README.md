@@ -18,4 +18,3 @@
   Matched and post-stratified; `STYLE = "cube"` is the matching cube.
 - `source/lib.py`: shared drawing helpers, colors, and text measurement. `source/make.py`: page and export assembly.
 - `source/va.py`, `source/vb.py`: the two full-page versions that were not chosen.
-- `older/compact/`: the earlier one-row landscape diagram. `older/matplotlib/`: the first matplotlib version.
