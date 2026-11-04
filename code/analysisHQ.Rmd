@@ -125,6 +125,7 @@ President_0820 <- read_excel("data/Benchmarks/Election Returns/President_Returns
 Governor_0622 <- read_excel("data/Benchmarks/Election Returns/Governor_Returns_2006_2022.xlsx")
 Senate_0622 <- read_excel("data/Benchmarks/Election Returns/US_Senate_Returns_2006_2022.xlsx") %>% 
   filter(!(concurrent_special == TRUE & special == TRUE)) %>% 
+  filter(!candidate %in% "BLANK") %>% # RI 2008: 67 blank write-in lines, not votes for a candidate
   select(-concurrent_special) # concurrent_special == TRUE indicates a state/year with both a regular and a special Senate election.
 # These cases are excluded because the CES typically asks about only one Senate race, 
 # making it ambiguous which election respondents are reporting on.
@@ -163,7 +164,8 @@ turnout_statewide <- read_excel("data/Benchmarks/VEP_including_ineligible_felons
   select(1:11) %>%
   slice(-n()) %>%
   mutate(State = toupper(State))
-stopifnot(nrow(turnout_statewide) == 51, tail(turnout_statewide$State, 1) == "WYOMING")
+stopifnot(nrow(turnout_statewide) == 51, tail(turnout_statewide$State, 1) == "WYOMING",
+          setequal(turnout_statewide$State, toupper(c(state.name, "District of Columbia"))))
 ```
 
 ### State Populations
@@ -1041,11 +1043,8 @@ governor_cand_prop_table <- calculate_cand_num_proportions(Governor_0622_clean_f
   )
 
 # President
-President_0820_nums <- assign_president_candidate_numbers(President_0820) %>%
-  filter(candidate %notin% c("OVER VOTE", "OVERVOTE", "OVERVOTES", "OVER VOTES")) %>%
-  group_by(year, state, office, district) %>%
-  mutate(totalvotes = sum(candidatevotes, na.rm = TRUE)) %>%
-  ungroup()
+# drop_president_nonvotes() removes blank/under/over/void rows and recomputes totalvotes
+President_0820_nums <- assign_president_candidate_numbers(drop_president_nonvotes(President_0820))
 president_candid_prop_table <- calculate_cand_num_proportions(President_0820_nums) %>%
   mutate(office = "President") %>%
   rename(
@@ -1301,8 +1300,8 @@ governor_candidate_level_props  <- candidate_level_proportions(Governor_0622_cle
 governor_candidate_level_props$Office <- "Governor"
 
 # President
-President_0820_candidate_level_props <- assign_president_candidate_numbers(President_0820) %>%
-  filter(candidate %notin% c("OVER VOTE", "OVERVOTE", "OVERVOTES", "OVER VOTES"))
+# drop_president_nonvotes() removes blank/under/over/void rows and recomputes totalvotes
+President_0820_candidate_level_props <- assign_president_candidate_numbers(drop_president_nonvotes(President_0820))
 
 president_candidate_level_props <- calculate_cand_num_proportions(President_0820_candidate_level_props) %>%
   mutate(office = "President") %>%

@@ -792,7 +792,7 @@ calculate_candidate_errors <- function(year_data_list,
 #'
 #' Special handling for specific variables:
 #' - VOTED_rc (turnout): Uses actual state turnout rates instead of CPS (REQUIRED).
-#'   District of Columbia is automatically skipped (no official turnout data available).
+#'   Covers all 50 states and the District of Columbia; stops if a state has no benchmark.
 #' - POST_STATE_rc (state): Uses actual state population shares instead of CPS (REQUIRED).
 #'   Measures CES state sampling accuracy by comparing CES state shares to true population shares.
 #' - All other variables: Use CPS as benchmark.
@@ -927,13 +927,16 @@ calculate_demovote_errors <- function(year_data_list,
         # ============================================================
         if (demo_var == "VOTED_rc") {
           
-          if (state == "DISTRICT OF COLUMBIA") next
           if (is.null(turnout_statewide)) stop("turnout_statewide required.")
           
           state_turnout_prop <- turnout_statewide %>%
             filter(State == state) %>%
             pull(as.character(year)) %>%
             as.numeric()
+          if (length(state_turnout_prop) != 1 || is.na(state_turnout_prop)) {
+            stop("No turnout benchmark for ", state, " ", year,
+                 " (check state labels in the turnout file).")
+          }
           
           categories <- c("Voted", "Did not vote")
           

@@ -146,6 +146,57 @@ recalculate_total_votes <- function(data, level) {
   return(updated_data)
 }
 
+## Presidential returns: keep only votes cast for a candidate (write-ins and
+## scattering included) and recompute totalvotes, so the benchmark denominator
+## matches the CES side, where respondents who did not vote in the race are dropped.
+## Drops blank, under-, over- and void-vote rows. Two state-years merge blanks with
+## write-ins in one row; those are corrected from the certified state returns:
+##   - MA 2008/2012 "BLANK VOTE/SCATTERING" is the state's Blanks line only
+##     (22,010 and 16,429); "All Others" is already the OTHER row
+##     (electionstats.state.ma.us).
+##   - NY 2008 "BLANK VOTE/SCATTERING" = Blank 80,236 + Void 988 + Scattering 3,613;
+##     NY 2012 "BLANK VOTE/VOID VOTE/SCATTERING" = Blank 49,913 + Void 4,250 +
+##     Scattering 9,076. The row is replaced by Scattering only
+##     (NYS Board of Elections, results.elections.ny.gov contests 3509 and 2385).
+## Nevada's "None of these candidates" is a ballot option and is kept.
+president_nonvote_rows <- c(
+  "OVER VOTE", "OVERVOTE", "OVERVOTES", "OVER VOTES",
+  "BLANK VOTE", "BLANK VOTES", "UNDERVOTES", "VOID", "VOID VOTE"
+)
+
+drop_president_nonvotes <- function(returns_data) {
+  ny_fix <- tibble::tribble(
+    ~year, ~state,      ~candidate,                        ~scattering,
+    2008,  "NEW YORK",  "BLANK VOTE/SCATTERING",           3613,
+    2012,  "NEW YORK",  "BLANK VOTE/VOID VOTE/SCATTERING", 9076
+  )
+  ma_drop <- tibble::tribble(
+    ~year, ~state,          ~candidate,
+    2008,  "MASSACHUSETTS", "BLANK VOTE/SCATTERING",
+    2012,  "MASSACHUSETTS", "BLANK VOTE/SCATTERING"
+  )
+  found <- dplyr::semi_join(returns_data, dplyr::bind_rows(ny_fix, ma_drop),
+                            by = c("year", "state", "candidate"))
+  stopifnot(nrow(found) == 4)
+
+  out <- returns_data %>%
+    dplyr::left_join(ny_fix, by = c("year", "state", "candidate")) %>%
+    dplyr::mutate(
+      candidatevotes = dplyr::if_else(is.na(scattering), candidatevotes, scattering),
+      candidate      = dplyr::if_else(is.na(scattering), candidate, "SCATTERING")
+    ) %>%
+    dplyr::select(-scattering) %>%
+    dplyr::anti_join(ma_drop, by = c("year", "state", "candidate")) %>%
+    dplyr::filter(!candidate %in% president_nonvote_rows) %>%
+    dplyr::group_by(year, state, office, district) %>%
+    dplyr::mutate(totalvotes = sum(candidatevotes, na.rm = TRUE)) %>%
+    dplyr::ungroup()
+
+  leftover <- out$candidate[grepl("BLANK VOTE|UNDER ?VOTE|OVER ?VOTE|VOID", out$candidate)]
+  if (length(leftover) > 0) stop("Unhandled non-vote rows: ", paste(unique(leftover), collapse = ", "))
+  out
+}
+
 assign_president_candidate_numbers <- function(returns_data) {
   returns_data %>%
     mutate(
