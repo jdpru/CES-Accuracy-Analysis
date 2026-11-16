@@ -1,0 +1,32 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\makebox[\textwidth][c]{%
+\begin{threeparttable}
+\caption{Sensitivity of office-level RMSE to less competitive races.}
+\label{tab:office_rmse_less_competitive_races}
+\begin{tabular}{lccccc}
+\toprule
+& \multicolumn{5}{c}{Maximum winning vote share retained} \\
+\cmidrule(lr){2-6}
+Office & $\leq 60\%$ & $\leq 70\%$ & $\leq 80\%$ & $\leq 90\%$ & $\leq 100\%$ \\
+\midrule
+President & \makebox[2.4em][r]{2.5}\hspace{0.25em}\makebox[3.8em][l]{(142)} & \makebox[2.4em][r]{2.7}\hspace{0.25em}\makebox[3.8em][l]{(197)} & \makebox[2.4em][r]{2.7}\hspace{0.25em}\makebox[3.8em][l]{(200)} & \makebox[2.4em][r]{2.7}\hspace{0.25em}\makebox[3.8em][l]{(200)} & \makebox[2.4em][r]{2.7}\hspace{0.25em}\makebox[3.8em][l]{(200)} \\
+US Senate & \makebox[2.4em][r]{3.5}\hspace{0.25em}\makebox[3.8em][l]{(169)} & \makebox[2.4em][r]{3.7}\hspace{0.25em}\makebox[3.8em][l]{(257)} & \makebox[2.4em][r]{3.8}\hspace{0.25em}\makebox[3.8em][l]{(279)} & \makebox[2.4em][r]{3.8}\hspace{0.25em}\makebox[3.8em][l]{(279)} & \makebox[2.4em][r]{3.8}\hspace{0.25em}\makebox[3.8em][l]{(279)} \\
+US House & \makebox[2.4em][r]{9.0}\hspace{0.25em}\makebox[3.8em][l]{(1,284)} & \makebox[2.4em][r]{9.2}\hspace{0.25em}\makebox[3.8em][l]{(2,607)} & \makebox[2.4em][r]{9.2}\hspace{0.25em}\makebox[3.8em][l]{(3,208)} & \makebox[2.4em][r]{9.4}\hspace{0.25em}\makebox[3.8em][l]{(3,394)} & \makebox[2.4em][r]{9.4}\hspace{0.25em}\makebox[3.8em][l]{(3,394)} \\
+Governor & \makebox[2.4em][r]{4.1}\hspace{0.25em}\makebox[3.8em][l]{(162)} & \makebox[2.4em][r]{4.1}\hspace{0.25em}\makebox[3.8em][l]{(209)} & \makebox[2.4em][r]{4.4}\hspace{0.25em}\makebox[3.8em][l]{(221)} & \makebox[2.4em][r]{4.4}\hspace{0.25em}\makebox[3.8em][l]{(221)} & \makebox[2.4em][r]{4.4}\hspace{0.25em}\makebox[3.8em][l]{(221)} \\
+Attorney general & \makebox[2.4em][r]{5.3}\hspace{0.25em}\makebox[3.8em][l]{(98)} & \makebox[2.4em][r]{5.2}\hspace{0.25em}\makebox[3.8em][l]{(143)} & \makebox[2.4em][r]{5.9}\hspace{0.25em}\makebox[3.8em][l]{(154)} & \makebox[2.4em][r]{6.1}\hspace{0.25em}\makebox[3.8em][l]{(156)} & \makebox[2.4em][r]{6.1}\hspace{0.25em}\makebox[3.8em][l]{(156)} \\
+Secretary of state & \makebox[2.4em][r]{5.1}\hspace{0.25em}\makebox[3.8em][l]{(88)} & \makebox[2.4em][r]{5.4}\hspace{0.25em}\makebox[3.8em][l]{(127)} & \makebox[2.4em][r]{5.9}\hspace{0.25em}\makebox[3.8em][l]{(135)} & \makebox[2.4em][r]{6.6}\hspace{0.25em}\makebox[3.8em][l]{(139)} & \makebox[2.4em][r]{6.6}\hspace{0.25em}\makebox[3.8em][l]{(139)} \\
+State senator & \makebox[2.4em][r]{6.0}\hspace{0.25em}\makebox[3.8em][l]{(214)} & \makebox[2.4em][r]{6.6}\hspace{0.25em}\makebox[3.8em][l]{(307)} & \makebox[2.4em][r]{7.5}\hspace{0.25em}\makebox[3.8em][l]{(346)} & \makebox[2.4em][r]{7.7}\hspace{0.25em}\makebox[3.8em][l]{(354)} & \makebox[2.4em][r]{7.7}\hspace{0.25em}\makebox[3.8em][l]{(354)} \\
+State representative & \makebox[2.4em][r]{5.4}\hspace{0.25em}\makebox[3.8em][l]{(242)} & \makebox[2.4em][r]{6.0}\hspace{0.25em}\makebox[3.8em][l]{(336)} & \makebox[2.4em][r]{6.4}\hspace{0.25em}\makebox[3.8em][l]{(366)} & \makebox[2.4em][r]{6.4}\hspace{0.25em}\makebox[3.8em][l]{(368)} & \makebox[2.4em][r]{6.4}\hspace{0.25em}\makebox[3.8em][l]{(368)} \\
+\midrule
+Mean & \makebox[2.4em][r]{5.1}\hspace{0.25em}\makebox[3.8em][l]{} & \makebox[2.4em][r]{5.4}\hspace{0.25em}\makebox[3.8em][l]{} & \makebox[2.4em][r]{5.7}\hspace{0.25em}\makebox[3.8em][l]{} & \makebox[2.4em][r]{5.9}\hspace{0.25em}\makebox[3.8em][l]{} & \makebox[2.4em][r]{5.9}\hspace{0.25em}\makebox[3.8em][l]{} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} Each cell reports RMSE in percentage points, with the number of races included in parentheses. Columns recalculate office-level RMSE after retaining only races where the winning candidate's benchmark vote share is less than or equal to the listed cutoff. Moving from left to right progressively includes less competitive races. Estimates use Matching + CES Weighting. RMSE is pooled across 2006--2022 rather than averaged by year.
+\end{tablenotes}
+\end{threeparttable}%
+}
+\end{table}

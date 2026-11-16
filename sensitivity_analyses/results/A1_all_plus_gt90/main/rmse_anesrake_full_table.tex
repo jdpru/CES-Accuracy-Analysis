@@ -1,0 +1,48 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\makebox[\textwidth][c]{%
+\begin{threeparttable}
+\caption{RMSE changes by weighting method.}
+\label{tab:rmse_anesrake_full}
+\begin{tabular}{lcccccccccc}
+\toprule
+ & \multicolumn{9}{c}{Year} \\
+\cmidrule(lr){2-10}
+Variable & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Mean \\
+\midrule
+\multicolumn{11}{l}{Matching-only RMSE (pp)} \\
+\addlinespace[0.2em]
+~~State representative & 7.4 & 5.5 & 6.6 & 5.8 & 9.0 & 8.7 & 7.3 & 11.9 & 13.7 & 8.4 \\
+~~State senator & 10.3 & 6.0 & 8.1 & 8.1 & 10.2 & 9.6 & 7.5 & 13.4 & 14.6 & 9.8 \\
+~~US House & 10.7 & 9.5 & 8.7 & 7.4 & 8.3 & 8.2 & 8.1 & 10.1 & 11.5 & 9.2 \\
+~~Voting method & 4.3 & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.5 \\
+\cmidrule(l){2-11}
+~~Mean & 8.2 & 6.2 & 7.0 & 6.9 & 7.8 & 7.9 & 7.0 & 11.0 & 11.9 & 8.2 \\
+\addlinespace[0.4em]
+\multicolumn{11}{l}{$\Delta$ to matching + weighting (pp)} \\
+\addlinespace[0.2em]
+~~State representative & +0.2 & $-$0.7 & $-$0.9 & +1.0 & $-$2.5 & $-$2.4 & $-$2.6 & $-$6.3 & $-$5.2 & $-$2.2 \\
+~~State senator & +0.6 & $-$0.4 & +0.0 & $-$0.6 & $-$2.5 & $-$1.4 & $-$3.0 & $-$7.0 & $-$5.8 & $-$2.2 \\
+~~US House & +0.2 & $-$0.7 & +1.2 & +2.2 & +0.6 & +1.2 & +0.4 & $-$2.2 & $-$1.4 & +0.2 \\
+~~Voting method & $-$0.6 & +0.5 & +1.3 & $-$1.4 & $-$0.4 & +0.3 & $-$0.0 & $-$1.8 & $-$1.7 & $-$0.4 \\
+\cmidrule(l){2-11}
+~~Mean & +0.1 & $-$0.3 & +0.4 & +0.3 & $-$1.2 & $-$0.6 & $-$1.3 & $-$4.3 & $-$3.5 & $-$1.2 \\
+\addlinespace[0.4em]
+\multicolumn{11}{l}{$\Delta$ to matching + anesrake (pp)} \\
+\addlinespace[0.2em]
+~~State representative & +1.5 & $-$0.1 & $-$0.1 & +2.2 & $-$0.4 & +0.4 & +0.1 & $-$1.3 & $-$0.3 & +0.2 \\
+~~State senator & +1.4 & +0.2 & +0.6 & +1.6 & $-$0.3 & $-$0.0 & $-$0.2 & $-$1.2 & $-$0.2 & +0.2 \\
+~~US House & +0.7 & +0.4 & +1.1 & +1.1 & +1.0 & +0.5 & +0.2 & $-$0.1 & +0.2 & +0.6 \\
+~~Voting method & +0.4 & $-$0.0 & +0.9 & $-$0.6 & $-$0.1 & +0.8 & $-$0.1 & $-$0.7 & $-$0.3 & +0.0 \\
+\cmidrule(l){2-11}
+~~Mean & +1.0 & +0.1 & +0.6 & +1.1 & +0.1 & +0.4 & +0.0 & $-$0.8 & $-$0.2 & +0.3 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} $\Delta$ equals RMSE under the indicated weighting minus Matching-Only RMSE, in percentage points; negative values indicate that weighting reduced error. The four variables shown are the only variables present in every year from 2006 through 2022 and not used in either YouGov weighting or anesrake. Because the 2006 CES guide does not document the matching or weighting variables, 2006 variables are assumed secondary.
+\end{tablenotes}
+\end{threeparttable}%
+}
+\end{table}

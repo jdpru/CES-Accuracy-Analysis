@@ -1,0 +1,29 @@
+State-year-chambers matched: 759 of 760 with errors
+Median % districts uncontested: 32.3; median % of votes in districts without the winner's opponent: 18.2
+
+=== err_weighted (signed: CES minus benchmark, winning party)
+  opp_absent_votes   b = -0.174 per pt  (SE 0.015, p = 1.24e-30)
+  win_absent_votes   b = +0.136 per pt  (SE 0.033, p = 3.71e-05)
+  N = 759, R2 = 0.19
+               n  opp_absent  mean_signed  rmse
+q                                              
+Q1 (fewest)  190        2.96        -0.86  7.09
+Q2           190       13.24        -1.65  5.44
+Q3           189       23.15        -1.89  5.97
+Q4 (most)    190       43.17        -6.73  9.23
+
+=== err_matching (signed: CES minus benchmark, winning party)
+  opp_absent_votes   b = -0.229 per pt  (SE 0.018, p = 4.19e-36)
+  win_absent_votes   b = +0.289 per pt  (SE 0.038, p = 2.15e-14)
+  N = 759, R2 = 0.23
+               n  opp_absent  mean_signed   rmse
+q                                               
+Q1 (fewest)  190        2.96        -2.32   7.96
+Q2           190       13.24        -3.65   7.79
+Q3           189       23.15        -4.37   8.58
+Q4 (most)    190       43.17        -9.82  12.71
+
+Share of weighted squared error in top quartile of opp_absent_votes: 42%
+Drop chambers with >10% opponent-absent votes: keep 233/759; State Representative: 6.11 (all 6.28), State Senator: 7.22 (all 7.88)
+Drop chambers with >25% opponent-absent votes: keep 508/759; State Representative: 5.72 (all 6.28), State Senator: 6.54 (all 7.88)
+Drop chambers with >50% opponent-absent votes: keep 709/759; State Representative: 5.97 (all 6.28), State Senator: 7.37 (all 7.88)

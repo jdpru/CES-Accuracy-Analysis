@@ -1,0 +1,103 @@
+macro,base,A1_list_mismatch,A1_nominee_bench,A1_fusion,A1_special,A1_hand_fixes,U_gt90,A1_all,A1_all_plus_gt90,A2_named_only,A2_named_statewide,A2_generic_AG_SoS
+GuideCompletionYouGov,41.9 percent,41.9 percent,41.9 percent,41.9 percent,41.9 percent,41.9 percent,41.9 percent,41.9 percent,41.9 percent,41.9 percent,41.9 percent,41.9 percent
+GuideCompletionExternal,8.2 percent,8.2 percent,8.2 percent,8.2 percent,8.2 percent,8.2 percent,8.2 percent,8.2 percent,8.2 percent,8.2 percent,8.2 percent,8.2 percent
+CompletionRateMin,13.9,13.9,13.9,13.9,13.9,13.9,13.9,13.9,13.9,13.9,13.9,13.9
+CompletionRateMinYear,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016,2016
+CompletionRateMax,61.2,61.2,61.2,61.2,61.2,61.2,61.2,61.2,61.2,61.2,61.2,61.2
+CompletionRateMaxYear,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020,2020
+CompletionRateRecentMin,30.0,30.0,30.0,30.0,30.0,30.0,30.0,30.0,30.0,30.0,30.0,30.0
+CompletionRateRecentMax,61.2,61.2,61.2,61.2,61.2,61.2,61.2,61.2,61.2,61.2,61.2,61.2
+CpsRateMin,72.9,72.9,72.9,72.9,72.9,72.9,72.9,72.9,72.9,72.9,72.9,72.9
+CpsRateMinYear,2022,2022,2022,2022,2022,2022,2022,2022,2022,2022,2022,2022
+CpsRateMax,92.0,92.0,92.0,92.0,92.0,92.0,92.0,92.0,92.0,92.0,92.0,92.0
+CpsRateMaxYear,2010,2010,2010,2010,2010,2010,2010,2010,2010,2010,2010,2010
+AnesrakeUsedRange,6--9,6--9,6--9,6--9,6--9,6--9,6--9,6--9,6--9,6--9,6--9,6--9
+NObsTotal,"10,489","10,485","10,481","10,153","10,479","10,477","10,277","10,122","9,946","9,020","9,780","10,289"
+NObsDemographic,"3,927","3,927","3,927","3,927","3,927","3,927","3,927","3,927","3,927","3,927","3,927","3,927"
+NObsVotingAdmin,908,908,908,908,908,908,908,908,908,908,908,908
+NObsCandidate,"5,654","5,650","5,646","5,318","5,644","5,642","5,442","5,287","5,111","4,185","4,945","5,454"
+NeitherNVars,16,16,16,16,16,16,16,16,16,14,16,16
+NeitherNObs,"7,214","7,213","7,209","6,924","7,211","7,204","7,043","6,908","6,766","6,381","7,055","7,066"
+NeitherMeanBefore,9.5,9.5,9.5,9.5,9.5,9.5,9.3,9.5,9.3,9.5,9.5,9.5
+NeitherMeanAfter,8.2,8.2,8.2,8.2,8.1,8.2,7.9,8.2,8.0,8.0,7.9,7.9
+UsedMeanBefore,10.7,10.7,10.7,10.7,10.7,10.7,10.7,10.7,10.7,10.7,10.7,10.7
+UsedMeanAfter,8.1,8.1,8.0,8.0,8.1,8.1,8.1,8.0,8.0,8.1,8.1,8.1
+NeitherMatchEarlyMin,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.0,6.2,6.1,6.0
+NeitherMatchEarlyMax,8.1,8.1,8.1,8.1,8.1,8.1,7.7,8.1,7.7,7.8,7.9,7.9
+NeitherMatchLateMin,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.0,8.7,9.1,9.1
+NeitherMatchLateMax,10.5,10.5,10.5,10.5,10.5,10.6,10.5,10.6,10.6,10.4,10.5,10.5
+NeitherCellsWorse,32,32,32,32,32,32,33,32,33,30,31,31
+NeitherCellsSame,4,4,4,3,4,4,4,3,4,3,4,4
+NeitherCellsImproved,61,61,61,62,61,61,60,62,60,39,53,54
+ErrWithinOnePtMatching,10.1 percent,10.1 percent,10.1 percent,10.0 percent,10.1 percent,10.0 percent,10.1 percent,10.0 percent,10.1 percent,10.1 percent,10.0 percent,10.0 percent
+ErrWithinThreePtMatching,28.7 percent,28.7 percent,28.7 percent,28.6 percent,28.7 percent,28.7 percent,28.8 percent,28.5 percent,28.7 percent,28.8 percent,28.5 percent,28.6 percent
+ErrWithinThreePtWeighted,34.4 percent,34.4 percent,34.4 percent,34.6 percent,34.4 percent,34.3 percent,34.5 percent,34.5 percent,34.7 percent,33.8 percent,34.3 percent,34.3 percent
+ErrBeyondFivePtMatching,55.3 percent,55.2 percent,55.2 percent,55.4 percent,55.3 percent,55.3 percent,55.1 percent,55.4 percent,55.2 percent,55.3 percent,55.5 percent,55.5 percent
+ErrMeanMatching,7.42,7.42,7.42,7.46,7.42,7.43,7.37,7.46,7.41,7.43,7.44,7.44
+ErrMeanWeighted,6.80,6.79,6.80,6.79,6.79,6.80,6.75,6.79,6.75,6.97,6.81,6.81
+ErrMedianMatching,5.69,5.69,5.69,5.70,5.69,5.69,5.65,5.70,5.65,5.69,5.72,5.71
+ErrMedianWeighted,4.72,4.72,4.72,4.69,4.72,4.72,4.70,4.70,4.68,4.82,4.73,4.73
+ErrSdMatching,7.08,7.08,7.07,7.14,7.05,7.08,7.01,7.11,7.07,7.15,7.07,7.07
+ErrSdWeighted,7.11,7.11,7.12,7.15,7.09,7.12,7.03,7.13,7.09,7.30,7.12,7.11
+ErrBeyondFifteenMatching,10.5 percent,10.5 percent,10.5 percent,10.7 percent,10.5 percent,10.5 percent,10.4 percent,10.7 percent,10.5 percent,10.4 percent,10.6 percent,10.5 percent
+ErrBeyondFifteenWeighted,9.6 percent,9.6 percent,9.6 percent,9.6 percent,9.6 percent,9.6 percent,9.4 percent,9.6 percent,9.4 percent,10.4 percent,9.6 percent,9.6 percent
+ErrBeyondTwentyMatching,4.92 percent,4.92 percent,4.91 percent,5.04 percent,4.91 percent,4.93 percent,4.80 percent,5.02 percent,4.92 percent,5.00 percent,4.88 percent,4.87 percent
+ErrBeyondTwentyWeighted,4.93 percent,4.94 percent,4.94 percent,4.97 percent,4.92 percent,4.94 percent,4.78 percent,4.97 percent,4.85 percent,5.34 percent,4.93 percent,4.92 percent
+ErrBeyondTwentyBoth,3.44 percent,3.44 percent,3.44 percent,3.50 percent,3.43 percent,3.44 percent,3.35 percent,3.49 percent,3.43 percent,3.68 percent,3.42 percent,3.41 percent
+NBeyondTwentyMatching,355,355,354,349,354,355,338,347,333,319,344,344
+NMovedBelowTwenty,107,107,106,107,107,107,102,106,101,84,103,103
+NStayedBeyondTwenty,248,248,248,242,247,248,236,241,232,235,241,241
+NCrossedAboveTwenty,108,108,108,102,108,108,101,102,96,106,107,107
+NBeyondTwentyWeighted,356,356,356,344,355,356,337,343,328,341,348,348
+ErrHistCutoff,37,37,37,37,37,37,37,37,37,38,37,37
+FigBTwoShareFiftyToHundred,26.0,26.0,26.0,25.2,26.0,25.9,25.4,25.2,24.7,26.3,25.0,26.2
+AnchorRmse,11.1,11.1,11.1,11.1,11.1,11.1,11.2,11.1,11.3,10.7,10.7,11.3
+ObsRmseBinMin,9.5,9.5,9.5,9.7,9.5,9.4,9.4,9.6,9.5,9.4,9.6,9.3
+ObsRmseBinMax,12.8,12.8,12.8,12.9,12.7,12.8,12.7,12.9,12.8,13.2,13.0,13.2
+FitBinObs,750,750,750,730,750,750,730,720,710,640,700,730
+NStateYearPools,459,459,459,459,459,459,459,459,459,459,459,459
+PoolRmseSmallest,10.5,10.5,10.5,10.5,10.5,10.5,10.6,10.5,10.6,10.4,10.5,10.5
+PoolRmseAboveHundredMin,6.6,6.6,6.6,6.5,6.6,6.6,6.6,6.5,6.6,6.4,6.6,6.6
+PoolRmseAboveHundredMax,8.4,8.4,8.4,8.3,8.4,8.4,8.4,8.3,8.3,8.6,8.4,8.4
+GuideGapOverall,1.2,1.2,1.1,1.2,1.2,1.1,0.3,1.1,0.2,0.5,0.5,0.7
+AnesrakeFitMeanMax,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
+CesThreeVarReduction,1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.2,1.2,0.4,1.5,1.1
+AnesThreeVarIncrease,0.3,0.3,0.3,0.2,0.3,0.3,0.3,0.3,0.3,0.0,0.1,0.3
+AnesHighestYears,seven,seven,seven,six,seven,seven,seven,seven,seven,two,five,seven
+ThreeVarYears,nine,nine,nine,nine,nine,nine,nine,nine,nine,nine,nine,nine
+TrendPrimMatchBeta,-0.006,-0.006,-0.006,-0.006,-0.006,-0.006,-0.006,-0.006,-0.006,-0.006,-0.006,-0.006
+TrendPrimMatchSE,0.122,0.122,0.122,0.122,0.122,0.122,0.122,0.122,0.122,0.122,0.122,0.122
+TrendPrimMatchP,0.958,0.958,0.958,0.958,0.958,0.958,0.958,0.958,0.958,0.958,0.958,0.958
+TrendPrimMatchPermP,0.956,0.956,0.956,0.956,0.956,0.956,0.956,0.956,0.956,0.956,0.956,0.956
+TrendPrimMatchCILow,-0.245,-0.245,-0.245,-0.245,-0.245,-0.245,-0.245,-0.245,-0.245,-0.245,-0.245,-0.245
+TrendPrimMatchCIHigh,0.233,0.233,0.233,0.233,0.233,0.233,0.233,0.233,0.233,0.233,0.233,0.233
+TrendPrimMatchFullPeriod,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1
+TrendPrimMatchMeanFirst,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2
+TrendPrimMatchMeanLast,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0
+TrendPrimWtdBeta,-0.120,-0.120,-0.120,-0.120,-0.120,-0.120,-0.120,-0.120,-0.120,-0.120,-0.120,-0.120
+TrendPrimWtdSE,0.072,0.072,0.072,0.072,0.072,0.072,0.072,0.072,0.072,0.072,0.072,0.072
+TrendPrimWtdP,0.094,0.094,0.094,0.094,0.094,0.094,0.094,0.094,0.094,0.094,0.094,0.094
+TrendPrimWtdPermP,0.082,0.082,0.082,0.082,0.082,0.082,0.082,0.082,0.082,0.082,0.082,0.082
+TrendPrimWtdCILow,-0.261,-0.261,-0.261,-0.261,-0.261,-0.261,-0.261,-0.261,-0.261,-0.261,-0.261,-0.261
+TrendPrimWtdCIHigh,0.021,0.021,0.021,0.021,0.021,0.021,0.021,0.021,0.021,0.021,0.021,0.021
+TrendPrimWtdFullPeriod,-1.7,-1.7,-1.7,-1.7,-1.7,-1.7,-1.7,-1.7,-1.7,-1.7,-1.7,-1.7
+TrendPrimWtdMeanFirst,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9
+TrendPrimWtdMeanLast,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3
+TrendSecMatchBeta,0.113,0.113,0.113,0.111,0.113,0.112,0.116,0.111,0.114,-0.030,0.127,0.113
+TrendSecMatchSE,0.066,0.066,0.066,0.066,0.067,0.066,0.068,0.067,0.068,0.079,0.077,0.066
+TrendSecMatchP,0.089,0.090,0.089,0.093,0.092,0.090,0.088,0.097,0.094,0.699,0.099,0.089
+TrendSecMatchPermP,0.131,0.131,0.131,0.142,0.129,0.134,0.114,0.142,0.127,0.565,0.106,0.131
+TrendSecMatchCILow,-0.017,-0.017,-0.017,-0.019,-0.018,-0.018,-0.017,-0.020,-0.019,-0.185,-0.024,-0.017
+TrendSecMatchCIHigh,0.243,0.243,0.243,0.241,0.245,0.242,0.250,0.242,0.247,0.124,0.278,0.243
+TrendSecMatchFullPeriod,1.8,1.8,1.8,1.8,1.8,1.8,1.9,1.8,1.8,-0.5,2.0,1.8
+TrendSecMatchMeanFirst,7.7,7.7,7.7,7.8,7.7,7.7,7.7,7.8,7.8,6.2,7.2,7.7
+TrendSecMatchMeanLast,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,5.8,9.1,9.5
+TrendSecWtdBeta,-0.016,-0.016,-0.016,-0.017,-0.015,-0.016,-0.011,-0.017,-0.014,0.023,-0.003,-0.016
+TrendSecWtdSE,0.040,0.040,0.040,0.041,0.041,0.040,0.042,0.042,0.042,0.041,0.047,0.040
+TrendSecWtdP,0.701,0.700,0.701,0.674,0.716,0.687,0.787,0.677,0.739,0.572,0.947,0.701
+TrendSecWtdPermP,0.755,0.755,0.755,0.736,0.754,0.743,0.807,0.726,0.766,0.457,0.950,0.755
+TrendSecWtdCILow,-0.095,-0.095,-0.095,-0.098,-0.095,-0.095,-0.093,-0.099,-0.097,-0.057,-0.095,-0.095
+TrendSecWtdCIHigh,0.064,0.064,0.064,0.063,0.066,0.063,0.070,0.064,0.068,0.104,0.088,0.064
+TrendSecWtdFullPeriod,-0.2,-0.2,-0.2,-0.3,-0.2,-0.3,-0.2,-0.3,-0.2,0.4,-0.0,-0.2
+TrendSecWtdMeanFirst,7.1,7.1,7.1,7.2,7.1,7.1,7.2,7.1,7.2,4.6,6.4,7.1
+TrendSecWtdMeanLast,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0,5.0,6.4,7.0

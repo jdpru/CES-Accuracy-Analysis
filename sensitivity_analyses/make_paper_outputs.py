@@ -1,0 +1,172 @@
+"""Write the paper-facing sensitivity outputs (Supplementary Material section H).
+
+  tables_and_figures/output/supplementary/sensitivity_exclusions.tex   Table H1
+  tables_and_figures/output/sensitivity_numbers.tex                    \\Sens* macros
+
+Both are built from results/<variant>/ written by run_variants.py, so run
+figuresHQ.ipynb first, then:  python3 build_flags.py && python3 run_variants.py
+&& python3 make_paper_outputs.py   (from this folder).
+manuscript.tex and supplementary_material.tex load sensitivity_numbers.tex
+next to prose_numbers.tex.
+"""
+import re
+from pathlib import Path
+import numpy as np
+import pandas as pd
+
+HERE = Path(__file__).resolve().parent
+RES = HERE / "results"
+OUT = HERE.parent / "tables_and_figures" / "output"
+
+COLS = [("base", "Base"), ("A1_all", "Section C"), ("U_gt90", r"Won $>$90\%"),
+        ("A1_all_plus_gt90", "Both"), ("A2_generic_AG_SoS", "Generic AG/SoS")]
+
+
+def macros(v):
+    d = {}
+    for line in open(RES / v / "prose_numbers.tex"):
+        m = re.match(r"\\newcommand\{\\(\w+)\}\{(.*?)\}", line.strip())
+        if m:
+            d[m.group(1)] = m.group(2)
+    return d
+
+
+def office_rmse(v):
+    """Pooled RMSE in the <=100% column of the Table 11 output."""
+    out = {}
+    for line in open(RES / v / "main" / "office_rmse_progressive_race_exclusion.tex"):
+        if "&" in line and "\\\\" in line:
+            cells = [re.sub(r"\\makebox\[[^\]]*\]\[\w\]\{([^}]*)\}", r"\1", c) for c in line.split("&")]
+            vals = re.findall(r"(\d+\.\d)", cells[-1])
+            if vals:
+                out[cells[0].strip()] = float(vals[0])
+    return out
+
+
+def num(s):
+    return float(s.replace("$-$", "-").replace(",", ""))
+
+
+M = {v: macros(v) for v, _ in COLS + [("A2_named_only", "")]}
+OFF = {v: office_rmse(v) for v, _ in COLS}
+n_base = num(M["base"]["NObsCandidate"])
+removed = {v: int(n_base - num(M[v]["NObsCandidate"])) for v, _ in COLS}
+
+flags = pd.read_csv(HERE / "flagged_races.csv")
+flags = flags[flags.In_Analysis]
+nflag = lambda *f: flags[flags.Flag.isin(f)].Race_Key.nunique()
+
+# AG races won with >90% and their share of AG squared error (CES weights, pooled).
+ms = pd.read_pickle(Path.home() / "ces_sens_scratch" / "_cache" / "most_specific.pkl") \
+    if (Path.home() / "ces_sens_scratch" / "_cache" / "most_specific.pkl").exists() \
+    else pd.read_excel(HERE.parent / "tables_and_figures" / "input_tables" / "most_specific.xlsx")
+ag = ms[(ms.Class == "Candidate Choice") & (ms.Validity_Scheme == "All")
+        & (ms.Weighting_Method == "CES-Provided Weights") & (ms.Variable == "Attorney General")
+        & ms.Benchmark.notna() & ms.Error.notna()]
+ag_hi = ag[ag.Benchmark > 90]
+ag_share = 100 * (ag_hi.Error ** 2).sum() / (ag.Error ** 2).sum()
+
+four = [v for v, _ in COLS]
+WORDS = "zero one two three four five six seven eight nine".split()
+def count(n):
+    """Spell out numbers under 10, as the prose does elsewhere."""
+    return WORDS[n] if n < 10 else f"{n:,}"
+f1 = lambda x: f"{x:.1f}"
+mac = {
+    # Counts of contests removed
+    "SensNSectionC": f"{removed['A1_all']:,}",
+    "SensNFusion": count(nflag('suppC_fusion')),
+    "SensNSpecial": count(nflag('suppC_special')),
+    "SensNHandFix": count(nflag('ces_manual_fix', 'returns_hand_fix')),
+    "SensNGtNinety": f"{removed['U_gt90']:,}",
+    "SensNGenericAGSoS": f"{removed['A2_generic_AG_SoS']:,}",
+    # Limitations paragraph
+    "SensAGNGtNinety": f"{len(ag_hi)}",
+    "SensAGShareSSE": f"{ag_share:.0f}",
+    # Section H ranges across the four exclusion columns (base excluded)
+    "SensNeitherMatchMin": f1(min(num(M[v]["NeitherMeanBefore"]) for v in four[1:])),
+    "SensNeitherMatchMax": f1(max(num(M[v]["NeitherMeanBefore"]) for v in four[1:])),
+    "SensNeitherWtdMin": f1(min(num(M[v]["NeitherMeanAfter"]) for v in four[1:])),
+    "SensNeitherWtdMax": f1(max(num(M[v]["NeitherMeanAfter"]) for v in four[1:])),
+    "SensBaseAGRmse": f1(OFF["base"]["Attorney general"]),
+    "SensBaseSoSRmse": f1(OFF["base"]["Secretary of state"]),
+    "SensGenericAGRmse": f1(OFF["A2_generic_AG_SoS"]["Attorney general"]),
+    "SensGenericSoSRmse": f1(OFF["A2_generic_AG_SoS"]["Secretary of state"]),
+    "SensGuideGapMin": f1(min(num(M[v]["GuideGapOverall"]) for v in four[1:])),
+    "SensGuideGapMax": f1(max(num(M[v]["GuideGapOverall"]) for v in four[1:])),
+    "SensNamedOnlyTrendBeta": M["A2_named_only"]["TrendSecMatchBeta"],
+    "SensNamedOnlyTrendP": M["A2_named_only"]["TrendSecMatchP"],
+}
+
+# Checks behind the Section H wording; fail loudly if a rerun changes them.
+for v in four[1:]:
+    m = M[v]
+    assert num(m["TrendSecMatchBeta"]) > 0 and num(m["TrendSecWtdBeta"]) < 0, f"{v}: trend sign changed"
+    assert num(m["TrendSecMatchP"]) >= 0.05 and num(m["TrendSecWtdP"]) >= 0.05, f"{v}: trend now significant"
+    assert num(m["CesThreeVarReduction"]) > 0 and num(m["AnesThreeVarIncrease"]) > 0, f"{v}: Table 13 direction changed"
+
+src = {"SensAGShareSSE": "Table 11 data", "SensAGNGtNinety": "Table 11 data"}
+lines = ["% Generated by sensitivity_analyses/make_paper_outputs.py. Do not edit by hand.",
+         "% manuscript.tex and supplementary_material.tex load this file after prose_numbers.tex.", ""]
+lines += [f"\\newcommand{{\\{k}}}{{{v}}}  % {src.get(k, 'Supplementary section H')}" for k, v in mac.items()]
+(OUT / "sensitivity_numbers.tex").write_text("\n".join(lines) + "\n")
+
+# ------------------------------------------------------------------ Table H1
+def cell(v, key):
+    return M[v][key]
+
+def pair(v, a, b):
+    return f"{M[v][a]} / {M[v][b]}"
+
+def trend(v, b, p):
+    return f"{M[v][b]} ({M[v][p]})"
+
+def neg(x):  # Table 13 reports reductions as positive numbers; show as signed change
+    return "$-$" + x
+
+rows = [
+    ("Candidate-choice estimates", lambda v: M[v]["NObsCandidate"]),
+    (None, "Mean RMSE, variables used in neither matching nor weighting (table~\\ref{tab:neither_by_year_paired})"),
+    ("\\quad Matching only", lambda v: M[v]["NeitherMeanBefore"]),
+    ("\\quad Matching + CES weights", lambda v: M[v]["NeitherMeanAfter"]),
+    (None, "Mean RMSE, variables used in matching or weighting (table~\\ref{tab:used_by_year_paired})"),
+    ("\\quad Matching only", lambda v: M[v]["UsedMeanBefore"]),
+    ("\\quad Matching + CES weights", lambda v: M[v]["UsedMeanAfter"]),
+    (None, "Trend in RMSE, secondary variables, $\\beta$ ($p$) (table~\\ref{tab:rmse_trend_primary_secondary})"),
+    ("\\quad Matching only", lambda v: trend(v, "TrendSecMatchBeta", "TrendSecMatchP")),
+    ("\\quad Matching + CES weights", lambda v: trend(v, "TrendSecWtdBeta", "TrendSecWtdP")),
+    (None, "Change in RMSE, four variables excluded from both weighting schemes (table~\\ref{tab:rmse_anesrake_full})"),
+    ("\\quad CES weights", lambda v: neg(M[v]["CesThreeVarReduction"])),
+    ("\\quad anesrake", lambda v: "+" + M[v]["AnesThreeVarIncrease"]),
+    (None, "Pooled RMSE, all races (table~\\ref{tab:office_rmse_less_competitive_races})"),
+    ("\\quad Attorney general", lambda v: f1(OFF[v]["Attorney general"])),
+    ("\\quad Secretary of state", lambda v: f1(OFF[v]["Secretary of state"])),
+    ("\\quad State senator", lambda v: f1(OFF[v]["State senator"])),
+    ("Difference from CES guides (table~\\ref{tab:ces_comparison})", lambda v: M[v]["GuideGapOverall"]),
+]
+
+t = [r"\begin{table}[!htbp]", r"\centering", r"\footnotesize", r"\makebox[\textwidth][c]{%",
+     r"\begin{threeparttable}",
+     r"\caption{Main results after excluding contested benchmark comparisons.}",
+     r"\label{tab:sensitivity_exclusions}",
+     r"\begin{tabular}{l" + "c" * len(COLS) + "}", r"\toprule",
+     "& " + " & ".join(h for _, h in COLS) + r" \\", r"\midrule"]
+for label, f in rows:
+    if label is None:
+        t.append(r"\addlinespace[0.3em]")
+        t.append(rf"\multicolumn{{{len(COLS) + 1}}}{{l}}{{{f}}} \\")
+    else:
+        t.append(label + " & " + " & ".join(f(v) for v, _ in COLS) + r" \\")
+t += [r"\bottomrule", r"\end{tabular}", r"\begin{tablenotes}", r"\footnotesize",
+      r"\item \textit{Note:} Each column repeats every computation in the paper after removing a set of "
+      r"candidate-choice contests from all weighting scenarios. Section C: the " + mac["SensNSectionC"] +
+      r" contests affected by a judgment call described in section C. Won $>$90\%: the " + mac["SensNGtNinety"] +
+      r" contests in which the winner received more than 90 percent of the vote. Both: the union of the two. "
+      r"Generic AG/SoS: the " + mac["SensNGenericAGSoS"] + r" attorney general and secretary of state contests "
+      r"from 2006 to 2016, which the CES asked about with generic party options. RMSE and changes in RMSE are in "
+      r"percentage points; $\beta$ is the change in RMSE per calendar year. Estimates of change for the four "
+      r"variables are averaged across variables and years, relative to matching alone.",
+      r"\end{tablenotes}", r"\end{threeparttable}%", r"}", r"\end{table}"]
+(OUT / "supplementary" / "sensitivity_exclusions.tex").write_text("\n".join(t) + "\n")
+print((OUT / "sensitivity_numbers.tex").read_text())
+print("\n".join(t))

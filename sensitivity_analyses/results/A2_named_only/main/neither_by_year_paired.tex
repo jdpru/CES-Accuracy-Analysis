@@ -1,0 +1,74 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\makebox[\textwidth][c]{%
+\begin{threeparttable}
+\caption{RMSE with and without CES weights for variables used in neither matching nor weighting.}
+\label{tab:neither_by_year_paired}
+\begin{tabular}{llcccccccccc}
+\toprule
+ & & \multicolumn{8}{c}{Year} & & \\
+\cmidrule(lr){3-10}
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & $\Delta$ \\
+\midrule
+\multicolumn{12}{l}{Demographic} \\
+\addlinespace[0.1em]
+~~Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & 8.2 & \\
+ & Matching + weights &  & 7.7 & 8.7 & 8.0 & 8.3 &  &  &  & 8.2 & $-$0.1 \\
+\addlinespace[0.1em]
+~~Family income & Matching only & \textcolor{gray}{$\times$} & \textcolor{gray}{$\times$} & \textcolor{gray}{$\times$} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 & \\
+ & Matching + weights &  &  &  & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2 \\
+\addlinespace[0.1em]
+~~Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{$\times$} & \textcolor{gray}{$\times$} & 12.5 & 12.5 & 11.8 & 12.0 & \\
+ & Matching + weights & 10.8 & 10.7 & 14.0 &  &  & 13.3 & 13.9 & 12.1 & 12.5 & +0.5 \\
+\addlinespace[0.1em]
+~~Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 & \\
+ & Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4 \\
+\addlinespace[0.1em]
+~~Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 & \\
+ & Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & $-$3.0 \\
+\addlinespace[0.1em]
+~~Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 & \\
+ & Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 &  & 4.2 & 6.2 & 5.7 & $-$1.1 \\
+\addlinespace[0.3em]
+\multicolumn{12}{l}{Non-demographic} \\
+\addlinespace[0.1em]
+~~Turnout & Matching only & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{$\circ$} & 35.0 & \\
+ & Matching + weights &  &  &  & 45.1 & 33.4 & 32.4 & 23.6 &  & 34.5 & $-$0.5 \\
+\addlinespace[0.1em]
+~~Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 & \\
+ & Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & $-$0.5 \\
+\addlinespace[0.1em]
+~~President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{$\circ$} & \textcolor{gray}{--} & 6.3 & \\
+ & Matching + weights & 3.5 &  & 2.9 &  & 1.7 &  &  &  & 2.8 & $-$3.5 \\
+\addlinespace[0.1em]
+~~US Senate & Matching only & 8.0 & 6.1 & 4.3 & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & 6.3 & \\
+ & Matching + weights & 5.1 & 2.0 & 2.4 &  &  &  &  &  & 3.4 & $-$2.9 \\
+\addlinespace[0.1em]
+~~US House & Matching only & 9.6 & 8.8 & 7.7 & 8.5 & 8.1 & 8.1 & 10.1 & 11.5 & 9.1 & \\
+ & Matching + weights & 9.0 & 10.1 & 9.7 & 9.0 & 9.6 & 8.3 & 8.0 & 10.0 & 9.2 & +0.1 \\
+\addlinespace[0.1em]
+~~Governor & Matching only & \textcolor{gray}{--} & 6.0 & 2.8 & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & \textcolor{gray}{$\circ$} & 5.4 & \\
+ & Matching + weights &  & 3.5 & 3.4 &  &  &  &  &  & 3.4 & $-$2.0 \\
+\addlinespace[0.1em]
+~~Attorney general & Matching only & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & 7.1 & 11.3 & 12.8 & 10.4 & \\
+ & Matching + weights &  &  &  &  &  & 4.2 & 3.6 & 7.5 & 5.8 & $-$4.6 \\
+\addlinespace[0.1em]
+~~Secretary of state & Matching only & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & 7.7 & 11.0 & 12.5 & 10.4 & \\
+ & Matching + weights &  &  &  &  &  & 4.2 & 3.7 & 6.5 & 5.2 & $-$5.2 \\
+\midrule
+Mean\tnote{b} & Matching only & 6.2 & 7.8 & 7.4 & 10.4 & 9.1 & 10.2 & 10.1 & 8.7 & 9.5 & \\
+ & Matching + weights & 5.9 & 6.5 & 6.1 & 10.7 & 8.6 & 9.1 & 8.0 & 7.3 & 8.0 & $-$1.5 \\
+ & $\Delta$ & $-$0.3 & $-$1.3 & $-$1.3 & +0.3 & $-$0.5 & $-$1.1 & $-$2.1 & $-$1.4 & & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} RMSE in percentage points for variables in the years in which they were used in neither matching nor CES weighting, 2008--2022. $\Delta$ equals pooled RMSE with CES weights minus pooled matching-only RMSE; negative values indicate lower error after weighting. \textcolor{gray}{$\times$} = used in matching that year; \textcolor{gray}{$\circ$} = used in CES weighting that year; \textcolor{gray}{--} = not measured or office not on the ballot. Age group, sex, and education were used in every year and are omitted. Non-demographic variables are turnout, voting method, and candidate choice. Data from 2006 are excluded because that year's matching and weighting variables are undocumented.
+\item[a] Computed once across all of a variable's error observations in the years shown, not as the average of the row, so years with more observations count more.
+\item[b] Arithmetic means; each variable counts equally. Year columns average the variables with an estimate in that year, so the set of variables differs across years; the Pooled column averages the pooled RMSEs. The $\Delta$ row gives each year's weighted mean minus its matching-only mean.
+\end{tablenotes}
+\end{threeparttable}%
+}
+\end{table}

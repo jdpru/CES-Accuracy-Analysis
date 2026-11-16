@@ -1,0 +1,36 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\makebox[\textwidth][c]{%
+\begin{threeparttable}
+\caption{National anesrake-weighted RMSE for variables used in weighting.}
+\label{tab:national_anesrake_variables_accuracy}
+\begin{tabular}{lcccccccccc}
+\toprule
+ & \multicolumn{9}{c}{Year} \\
+\cmidrule(lr){2-10}
+Variable & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Mean \\
+\midrule
+\multicolumn{11}{l}{Demographic} \\
+\addlinespace[0.2em]
+~~Age group & 0.0 & 0.0 & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
+~~Sex & -- & -- & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & -- & 0.0 \\
+~~Hispanic origin & -- & -- & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
+~~Education & 0.0 & 0.0 & 0.6 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.1 \\
+~~Family income & 0.0 & 0.0 & 0.2 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
+~~Employment status & 0.0 & 0.0 & 0.6 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.1 \\
+~~Union membership & 0.0 & -- & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
+~~Veteran status & 0.0 & 0.0 & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
+~~Residence duration & -- & 0.0 & 0.1 & 0.0 & 0.0 & -- & -- & -- & -- & 0.0 \\
+\midrule
+Yearly mean & 0.0 & 0.0 & 0.2 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item -- Variable not used as an anesrake target that year: either not provided or provided but not selected (see table~\ref{tab:vars_used_by_anesrake}).
+\item \textit{Note:} RMSE in percentage points. National-level errors. The anesrake weights use the demographic variables listed in table~\ref{tab:vars_used_by_anesrake}.
+\end{tablenotes}
+\end{threeparttable}%
+}
+\end{table}

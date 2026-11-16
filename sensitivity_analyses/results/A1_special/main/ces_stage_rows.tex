@@ -1,0 +1,105 @@
+\begin{table}[p]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4.2pt}
+\renewcommand{\arraystretch}{0.85}
+\makebox[\textwidth][c]{%
+\begin{minipage}{1.08\textwidth}
+\centering
+\begin{threeparttable}
+\caption{Variables used in each stage of CES sample matching and weighting.}
+\label{tab:ces_stages}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l l *{9}{c}@{}}
+\toprule
+ &  & \multicolumn{9}{c}{Year} \\
+\cmidrule(l){3-11}
+Variable & \hspace{2pt}Stage & 2006 & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 \\
+\midrule
+\multicolumn{11}{@{}l}{Demographic} \\
+\addlinespace[1pt]
+Age & \hspace{2pt}Target strata & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} \\
+ & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+ & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+ & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\cmidrule{1-11}
+Gender & \hspace{2pt}Target strata & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} \\
+ & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+ & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+ & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\cmidrule{1-11}
+Race & \hspace{2pt}Target strata & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} \\
+ & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+ & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+ & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\cmidrule{1-11}
+Education & \hspace{2pt}Target strata & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} \\
+ & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+ & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+ & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\cmidrule{1-11}
+Hispanic origin & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\cmidrule{1-11}
+Marital status & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+Family income & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+Employment status & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+Ideology & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+ & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+Party ID (baseline) & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+ & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+Political interest & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+ & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+Religious tradition & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+Church attendance & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+``Born again'' status & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+ & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+ & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\cmidrule{1-11}
+Census region & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+Metropolitan status & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+State of residence & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\cmidrule{1-11}
+State size & \hspace{2pt}Target strata & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} \\
+\cmidrule{1-11}
+District competitiveness & \hspace{2pt}Target strata & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} \\
+\cmidrule{1-11}
+Took post-election wave & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+\addlinespace[3pt]
+\multicolumn{11}{@{}l}{Voting Administration} \\
+\addlinespace[1pt]
+Voter registration & \hspace{2pt}Target strata & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} & \textcolor{black!55}{$\times$} \\
+ & \hspace{2pt}Matching & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+ & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} \\
+ & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\cmidrule{1-11}
+Turnout, earlier election & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ \\
+\addlinespace[3pt]
+\multicolumn{11}{@{}l}{Candidate Choice} \\
+\addlinespace[1pt]
+Presidential vote, prior election & \hspace{2pt}Frame weighting & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ \\
+ & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\cmidrule{1-11}
+Presidential vote, current election & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & \textcolor{black!22}{$\cdot$} \\
+\cmidrule{1-11}
+Vote choice, governor & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\cmidrule{1-11}
+Vote choice, US senator & \hspace{2pt}Post-stratification & \textcolor{black!55}{$\times$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & \textcolor{black!22}{$\cdot$} & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\bottomrule
+\end{tabular*}%
+\begin{tablenotes}[flushleft]
+\scriptsize
+\item \textit{Note:} A check indicates that a variable was used at the specified stage; a dot indicates documented non-use. A $\times$ indicates that the guide does not document which variables were used at that stage. A variable is also labeled primary when the weights used the same measure from the previous election. For example, the 2022 frame weights included respondents' turnout in the 2020 election, so turnout in the 2022 election is labeled primary.
+\end{tablenotes}
+\end{threeparttable}
+\end{minipage}%
+}
+\end{table}

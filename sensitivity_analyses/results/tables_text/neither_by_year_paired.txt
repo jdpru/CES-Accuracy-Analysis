@@ -1,0 +1,464 @@
+===== base: No exclusions (should reproduce committed numbers)
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.5 & & 2.9 & & 1.7 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 6.1 & 4.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.3 &
+& Matching + weights & 5.1 & 2.0 & 2.4 & & & & & & 3.4 & -2.9
+US House & Matching only & 9.6 & 8.8 & 7.7 & 8.5 & 8.1 & 8.1 & 10.1 & 11.5 & 9.1 &
+& Matching + weights & 9.0 & 10.1 & 9.7 & 9.0 & 9.6 & 8.3 & 8.0 & 10.0 & 9.2 & +0.1
+Governor & Matching only & 4.8 & 6.0 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.3 &
+& Matching + weights & 4.7 & 3.5 & 3.4 & & & & & & 3.7 & -1.6
+Attorney general & Matching only & \textcolor{gray}{--} & 12.6 & 15.4 & 9.3 & 6.5 & 7.1 & 11.3 & 12.8 & 10.9 &
+& Matching + weights & & 11.8 & 15.2 & 8.0 & 4.9 & 4.2 & 3.6 & 7.5 & 8.6 & -2.2
+Secretary of state & Matching only & \textcolor{gray}{--} & 6.7 & 9.7 & 9.0 & 10.0 & 7.7 & 11.0 & 12.5 & 9.4 &
+& Matching + weights & & 6.4 & 10.9 & 8.2 & 9.6 & 4.2 & 3.7 & 6.5 & 7.0 & -2.4
+State senator & Matching only & 5.9 & 9.7 & 8.0 & 13.4 & 9.5 & 7.5 & 13.4 & 14.6 & 10.7 &
+& Matching + weights & 5.5 & 9.7 & 7.4 & 12.1 & 8.1 & 4.5 & 6.4 & 8.8 & 8.2 & -2.6
+State representative & Matching only & 5.4 & 6.2 & 5.7 & 8.7 & 8.6 & 7.2 & 11.7 & 13.6 & 8.9 &
+& Matching + weights & 4.9 & 5.4 & 6.4 & 6.3 & 6.5 & 4.6 & 5.5 & 8.5 & 6.1 & -2.8
+Mean\tnote{b} & Matching only & 6.0 & 8.1 & 8.0 & 10.3 & 9.0 & 9.7 & 10.5 & 9.7 & 9.5 &
+& Matching + weights & 5.7 & 7.1 & 7.2 & 10.0 & 8.2 & 8.2 & 7.6 & 7.6 & 8.2 & -1.3
+& \Delta & -0.3 & -1.0 & -0.8 & -0.3 & -0.8 & -1.5 & -2.9 & -2.1 & &
+
+===== A1_list_mismatch: Drop 4 retained CES/ballot list mismatches
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.5 & & 2.9 & & 1.7 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 6.1 & 4.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.3 &
+& Matching + weights & 5.1 & 2.0 & 2.4 & & & & & & 3.4 & -2.9
+US House & Matching only & 9.6 & 8.8 & 7.7 & 8.5 & 8.1 & 8.1 & 10.1 & 11.5 & 9.1 &
+& Matching + weights & 9.0 & 10.1 & 9.7 & 9.0 & 9.6 & 8.3 & 8.0 & 10.0 & 9.2 & +0.1
+Governor & Matching only & 4.8 & 6.0 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.3 &
+& Matching + weights & 4.7 & 3.5 & 3.4 & & & & & & 3.7 & -1.6
+Attorney general & Matching only & \textcolor{gray}{--} & 12.6 & 15.4 & 9.3 & 6.5 & 7.1 & 11.3 & 12.8 & 10.9 &
+& Matching + weights & & 11.8 & 15.2 & 8.0 & 4.9 & 4.2 & 3.6 & 7.5 & 8.6 & -2.2
+Secretary of state & Matching only & \textcolor{gray}{--} & 6.7 & 9.7 & 9.0 & 10.0 & 7.7 & 11.0 & 12.5 & 9.3 &
+& Matching + weights & & 6.4 & 10.9 & 8.2 & 9.6 & 4.2 & 3.7 & 6.2 & 6.9 & -2.4
+State senator & Matching only & 5.9 & 9.7 & 8.0 & 13.4 & 9.5 & 7.5 & 13.4 & 14.6 & 10.7 &
+& Matching + weights & 5.5 & 9.7 & 7.4 & 12.1 & 8.1 & 4.5 & 6.4 & 8.8 & 8.2 & -2.6
+State representative & Matching only & 5.4 & 6.2 & 5.7 & 8.7 & 8.6 & 7.2 & 11.7 & 13.6 & 8.9 &
+& Matching + weights & 4.9 & 5.4 & 6.4 & 6.3 & 6.5 & 4.6 & 5.5 & 8.5 & 6.1 & -2.8
+Mean\tnote{b} & Matching only & 6.0 & 8.1 & 8.0 & 10.3 & 9.0 & 9.7 & 10.5 & 9.7 & 9.5 &
+& Matching + weights & 5.7 & 7.1 & 7.2 & 10.0 & 8.2 & 8.2 & 7.6 & 7.5 & 8.2 & -1.3
+& \Delta & -0.3 & -1.0 & -0.8 & -0.3 & -0.8 & -1.5 & -2.9 & -2.2 & &
+
+===== A1_nominee_bench: Drop 8 contests benchmarked to a nominee
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.5 & & 2.9 & & 1.7 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 5.3 & 4.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.1 &
+& Matching + weights & 5.1 & 2.0 & 2.3 & & & & & & 3.4 & -2.7
+US House & Matching only & 9.6 & 8.8 & 7.7 & 8.5 & 8.1 & 8.1 & 10.1 & 11.5 & 9.1 &
+& Matching + weights & 9.0 & 10.1 & 9.7 & 9.0 & 9.6 & 8.3 & 8.0 & 10.0 & 9.2 & +0.1
+Governor & Matching only & 4.8 & 5.8 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.2 &
+& Matching + weights & 4.7 & 3.5 & 3.4 & & & & & & 3.7 & -1.5
+Attorney general & Matching only & \textcolor{gray}{--} & 12.6 & 15.4 & 9.3 & 6.5 & 7.1 & 11.3 & 12.8 & 10.9 &
+& Matching + weights & & 11.8 & 15.2 & 8.0 & 4.9 & 4.2 & 3.6 & 7.5 & 8.6 & -2.2
+Secretary of state & Matching only & \textcolor{gray}{--} & 6.7 & 9.7 & 9.0 & 10.0 & 5.9 & 11.0 & 12.5 & 9.1 &
+& Matching + weights & & 6.4 & 10.9 & 8.2 & 9.6 & 3.6 & 3.7 & 6.5 & 6.9 & -2.2
+State senator & Matching only & 5.9 & 9.7 & 8.0 & 13.4 & 9.5 & 7.5 & 13.4 & 14.6 & 10.7 &
+& Matching + weights & 5.5 & 9.7 & 7.4 & 12.1 & 8.1 & 4.5 & 6.4 & 8.8 & 8.2 & -2.6
+State representative & Matching only & 5.4 & 6.2 & 5.7 & 8.7 & 8.6 & 7.2 & 11.7 & 13.6 & 8.9 &
+& Matching + weights & 4.9 & 5.4 & 6.4 & 6.3 & 6.5 & 4.6 & 5.5 & 8.5 & 6.1 & -2.8
+Mean\tnote{b} & Matching only & 6.0 & 8.1 & 8.0 & 10.3 & 9.0 & 9.5 & 10.5 & 9.7 & 9.5 &
+& Matching + weights & 5.7 & 7.1 & 7.2 & 10.0 & 8.2 & 8.2 & 7.6 & 7.6 & 8.2 & -1.3
+& \Delta & -0.3 & -1.0 & -0.8 & -0.3 & -0.8 & -1.3 & -2.9 & -2.1 & &
+
+===== A1_fusion: Drop contests with fusion-line aggregation
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.5 & & 2.9 & & 1.7 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 5.3 & 4.4 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.1 &
+& Matching + weights & 5.1 & 2.0 & 2.3 & & & & & & 3.4 & -2.7
+US House & Matching only & 9.5 & 8.7 & 7.6 & 8.4 & 8.2 & 8.1 & 10.3 & 11.5 & 9.1 &
+& Matching + weights & 8.8 & 10.0 & 9.6 & 9.0 & 9.6 & 8.4 & 8.0 & 9.9 & 9.2 & +0.1
+Governor & Matching only & 4.8 & 6.0 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.3 &
+& Matching + weights & 4.7 & 3.5 & 3.4 & & & & & & 3.7 & -1.6
+Attorney general & Matching only & \textcolor{gray}{--} & 13.0 & 15.4 & 9.5 & 6.5 & 7.2 & 11.3 & 12.9 & 11.1 &
+& Matching + weights & & 12.2 & 15.2 & 8.2 & 4.9 & 4.3 & 3.6 & 7.6 & 8.8 & -2.3
+Secretary of state & Matching only & \textcolor{gray}{--} & 6.8 & 9.7 & 9.2 & 10.0 & 7.7 & 11.0 & 12.5 & 9.4 &
+& Matching + weights & & 6.5 & 10.9 & 8.4 & 9.6 & 4.2 & 3.7 & 6.5 & 7.0 & -2.4
+State senator & Matching only & 6.0 & 10.0 & 8.1 & 13.6 & 9.6 & 7.5 & 13.4 & 14.6 & 10.8 &
+& Matching + weights & 5.6 & 9.9 & 7.5 & 12.3 & 8.1 & 4.5 & 6.4 & 8.8 & 8.2 & -2.6
+State representative & Matching only & 5.4 & 6.4 & 5.7 & 9.0 & 8.7 & 7.3 & 11.9 & 13.7 & 9.1 &
+& Matching + weights & 4.7 & 5.5 & 6.7 & 6.5 & 6.3 & 4.6 & 5.6 & 8.5 & 6.2 & -2.9
+Mean\tnote{b} & Matching only & 6.0 & 8.1 & 8.0 & 10.4 & 9.0 & 9.7 & 10.5 & 9.7 & 9.5 &
+& Matching + weights & 5.7 & 7.1 & 7.2 & 10.0 & 8.2 & 8.2 & 7.7 & 7.6 & 8.2 & -1.3
+& \Delta & -0.3 & -1.0 & -0.8 & -0.4 & -0.8 & -1.5 & -2.8 & -2.1 & &
+
+===== A1_special: Drop contests benchmarked to a special election
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.5 & & 2.9 & & 1.7 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 6.2 & 4.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.4 &
+& Matching + weights & 5.1 & 2.1 & 2.4 & & & & & & 3.5 & -2.9
+US House & Matching only & 9.6 & 8.8 & 7.7 & 8.5 & 8.1 & 8.1 & 10.1 & 11.5 & 9.1 &
+& Matching + weights & 9.0 & 10.1 & 9.7 & 9.0 & 9.6 & 8.3 & 8.0 & 10.0 & 9.2 & +0.1
+Governor & Matching only & 4.8 & 6.0 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.3 &
+& Matching + weights & 4.7 & 3.5 & 3.4 & & & & & & 3.7 & -1.6
+Attorney general & Matching only & \textcolor{gray}{--} & 12.6 & 15.4 & 9.3 & 6.5 & 7.1 & 11.3 & 12.8 & 10.9 &
+& Matching + weights & & 11.8 & 15.2 & 8.0 & 4.9 & 4.2 & 3.6 & 7.5 & 8.6 & -2.2
+Secretary of state & Matching only & \textcolor{gray}{--} & 6.7 & 9.7 & 9.0 & 10.0 & 7.7 & 11.0 & 12.5 & 9.4 &
+& Matching + weights & & 6.4 & 10.9 & 8.2 & 9.6 & 4.2 & 3.7 & 6.5 & 7.0 & -2.4
+State senator & Matching only & 5.9 & 9.7 & 8.0 & 10.1 & 9.5 & 7.5 & 13.4 & 14.6 & 10.3 &
+& Matching + weights & 5.5 & 9.7 & 7.4 & 7.6 & 8.1 & 4.5 & 6.4 & 8.8 & 7.4 & -2.8
+State representative & Matching only & 5.4 & 6.2 & 5.7 & 8.7 & 8.6 & 7.2 & 11.7 & 13.6 & 8.9 &
+& Matching + weights & 4.9 & 5.4 & 6.4 & 6.3 & 6.5 & 4.6 & 5.5 & 8.5 & 6.1 & -2.8
+Mean\tnote{b} & Matching only & 6.0 & 8.1 & 8.0 & 10.0 & 9.0 & 9.7 & 10.5 & 9.7 & 9.5 &
+& Matching + weights & 5.7 & 7.1 & 7.2 & 9.6 & 8.2 & 8.2 & 7.6 & 7.6 & 8.1 & -1.3
+& \Delta & -0.3 & -1.0 & -0.8 & -0.4 & -0.8 & -1.5 & -2.9 & -2.1 & &
+
+===== A1_hand_fixes: Drop contests with hand-corrected CES or returns data
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.5 & & 2.9 & & 1.7 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 6.1 & 4.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.3 &
+& Matching + weights & 5.1 & 2.0 & 2.4 & & & & & & 3.4 & -2.9
+US House & Matching only & 9.6 & 8.8 & 7.7 & 8.5 & 8.1 & 8.1 & 10.1 & 11.5 & 9.1 &
+& Matching + weights & 9.0 & 10.1 & 9.7 & 9.0 & 9.6 & 8.3 & 8.0 & 10.0 & 9.3 & +0.1
+Governor & Matching only & 4.8 & 6.0 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.3 &
+& Matching + weights & 4.7 & 3.5 & 3.4 & & & & & & 3.7 & -1.6
+Attorney general & Matching only & \textcolor{gray}{--} & 12.6 & 15.4 & 9.3 & 6.5 & 7.1 & 11.8 & 12.8 & 10.9 &
+& Matching + weights & & 11.8 & 15.2 & 8.0 & 4.9 & 4.2 & 3.0 & 7.5 & 8.6 & -2.3
+Secretary of state & Matching only & \textcolor{gray}{--} & 6.7 & 9.7 & 9.0 & 10.0 & 7.7 & 11.0 & 12.5 & 9.4 &
+& Matching + weights & & 6.4 & 10.9 & 8.2 & 9.6 & 4.2 & 3.7 & 6.5 & 7.0 & -2.4
+State senator & Matching only & 5.9 & 9.7 & 8.0 & 13.4 & 9.5 & 7.5 & 13.4 & 14.6 & 10.7 &
+& Matching + weights & 5.5 & 9.7 & 7.4 & 12.1 & 8.1 & 4.5 & 6.4 & 8.8 & 8.2 & -2.6
+State representative & Matching only & 5.5 & 6.3 & 5.8 & 8.8 & 8.6 & 7.2 & 11.7 & 13.6 & 9.0 &
+& Matching + weights & 4.9 & 5.5 & 6.5 & 6.3 & 6.3 & 4.6 & 5.5 & 8.5 & 6.2 & -2.8
+Mean\tnote{b} & Matching only & 6.0 & 8.1 & 8.0 & 10.3 & 9.0 & 9.7 & 10.6 & 9.7 & 9.5 &
+& Matching + weights & 5.7 & 7.1 & 7.2 & 10.0 & 8.2 & 8.2 & 7.6 & 7.6 & 8.2 & -1.3
+& \Delta & -0.3 & -1.0 & -0.8 & -0.3 & -0.8 & -1.5 & -3.0 & -2.1 & &
+
+===== U_gt90: Drop races with winner > 90%
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.9 & \textcolor{gray}{--} & 4.5 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.6 & & 2.9 & & 1.8 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 6.2 & 4.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.3 &
+& Matching + weights & 5.1 & 2.0 & 2.4 & & & & & & 3.4 & -2.9
+US House & Matching only & 9.6 & 8.7 & 7.5 & 8.4 & 8.1 & 8.1 & 10.0 & 11.5 & 9.1 &
+& Matching + weights & 8.9 & 9.8 & 9.7 & 9.0 & 9.3 & 8.5 & 7.9 & 10.1 & 9.2 & +0.1
+Governor & Matching only & 4.8 & 6.0 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.3 &
+& Matching + weights & 4.7 & 3.5 & 3.4 & & & & & & 3.7 & -1.6
+Attorney general & Matching only & \textcolor{gray}{--} & 9.2 & 4.5 & 8.7 & 6.5 & 6.5 & 11.3 & 10.2 & 8.6 &
+& Matching + weights & & 8.2 & 5.2 & 7.3 & 4.9 & 3.5 & 3.6 & 4.7 & 6.0 & -2.6
+Secretary of state & Matching only & \textcolor{gray}{--} & 6.7 & 9.7 & 9.0 & 10.0 & 7.7 & 11.0 & 10.2 & 8.8 &
+& Matching + weights & & 6.4 & 10.9 & 8.2 & 9.6 & 4.2 & 3.7 & 4.9 & 6.7 & -2.1
+State senator & Matching only & 5.9 & 7.9 & 8.0 & 10.1 & 9.5 & 7.5 & 13.4 & 14.6 & 10.1 &
+& Matching + weights & 5.5 & 7.9 & 7.4 & 7.6 & 8.1 & 4.5 & 6.4 & 8.8 & 7.2 & -2.9
+State representative & Matching only & 5.4 & 6.2 & 5.7 & 8.7 & 8.6 & 7.2 & 11.7 & 13.6 & 8.9 &
+& Matching + weights & 4.9 & 5.4 & 6.4 & 6.3 & 6.5 & 4.6 & 5.5 & 8.5 & 6.1 & -2.8
+Mean\tnote{b} & Matching only & 6.0 & 7.7 & 7.2 & 10.0 & 9.0 & 9.7 & 10.5 & 9.2 & 9.3 &
+& Matching + weights & 5.7 & 6.6 & 6.5 & 9.5 & 8.2 & 8.2 & 7.6 & 7.2 & 7.9 & -1.3
+& \Delta & -0.3 & -1.1 & -0.7 & -0.5 & -0.8 & -1.5 & -2.9 & -2.0 & &
+
+===== A1_all: Drop every Supplement C / hand-fix flag above
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.5 & & 2.9 & & 1.7 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 5.4 & 4.4 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.2 &
+& Matching + weights & 5.1 & 2.1 & 2.2 & & & & & & 3.5 & -2.7
+US House & Matching only & 9.5 & 8.7 & 7.6 & 8.4 & 8.2 & 8.1 & 10.3 & 11.5 & 9.1 &
+& Matching + weights & 8.8 & 10.0 & 9.6 & 9.0 & 9.6 & 8.4 & 8.0 & 9.9 & 9.2 & +0.1
+Governor & Matching only & 4.8 & 5.9 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.2 &
+& Matching + weights & 4.7 & 3.5 & 3.4 & & & & & & 3.7 & -1.5
+Attorney general & Matching only & \textcolor{gray}{--} & 13.0 & 15.4 & 9.5 & 6.5 & 7.2 & 11.8 & 12.9 & 11.1 &
+& Matching + weights & & 12.2 & 15.2 & 8.2 & 4.9 & 4.3 & 3.0 & 7.6 & 8.8 & -2.3
+Secretary of state & Matching only & \textcolor{gray}{--} & 6.8 & 9.7 & 9.2 & 10.0 & 5.9 & 11.0 & 12.5 & 9.1 &
+& Matching + weights & & 6.5 & 10.9 & 8.4 & 9.6 & 3.6 & 3.7 & 6.2 & 6.9 & -2.2
+State senator & Matching only & 6.0 & 10.0 & 8.1 & 10.2 & 9.6 & 7.5 & 13.4 & 14.6 & 10.3 &
+& Matching + weights & 5.6 & 9.9 & 7.5 & 7.7 & 8.1 & 4.5 & 6.4 & 8.8 & 7.5 & -2.9
+State representative & Matching only & 5.5 & 6.6 & 5.8 & 9.0 & 8.7 & 7.3 & 11.9 & 13.7 & 9.1 &
+& Matching + weights & 4.8 & 5.6 & 6.7 & 6.5 & 6.3 & 4.6 & 5.6 & 8.5 & 6.2 & -2.9
+Mean\tnote{b} & Matching only & 6.0 & 8.1 & 8.0 & 10.1 & 9.0 & 9.6 & 10.6 & 9.7 & 9.5 &
+& Matching + weights & 5.7 & 7.1 & 7.2 & 9.7 & 8.2 & 8.2 & 7.6 & 7.5 & 8.2 & -1.3
+& \Delta & -0.3 & -1.0 & -0.8 & -0.4 & -0.8 & -1.4 & -3.0 & -2.2 & &
+
+===== A1_all_plus_gt90: A1_all plus races with winner > 90%
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.9 & \textcolor{gray}{--} & 4.5 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.6 & & 2.9 & & 1.8 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 5.5 & 4.4 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.2 &
+& Matching + weights & 5.1 & 2.1 & 2.2 & & & & & & 3.5 & -2.7
+US House & Matching only & 9.5 & 8.7 & 7.4 & 8.3 & 8.2 & 8.1 & 10.1 & 11.5 & 9.1 &
+& Matching + weights & 8.8 & 9.9 & 9.7 & 8.9 & 9.3 & 8.5 & 7.9 & 10.1 & 9.2 & +0.1
+Governor & Matching only & 4.8 & 5.9 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.2 &
+& Matching + weights & 4.7 & 3.5 & 3.4 & & & & & & 3.7 & -1.5
+Attorney general & Matching only & \textcolor{gray}{--} & 9.5 & 4.5 & 8.9 & 6.5 & 6.6 & 11.8 & 10.2 & 8.7 &
+& Matching + weights & & 8.5 & 5.2 & 7.5 & 4.9 & 3.6 & 3.0 & 4.6 & 6.0 & -2.7
+Secretary of state & Matching only & \textcolor{gray}{--} & 6.8 & 9.7 & 9.2 & 10.0 & 5.9 & 11.0 & 10.1 & 8.6 &
+& Matching + weights & & 6.5 & 10.9 & 8.4 & 9.6 & 3.6 & 3.7 & 4.5 & 6.7 & -1.9
+State senator & Matching only & 6.0 & 8.1 & 8.1 & 10.2 & 9.6 & 7.5 & 13.4 & 14.6 & 10.1 &
+& Matching + weights & 5.6 & 8.1 & 7.5 & 7.7 & 8.1 & 4.5 & 6.4 & 8.8 & 7.2 & -2.9
+State representative & Matching only & 5.5 & 6.6 & 5.8 & 9.0 & 8.7 & 7.3 & 11.9 & 13.7 & 9.1 &
+& Matching + weights & 4.8 & 5.6 & 6.7 & 6.5 & 6.3 & 4.6 & 5.6 & 8.5 & 6.2 & -2.9
+Mean\tnote{b} & Matching only & 6.0 & 7.7 & 7.3 & 10.0 & 9.0 & 9.5 & 10.6 & 9.2 & 9.3 &
+& Matching + weights & 5.7 & 6.7 & 6.5 & 9.6 & 8.2 & 8.1 & 7.6 & 7.1 & 8.0 & -1.3
+& \Delta & -0.3 & -1.0 & -0.8 & -0.4 & -0.8 & -1.4 & -3.0 & -2.1 & &
+
+===== A2_named_only: Keep only items that named candidates (drops all state legislative)
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.5 & & 2.9 & & 1.7 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 6.1 & 4.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.3 &
+& Matching + weights & 5.1 & 2.0 & 2.4 & & & & & & 3.4 & -2.9
+US House & Matching only & 9.6 & 8.8 & 7.7 & 8.5 & 8.1 & 8.1 & 10.1 & 11.5 & 9.1 &
+& Matching + weights & 9.0 & 10.1 & 9.7 & 9.0 & 9.6 & 8.3 & 8.0 & 10.0 & 9.2 & +0.1
+Governor & Matching only & \textcolor{gray}{--} & 6.0 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.4 &
+& Matching + weights & & 3.5 & 3.4 & & & & & & 3.4 & -2.0
+Attorney general & Matching only & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & 7.1 & 11.3 & 12.8 & 10.4 &
+& Matching + weights & & & & & & 4.2 & 3.6 & 7.5 & 5.8 & -4.6
+Secretary of state & Matching only & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & 7.7 & 11.0 & 12.5 & 10.4 &
+& Matching + weights & & & & & & 4.2 & 3.7 & 6.5 & 5.2 & -5.2
+Mean\tnote{b} & Matching only & 6.2 & 7.8 & 7.4 & 10.4 & 9.1 & 10.2 & 10.1 & 8.7 & 9.5 &
+& Matching + weights & 5.9 & 6.5 & 6.1 & 10.7 & 8.6 & 9.1 & 8.0 & 7.3 & 8.0 & -1.5
+& \Delta & -0.3 & -1.3 & -1.3 & +0.3 & -0.5 & -1.1 & -2.1 & -1.4 & &
+
+===== A2_named_statewide: Drop party-label items except state legislative (no named alternative exists)
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.5 & & 2.9 & & 1.7 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 6.1 & 4.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.3 &
+& Matching + weights & 5.1 & 2.0 & 2.4 & & & & & & 3.4 & -2.9
+US House & Matching only & 9.6 & 8.8 & 7.7 & 8.5 & 8.1 & 8.1 & 10.1 & 11.5 & 9.1 &
+& Matching + weights & 9.0 & 10.1 & 9.7 & 9.0 & 9.6 & 8.3 & 8.0 & 10.0 & 9.2 & +0.1
+Governor & Matching only & \textcolor{gray}{--} & 6.0 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.4 &
+& Matching + weights & & 3.5 & 3.4 & & & & & & 3.4 & -2.0
+Attorney general & Matching only & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & 7.1 & 11.3 & 12.8 & 10.4 &
+& Matching + weights & & & & & & 4.2 & 3.6 & 7.5 & 5.8 & -4.6
+Secretary of state & Matching only & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & 7.7 & 11.0 & 12.5 & 10.4 &
+& Matching + weights & & & & & & 4.2 & 3.7 & 6.5 & 5.2 & -5.2
+State senator & Matching only & 5.9 & 9.7 & 8.0 & 13.4 & 9.5 & 7.5 & 13.4 & 14.6 & 10.7 &
+& Matching + weights & 5.5 & 9.7 & 7.4 & 12.1 & 8.1 & 4.5 & 6.4 & 8.8 & 8.2 & -2.6
+State representative & Matching only & 5.4 & 6.2 & 5.7 & 8.7 & 8.6 & 7.2 & 11.7 & 13.6 & 8.9 &
+& Matching + weights & 4.9 & 5.4 & 6.4 & 6.3 & 6.5 & 4.6 & 5.5 & 8.5 & 6.1 & -2.8
+Mean\tnote{b} & Matching only & 6.1 & 7.9 & 7.3 & 10.5 & 9.1 & 9.7 & 10.5 & 9.7 & 9.5 &
+& Matching + weights & 5.8 & 6.7 & 6.2 & 10.4 & 8.4 & 8.2 & 7.6 & 7.6 & 7.9 & -1.7
+& \Delta & -0.3 & -1.2 & -1.1 & -0.1 & -0.7 & -1.5 & -2.9 & -2.1 & &
+
+===== A2_generic_AG_SoS: Drop AG/SoS items with generic 'Democratic/Republican candidate' options (2006-2016)
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Hispanic origin & Matching only & \textcolor{gray}{--} & 7.4 & 8.9 & 8.4 & 8.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 8.2 &
+& Matching + weights & & 7.7 & 8.7 & 8.0 & 8.3 & & & & 8.2 & -0.1
+Family income & Matching only & \textcolor{gray}{\times} & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 3.3 & 4.0 & 4.0 & 4.9 & 7.0 & 4.8 &
+& Matching + weights & & & & 4.5 & 4.4 & 5.2 & 6.6 & 8.6 & 6.1 & +1.2
+Employment status & Matching only & 7.3 & 10.6 & 15.7 & \textcolor{gray}{\times} & \textcolor{gray}{\times} & 12.5 & 12.5 & 11.8 & 12.0 &
+& Matching + weights & 10.8 & 10.7 & 14.0 & & & 13.3 & 13.9 & 12.1 & 12.5 & +0.5
+Union membership & Matching only & 3.7 & 5.4 & 5.3 & 5.2 & 4.8 & 4.9 & 5.5 & 4.8 & 5.0 &
+& Matching + weights & 3.7 & 5.6 & 5.9 & 5.1 & 5.1 & 5.7 & 6.3 & 5.3 & 5.4 & +0.4
+Veteran status & Matching only & 7.2 & 11.2 & 9.4 & 7.0 & 5.6 & 5.4 & 4.5 & 4.6 & 7.2 &
+& Matching + weights & 4.7 & 5.3 & 4.5 & 4.6 & 4.2 & 3.2 & 3.3 & 3.4 & 4.2 & -3.0
+Residence duration & Matching only & 4.2 & 10.4 & 8.8 & 5.8 & 6.1 & \textcolor{gray}{--} & 5.0 & 5.2 & 6.8 &
+& Matching + weights & 6.0 & 7.5 & 4.9 & 5.3 & 5.1 & & 4.2 & 6.2 & 5.7 & -1.1
+Turnout & Matching only & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 41.3 & 32.0 & 37.4 & 27.7 & \textcolor{gray}{\circ} & 35.0 &
+& Matching + weights & & & & 45.1 & 33.4 & 32.4 & 23.6 & & 34.5 & -0.5
+Voting method & Matching only & 4.0 & 4.7 & 6.2 & 3.9 & 5.3 & 5.0 & 8.5 & 8.0 & 5.9 &
+& Matching + weights & 4.5 & 6.0 & 4.8 & 3.5 & 5.5 & 5.0 & 6.8 & 6.3 & 5.4 & -0.5
+President & Matching only & 5.8 & \textcolor{gray}{--} & 4.4 & \textcolor{gray}{--} & 8.1 & \textcolor{gray}{--} & \textcolor{gray}{\circ} & \textcolor{gray}{--} & 6.3 &
+& Matching + weights & 3.5 & & 2.9 & & 1.7 & & & & 2.8 & -3.5
+US Senate & Matching only & 8.0 & 6.1 & 4.3 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 6.3 &
+& Matching + weights & 5.1 & 2.0 & 2.4 & & & & & & 3.4 & -2.9
+US House & Matching only & 9.6 & 8.8 & 7.7 & 8.5 & 8.1 & 8.1 & 10.1 & 11.5 & 9.1 &
+& Matching + weights & 9.0 & 10.1 & 9.7 & 9.0 & 9.6 & 8.3 & 8.0 & 10.0 & 9.2 & +0.1
+Governor & Matching only & 4.8 & 6.0 & 2.8 & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & \textcolor{gray}{\circ} & 5.3 &
+& Matching + weights & 4.7 & 3.5 & 3.4 & & & & & & 3.7 & -1.6
+Attorney general & Matching only & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & 7.1 & 11.3 & 12.8 & 10.4 &
+& Matching + weights & & & & & & 4.2 & 3.6 & 7.5 & 5.8 & -4.6
+Secretary of state & Matching only & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & \textcolor{gray}{--} & 7.7 & 11.0 & 12.5 & 10.4 &
+& Matching + weights & & & & & & 4.2 & 3.7 & 6.5 & 5.2 & -5.2
+State senator & Matching only & 5.9 & 9.7 & 8.0 & 13.4 & 9.5 & 7.5 & 13.4 & 14.6 & 10.7 &
+& Matching + weights & 5.5 & 9.7 & 7.4 & 12.1 & 8.1 & 4.5 & 6.4 & 8.8 & 8.2 & -2.6
+State representative & Matching only & 5.4 & 6.2 & 5.7 & 8.7 & 8.6 & 7.2 & 11.7 & 13.6 & 8.9 &
+& Matching + weights & 4.9 & 5.4 & 6.4 & 6.3 & 6.5 & 4.6 & 5.5 & 8.5 & 6.1 & -2.8
+Mean\tnote{b} & Matching only & 6.0 & 7.9 & 7.3 & 10.5 & 9.1 & 9.7 & 10.5 & 9.7 & 9.5 &
+& Matching + weights & 5.7 & 6.7 & 6.2 & 10.4 & 8.4 & 8.2 & 7.6 & 7.6 & 7.9 & -1.6
+& \Delta & -0.3 & -1.2 & -1.1 & -0.1 & -0.7 & -1.5 & -2.9 & -2.1 & &
+

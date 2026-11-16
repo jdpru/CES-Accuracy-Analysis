@@ -1,0 +1,324 @@
+===== base: No exclusions (should reproduce committed numbers)
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.3 & & 2.3 & -7.7
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.9 & 7.3 & 5.9 & 9.9 & 9.9 & 8.0 &
+& Matching + weights & & & & 3.1 & 4.0 & 4.5 & 3.3 & 4.8 & 4.0 & -4.0
+Governor & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.1 & 5.8 & 11.0 & 10.9 & 7.9 &
+& Matching + weights & & & & 3.5 & 4.0 & 4.2 & 4.3 & 5.7 & 4.5 & -3.4
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 7.9 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 5.1 & 4.6 & 4.1 & 10.0 & 8.1 & -2.7
+& \Delta & -1.1 & -5.2 & -2.2 & -1.8 & -2.8 & -2.1 & -4.7 & -2.1 & &
+
+===== A1_list_mismatch: Drop 4 retained CES/ballot list mismatches
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.3 & & 2.3 & -7.7
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.7 & 7.3 & 5.9 & 9.9 & 9.9 & 8.0 &
+& Matching + weights & & & & 3.2 & 4.0 & 4.5 & 3.3 & 4.8 & 4.0 & -4.0
+Governor & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.1 & 5.8 & 11.0 & 10.9 & 7.9 &
+& Matching + weights & & & & 3.5 & 4.0 & 4.2 & 4.3 & 5.7 & 4.5 & -3.4
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 7.9 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 5.1 & 4.6 & 4.1 & 10.0 & 8.1 & -2.6
+& \Delta & -1.1 & -5.2 & -2.2 & -1.8 & -2.8 & -2.1 & -4.7 & -2.1 & &
+
+===== A1_nominee_bench: Drop 8 contests benchmarked to a nominee
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.3 & & 2.3 & -7.7
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.9 & 7.3 & 6.0 & 9.9 & 9.9 & 8.0 &
+& Matching + weights & & & & 3.1 & 2.8 & 4.4 & 3.3 & 4.8 & 3.8 & -4.3
+Governor & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.1 & 5.8 & 11.0 & 10.9 & 7.9 &
+& Matching + weights & & & & 3.5 & 4.0 & 4.2 & 4.3 & 5.7 & 4.5 & -3.4
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 7.9 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 4.9 & 4.6 & 4.1 & 10.0 & 8.0 & -2.7
+& \Delta & -1.1 & -5.2 & -2.2 & -1.8 & -3.0 & -2.1 & -4.7 & -2.1 & &
+
+===== A1_fusion: Drop contests with fusion-line aggregation
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.3 & & 2.3 & -7.7
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.9 & 7.6 & 6.0 & 9.9 & 9.7 & 8.0 &
+& Matching + weights & & & & 3.1 & 4.2 & 4.6 & 3.3 & 3.8 & 3.8 & -4.2
+Governor & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.1 & 5.8 & 11.0 & 10.9 & 7.9 &
+& Matching + weights & & & & 3.5 & 4.0 & 4.2 & 4.3 & 5.7 & 4.5 & -3.4
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 8.0 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 5.2 & 4.6 & 4.1 & 9.8 & 8.0 & -2.7
+& \Delta & -1.1 & -5.2 & -2.2 & -1.8 & -2.8 & -2.1 & -4.7 & -2.3 & &
+
+===== A1_special: Drop contests benchmarked to a special election
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.3 & & 2.3 & -7.7
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.6 & 7.3 & 5.9 & 9.9 & 9.9 & 7.9 &
+& Matching + weights & & & & 3.1 & 4.0 & 4.5 & 3.3 & 4.8 & 4.0 & -3.9
+Governor & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.3 & 5.8 & 11.0 & 10.9 & 7.9 &
+& Matching + weights & & & & 3.5 & 4.1 & 4.2 & 4.3 & 5.7 & 4.5 & -3.4
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 7.9 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 5.2 & 4.6 & 4.1 & 10.0 & 8.1 & -2.6
+& \Delta & -1.1 & -5.2 & -2.2 & -1.8 & -2.7 & -2.1 & -4.7 & -2.1 & &
+
+===== A1_hand_fixes: Drop contests with hand-corrected CES or returns data
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.3 & & 2.3 & -7.7
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.9 & 7.3 & 5.9 & 9.9 & 9.9 & 8.0 &
+& Matching + weights & & & & 3.1 & 4.0 & 4.5 & 3.3 & 4.8 & 4.0 & -4.0
+Governor & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.1 & 5.8 & 11.0 & 10.9 & 8.0 &
+& Matching + weights & & & & 3.5 & 4.0 & 4.2 & 4.3 & 5.7 & 4.5 & -3.5
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 7.9 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 5.1 & 4.6 & 4.1 & 10.0 & 8.1 & -2.7
+& \Delta & -1.1 & -5.2 & -2.2 & -1.8 & -2.8 & -2.1 & -4.7 & -2.1 & &
+
+===== U_gt90: Drop races with winner > 90%
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.4 & & 2.4 & -7.8
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.6 & 7.3 & 5.9 & 9.9 & 9.9 & 7.9 &
+& Matching + weights & & & & 3.1 & 4.0 & 4.5 & 3.3 & 4.8 & 4.0 & -3.9
+Governor & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.1 & 5.8 & 11.0 & 10.9 & 7.9 &
+& Matching + weights & & & & 3.5 & 4.0 & 4.2 & 4.3 & 5.7 & 4.5 & -3.4
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 7.9 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 5.1 & 4.6 & 4.1 & 10.0 & 8.1 & -2.7
+& \Delta & -1.1 & -5.2 & -2.2 & -1.8 & -2.8 & -2.1 & -4.7 & -2.1 & &
+
+===== A1_all: Drop every Supplement C / hand-fix flag above
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.3 & & 2.3 & -7.7
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.4 & 7.6 & 6.2 & 9.9 & 9.7 & 8.0 &
+& Matching + weights & & & & 3.2 & 2.9 & 4.5 & 3.3 & 3.8 & 3.6 & -4.5
+Governor & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.3 & 5.8 & 11.0 & 10.9 & 8.0 &
+& Matching + weights & & & & 3.5 & 4.1 & 4.2 & 4.3 & 5.7 & 4.5 & -3.5
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 8.0 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.9 & 5.0 & 4.6 & 4.1 & 9.8 & 8.0 & -2.7
+& \Delta & -1.1 & -5.2 & -2.2 & -1.7 & -3.0 & -2.1 & -4.7 & -2.3 & &
+
+===== A1_all_plus_gt90: A1_all plus races with winner > 90%
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.4 & & 2.4 & -7.8
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.0 & 7.6 & 6.2 & 9.9 & 9.7 & 8.0 &
+& Matching + weights & & & & 3.3 & 2.9 & 4.5 & 3.3 & 3.8 & 3.6 & -4.4
+Governor & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.3 & 5.8 & 11.0 & 10.9 & 8.0 &
+& Matching + weights & & & & 3.5 & 4.1 & 4.2 & 4.3 & 5.7 & 4.5 & -3.5
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.5 & 8.0 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.9 & 5.0 & 4.6 & 4.1 & 9.8 & 8.0 & -2.7
+& \Delta & -1.1 & -5.2 & -2.2 & -1.6 & -3.0 & -2.1 & -4.7 & -2.3 & &
+
+===== A2_named_only: Keep only items that named candidates (drops all state legislative)
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.3 & & 2.3 & -7.7
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.9 & 7.3 & 5.9 & 9.9 & 9.9 & 8.0 &
+& Matching + weights & & & & 3.1 & 4.0 & 4.5 & 3.3 & 4.8 & 4.0 & -4.0
+Governor & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.1 & 5.8 & 11.0 & 10.9 & 7.9 &
+& Matching + weights & & & & 3.5 & 4.0 & 4.2 & 4.3 & 5.7 & 4.5 & -3.4
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 7.9 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 5.1 & 4.6 & 4.1 & 10.0 & 8.1 & -2.7
+& \Delta & -1.1 & -5.2 & -2.2 & -1.8 & -2.8 & -2.1 & -4.7 & -2.1 & &
+
+===== A2_named_statewide: Drop party-label items except state legislative (no named alternative exists)
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.3 & & 2.3 & -7.7
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.9 & 7.3 & 5.9 & 9.9 & 9.9 & 8.0 &
+& Matching + weights & & & & 3.1 & 4.0 & 4.5 & 3.3 & 4.8 & 4.0 & -4.0
+Governor & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.1 & 5.8 & 11.0 & 10.9 & 7.9 &
+& Matching + weights & & & & 3.5 & 4.0 & 4.2 & 4.3 & 5.7 & 4.5 & -3.4
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 7.9 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 5.1 & 4.6 & 4.1 & 10.0 & 8.1 & -2.7
+& \Delta & -1.1 & -5.2 & -2.2 & -1.8 & -2.8 & -2.1 & -4.7 & -2.1 & &
+
+===== A2_generic_AG_SoS: Drop AG/SoS items with generic 'Democratic/Republican candidate' options (2006-2016)
+& & {Year} & &
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & \Delta
+Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 &
+& Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & -5.0
+Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 &
+& Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & -1.4
+Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 9.2 & 9.3 & 5.3 & 8.2 &
+& Matching + weights & & & & & & 8.7 & 8.2 & 3.8 & 7.2 & -0.9
+Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 &
+& Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & -3.2
+Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.2 &
+& Matching + weights & 3.5 & 3.9 & 3.8 & & & & & & 3.7 & -0.5
+Employment status & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 12.5 & 10.8 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 11.7 &
+& Matching + weights & & & & 12.0 & 12.8 & & & & 12.4 & +0.7
+Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 37.4 & 35.4 &
+& Matching + weights & 22.9 & 29.2 & 35.4 & & & & & 45.6 & 34.3 & -1.1
+President & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & \textcolor{gray}{\cdot} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 &
+& Matching + weights & & & & & & & 2.3 & & 2.3 & -7.7
+US Senate & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 5.9 & 7.3 & 5.9 & 9.9 & 9.9 & 8.0 &
+& Matching + weights & & & & 3.1 & 4.0 & 4.5 & 3.3 & 4.8 & 4.0 & -4.0
+Governor & Matching only & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & \textcolor{gray}{\cdot} & 4.8 & 7.1 & 5.8 & 11.0 & 10.9 & 7.9 &
+& Matching + weights & & & & 3.5 & 4.0 & 4.2 & 4.3 & 5.7 & 4.5 & -3.4
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 7.9 & 6.7 & 8.8 & 12.1 & 10.7 &
+& Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 5.1 & 4.6 & 4.1 & 10.0 & 8.1 & -2.7
+& \Delta & -1.1 & -5.2 & -2.2 & -1.8 & -2.8 & -2.1 & -4.7 & -2.1 & &
+

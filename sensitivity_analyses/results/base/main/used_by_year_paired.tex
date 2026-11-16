@@ -1,0 +1,62 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\makebox[\textwidth][c]{%
+\begin{threeparttable}
+\caption{RMSE with and without CES weights for variables used in matching or weighting.}
+\label{tab:used_by_year_paired}
+\begin{tabular}{llcccccccccc}
+\toprule
+ & & \multicolumn{8}{c}{Year} & & \\
+\cmidrule(lr){3-10}
+Variable & Estimate & 2008 & 2010 & 2012 & 2014 & 2016 & 2018 & 2020 & 2022 & Pooled\tnote{a} & $\Delta$ \\
+\midrule
+\multicolumn{12}{l}{Demographic} \\
+\addlinespace[0.1em]
+~~Age group & Matching only & 6.4 & 12.4 & 9.8 & 7.6 & 8.8 & 7.6 & 8.9 & 8.4 & 8.9 & \\
+ & Matching + weights & 4.5 & 5.3 & 3.8 & 4.3 & 3.0 & 3.3 & 3.1 & 3.0 & 3.9 & $-$5.0 \\
+\addlinespace[0.1em]
+~~Sex & Matching only & 5.4 & 3.3 & 3.6 & 4.0 & 6.1 & 5.3 & 6.2 & 5.6 & 5.0 & \\
+ & Matching + weights & 6.9 & 5.0 & 1.6 & 2.2 & 1.2 & 3.0 & 2.8 & 3.0 & 3.7 & $-$1.4 \\
+\addlinespace[0.1em]
+~~Hispanic origin & Matching only & \textcolor{gray}{--} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & 9.2 & 9.3 & 5.3 & 8.2 & \\
+ & Matching + weights &  &  &  &  &  & 8.7 & 8.2 & 3.8 & 7.2 & $-$0.9 \\
+\addlinespace[0.1em]
+~~Education & Matching only & 3.9 & 13.8 & 7.7 & 5.0 & 7.3 & 6.4 & 6.1 & 7.1 & 7.7 & \\
+ & Matching + weights & 3.2 & 6.4 & 3.6 & 4.0 & 5.8 & 4.1 & 4.4 & 3.9 & 4.5 & $-$3.2 \\
+\addlinespace[0.1em]
+~~Family income & Matching only & 3.8 & 5.2 & 3.4 & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & 4.2 & \\
+ & Matching + weights & 3.5 & 3.9 & 3.8 &  &  &  &  &  & 3.7 & $-$0.5 \\
+\addlinespace[0.1em]
+~~Employment status & Matching only & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & 12.5 & 10.8 & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & 11.7 & \\
+ & Matching + weights &  &  &  & 12.0 & 12.8 &  &  &  & 12.4 & +0.7 \\
+\addlinespace[0.3em]
+\multicolumn{12}{l}{Non-demographic} \\
+\addlinespace[0.1em]
+~~Turnout & Matching only & 26.9 & 41.3 & 34.4 & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & 37.4 & 35.4 & \\
+ & Matching + weights & 22.9 & 29.2 & 35.4 &  &  &  &  & 45.6 & 34.3 & $-$1.1 \\
+\addlinespace[0.1em]
+~~President & Matching only & \textcolor{gray}{$\cdot$} & \textcolor{gray}{--} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{--} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{--} & 10.1 & \textcolor{gray}{--} & 10.1 & \\
+ & Matching + weights &  &  &  &  &  &  & 2.3 &  & 2.3 & $-$7.7 \\
+\addlinespace[0.1em]
+~~US Senate & Matching only & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & 5.9 & 7.3 & 5.9 & 9.9 & 9.9 & 8.0 & \\
+ & Matching + weights &  &  &  & 3.1 & 4.0 & 4.5 & 3.3 & 4.8 & 4.0 & $-$4.0 \\
+\addlinespace[0.1em]
+~~Governor & Matching only & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & \textcolor{gray}{$\cdot$} & 4.8 & 7.1 & 5.8 & 11.0 & 10.9 & 7.9 & \\
+ & Matching + weights &  &  &  & 3.5 & 4.0 & 4.2 & 4.3 & 5.7 & 4.5 & $-$3.4 \\
+\midrule
+Mean\tnote{b} & Matching only & 9.3 & 15.2 & 11.8 & 6.6 & 7.9 & 6.7 & 8.8 & 12.1 & 10.7 & \\
+ & Matching + weights & 8.2 & 10.0 & 9.6 & 4.8 & 5.1 & 4.6 & 4.1 & 10.0 & 8.1 & $-$2.7 \\
+ & $\Delta$ & $-$1.1 & $-$5.2 & $-$2.2 & $-$1.8 & $-$2.8 & $-$2.1 & $-$4.7 & $-$2.1 & & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} RMSE in percentage points for variables in the years in which they were used in sample matching or in either CES weighting step, 2008--2022. $\Delta$ equals pooled RMSE with CES weights minus pooled matching-only RMSE; negative values indicate lower error after weighting. \textcolor{gray}{$\cdot$} = used in neither matching nor weighting that year (see table~\ref{tab:neither_by_year_paired}); \textcolor{gray}{--} = not measured or office not on the ballot. Non-demographic variables are turnout and candidate choice. Data from 2006 are excluded because that year's matching and weighting variables are undocumented.
+\item[a] Computed once across all of a variable's error observations in the years shown, not as the average of the row, so years with more observations count more.
+\item[b] Arithmetic means; each variable counts equally. Year columns average the variables with an estimate in that year, so the set of variables differs across years; the Pooled column averages the pooled RMSEs. The $\Delta$ row gives each year's weighted mean minus its matching-only mean.
+\end{tablenotes}
+\end{threeparttable}%
+}
+\end{table}

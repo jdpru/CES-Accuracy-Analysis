@@ -1,0 +1,29 @@
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\makebox[\textwidth][c]{%
+\begin{threeparttable}
+\caption{RMSE trends over time for primary and secondary variables.}
+\label{tab:rmse_trend_primary_secondary}
+\begin{tabular}{lrcccrc}
+\toprule
+Estimate & $\beta$ & SE & $p$-value & Perm. $p$ & $N_{\text{vars}}$ & Years \\
+\midrule
+\multicolumn{7}{l}{Panel A: Primary variables (always used in matching or weighting)} \\
+\addlinespace[0.2em]
+~~Matching only & $-$0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022 \\
+~~Matching + weighting & $-$0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022 \\
+\addlinespace[0.3em]
+\multicolumn{7}{l}{Panel B: Secondary variables (never used in matching or weighting)} \\
+\addlinespace[0.2em]
+~~Matching only & 0.112 & 0.066 & 0.090 & 0.134 & 6 & 2006--2022 \\
+~~Matching + weighting & $-$0.016 & 0.040 & 0.687 & 0.743 & 6 & 2006--2022 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Note:} Each row is an OLS regression of year-by-variable RMSE on calendar year with variable fixed effects; $\beta$ is the change in RMSE, in percentage points, per calendar year. Standard errors are HC3 heteroskedasticity-robust; permutation $p$-values are based on 10,000 permutations of year labels. Primary variables (age group, sex, education) were used in matching or weighting in every documented year; secondary variables (union membership, veteran status, voting method, US House, state senator, state representative) were never used in matching or weighting. Because the 2006 CES guide does not document the matching or weighting variables, 2006 variables are assumed secondary, and 2006 is excluded from the primary models.
+\end{tablenotes}
+\end{threeparttable}%
+}
+\end{table}

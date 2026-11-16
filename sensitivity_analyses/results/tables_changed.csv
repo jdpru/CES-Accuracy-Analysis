@@ -1,0 +1,17 @@
+table,base,A1_list_mismatch,A1_nominee_bench,A1_fusion,A1_special,A1_hand_fixes,U_gt90,A1_all,A1_all_plus_gt90,A2_named_only,A2_named_statewide,A2_generic_AG_SoS
+main/ces_comparison.tex,False,True,True,True,True,True,True,True,True,True,True,True
+main/ces_stage_rows.tex,False,False,False,False,False,False,False,False,False,False,False,False
+main/neither_by_year_paired.tex,False,True,True,True,True,True,True,True,True,True,True,True
+main/observation_counts.tex,False,True,True,True,True,True,True,True,True,True,True,True
+main/office_rmse_progressive_race_exclusion.tex,False,True,True,True,True,True,True,True,True,True,True,True
+main/rmse_anesrake_full_table.tex,False,False,False,True,True,True,True,True,True,True,True,False
+main/rmse_trend_primary_secondary_tests.tex,False,True,False,True,True,True,True,True,True,True,True,False
+main/sample_description.tex,False,False,False,False,False,False,False,False,False,False,False,False
+main/states_respondents_by_office.tex,False,True,True,True,True,True,True,True,True,True,True,True
+main/used_by_year_paired.tex,False,True,True,True,True,True,True,True,True,True,True,False
+main/vars_used_by_anesrake.tex,False,False,False,False,False,False,False,False,False,False,False,False
+supplementary/cps_sample_description.tex,False,False,False,False,False,False,False,False,False,False,False,False
+supplementary/data_sources.tex,False,False,False,False,False,False,False,False,False,False,False,False
+supplementary/national_anesrake_variables_accuracy.tex,False,False,False,False,False,False,False,False,False,False,False,False
+supplementary/rmse_demographic_candidate_choice_weighting_comparison_vertical.tex,False,True,True,True,True,True,True,True,True,False,False,False
+supplementary/us_house_rmse_grid.tex,False,True,False,True,True,True,True,True,True,True,True,False

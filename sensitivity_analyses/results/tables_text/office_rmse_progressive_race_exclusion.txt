@@ -1,0 +1,156 @@
+===== base: No exclusions (should reproduce committed numbers)
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (204)
+US Senate & 4.0 (185) & 4.0 (278) & 4.1 (301) & 4.1 (301) & 4.1 (303)
+US House & 9.0 (1,399) & 9.2 (2,793) & 9.2 (3,427) & 9.4 (3,651) & 9.4 (3,841)
+Governor & 4.1 (166) & 4.1 (213) & 4.4 (225) & 4.4 (225) & 4.4 (225)
+Attorney general & 5.2 (103) & 5.1 (151) & 5.9 (162) & 6.0 (164) & 9.5 (175)
+Secretary of state & 5.2 (92) & 5.5 (131) & 6.0 (139) & 6.7 (143) & 7.8 (146)
+State senator & 5.9 (221) & 6.5 (315) & 7.5 (354) & 7.7 (362) & 8.5 (364)
+State representative & 5.4 (260) & 5.9 (364) & 6.3 (394) & 6.3 (396) & 6.3 (396)
+Mean & 5.2 & 5.4 & 5.8 & 5.9 & 6.6
+
+===== A1_list_mismatch: Drop 4 retained CES/ballot list mismatches
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (204)
+US Senate & 4.1 (183) & 4.1 (276) & 4.1 (299) & 4.1 (299) & 4.1 (301)
+US House & 9.0 (1,399) & 9.2 (2,792) & 9.2 (3,426) & 9.4 (3,650) & 9.4 (3,840)
+Governor & 4.1 (166) & 4.1 (213) & 4.4 (225) & 4.4 (225) & 4.4 (225)
+Attorney general & 5.2 (103) & 5.1 (151) & 5.9 (162) & 6.0 (164) & 9.5 (175)
+Secretary of state & 5.1 (91) & 5.5 (130) & 6.0 (138) & 6.7 (142) & 7.8 (145)
+State senator & 5.9 (221) & 6.5 (315) & 7.5 (354) & 7.7 (362) & 8.5 (364)
+State representative & 5.4 (260) & 5.9 (364) & 6.3 (394) & 6.3 (396) & 6.3 (396)
+Mean & 5.2 & 5.4 & 5.8 & 5.9 & 6.6
+
+===== A1_nominee_bench: Drop 8 contests benchmarked to a nominee
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (204)
+US Senate & 3.8 (179) & 3.9 (272) & 4.0 (295) & 4.0 (295) & 4.0 (297)
+US House & 9.0 (1,399) & 9.2 (2,793) & 9.2 (3,427) & 9.4 (3,651) & 9.4 (3,841)
+Governor & 4.1 (165) & 4.1 (212) & 4.4 (224) & 4.4 (224) & 4.4 (224)
+Attorney general & 5.2 (103) & 5.1 (151) & 5.9 (162) & 6.0 (164) & 9.5 (175)
+Secretary of state & 5.1 (91) & 5.5 (130) & 6.0 (138) & 6.6 (142) & 7.8 (145)
+State senator & 5.9 (221) & 6.5 (315) & 7.5 (354) & 7.7 (362) & 8.5 (364)
+State representative & 5.4 (260) & 5.9 (364) & 6.3 (394) & 6.3 (396) & 6.3 (396)
+Mean & 5.1 & 5.4 & 5.7 & 5.9 & 6.6
+
+===== A1_fusion: Drop contests with fusion-line aggregation
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (204)
+US Senate & 3.7 (178) & 3.9 (267) & 3.9 (289) & 3.9 (289) & 3.9 (291)
+US House & 9.0 (1,288) & 9.2 (2,615) & 9.2 (3,216) & 9.4 (3,403) & 9.4 (3,559)
+Governor & 4.1 (165) & 4.1 (212) & 4.4 (224) & 4.4 (224) & 4.4 (224)
+Attorney general & 5.3 (98) & 5.2 (144) & 5.9 (155) & 6.1 (157) & 9.7 (168)
+Secretary of state & 5.3 (90) & 5.6 (129) & 6.1 (137) & 6.7 (141) & 7.8 (144)
+State senator & 6.0 (214) & 6.6 (307) & 7.5 (346) & 7.7 (354) & 8.6 (356)
+State representative & 5.3 (246) & 6.0 (340) & 6.3 (370) & 6.3 (372) & 6.3 (372)
+Mean & 5.1 & 5.4 & 5.8 & 5.9 & 6.6
+
+===== A1_special: Drop contests benchmarked to a special election
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (204)
+US Senate & 4.1 (183) & 4.1 (275) & 4.1 (298) & 4.1 (298) & 4.1 (300)
+US House & 9.0 (1,398) & 9.2 (2,789) & 9.2 (3,423) & 9.4 (3,646) & 9.4 (3,836)
+Governor & 4.1 (165) & 4.1 (212) & 4.4 (224) & 4.4 (224) & 4.4 (224)
+Attorney general & 5.2 (103) & 5.1 (151) & 5.9 (162) & 6.0 (164) & 9.5 (175)
+Secretary of state & 5.2 (92) & 5.5 (131) & 6.0 (139) & 6.7 (143) & 7.8 (146)
+State senator & 5.9 (221) & 6.5 (315) & 7.5 (354) & 7.7 (362) & 7.9 (363)
+State representative & 5.4 (260) & 5.9 (364) & 6.3 (394) & 6.3 (396) & 6.3 (396)
+Mean & 5.2 & 5.4 & 5.8 & 5.9 & 6.5
+
+===== A1_hand_fixes: Drop contests with hand-corrected CES or returns data
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (204)
+US Senate & 4.0 (185) & 4.0 (278) & 4.1 (301) & 4.1 (301) & 4.1 (303)
+US House & 9.0 (1,396) & 9.2 (2,790) & 9.2 (3,424) & 9.4 (3,648) & 9.4 (3,838)
+Governor & 4.1 (165) & 4.1 (212) & 4.4 (224) & 4.4 (224) & 4.4 (224)
+Attorney general & 5.2 (103) & 5.1 (150) & 5.9 (161) & 6.0 (163) & 9.5 (174)
+Secretary of state & 5.2 (92) & 5.5 (131) & 6.0 (139) & 6.7 (143) & 7.5 (145)
+State senator & 5.9 (221) & 6.5 (315) & 7.5 (354) & 7.7 (362) & 8.5 (364)
+State representative & 5.4 (254) & 6.0 (358) & 6.3 (388) & 6.3 (390) & 6.3 (390)
+Mean & 5.2 & 5.4 & 5.8 & 5.9 & 6.5
+
+===== U_gt90: Drop races with winner > 90%
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (200)
+US Senate & 4.0 (185) & 4.0 (278) & 4.1 (301) & 4.1 (301) & 4.1 (301)
+US House & 9.0 (1,399) & 9.2 (2,793) & 9.2 (3,427) & 9.4 (3,651) & 9.4 (3,651)
+Governor & 4.1 (166) & 4.1 (213) & 4.4 (225) & 4.4 (225) & 4.4 (225)
+Attorney general & 5.2 (103) & 5.1 (151) & 5.9 (162) & 6.0 (164) & 6.0 (164)
+Secretary of state & 5.2 (92) & 5.5 (131) & 6.0 (139) & 6.7 (143) & 6.7 (143)
+State senator & 5.9 (221) & 6.5 (315) & 7.5 (354) & 7.7 (362) & 7.7 (362)
+State representative & 5.4 (260) & 5.9 (364) & 6.3 (394) & 6.3 (396) & 6.3 (396)
+Mean & 5.2 & 5.4 & 5.8 & 5.9 & 5.9
+
+===== A1_all: Drop every Supplement C / hand-fix flag above
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (204)
+US Senate & 3.5 (169) & 3.7 (257) & 3.8 (279) & 3.8 (279) & 3.8 (281)
+US House & 9.0 (1,284) & 9.2 (2,607) & 9.2 (3,208) & 9.4 (3,394) & 9.4 (3,550)
+Governor & 4.1 (162) & 4.1 (209) & 4.4 (221) & 4.4 (221) & 4.4 (221)
+Attorney general & 5.3 (98) & 5.2 (143) & 5.9 (154) & 6.1 (156) & 9.7 (167)
+Secretary of state & 5.1 (88) & 5.4 (127) & 5.9 (135) & 6.6 (139) & 7.5 (141)
+State senator & 6.0 (214) & 6.6 (307) & 7.5 (346) & 7.7 (354) & 7.9 (355)
+State representative & 5.4 (242) & 6.0 (336) & 6.4 (366) & 6.4 (368) & 6.4 (368)
+Mean & 5.1 & 5.4 & 5.7 & 5.9 & 6.5
+
+===== A1_all_plus_gt90: A1_all plus races with winner > 90%
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (200)
+US Senate & 3.5 (169) & 3.7 (257) & 3.8 (279) & 3.8 (279) & 3.8 (279)
+US House & 9.0 (1,284) & 9.2 (2,607) & 9.2 (3,208) & 9.4 (3,394) & 9.4 (3,394)
+Governor & 4.1 (162) & 4.1 (209) & 4.4 (221) & 4.4 (221) & 4.4 (221)
+Attorney general & 5.3 (98) & 5.2 (143) & 5.9 (154) & 6.1 (156) & 6.1 (156)
+Secretary of state & 5.1 (88) & 5.4 (127) & 5.9 (135) & 6.6 (139) & 6.6 (139)
+State senator & 6.0 (214) & 6.6 (307) & 7.5 (346) & 7.7 (354) & 7.7 (354)
+State representative & 5.4 (242) & 6.0 (336) & 6.4 (366) & 6.4 (368) & 6.4 (368)
+Mean & 5.1 & 5.4 & 5.7 & 5.9 & 5.9
+
+===== A2_named_only: Keep only items that named candidates (drops all state legislative)
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (204)
+US Senate & 3.9 (169) & 3.7 (248) & 3.8 (269) & 3.8 (269) & 3.8 (271)
+US House & 8.7 (1,261) & 9.0 (2,495) & 9.1 (3,060) & 9.2 (3,255) & 9.2 (3,411)
+Governor & 4.1 (138) & 4.2 (171) & 4.2 (178) & 4.2 (178) & 4.2 (178)
+Attorney general & 3.6 (37) & 3.6 (58) & 3.8 (62) & 4.1 (63) & 5.8 (66)
+Secretary of state & 4.2 (32) & 4.3 (52) & 4.5 (54) & 4.5 (54) & 5.2 (55)
+State senator & -- & -- & -- & -- & --
+State representative & -- & -- & -- & -- & --
+Mean & 4.5 & 4.6 & 4.7 & 4.7 & 5.2
+
+===== A2_named_statewide: Drop party-label items except state legislative (no named alternative exists)
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (204)
+US Senate & 3.9 (169) & 3.7 (248) & 3.8 (269) & 3.8 (269) & 3.8 (271)
+US House & 8.7 (1,261) & 9.0 (2,495) & 9.1 (3,060) & 9.2 (3,255) & 9.2 (3,411)
+Governor & 4.1 (138) & 4.2 (171) & 4.2 (178) & 4.2 (178) & 4.2 (178)
+Attorney general & 3.6 (37) & 3.6 (58) & 3.8 (62) & 4.1 (63) & 5.8 (66)
+Secretary of state & 4.2 (32) & 4.3 (52) & 4.5 (54) & 4.5 (54) & 5.2 (55)
+State senator & 5.9 (221) & 6.5 (315) & 7.5 (354) & 7.7 (362) & 8.5 (364)
+State representative & 5.4 (260) & 5.9 (364) & 6.3 (394) & 6.3 (396) & 6.3 (396)
+Mean & 4.8 & 5.0 & 5.2 & 5.3 & 5.7
+
+===== A2_generic_AG_SoS: Drop AG/SoS items with generic 'Democratic/Republican candidate' options (2006-2016)
+& {Maximum winning vote share retained}
+Office & \leq 60\% & \leq 70\% & \leq 80\% & \leq 90\% & \leq 100\%
+President & 2.5 (142) & 2.7 (197) & 2.7 (200) & 2.7 (200) & 2.7 (204)
+US Senate & 4.0 (185) & 4.0 (278) & 4.1 (301) & 4.1 (301) & 4.1 (303)
+US House & 9.0 (1,399) & 9.2 (2,793) & 9.2 (3,427) & 9.4 (3,651) & 9.4 (3,841)
+Governor & 4.1 (166) & 4.1 (213) & 4.4 (225) & 4.4 (225) & 4.4 (225)
+Attorney general & 3.6 (37) & 3.6 (58) & 3.8 (62) & 4.1 (63) & 5.8 (66)
+Secretary of state & 4.2 (32) & 4.3 (52) & 4.5 (54) & 4.5 (54) & 5.2 (55)
+State senator & 5.9 (221) & 6.5 (315) & 7.5 (354) & 7.7 (362) & 8.5 (364)
+State representative & 5.4 (260) & 5.9 (364) & 6.3 (394) & 6.3 (396) & 6.3 (396)
+Mean & 4.8 & 5.1 & 5.3 & 5.4 & 5.8
+
