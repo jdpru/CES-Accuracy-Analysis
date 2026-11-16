@@ -197,8 +197,45 @@ drop_president_nonvotes <- function(returns_data) {
   out
 }
 
+## Collapse fusion lines: a candidate who appears on a major-party line and on
+## minor-party lines (NY Working Families, Conservative, Independence) gets one
+## row with the summed votes and the major party, so those votes count for the
+## candidate and the major party instead of "Other Candidates" / OTHER. Matches
+## the rule the House, Senate, Governor and state-office tables already follow.
+## Candidates with no DEM/REP line are left unchanged.
+collapse_fusion_lines <- function(returns_data) {
+  keys <- c("year", "state", "office", "district", "candidate")
+  flagged <- returns_data %>%
+    group_by(across(all_of(keys))) %>%
+    mutate(
+      .has_dem = any(party_simplified == "DEM"),
+      .has_rep = any(party_simplified == "REP")
+    ) %>%
+    ungroup()
+  both <- flagged %>% filter(.has_dem & .has_rep)
+  if (nrow(both) > 0) {
+    stop("Candidate on both DEM and REP lines: ",
+         paste(unique(both$candidate), collapse = ", "))
+  }
+  fused <- flagged %>% filter(.has_dem | .has_rep)
+  summed <- fused %>%
+    group_by(across(all_of(keys))) %>%
+    summarise(.votes = sum(candidatevotes, na.rm = TRUE), .groups = "drop")
+  major_rows <- fused %>%
+    filter(party_simplified %in% c("DEM", "REP")) %>%
+    group_by(across(all_of(keys))) %>%
+    slice_max(candidatevotes, n = 1, with_ties = FALSE) %>%
+    ungroup() %>%
+    left_join(summed, by = keys) %>%
+    mutate(candidatevotes = .votes) %>%
+    select(-.votes)
+  bind_rows(major_rows, flagged %>% filter(!(.has_dem | .has_rep))) %>%
+    select(-.has_dem, -.has_rep)
+}
+
 assign_president_candidate_numbers <- function(returns_data) {
   returns_data %>%
+    collapse_fusion_lines() %>%
     mutate(
       cand_num = case_when(
         party_simplified == "DEM" & year %notin% c(2008, 2016) ~ 1,
