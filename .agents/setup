@@ -88,16 +88,19 @@ step "Orb agent guidance"
 agents_md="$HOME/.config/amp/AGENTS.md"
 marker="# CES Accuracy Analysis orb notes"
 mkdir -p "$(dirname "$agents_md")"
-if ! grep -Fqx "$marker" "$agents_md" 2>/dev/null; then
-  cat >> "$agents_md" <<'EOF'
-
+# Replace the block on every run so a stale snapshot picks up edits to it.
+if [[ -f "$agents_md" ]]; then
+  awk -v m="$marker" '$0 == m {skip = 1; next} skip && /^- / {next} {skip = 0; print}' "$agents_md" > "$agents_md.tmp"
+  mv "$agents_md.tmp" "$agents_md"
+fi
+cat >> "$agents_md" <<'EOF'
 # CES Accuracy Analysis orb notes
 - R 4.4.2 (renv.lock's version) is at /opt/R/4.4.2, linked into /usr/local/bin. Run R from the repo root so .Rprofile activates renv; the project library already has every package analysisHQ.Rmd loads.
 - New R packages: `renv::install()` pulls Linux binaries from Posit Package Manager via RENV_CONFIG_REPOS_OVERRIDE in ~/.Renviron.
-- Raw CES data (data/CES Data/) and the IPUMS API key are not in the orb, so analysisHQ.Rmd cannot run end to end. tables_and_figures/input_tables/ is committed, so figuresHQ.ipynb runs: `jupyter nbconvert --to notebook --execute figuresHQ.ipynb --output-dir /tmp/nbout` from tables_and_figures/.
+- To run analysisHQ.Rmd: `data/download_ces_data.sh` fetches the raw CES files (4.6 GB) from Harvard Dataverse, and the IPUMS_API_KEY project secret lets the Rmd download CPS extracts. The full run needs more than 8 GB of RAM (a1.large or bigger). Render it with `Rscript -e 'rmarkdown::render("code/analysisHQ.Rmd", output_dir = "/tmp/rmdout")'` from the repo root.
+- tables_and_figures/input_tables/ is committed, so figuresHQ.ipynb runs without the raw data: `jupyter nbconvert --to notebook --execute figuresHQ.ipynb --output-dir /tmp/nbout` from tables_and_figures/.
 - Build the paper with `latexmk -pdf manuscript.tex` from a directory laid out as the README's "Building the Paper" section describes.
 EOF
-fi
 done_step
 
 echo

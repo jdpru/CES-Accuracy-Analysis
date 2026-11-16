@@ -84,7 +84,7 @@ The pipeline has two stages, and the paper is built from their output:
 
 ### Get an IPUMS API Key
 4. I use the IPUMS API to download the relevant CPS data. A free key can be acquired at [https://developer.ipums.org/docs/v2/get-started/](https://developer.ipums.org/docs/v2/get-started/).
-5. Place this key as a string into the variable `USER_IPUMS_API_KEY` in analysisHQ.Rmd. CPS data can also be [downloaded manually from IPUMS](https://cps.ipums.org/cps-action/variables/group) if preferred.
+5. Save the key once with `ipumsr::set_ipums_api_key("your key", save = TRUE)`, which stores it as `IPUMS_API_KEY` in your `~/.Renviron`, then restart R. analysisHQ.Rmd reads it from there; do not paste it into the Rmd. The first run downloads the CPS extracts into `data/IPUMS CPS Artifacts/`, and later runs read those files. CPS data can also be [downloaded manually from IPUMS](https://cps.ipums.org/cps-action/variables/group) if preferred.
 
 ### Open the CES Accuracy Analysis.Rproj file
 6. This should recreate the R environment and set up your working directory properly

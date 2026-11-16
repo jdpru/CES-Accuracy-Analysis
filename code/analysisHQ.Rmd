@@ -6,10 +6,10 @@ date: "2025-04-04"
 
 # Environment Setup --------------------------------------
 ```{r setup, include=FALSE}
-## USER: Set your project root here, something like /Users/jdpruett/Desktop/CES Accuracy Analysis/')
-knitr::opts_knit$set(root.dir = '/Users/jdpruett/Repos/CES Accuracy Analysis/')
+# Project root: {here} finds it from the .here file at the top of the repo.
+knitr::opts_knit$set(root.dir = here::here())
 
-## USER: You will need to set USER_IPUMS_API_KEY to fetch CPS data. Look at section "CPS Datasets" and paste it in there.  
+## USER: You will need an IPUMS API key in the IPUMS_API_KEY environment variable to fetch CPS data. See section "CPS Datasets".
 ```
 
 
@@ -230,30 +230,76 @@ NC_flag_df <- read.csv("data/misc./NC_responents_incorrect_CD.csv") %>%
 skip_conditions <- read.xlsx("data/misc./skip_conditions_final.xlsx")
 ```
 
-#### Optional local CPS load
-#<!--
-This block is intentionally commented out.
+## CPS Datasets
+The IPUMS API key is read from the `IPUMS_API_KEY` environment variable, which
+ipumsr uses by default. Set it once with `ipumsr::set_ipums_api_key("your key", save = TRUE)`
+(a free key is available at https://developer.ipums.org/docs/v2/get-started/), or
+store it as a secret where the code runs. Do not paste the key into this file.
 
-Use it only if you have already downloaded the IPUMS CPS extracts and have the
-`.xml` DDI files plus associated fixed-width data files stored locally in
-`data/IPUMS CPS Artifacts`.
-
-This is a convenience path for reloading local CPS files without submitting new
-extract requests to IPUMS. If you have not already downloaded the CPS data, leave
-this commented out and use the normal IPUMS remote-download workflow instead.
-
+### Prep monthly sample codes and variables
+This is necessary to use the IPUMS API to download CPS data.
 ```{r}
-# Path to the CPS Artifacts folder from this repo. Something like
+# All
 cps_vars_all <- c("WTFINL", "EARNWT", "VOSUPPWT", "STATEFIP", "SEX", "EDUC", "AGE", "CITIZEN", "HISPAN", "OCC", "VETSTAT", "REGION", "EMPSTAT", "CLASSWKR", "UNION", "FAMINC", "VOTERES", "VOREG", "VOTED", "VOWHYNOT", "VOTEHOW")
-cps_artifact_dir <- ""
-cps_artifact_dir <- "/Users/jdpruett/Repos/CES Accuracy Analysis/data/IPUMS CPS Artifacts"
 
-if (!nzchar(cps_artifact_dir)) {
-  stop("cps_artifact_dir is blank. Please set it to the directory containing the CPS XML/DDI files.")
-}
+# 2006
+cps_sample_2006 = c('cps2006_01s', 'cps2006_02b', 'cps2006_03b', 'cps2006_04b', 'cps2006_05s', 'cps2006_06s', 'cps2006_07b', 'cps2006_08s', 'cps2006_09s', 'cps2006_10s', 'cps2006_11s', 'cps2006_12s')
+# 2008
+cps_sample_2008 = c('cps2008_01s', 'cps2008_02b', 'cps2008_03b', 'cps2008_04b', 'cps2008_05s', 'cps2008_06s', 'cps2008_07b', 'cps2008_08s', 'cps2008_09s', 'cps2008_10s', 'cps2008_11s', 'cps2008_12s')
+# 2010
+cps_sample_2010 = c('cps2010_01s', 'cps2010_02b', 'cps2010_03b', 'cps2010_04b','cps2010_05s', 'cps2010_06s','cps2010_07s', 'cps2010_08s', 'cps2010_09s', 'cps2010_10s', 'cps2010_11s', 'cps2010_12s')
+# 2012
+cps_sample_2012 = c('cps2012_01s', 'cps2012_02b', 'cps2012_03b', 'cps2012_04b', 'cps2012_05s', 'cps2012_06s', 'cps2012_07s', 'cps2012_08s', 'cps2012_09s', 'cps2012_10s', 'cps2012_11s', 'cps2012_12s')
+# 2014
+cps_sample_2014 = c('cps2014_01s', 'cps2014_02s', 'cps2014_03b', 'cps2014_04b', 'cps2014_05b', 'cps2014_06s', 'cps2014_07s', 'cps2014_08s', 'cps2014_09s', 'cps2014_10s', 'cps2014_11s', 'cps2014_12s')
+# 2016
+cps_sample_2016 = c('cps2016_01s', 'cps2016_02s', 'cps2016_03b', 'cps2016_04b', 'cps2016_05b', 'cps2016_06s', 'cps2016_07b', 'cps2016_08s', 'cps2016_09s', 'cps2016_10s', 'cps2016_11s', 'cps2016_12s')
+# 2018
+cps_sample_2018 = c('cps2018_01s', 'cps2018_02s', 'cps2018_03b', 'cps2018_04b', 'cps2018_05s', 'cps2018_06s', 'cps2018_07s', 'cps2018_08s', 'cps2018_09s', 'cps2018_10s', 'cps2018_11s', 'cps2018_12s')
+# 2020
+cps_sample_2020 = c('cps2020_01s', 'cps2020_02s', 'cps2020_03b', 'cps2020_04b', 'cps2020_05b', 'cps2020_06s', 'cps2020_07b', 'cps2020_08s', 'cps2020_09b', 'cps2020_10s', 'cps2020_11s', 'cps2020_12s')
+# 2022
+cps_sample_2022 = c('cps2022_01s', 'cps2022_02s', 'cps2022_03b', 'cps2022_04s', 'cps2022_05s', 'cps2022_06s', 'cps2022_07s', 'cps2022_08s', 'cps2022_09s', 'cps2022_10s', 'cps2022_11s', 'cps2022_12s')
+```
 
+### Download CPS extracts
+If `data/IPUMS CPS Artifacts` has no extracts yet, this submits one IPUMS extract
+per year and downloads the xml (metadata) and .dat.gz (compressed raw data) files
+there. Later runs skip this and read the local files. Delete the folder's contents
+to download fresh extracts.
+```{r}
+cps_artifact_dir <- here("data/IPUMS CPS Artifacts")
 target_years <- seq(2006, 2022, by = 2)
 
+if (length(list.files(cps_artifact_dir, pattern = "\\.xml$")) == 0) {
+  if (!nzchar(Sys.getenv("IPUMS_API_KEY"))) {
+    stop(
+      "IPUMS_API_KEY is not set and data/IPUMS CPS Artifacts is empty. Create a free IPUMS API key at https://developer.ipums.org/docs/v2/get-started/, then run ipumsr::set_ipums_api_key(\"your key\", save = TRUE) and restart R.",
+      call. = FALSE
+    )
+  }
+
+  # Submit every year first so IPUMS processes them in parallel, then wait for each.
+  cps_extracts <- map(target_years, function(year) {
+    define_extract_micro(
+      collection = "cps",
+      description = paste("CPS Extract for", year),
+      samples = get(paste0("cps_sample_", year)),
+      variables = cps_vars_all
+    ) %>%
+      submit_extract()
+  })
+
+  walk(cps_extracts, function(extract) {
+    extract %>%
+      wait_for_extract() %>%
+      download_extract(download_dir = cps_artifact_dir)
+  })
+}
+```
+
+### Read in CPS datasets to global environment
+```{r}
 ddi_files <- list.files(
   cps_artifact_dir,
   pattern = "\\.xml$",
@@ -296,85 +342,13 @@ cps_raw_list <- setNames(
   map_chr(cps_loaded, "name")
 )
 
+missing_cps_years <- setdiff(target_years, map_dbl(cps_loaded, "year"))
+if (length(missing_cps_years)) {
+  stop("No CPS extract in data/IPUMS CPS Artifacts for: ", paste(missing_cps_years, collapse = ", "), call. = FALSE)
+}
+
 list2env(cps_raw_list, envir = .GlobalEnv)
 ```
-#-->
-
-<!--
-## CPS Datasets
-```{r}
-# # Set IPUMS API Key (specific to user, free to acquire on IPUMS site)
-# USER_IPUMS_API_KEY = ""
-# 
-# 
-# if (USER_IPUMS_API_KEY == "") {
-#   stop(
-#     "USER_IPUMS_API_KEY is blank. Create a free IPUMS API key at https://developer.ipums.org/docs/v2/get-started/, then paste it into USER_IPUMS_API_KEY and re-run from this point",
-#     call. = FALSE
-#   )
-# }
-# 
-# set_ipums_api_key(USER_IPUMS_API_KEY, save = TRUE, overwrite = TRUE)
-```
-
-
-### Prep monthly sample codes and variables
-This is necessary to use the IPUMS API to download CPS data.
-```{r}
-# All
-cps_vars_all <- c("WTFINL", "EARNWT", "VOSUPPWT", "STATEFIP", "SEX", "EDUC", "AGE", "CITIZEN", "HISPAN", "OCC", "VETSTAT", "REGION", "EMPSTAT", "CLASSWKR", "UNION", "FAMINC", "VOTERES", "VOREG", "VOTED", "VOWHYNOT", "VOTEHOW")
-
-# 2006
-cps_sample_2006 = c('cps2006_01s', 'cps2006_02b', 'cps2006_03b', 'cps2006_04b', 'cps2006_05s', 'cps2006_06s', 'cps2006_07b', 'cps2006_08s', 'cps2006_09s', 'cps2006_10s', 'cps2006_11s', 'cps2006_12s')
-# 2008
-cps_sample_2008 = c('cps2008_01s', 'cps2008_02b', 'cps2008_03b', 'cps2008_04b', 'cps2008_05s', 'cps2008_06s', 'cps2008_07b', 'cps2008_08s', 'cps2008_09s', 'cps2008_10s', 'cps2008_11s', 'cps2008_12s')
-# 2010
-cps_sample_2010 = c('cps2010_01s', 'cps2010_02b', 'cps2010_03b', 'cps2010_04b','cps2010_05s', 'cps2010_06s','cps2010_07s', 'cps2010_08s', 'cps2010_09s', 'cps2010_10s', 'cps2010_11s', 'cps2010_12s')
-# 2012
-cps_sample_2012 = c('cps2012_01s', 'cps2012_02b', 'cps2012_03b', 'cps2012_04b', 'cps2012_05s', 'cps2012_06s', 'cps2012_07s', 'cps2012_08s', 'cps2012_09s', 'cps2012_10s', 'cps2012_11s', 'cps2012_12s')
-# 2014
-cps_sample_2014 = c('cps2014_01s', 'cps2014_02s', 'cps2014_03b', 'cps2014_04b', 'cps2014_05b', 'cps2014_06s', 'cps2014_07s', 'cps2014_08s', 'cps2014_09s', 'cps2014_10s', 'cps2014_11s', 'cps2014_12s')
-# 2016
-cps_sample_2016 = c('cps2016_01s', 'cps2016_02s', 'cps2016_03b', 'cps2016_04b', 'cps2016_05b', 'cps2016_06s', 'cps2016_07b', 'cps2016_08s', 'cps2016_09s', 'cps2016_10s', 'cps2016_11s', 'cps2016_12s')
-# 2018
-cps_sample_2018 = c('cps2018_01s', 'cps2018_02s', 'cps2018_03b', 'cps2018_04b', 'cps2018_05s', 'cps2018_06s', 'cps2018_07s', 'cps2018_08s', 'cps2018_09s', 'cps2018_10s', 'cps2018_11s', 'cps2018_12s')
-# 2020
-cps_sample_2020 = c('cps2020_01s', 'cps2020_02s', 'cps2020_03b', 'cps2020_04b', 'cps2020_05b', 'cps2020_06s', 'cps2020_07b', 'cps2020_08s', 'cps2020_09b', 'cps2020_10s', 'cps2020_11s', 'cps2020_12s')
-# 2022
-cps_sample_2022 = c('cps2022_01s', 'cps2022_02s', 'cps2022_03b', 'cps2022_04s', 'cps2022_05s', 'cps2022_06s', 'cps2022_07s', 'cps2022_08s', 'cps2022_09s', 'cps2022_10s', 'cps2022_11s', 'cps2022_12s')
-```
-
-### Read in CPS datasets to global environment
-Note this creates xml (metadata) and .dat.giz (compressed raw data) files in the data/IPUMS CPS Artifacts subdirectory
-```{r}
-extract_codes <- list()
-
-for (year in seq(2006, 2022, by = 2)) {
-  suffix <- substr(year, 3, 4)
-  extract_name <- paste("CPS Extract for", year)
-  cps_sample_var <- paste("cps_sample", year, sep = "_")
-  df_name <- paste("CPS", suffix, "raw", sep = "_")
-
-  extract_code <- paste0(
-    "  define_extract_micro(\n",
-    "    collection = \"cps\",\n",
-    "    description = \"", extract_name, "\",\n",
-    "    samples = ", cps_sample_var, ",\n",
-    "    variables = cps_vars_all) %>%\n",
-    "  submit_extract() %>%\n",
-    "  wait_for_extract() %>%\n",
-    "  download_extract(download_dir = \"data/IPUMS CPS Artifacts\") %>%\n",
-    "  read_ipums_micro()"
-  )
-
-  extract_codes[[df_name]] <- extract_code
-}
-
-for (df_name in names(extract_codes)) {
-  assign(df_name, eval(parse(text = extract_codes[[df_name]])), envir = .GlobalEnv)
-}
-```
--->
 
 ## Subset datasets --------------
 Subset CES to only include relevant variables

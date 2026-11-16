@@ -79,6 +79,6 @@ Other files in `misc./` (e.g. `CES_Reported_Errors.xlsx`) may be for reference o
 
 ## IPUMS CPS Artifacts/
 
-Used by the **ipumsr** R package when pulling Current Population Survey data via the IPUMS API. The **CPS Data** chunk in `analysisHQ.Rmd` defines extracts, submits them, and downloads results into `data/IPUMS CPS Artifacts/`. You need a free [IPUMS API key](https://developer.ipums.org/docs/v2/get-started/) stored as `USER_IPUMS_API_KEY` in the Rmd. Alternatively, you can download CPS data manually from [IPUMS CPS](https://cps.ipums.org/cps-action/variables/group) and place or point the code to the right location.
+Used by the **ipumsr** R package when pulling Current Population Survey data via the IPUMS API. The **CPS Datasets** section of `analysisHQ.Rmd` defines extracts, submits them, and downloads results into `data/IPUMS CPS Artifacts/` when that folder has no extracts; otherwise it reads the files already there. You need a free [IPUMS API key](https://developer.ipums.org/docs/v2/get-started/) in the `IPUMS_API_KEY` environment variable (`ipumsr::set_ipums_api_key("your key", save = TRUE)`). Alternatively, you can download CPS data manually from [IPUMS CPS](https://cps.ipums.org/cps-action/variables/group) and place the `.xml` and `.dat.gz` files in that folder.
 
 Contents of this folder (e.g. `.xml`, `.dat.gz`) are gitignored; only the directory structure is kept in the repo.
