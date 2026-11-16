@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Orb resume: runs after the orb first starts and every time it wakes.
+# analysisHQ.Rmd's full run needs more memory than an a1.large orb lets
+# processes use (about 14.8 GB), so keep a swapfile on to absorb the overflow.
+set -euo pipefail
+
+swapfile=/swapfile
+swap_gb=16
+
+if awk 'NR > 1 {print $1}' /proc/swaps | grep -qx "$swapfile"; then
+  exit 0
+fi
+
+if [[ ! -f "$swapfile" ]]; then
+  free_gb=$(df --output=avail -BG / | tail -1 | tr -dc '0-9')
+  if ((free_gb < swap_gb + 10)); then
+    echo "Skipping swap: only ${free_gb} GB free on /" >&2
+    exit 0
+  fi
+  sudo fallocate -l "${swap_gb}G" "$swapfile"
+  sudo chmod 600 "$swapfile"
+  sudo mkswap -q "$swapfile"
+fi
+
+sudo swapon "$swapfile"
+echo "Swap on: $swapfile (${swap_gb} GB)"

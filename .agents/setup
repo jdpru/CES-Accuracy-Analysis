@@ -97,7 +97,7 @@ cat >> "$agents_md" <<'EOF'
 # CES Accuracy Analysis orb notes
 - R 4.4.2 (renv.lock's version) is at /opt/R/4.4.2, linked into /usr/local/bin. Run R from the repo root so .Rprofile activates renv; the project library already has every package analysisHQ.Rmd loads.
 - New R packages: `renv::install()` pulls Linux binaries from Posit Package Manager via RENV_CONFIG_REPOS_OVERRIDE in ~/.Renviron.
-- To run analysisHQ.Rmd: `data/download_ces_data.sh` fetches the raw CES files (4.6 GB) from Harvard Dataverse, and the IPUMS_API_KEY project secret lets the Rmd download CPS extracts. The full run needs more than 8 GB of RAM (a1.large or bigger). Render it with `Rscript -e 'rmarkdown::render("code/analysisHQ.Rmd", output_dir = "/tmp/rmdout")'` from the repo root.
+- To run analysisHQ.Rmd: `data/download_ces_data.sh` fetches the raw CES files (4.6 GB) from Harvard Dataverse, and the IPUMS_API_KEY project secret lets the Rmd download CPS extracts. The full run's working set is about 18 GB: on a1.large (about 14.8 GB usable) it relies on the 16 GB /swapfile that .agents/resume turns on, and it takes about 20 minutes. Render it with `Rscript -e 'rmarkdown::render("code/analysisHQ.Rmd", output_dir = "/tmp/rmdout")'` from the repo root.
 - tables_and_figures/input_tables/ is committed, so figuresHQ.ipynb runs without the raw data: `jupyter nbconvert --to notebook --execute figuresHQ.ipynb --output-dir /tmp/nbout` from tables_and_figures/.
 - Build the paper with `latexmk -pdf manuscript.tex` from a directory laid out as the README's "Building the Paper" section describes.
 EOF
