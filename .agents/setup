@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+# Orb setup: R 4.4.2 + renv library, Python notebook stack, pandoc, and LaTeX.
+# Runs on a fresh orb and again on stale snapshots, so every step is idempotent.
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
+R_VERSION="$(jq -r '.R.Version' renv.lock)"
+R_HOME_DIR="/opt/R/$R_VERSION"
+# Posit Package Manager serves prebuilt Linux binaries, so packages install in
+# seconds instead of compiling from source. The snapshot date matches renv.lock
+# (renv 1.1.4, dplyr 1.1.4), so packages the lockfile does not record, such as
+# tidyverse, resolve to versions compatible with the pinned ones.
+P3M_REPO="https://packagemanager.posit.co/cran/__linux__/trixie/2025-04-01"
+
+step() { printf '\n==> %s\n' "$*"; step_start=$SECONDS; }
+done_step() { printf '    (%ss)\n' "$((SECONDS - step_start))"; }
+
+step "System packages"
+apt_packages=(
+  # R package system requirements (from the Posit sysreqs API for Debian 13)
+  libcurl4-openssl-dev libssl-dev libxml2-dev libicu-dev zlib1g-dev libuv1-dev
+  libfontconfig1-dev libfreetype-dev libfribidi-dev libharfbuzz-dev
+  libjpeg-dev libpng-dev libtiff-dev libwebp-dev libx11-dev
+  libgdal-dev gdal-bin libgeos-dev libproj-dev libsqlite3-dev libudunits2-dev libabsl-dev
+  cmake make pandoc
+  # Python stack for the figures notebooks and sensitivity analyses
+  python3-pandas python3-numpy python3-scipy python3-matplotlib python3-seaborn
+  python3-statsmodels python3-openpyxl python3-fonttools jupyter-nbconvert python3-ipykernel
+  # LaTeX for manuscript.tex and supplementary_material.tex (latexmk + biber)
+  latexmk biber lmodern texlive-latex-base texlive-latex-recommended texlive-latex-extra
+  texlive-fonts-recommended texlive-bibtex-extra
+)
+missing=()
+for pkg in "${apt_packages[@]}"; do
+  dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q '^install ok installed$' || missing+=("$pkg")
+done
+if ((${#missing[@]})); then
+  echo "Installing: ${missing[*]}"
+  sudo apt-get update -qq
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends "${missing[@]}"
+else
+  echo "All system packages present"
+fi
+done_step
+
+step "R $R_VERSION"
+if [[ ! -x "$R_HOME_DIR/bin/R" ]]; then
+  deb_dir="$(mktemp -d)"
+  curl -fsSL -o "$deb_dir/r.deb" "https://cdn.posit.co/r/debian-13/pkgs/r-${R_VERSION}_1_amd64.deb"
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq "$deb_dir/r.deb"
+  rm -rf "$deb_dir"
+fi
+sudo ln -sf "$R_HOME_DIR/bin/R" /usr/local/bin/R
+sudo ln -sf "$R_HOME_DIR/bin/Rscript" /usr/local/bin/Rscript
+done_step
+
+step "R repository settings"
+# ~/.Renviron is read by every R session (the repo has no project .Renviron).
+# renv uses this override for restore and install in place of the lockfile's CRAN URL.
+renviron="$HOME/.Renviron"
+touch "$renviron"
+grep -v '^RENV_CONFIG_REPOS_OVERRIDE=' "$renviron" > "$renviron.tmp" || true
+echo "RENV_CONFIG_REPOS_OVERRIDE=$P3M_REPO" >> "$renviron.tmp"
+mv "$renviron.tmp" "$renviron"
+done_step
+
+step "R packages (renv)"
+# .Rprofile activates renv and bootstraps it on first run.
+Rscript --no-echo - <<'EOF'
+options(renv.consent = TRUE)
+renv::restore(prompt = FALSE)
+# analysisHQ.Rmd loads more packages than renv.lock records; install the rest
+# into the project library so the Rmd does not compile them from CRAN.
+rmd <- readLines("code/analysisHQ.Rmd")
+eval(parse(text = grep("^pckgs <- c\\(", rmd, value = TRUE)[1]))
+need <- setdiff(unique(c(pckgs, "rmarkdown", "knitr")), rownames(installed.packages()))
+if (length(need)) renv::install(need, prompt = FALSE) else cat("All analysisHQ.Rmd packages installed\n")
+invisible(lapply(pckgs, function(p) {
+  if (!requireNamespace(p, quietly = TRUE)) stop("Package failed to load: ", p)
+}))
+cat("Loaded", length(pckgs), "analysisHQ.Rmd packages\n")
+EOF
+done_step
+
+step "Orb agent guidance"
+agents_md="$HOME/.config/amp/AGENTS.md"
+marker="# CES Accuracy Analysis orb notes"
+mkdir -p "$(dirname "$agents_md")"
+if ! grep -Fqx "$marker" "$agents_md" 2>/dev/null; then
+  cat >> "$agents_md" <<'EOF'
+
+# CES Accuracy Analysis orb notes
+- R 4.4.2 (renv.lock's version) is at /opt/R/4.4.2, linked into /usr/local/bin. Run R from the repo root so .Rprofile activates renv; the project library already has every package analysisHQ.Rmd loads.
+- New R packages: `renv::install()` pulls Linux binaries from Posit Package Manager via RENV_CONFIG_REPOS_OVERRIDE in ~/.Renviron.
+- Raw CES data (data/CES Data/) and the IPUMS API key are not in the orb, so analysisHQ.Rmd cannot run end to end. tables_and_figures/input_tables/ is committed, so figuresHQ.ipynb runs: `jupyter nbconvert --to notebook --execute figuresHQ.ipynb --output-dir /tmp/nbout` from tables_and_figures/.
+- Build the paper with `latexmk -pdf manuscript.tex` from a directory laid out as the README's "Building the Paper" section describes.
+EOF
+fi
+done_step
+
+echo
+echo "Setup complete in ${SECONDS}s"

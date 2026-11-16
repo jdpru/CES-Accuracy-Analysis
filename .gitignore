@@ -95,3 +95,6 @@ Claude outputs/
 *.blg
 *.out
 tmp*.tmp
+
+# Amp orb portals
+.amp/portals/*
