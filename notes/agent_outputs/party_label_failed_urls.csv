@@ -1,0 +1,31 @@
+url,reason
+http://scvotes.org/2012/01/13/2012_candidates,Legacy official candidate page request aborted.
+http://www.goupstate.com/article/20120810/ARTICLES/208101040/1051/news01?Title=Petition-candidates-face-uphill-battle,HTTP404; current newspaper page not found.
+http://www.independentmail.com/news/2012/jun/06/no-republican-primary-oconee-county/,HTTP404; current newspaper page not found.
+http://www.scvotes.org/2012/01/13/2012_candidates,webfetch aborted; recovered official archive. | Direct webfetch aborted; recovered original official index via Internet Archive.
+http://www.scvotes.org/2012/07/12/2012_petition_candidates,Retrieval aborted / timeout; historical filing evidence unavailable.
+http://www.scvotes.org/files/2012%20Candidates/2012%20Candidate%20Names%20-%20Democratic%20%28sorted%29.xls,Retrieval aborted / timeout; historical filing evidence unavailable.
+http://www.scvotes.org/files/2012%20Candidates/2012%20Candidate%20Names%20-%20Republican%20%28sorted%29.xls,Retrieval aborted / timeout; historical filing evidence unavailable.
+http://www.thestate.com/2012/06/12/2312597/list-of-de-certified-candidates.html,webfetch aborted; not relied upon.
+https://archive.org/wayback/available?url=http%3A%2F%2Fqual.sos.state.ga.us%2FQualifyingSearchResults.asp%3FRaceID%3D4&timestamp=20121101,API client timeout at5seconds; general-election candidate-list link discovered on Ballotpedia but archive not recovered
+https://archive.org/wayback/available?url=web.co.dekalb.ga.us/voter/CurrentElectionInfo.html&timestamp=20121020,"API client timeout at5seconds, not proof no capture exists"
+https://cawp.rutgers.edu/sites/default/files/resources/can2012results-leg.pdf,Webfetch empty and REPL PDF download not valid PDF for extraction (PDFium error3). Search index supplied named candidate entries and explicit party-code footnote.
+https://ct.elstats.civera.com/api/download_search.csv?search=%7B%22global%22%3A%7B%22years%22%3A%7B%22from%22%3A2006%2C%22to%22%3A2022%7D%7D%2C%22contests%22%3A%7B%22candidates%22%3A%5B%5D%2C%22offices%22%3A%5B%7B%22id%22%3A49%7D%5D%2C%22divisions%22%3A%5B%5D%7D%2C%22voterStats%22%3Afalse%2C%22stages%22%3A%5B%5D%2C%22specialElectionsOnly%22%3Afalse%7D,Export downloads successfully but contains incomplete/defective2010 records: Districts3-7 unknown candidate0;11/82/93 candidate party blank;48 incorrect/incomplete town totals. These are recovered from original2010 SOV; export otherwise used for full roster.
+https://ct.elstats2.civera.com/eng/files/serve/58,PDF downloaded successfully but embedded-text extraction returns blank on scanned legislative pages. Recovered by rendering and visually inspecting original tables.
+https://indianavoters.in.gov/ENRHistorical/ExportElectionsToCSV?year=2006&electionType=General&office=State%20Representative&filterElectionType=false,Incomplete export parameters returned HTTP 200 with header only (unusable). Recovered using the exact accepted UI export parameters including county=-- ALL COUNTIES -- and party=Select.
+https://scvotes.gov/2012-petition-candidates/,HTTP404; unusable for historical filing evidence.
+https://scvotes.gov/2012/01/13/2012-candidates/,404; not a successful migration of the legacy official page.
+https://sos.ga.gov/sites/default/files/2022-01/november_2012_generalelection_stateanalytics.pdf,"Direct fetch403 HTML, not PDF; PDF extraction failed. Search index exposes November report but HD125 labels blank."
+https://sos.idaho.gov/elect/results/2006/general/tot_leg.htm,Direct webfetch returned official Page Not Found/outdated link page. Recovered entire roster through current official canvass database; indexed original page supplies District34 R and W/I labels omitted in current database.
+https://web.archive.org/cdx/search/cdx?url=scvotes.org/files/2012%20Candidates/*&output=json&filter=statuscode:200&collapse=urlkey,Retrieval aborted / timeout; historical filing evidence unavailable.
+https://web.archive.org/cdx/search/cdx?url=web.co.dekalb.ga.us/voter/pdf/*&output=json&filter=timestamp:2012&filter=statuscode:200&collapse=urlkey,webfetch operation aborted/timeout
+https://web.archive.org/web/20120513132603/http://www.scvotes.org/files/2012%20Candidates/2012%20Primary%20-%20Democratic%20Filing.xls,Initial Wayback URL returned HTML wrapper instead of workbook; recovered via its explicit iframe URL at May13 2012 13:25:41.
+https://web.archive.org/web/20120513132603/http://www.scvotes.org/files/2012%20Candidates/2012%20Primary%20-%20Republican%20Filing.xls,"HTTP200 returned Wayback HTML wrapper, not workbook. Recovered original bytes using timestamp20120513132808id_ URL. | Initial Wayback URL returned HTML wrapper instead of workbook; recovered via its explicit iframe URL at May13 2012 13:28:08."
+https://www.augustaga.gov/605/Election-Results,"webfetch returned only subset of archive links (2018/2022), omitting2012 links seen in search index; unusable for2012 county recovery."
+https://www.courtlistener.com/docket/5073212/28/2/somers-v-south-carolina-state-election-commission,HTTP404; unusable for historical filing evidence. | 404 on webfetch with and without trailing slash; detailed indexed text available.
+https://www.courtlistener.com/opinion/8716943/smith-v-state-of-south-carolina-election-commission,"webfetch returned empty extraction. Search excerpt reports Shirley Democratic primary opponent, but not necessary after original filing workbook recovery."
+https://www.dekalbcountyga.gov/sites/default/files/Result_11062012.pdf,404; archived PDF successfully recovered instead
+https://www.dekalbcountyga.gov/voter-registration-elections/2012-election-results,HTTP404 migrated-site page; search index retains old link titles but no usable November PDF links.
+https://www.presidency.ucsb.edu/sites/default/files/election-maps/2012/ga.pdf,"Downloaded16-page PDF is incomplete for task: includes first printed results page plus presidential write-in reports, no House results. Usable PDF but not House evidence."
+https://www.scvotes.org/2012/01/13/2012_candidates,HTTP404 current site; recovered official archive.
+https://www.thestate.com/2012/06/12/2312597/list-of-de-certified-candidates.html,webfetch aborted; not relied upon.

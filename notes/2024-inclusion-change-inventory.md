@@ -1,6 +1,6 @@
 # Adding 2024: change inventory (2026-11-15)
 
-A read-only survey of analysisHQ.Rmd and its utilities, CODEBOOK.xlsm, data/misc., the benchmark files, figuresHQ.ipynb, additionalFiguresHQ.ipynb, sensitivity_analyses/, manuscript.tex, supplementary_material.tex and the READMEs. Six parallel passes were made, and the main claims were spot-checked against the files. Nothing was modified. Line numbers are as of commit 9190910.
+A read-only survey of analysisHQ.Rmd and its utilities, CODEBOOK.xlsm, data/misc., the benchmark files, figuresHQ.ipynb, droppedFiguresHQ.ipynb, sensitivity_analyses/, manuscript.tex, supplementary_material.tex and the READMEs. Six parallel passes were made, and the main claims were spot-checked against the files. Nothing was modified. Line numbers are as of commit 9190910.
 
 ## Bottom line
 
@@ -183,7 +183,7 @@ A read-only survey of analysisHQ.Rmd and its utilities, CODEBOOK.xlsm, data/misc
 - cell 33 (Table 9)
 - cell 35 (Figure 2)
 - cell 56 (Table S.3 / Figure S.1)
-- additionalFiguresHQ cells 11, 13, 15, 17, 55, 62, 64
+- droppedFiguresHQ cells 11, 13, 15, 17, 55, 62, 64
 
 Cells 31 and 35 are coupled: an assert requires their observation counts to match.
 
@@ -193,11 +193,11 @@ Cells 31 and 35 are coupled: an assert requires their observation counts to matc
 
 **Hand-transcribed data:**
 - Cell 21 (Table 5): 2024 N, completion rate (must end in `\%`), field dates, note clause.
-- Cell 15 and cell 24: `presidential_years` / `[2008, 2012, 2016, 2020]`. Add 2024. additionalFiguresHQ has the same list at 7.76, 9.79 and 44.16.
+- Cell 15 and cell 24: `presidential_years` / `[2008, 2012, 2016, 2020]`. Add 2024. droppedFiguresHQ has the same list at 7.76, 9.79 and 44.16.
 
 **Assertions that may fail with 2024:**
 - Cell 56: Governor and Senate must be Primary every year after 2012, age/education/sex Primary, union/veteran Secondary.
-- additionalFiguresHQ 62.55–70: exact consistent-variable sets.
+- droppedFiguresHQ 62.55–70: exact consistent-variable sets.
 
 **Figure 3 (cell 41):**
 - Ticks are `[2006…2022]`.

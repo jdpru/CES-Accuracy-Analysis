@@ -1,0 +1,8 @@
+state,year,input_rows,party_match,party_mismatch,party_label_errors_excluding_extra,extra_election_rows,vote_match,vote_mismatch,missing_candidate_lines,unknown,note
+Michigan,2016,263,37,226,223,3,260,0,6,0,"Three extras are same-day partial-term House11 election, not regular2-year election."
+Missouri,2010,287,103,184,184,0,287,0,3,0,Entire district14 missing; six corrupted candidate names and district-label text documented.
+Georgia,2012,222,212,10,10,0,222,0,0,0,"Includes2 literal trailing-quote party-label errors. Five November party badges absent; official nomination records plus November roster used, with limitation documented."
+Idaho,2006,61,59,2,2,0,61,0,1,0,
+Connecticut,2010,356,350,6,4,2,353,1,1,0,Two extras are2012 House25 rows; four purported Independent candidates are Democratic-only.
+Indiana,2006,175,175,0,0,0,0,175,0,0,All175 party labels correct but all175 votes incorrect; independently verified official statewide export and UI.
+South Carolina,2012,175,173,2,2,0,172,3,0,0,

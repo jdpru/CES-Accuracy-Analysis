@@ -14,8 +14,8 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2022|ALASKA|U.S. House|District 1,ces_manual_fix,Begich party filled in by hand,True,48.76635939456014,51.50404152222153,2.737682127661394,98.0,Candidate
 2020|WEST VIRGINIA|Attorney General|statewide,ces_manual_fix,Petsonk party filled in by hand,True,63.77217138190271,70.54931719195136,6.777145810048651,338.0,Candidate
 2014|OKLAHOMA|Governor|statewide,ces_manual_fix,missing candidate names/parties filled in,True,55.80512856573043,58.69380887740429,2.888680311673859,268.0,Candidate
-2006|NEW YORK|U.S. Senate|statewide,suppC_fusion,10.89,True,60.10911229778356,65.95405425451814,5.844941956734573,1208.0,Party
-2006|RHODE ISLAND|U.S. Senate|statewide,suppC_fusion,0.00,True,53.47242580769021,39.85535291608239,-13.61707289160783,86.0,Party
+2006|NEW YORK|U.S. Senate|statewide,suppC_fusion,10.89,True,67.00205988659822,65.95405425451814,-1.048005632080085,1208.0,Party
+2006|RHODE ISLAND|U.S. Senate|statewide,suppC_fusion,0.00,True,53.47450129847893,39.85535291608239,-13.61914838239654,86.0,Party
 2010|ALASKA|U.S. Senate|statewide,suppC_fusion,0.01,True,35.56122628697119,38.49723238801403,2.936006101042835,90.0,Candidate
 2010|CONNECTICUT|U.S. Senate|statewide,suppC_fusion,2.67,True,55.15841871799431,53.74929026444653,-1.40912845354778,524.0,Candidate
 2012|CONNECTICUT|U.S. Senate|statewide,suppC_fusion,5.44,True,54.82079213422201,58.8837245501471,4.06293241592509,420.0,Candidate
@@ -330,13 +330,13 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2006|CONNECTICUT|State Senator|statewide,suppC_fusion,1.89,True,55.31601950337382,52.58987996919441,-2.726139534179406,254.0,Party
 2006|DELAWARE|State Representative|statewide,suppC_fusion,0.06,True,50.03192294519824,57.22365949996578,7.191736554767536,63.0,Party
 2006|NEW YORK|Attorney General|statewide,suppC_fusion,10.90,True,58.31064170936596,58.38181947960162,0.07117777023566418,1137.0,Party
-2006|NEW YORK|State Representative|statewide,suppC_fusion,10.47,True,64.04711309016206,59.64835984605531,-4.398753244106746,1077.0,Party
+2006|NEW YORK|State Representative|statewide,suppC_fusion,10.47,False,,,,,
 2006|NEW YORK|State Senator|statewide,suppC_fusion,11.30,True,51.14552083296138,58.904165560979,7.758644728017627,1109.0,Party
 2006|SOUTH CAROLINA|State Representative|statewide,suppC_fusion,0.09,True,60.95989236934197,54.65929260085441,-6.300599768487558,244.0,Party
-2008|CONNECTICUT|State Representative|statewide,suppC_fusion,2.39,True,62.43447099962432,61.66266716613731,-0.7718038334870059,307.0,Party
+2008|CONNECTICUT|State Representative|statewide,suppC_fusion,2.39,False,,,,,
 2008|CONNECTICUT|State Senator|statewide,suppC_fusion,4.14,True,59.29768465850275,60.87372995208686,1.576045293584116,297.0,Party
 2008|DELAWARE|State Representative|statewide,suppC_fusion,0.18,True,56.90098072297025,67.76021968729846,10.85923896432821,80.0,Party
-2008|NEW YORK|State Representative|statewide,suppC_fusion,9.29,True,64.63707962545861,63.20001984803883,-1.437059777419769,1132.0,Party
+2008|NEW YORK|State Representative|statewide,suppC_fusion,9.29,False,,,,,
 2008|NEW YORK|State Senator|statewide,suppC_fusion,9.54,False,,,,,
 2010|CONNECTICUT|Attorney General|statewide,suppC_fusion,3.41,True,53.70559287852357,49.40357857251696,-4.302014306006613,523.0,Party
 2010|CONNECTICUT|Secretary of State|statewide,suppC_fusion,2.30,True,52.86929188574406,49.29692616829607,-3.572365717447995,508.0,Party
@@ -348,10 +348,9 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2010|NEW YORK|State Senator|statewide,suppC_fusion,12.52,False,,,,,
 2010|OKLAHOMA|Attorney General|statewide,suppC_fusion,0.01,True,62.91755008335426,58.34774169630128,-4.569808387052976,357.0,Party
 2010|SOUTH CAROLINA|State Representative|statewide,suppC_fusion,0.34,True,59.19024509085645,51.35740992127145,-7.832835169584995,382.0,Party
-2012|CONNECTICUT|State Representative|statewide,suppC_fusion,2.96,True,56.18393783878957,58.05410463745889,1.870166798669326,361.0,Party
+2012|CONNECTICUT|State Representative|statewide,suppC_fusion,2.66,True,56.25954658224192,58.05410463745889,1.794558055216966,361.0,Party
 2012|CONNECTICUT|State Senator|statewide,suppC_fusion,3.46,True,56.23415893823089,54.49161743834874,-1.742541499882155,363.0,Party
-2012|NEW HAMPSHIRE|State Representative|statewide,suppC_fusion,0.26,True,50.79810477779829,49.28256356534234,-1.515541212455945,284.0,Party
-2012|NEW YORK|State Representative|statewide,suppC_fusion,9.83,True,64.90626114799022,61.89088807677883,-3.015373071211391,1644.0,Party
+2012|NEW YORK|State Representative|statewide,suppC_fusion,9.83,False,,,,,
 2012|NEW YORK|State Senator|statewide,suppC_fusion,10.81,False,,,,,
 2012|SOUTH CAROLINA|State Representative|statewide,suppC_fusion,0.44,True,58.11789233433717,53.97048876393647,-4.14740357040071,512.0,Party
 2012|SOUTH CAROLINA|State Senator|statewide,suppC_fusion,1.39,False,,,,,
@@ -360,12 +359,12 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2014|CONNECTICUT|State Representative|statewide,suppC_fusion,3.68,True,49.92281281564222,49.75846514182162,-0.1643476738205973,420.0,Party
 2014|CONNECTICUT|State Senator|statewide,suppC_fusion,4.36,True,50.83159621246758,48.92457647011757,-1.907019742350008,419.0,Party
 2014|NEW YORK|Attorney General|statewide,suppC_fusion,15.00,True,55.72629462068297,53.37450649177122,-2.351788128911747,1633.0,Party
-2014|NEW YORK|State Representative|statewide,suppC_fusion,15.01,True,54.19270702392831,49.86936996000476,-4.32333706392355,1624.0,Party
+2014|NEW YORK|State Representative|statewide,suppC_fusion,15.01,False,,,,,
 2014|NEW YORK|State Senator|statewide,suppC_fusion,16.02,False,,,,,
 2014|SOUTH CAROLINA|State Representative|statewide,suppC_fusion,0.02,True,62.18287174866992,60.60851803819508,-1.574353710474841,413.0,Party
-2016|CONNECTICUT|State Representative|statewide,suppC_fusion,5.20,True,52.11980573223636,42.01182141666862,-10.10798431556774,432.0,Party
+2016|CONNECTICUT|State Representative|statewide,suppC_fusion,4.78,True,51.90420250082931,42.01182141666862,-9.89238108416069,432.0,Party
 2016|CONNECTICUT|State Senator|statewide,suppC_fusion,4.43,True,50.75303589086106,55.63315920830772,4.880123317446672,430.0,Party
-2016|NEW YORK|State Representative|statewide,suppC_fusion,10.49,True,63.14860319886233,59.89203492549115,-3.256568273371185,2411.0,Party
+2016|NEW YORK|State Representative|statewide,suppC_fusion,10.49,False,,,,,
 2016|NEW YORK|State Senator|statewide,suppC_fusion,11.14,False,,,,,
 2016|SOUTH CAROLINA|State Representative|statewide,suppC_fusion,0.27,True,63.8007395654807,54.38220358577131,-9.418535979709397,480.0,Party
 2018|NEW YORK|Attorney General|statewide,suppC_fusion,8.33,True,62.41886608578599,62.87170506901209,0.4528389832261084,2196.0,Candidate
@@ -388,7 +387,7 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2006|TEXAS|U.S. House|District 28,suppC_special,special election only,True,87.93260883544467,100.0,12.06739116455533,20.0,Party
 2016|OREGON|Governor|statewide,suppC_special,special election only,True,50.70381138081482,52.05977611506813,1.355964734253305,777.0,Candidate
 2008|OHIO|Attorney General|statewide,suppC_special,special election only,False,,,,,
-2014|SOUTH CAROLINA|State Senator|statewide,suppC_special,special election only,True,96.7072072072072,35.75157844195131,-60.95562876525589,407.0,Party
+2014|SOUTH CAROLINA|State Senator|statewide,suppC_special,special election only,False,,,,,
 2015|NEW JERSEY|State Senator|statewide,suppC_special,special election only,False,,,,,
 2018|LOUISIANA|Secretary of State|statewide,suppC_special,special election only,False,,,,,
 2018|LOUISIANA|State Representative|statewide,suppC_special,special election only,False,,,,,
@@ -471,7 +470,7 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2020|ALASKA|U.S. House|District 1,returns_hand_fix,changed to indep since technically she was indep,True,54.40120057197061,59.53143314110002,5.130232569129412,79.0,Candidate
 2010|ALASKA|State Representative|statewide,returns_hand_fix,"Originally missing, but present here: https://www.elections.alaska.gov/Core/Archive/10GENR/data/sovcOF/hd34.pdf",True,54.91003113292174,54.78338296801195,-0.1266481649097928,77.0,Party
 2014|CONNECTICUT|State Representative|statewide,returns_hand_fix,"Edited manually, BP data was incorrect.",True,49.92281281564222,49.75846514182162,-0.1643476738205973,420.0,Party
-2016|CONNECTICUT|State Representative|statewide,returns_hand_fix,"Edit manually, was incorrect in BP data",True,52.11980573223636,42.01182141666862,-10.10798431556774,432.0,Party
+2016|CONNECTICUT|State Representative|statewide,returns_hand_fix,"Edit manually, was incorrect in BP data",True,51.90420250082931,42.01182141666862,-9.89238108416069,432.0,Party
 2006|SOUTH DAKOTA|Secretary of State|statewide,returns_hand_fix,"Input incorrectly by Ballotpedia, they added an extra digit and it said 2171518",True,100.0,72.96074187197244,-27.03925812802756,59.0,Party
 2008|WISCONSIN|State Representative|statewide,returns_hand_fix,"total was was actually 25617, so this was likely human error in input.",True,55.13168078091378,53.98411643356003,-1.147564347353758,491.0,Party
 2010|WISCONSIN|State Representative|statewide,returns_hand_fix,Originally incorrect entered as 97580,True,55.18119917629905,54.46868083711139,-0.7125183391876733,719.0,Party
@@ -883,7 +882,6 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2006|NEW MEXICO|U.S. Senate|statewide,party_label_item,,True,70.60513830453854,71.36033069648286,0.755192391944326,233.0,Party
 2006|NEW YORK|Attorney General|statewide,party_label_item,,True,58.31064170936596,58.38181947960162,0.07117777023566418,1137.0,Party
 2006|NEW YORK|Governor|statewide,party_label_item,,True,69.56402882886131,67.5971092880304,-1.966919540830914,1235.0,Party
-2006|NEW YORK|State Representative|statewide,party_label_item,,True,64.04711309016206,59.64835984605531,-4.398753244106746,1077.0,Party
 2006|NEW YORK|State Senator|statewide,party_label_item,,True,51.14552083296138,58.904165560979,7.758644728017627,1109.0,Party
 2006|NEW YORK|U.S. House|District 1,party_label_item,,True,62.23462621058155,42.67283796573366,-19.5617882448479,55.0,Party
 2006|NEW YORK|U.S. House|District 10,party_label_item,,True,92.1641743394588,92.64248150027198,0.478307160813185,11.0,Party
@@ -922,7 +920,7 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2006|NEW YORK|U.S. House|District 26,party_label_item,,True,51.98481236707253,48.71574674548813,-3.269065621584405,53.0,Party
 2006|NEW YORK|U.S. House|District 29,party_label_item,,True,51.46346078274412,55.93540357836056,4.471942795616435,69.0,Party
 2006|NEW YORK|U.S. House|District 3,party_label_item,,True,56.04085228211198,51.35205649796563,-4.688795784146349,50.0,Party
-2006|NEW YORK|U.S. Senate|statewide,party_label_item,,True,60.10911229778356,65.95405425451814,5.844941956734573,1208.0,Party
+2006|NEW YORK|U.S. Senate|statewide,party_label_item,,True,67.00205988659822,65.95405425451814,-1.048005632080085,1208.0,Party
 2006|NORTH CAROLINA|State Representative|statewide,party_label_item,,True,50.55317743520308,41.91864135028329,-8.63453608491978,567.0,Party
 2006|NORTH CAROLINA|State Senator|statewide,party_label_item,,True,51.87540135330819,58.56990051214542,6.69449915883723,504.0,Party
 2006|NORTH CAROLINA|U.S. House|District 1,party_label_item,,True,100.0,100.0,0.0,21.0,Party
@@ -1015,7 +1013,7 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2006|RHODE ISLAND|State Senator|statewide,party_label_item,,True,76.98769876987699,50.00053149096263,-26.98716727891436,77.0,Party
 2006|RHODE ISLAND|U.S. House|District 1,party_label_item,,True,69.19332907844715,39.66247799529536,-29.53085108315179,39.0,Party
 2006|RHODE ISLAND|U.S. House|District 2,party_label_item,,True,72.6470907933353,72.95539677715715,0.3083059838218438,43.0,Party
-2006|RHODE ISLAND|U.S. Senate|statewide,party_label_item,,True,53.47242580769021,39.85535291608239,-13.61707289160783,86.0,Party
+2006|RHODE ISLAND|U.S. Senate|statewide,party_label_item,,True,53.47450129847893,39.85535291608239,-13.61914838239654,86.0,Party
 2006|SOUTH CAROLINA|Attorney General|statewide,party_label_item,,True,99.22436114498706,56.83212913800337,-42.39223200698368,241.0,Party
 2006|SOUTH CAROLINA|Attorney General|statewide,uncontested_gt90,99.2,True,99.22436114498706,56.83212913800337,-42.39223200698368,241.0,Party
 2006|SOUTH CAROLINA|Governor|statewide,party_label_item,,True,55.11854000908465,55.94803071159304,0.8294907025083953,306.0,Party
@@ -1098,7 +1096,7 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2006|VERMONT|State Representative|statewide,party_label_item,,True,57.71098888686147,55.93107914152051,-1.779909745340957,43.0,Party
 2006|VERMONT|State Senator|statewide,party_label_item,,True,64.09606418155434,62.70027216603103,-1.395792015523323,44.0,Party
 2006|VERMONT|U.S. House|District 1,party_label_item,,True,53.21703980572916,56.03772937274567,2.82068956701651,56.0,Party
-2006|VERMONT|U.S. Senate|statewide,party_label_item,,True,67.63801401575346,71.36696556225061,3.72895154649715,55.0,Party
+2006|VERMONT|U.S. Senate|statewide,party_label_item,,True,67.63801401575343,71.36696556225061,3.728951546497172,55.0,Party
 2006|VIRGINIA|U.S. House|District 3,party_label_item,,True,96.08040634847548,100.0,3.919593651524522,30.0,Party
 2006|VIRGINIA|U.S. House|District 3,uncontested_gt90,96.1,True,96.08040634847548,100.0,3.919593651524522,30.0,Party
 2006|VIRGINIA|U.S. House|District 8,party_label_item,,True,66.40386583390314,68.64327412000587,2.239408286102729,71.0,Party
@@ -1159,7 +1157,6 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2008|CALIFORNIA|State Senator|statewide,party_label_item,,True,55.06467350851275,57.36575652962777,2.301083021115014,1767.0,Party
 2008|COLORADO|State Representative|statewide,party_label_item,,True,51.99544323809081,52.26384536868077,0.268402130589962,348.0,Party
 2008|COLORADO|State Senator|statewide,party_label_item,,True,56.38590993365612,51.74606835311193,-4.639841580544191,335.0,Party
-2008|CONNECTICUT|State Representative|statewide,party_label_item,,True,62.43447099962432,61.66266716613731,-0.7718038334870059,307.0,Party
 2008|CONNECTICUT|State Senator|statewide,party_label_item,,True,59.29768465850275,60.87372995208686,1.576045293584116,297.0,Party
 2008|DELAWARE|Governor|statewide,party_label_item,,True,67.52487323002804,69.06971779492414,1.544844564896108,87.0,Party
 2008|DELAWARE|State Representative|statewide,party_label_item,,True,56.90098072297025,67.76021968729846,10.85923896432821,80.0,Party
@@ -1189,7 +1186,6 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2008|MASSACHUSETTS|State Representative|statewide,party_label_item,,True,80.69103383597819,72.761993503723,-7.929040332255177,359.0,Party
 2008|MASSACHUSETTS|State Senator|statewide,party_label_item,,True,80.32935739186156,73.38080436614716,-6.948553025714411,345.0,Party
 2008|MICHIGAN|State Representative|statewide,party_label_item,,True,56.95167014760037,55.83188920097809,-1.119780946622273,696.0,Party
-2008|MINNESOTA|State Senator|statewide,party_label_item,,True,58.00432567176216,54.61650787377514,-3.387817797987014,349.0,Party
 2008|MISSOURI|Governor|statewide,party_label_item,,True,58.39960552898798,61.91934143070286,3.519735901714882,637.0,Party
 2008|MISSOURI|State Representative|statewide,party_label_item,,True,52.08758721956337,51.99082417707022,-0.09676304249315315,610.0,Party
 2008|MISSOURI|State Senator|statewide,party_label_item,,True,49.92027010106161,51.35808153033757,1.437811429275965,568.0,Party
@@ -1203,7 +1199,6 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2008|NEW HAMPSHIRE|State Senator|statewide,party_label_item,,True,52.05400171746859,52.84626604633706,0.7922643288684639,163.0,Party
 2008|NEW MEXICO|State Representative|statewide,party_label_item,,True,57.53682349178878,60.20645329881912,2.669629807030338,180.0,Party
 2008|NEW MEXICO|State Senator|statewide,party_label_item,,True,60.14953097843711,60.47282175118334,0.3232907727462209,180.0,Party
-2008|NEW YORK|State Representative|statewide,party_label_item,,True,64.63707962545861,63.20001984803883,-1.437059777419769,1132.0,Party
 2008|NEW YORK|U.S. House|District 11,uncontested_gt90,92.7,True,92.74898206228677,89.55456654263016,-3.194415519656616,37.0,Candidate
 2008|NEW YORK|U.S. House|District 9,uncontested_gt90,93.0,True,93.04745872343248,66.95963494345982,-26.08782377997267,17.0,Candidate
 2008|NEW YORK|U.S. House|District 16,uncontested_gt90,96.6,True,96.58993384927356,93.50179471993097,-3.088139129342593,14.0,Candidate
@@ -1310,7 +1305,6 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2010|KANSAS|Attorney General|statewide,party_label_item,,True,54.92929230002493,63.98950672702831,9.060214427003388,380.0,Party
 2010|KANSAS|Secretary of State|statewide,party_label_item,,True,51.24367748005522,64.65171025466053,13.40803277460532,377.0,Party
 2010|KANSAS|State Representative|statewide,party_label_item,,True,67.58591980347238,69.14981587779864,1.563896074326265,375.0,Party
-2010|KANSAS|State Senator|statewide,party_label_item,,True,59.52892229230976,72.67772189152998,13.14879959922023,348.0,Party
 2010|KENTUCKY|State Representative|statewide,party_label_item,,True,51.36510449310845,45.85544823869935,-5.509656254409095,415.0,Party
 2010|KENTUCKY|State Senator|statewide,party_label_item,,True,57.88024136498464,49.46633906248558,-8.41390230249906,371.0,Party
 2010|MAINE|State Representative|statewide,party_label_item,,True,50.20398639492413,44.23985497362496,-5.964131421299168,236.0,Party
@@ -1418,7 +1412,7 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2012|CALIFORNIA|State Senator|statewide,party_label_item,,True,62.60870104884255,61.86795155486659,-0.7407494939759673,2997.0,Party
 2012|COLORADO|State Representative|statewide,party_label_item,,True,47.92119960230244,43.34644598054799,-4.574753621754452,706.0,Party
 2012|COLORADO|State Senator|statewide,party_label_item,,True,51.92858442765055,49.53891201215933,-2.389672415491217,668.0,Party
-2012|CONNECTICUT|State Representative|statewide,party_label_item,,True,56.18393783878957,58.05410463745889,1.870166798669326,361.0,Party
+2012|CONNECTICUT|State Representative|statewide,party_label_item,,True,56.25954658224192,58.05410463745889,1.794558055216966,361.0,Party
 2012|CONNECTICUT|State Senator|statewide,party_label_item,,True,56.23415893823089,54.49161743834874,-1.742541499882155,363.0,Party
 2012|DELAWARE|State Representative|statewide,party_label_item,,True,62.21792700828644,62.59443888715395,0.3765118788675026,160.0,Party
 2012|DELAWARE|State Senator|statewide,party_label_item,,True,62.5032258780632,64.86701477295827,2.363788894895069,163.0,Party
@@ -1465,11 +1459,10 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2012|MONTANA|State Senator|statewide,party_label_item,,True,49.66420019188561,49.79344110566302,0.1292409137774175,177.0,Party
 2012|NEVADA|State Representative|statewide,party_label_item,,True,50.27497723553596,45.90908530774166,-4.365891927794291,395.0,Party
 2012|NEVADA|State Senator|statewide,party_label_item,,True,55.56952938492273,47.68107844863494,-7.888450936287795,406.0,Party
-2012|NEW HAMPSHIRE|State Representative|statewide,party_label_item,,True,50.79810477779829,49.28256356534234,-1.515541212455945,284.0,Party
+2012|NEW HAMPSHIRE|State Representative|statewide,party_label_item,,True,51.11698881551438,49.28256356534234,-1.834425250172028,284.0,Party
 2012|NEW HAMPSHIRE|State Senator|statewide,party_label_item,,True,50.53565182242882,50.78996711490105,0.2543152924722292,270.0,Party
 2012|NEW MEXICO|State Representative|statewide,party_label_item,,True,50.43936047893806,51.84990306677572,1.41054258783766,317.0,Party
 2012|NEW MEXICO|State Senator|statewide,party_label_item,,True,57.12627836729302,49.98547555505232,-7.140802812240699,312.0,Party
-2012|NEW YORK|State Representative|statewide,party_label_item,,True,64.90626114799022,61.89088807677883,-3.015373071211391,1644.0,Party
 2012|NEW YORK|U.S. House|District 15,uncontested_gt90,97.2,True,97.16513381917704,99.14921689210388,1.984083072926836,33.0,Candidate
 2012|NEW YORK|U.S. House|District 13,uncontested_gt90,90.7,True,90.72276103735881,72.48479956463582,-18.23796147272299,59.0,Candidate
 2012|NEW YORK|U.S. House|District 8,uncontested_gt90,90.1,True,90.12374698222881,85.24576037449246,-4.877986607736347,44.0,Candidate
@@ -1635,7 +1628,6 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2014|NEW MEXICO|Secretary of State|statewide,party_label_item,,True,51.63595173602561,50.93857002411265,-0.6973817119129588,269.0,Party
 2014|NEW MEXICO|State Representative|statewide,party_label_item,,True,50.62482680945018,40.13988688560232,-10.48493992384785,269.0,Party
 2014|NEW YORK|Attorney General|statewide,party_label_item,,True,55.72629462068297,53.37450649177122,-2.351788128911747,1633.0,Party
-2014|NEW YORK|State Representative|statewide,party_label_item,,True,54.19270702392831,49.86936996000476,-4.32333706392355,1624.0,Party
 2014|NEW YORK|U.S. House|District 8,uncontested_gt90,92.0,True,91.97133299205943,81.22241742346425,-10.74891556859518,35.0,Candidate
 2014|NEW YORK|U.S. House|District 5,uncontested_gt90,94.9,True,94.85223186880646,92.22232717778195,-2.629904691024507,33.0,Candidate
 2014|NEW YORK|U.S. House|District 6,uncontested_gt90,98.9,True,98.93679752693744,99.13387215870996,0.1970746317725229,34.0,Candidate
@@ -1670,8 +1662,6 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2014|SOUTH CAROLINA|Attorney General|statewide,party_label_item,,True,60.30533478373072,60.96306389493576,0.6577291112050299,409.0,Party
 2014|SOUTH CAROLINA|Secretary of State|statewide,party_label_item,,True,59.55090242469335,61.2417724160085,1.690869991315147,401.0,Party
 2014|SOUTH CAROLINA|State Representative|statewide,party_label_item,,True,62.18287174866992,60.60851803819508,-1.574353710474841,413.0,Party
-2014|SOUTH CAROLINA|State Senator|statewide,party_label_item,,True,96.7072072072072,35.75157844195131,-60.95562876525589,407.0,Party
-2014|SOUTH CAROLINA|State Senator|statewide,uncontested_gt90,96.7,True,96.7072072072072,35.75157844195131,-60.95562876525589,407.0,Party
 2014|SOUTH CAROLINA|U.S. House|District 1,uncontested_gt90,93.4,True,93.41000665023667,84.75061832079616,-8.659388329440503,66.0,Candidate
 2014|SOUTH DAKOTA|Attorney General|statewide,party_label_item,,True,81.99635655505999,67.28497129498452,-14.71138526007547,77.0,Party
 2014|SOUTH DAKOTA|Secretary of State|statewide,party_label_item,,True,60.23164379638875,68.31934972520337,8.087705928814625,80.0,Party
@@ -1719,11 +1709,11 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2016|CALIFORNIA|U.S. House|District 13,uncontested_gt90,90.8,True,90.78455482220453,92.22584997648805,1.441295154283523,78.0,Candidate
 2016|COLORADO|State Representative|statewide,party_label_item,,True,49.26640779155978,47.0318223621982,-2.23458542936158,727.0,Party
 2016|COLORADO|State Senator|statewide,party_label_item,,True,53.43780524708974,51.35288958835705,-2.084915658732689,719.0,Party
-2016|CONNECTICUT|State Representative|statewide,party_label_item,,True,52.11980573223636,42.01182141666862,-10.10798431556774,432.0,Party
+2016|CONNECTICUT|State Representative|statewide,party_label_item,,True,51.90420250082931,42.01182141666862,-9.89238108416069,432.0,Party
 2016|CONNECTICUT|State Senator|statewide,party_label_item,,True,50.75303589086106,55.63315920830772,4.880123317446672,430.0,Party
 2016|DELAWARE|State Representative|statewide,party_label_item,,True,59.51197041287725,51.03931774395324,-8.472652668924008,164.0,Party
 2016|DELAWARE|State Senator|statewide,party_label_item,,True,52.30285515899211,49.54877052822452,-2.754084630767595,154.0,Party
-2016|DISTRICT OF COLUMBIA|President|nationwide,uncontested_gt90,90.5,True,90.48388386787171,89.34979047953723,-1.134093388334477,132.0,Candidate
+2016|DISTRICT OF COLUMBIA|President|nationwide,uncontested_gt90,90.9,True,90.86382152999987,89.34979047953723,-1.514031050462634,132.0,Candidate
 2016|FLORIDA|State Representative|statewide,party_label_item,,True,57.08021153512994,50.85295949377203,-6.227252041357911,3012.0,Party
 2016|FLORIDA|State Senator|statewide,party_label_item,,True,56.9195289719144,50.30440991088776,-6.615119061026641,2997.0,Party
 2016|GEORGIA|State Representative|statewide,party_label_item,,True,64.21873785536197,52.54265751343452,-11.67608034192744,1087.0,Party
@@ -1781,7 +1771,6 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2016|NEW MEXICO|Secretary of State|statewide,party_label_item,,True,56.41270378665556,53.5177182965846,-2.894985490070956,259.0,Party
 2016|NEW MEXICO|State Representative|statewide,party_label_item,,True,54.15314860416596,50.39052837012352,-3.762620234042435,265.0,Party
 2016|NEW MEXICO|State Senator|statewide,party_label_item,,True,59.60473365725698,49.77607144780502,-9.828662209451966,263.0,Party
-2016|NEW YORK|State Representative|statewide,party_label_item,,True,63.14860319886233,59.89203492549115,-3.256568273371185,2411.0,Party
 2016|NEW YORK|U.S. House|District 15,uncontested_gt90,95.2,True,95.20329127306994,79.12821868392537,-16.07507258914457,48.0,Candidate
 2016|NEW YORK|U.S. House|District 8,uncontested_gt90,93.2,True,93.2198972211483,87.4305538285654,-5.789343392582907,79.0,Candidate
 2016|NEW YORK|U.S. House|District 9,uncontested_gt90,92.3,True,92.28545330771153,97.87190053649346,5.586447228781921,81.0,Candidate
@@ -2004,7 +1993,6 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2020|NEVADA|State Senator|statewide,party_label_item,,True,56.16457273914389,52.13708001046827,-4.027492728675619,484.0,Party
 2020|NEW HAMPSHIRE|State Representative|statewide,party_label_item,,True,50.98186684390347,43.68622060334744,-7.295646240556031,304.0,Party
 2020|NEW HAMPSHIRE|State Senator|statewide,party_label_item,,True,50.1904330113502,42.45930835047637,-7.731124660873828,303.0,Party
-2020|NEW JERSEY|State Representative|statewide,party_label_item,,True,52.45006711955417,41.53651419108502,-10.91355292846915,1127.0,Party
 2020|NEW MEXICO|State Representative|statewide,party_label_item,,True,51.72684939581491,58.55494282517068,6.828093429355764,295.0,Party
 2020|NEW MEXICO|State Senator|statewide,party_label_item,,True,51.67953598641686,57.63836576031409,5.958829773897234,294.0,Party
 2020|NEW YORK|State Representative|statewide,party_label_item,,True,62.38575213861858,64.74314833300116,2.357396194382588,2515.0,Party
@@ -2107,7 +2095,6 @@ Race_Key,Flag,Detail,In_Analysis,Benchmark,CES_Weighted,Error,n_respondents,Spec
 2022|NEVADA|State Senator|statewide,party_label_item,,True,59.98800098815392,46.71214645475288,-13.27585453340105,485.0,Party
 2022|NEW HAMPSHIRE|State Representative|statewide,party_label_item,,True,50.88128929359619,62.96674755128559,12.0854582576894,211.0,Party
 2022|NEW HAMPSHIRE|State Senator|statewide,party_label_item,,True,50.51317656547114,63.46542180024585,12.95224523477471,212.0,Party
-2022|NEW JERSEY|State Representative|statewide,party_label_item,,True,61.06340111169855,41.58269347984732,-19.48070763185124,917.0,Party
 2022|NEW MEXICO|State Representative|statewide,party_label_item,,True,54.87279676677645,65.83171197078454,10.95891520400809,268.0,Party
 2022|NEW YORK|State Representative|statewide,party_label_item,,True,54.12238260159076,62.21965767087113,8.097275069280375,2298.0,Party
 2022|NEW YORK|U.S. House|District 13,uncontested_gt90,98.9,True,98.93335369889516,98.56554736953271,-0.3678063293624518,61.0,Candidate

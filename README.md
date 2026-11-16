@@ -62,7 +62,7 @@ The pipeline has two stages, and the paper is built from their output:
 
 `tables_and_figures/` also holds one more notebook and two folders:
 
-- **`additionalFiguresHQ.ipynb`** is optional and for reference only: exhibits dropped from the paper, earlier versions, robustness checks, and exploratory analyses. Nothing in the paper loads its output (see [Run](#run)).
+- **`droppedFiguresHQ.ipynb`** is optional and for reference only: exhibits dropped from the paper, earlier versions, robustness checks, and exploratory analyses. Nothing in the paper loads its output (see [Run](#run)).
 - **`process_diagram/`** holds `process_diagram.pdf` (Figure 1, the CES sampling and weighting schematic) and the source to rebuild it. It has its own README.
 - **`guide_evidence/`** holds `evidence01.png` through `evidence12.png`, screenshots from CES guides used in the Supplementary Material.
 
@@ -111,7 +111,7 @@ Once the environment is set up, run the pipeline in this order:
 
 10. **`figuresHQ.ipynb`** (in `tables_and_figures/`) can then be run from top to bottom. It reads from `input_tables/` and writes the paper's tables, figures, and in-text number macros to `tables_and_figures/output/` (`main/`, `supplementary/`, and `prose_numbers.tex`). Running it creates the `output/` subfolders. `output/` is git-ignored, so it will not appear in a fresh clone.
 
-11. Optional: **`additionalFiguresHQ.ipynb`** (in `tables_and_figures/`) is for reference only. Its first cell runs `figuresHQ.ipynb`, so the requirements for step 10 apply. It then writes everything to `tables_and_figures/output/additional/`. Nothing in the paper loads these files.
+11. Optional: **`droppedFiguresHQ.ipynb`** (in `tables_and_figures/`) is for reference only. Its first cell runs `figuresHQ.ipynb`, so the requirements for step 10 apply. It then writes everything to `tables_and_figures/output/additional/`. Nothing in the paper loads these files.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
