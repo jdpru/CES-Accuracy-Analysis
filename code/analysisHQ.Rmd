@@ -348,6 +348,8 @@ if (length(missing_cps_years)) {
 }
 
 list2env(cps_raw_list, envir = .GlobalEnv)
+# CPS_XX_raw now holds the data; drop the lists so they don't keep a second reference to it.
+rm(cps_loaded, cps_raw_list)
 ```
 
 ## Subset datasets --------------
@@ -395,6 +397,9 @@ CES_16_raw_subset <- CES_16_raw[, CES_16_subset_vars]
 CES_18_raw_subset <- CES_18_raw[, CES_18_subset_vars]
 CES_20_raw_subset <- CES_20_raw[, CES_20_subset_vars]
 CES_22_raw_subset <- CES_22_raw[, CES_22_subset_vars]
+
+# Nothing below reads the full CES files, only the subsets; free their memory.
+rm(list = ls(pattern = "^CES_\\d{2}_raw$")); invisible(gc())
 ```
 
 Correction for 2018 Straight-Ticket voters
@@ -508,6 +513,9 @@ for (year in years) {
   # Assign the subset dataframe back to the global environment
   assign(paste0(raw_df_name, "_subset"), subset_df, envir = .GlobalEnv)
 }
+
+# Nothing below reads the full CPS extracts, only the subsets; free their memory.
+rm(list = ls(pattern = "^CPS_\\d{2}_raw$")); invisible(gc())
 
 ```
 
