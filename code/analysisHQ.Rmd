@@ -1008,21 +1008,12 @@ house_prop_table <- calculate_state_level_party_proportions(House_0622_clean_fix
   bind_rows(house_district_prop_table_2006)
 
 # US Senate
+# Same party assignment as the House: a candidate's minor-party fusion lines
+# (e.g., NY Working Families/Conservative, CT Working Families) count toward
+# their major party rather than OTHER.
 Senate_0622_clean_fixed <- recalculate_total_votes(Senate_0622, "statewide")
-senate_cand_prop_table <- calculate_party_proportions(Senate_0622_clean_fixed) %>%
-  mutate(office = "US Senate") %>%
-  rename(
-    Office = office,
-    State = state,
-    District = district,
-    Year = year,
-    #Candidate = candidate_name,
-    Party_Detailed = party_detailed,
-    Party_Simplified = party_simplified,
-    #Candidate_Votes = candidatevotes,
-    Total_Votes = totalvotes,
-    Proportion = proportion
-  )
+senate_prop_table <- calculate_state_level_party_proportions(Senate_0622_clean_fixed) %>%
+  mutate(Office = "US Senate")
 
 # Governor
 Governor_0622_clean_fixed <- recalculate_total_votes(Governor_0622, "statewide")
@@ -1083,7 +1074,6 @@ secretary_of_state_prop_table <- make_bp_prop_table(Secretary_of_state_full) %>%
 
 merge_list <- list(
   governor_cand_prop_table,
-  senate_cand_prop_table,
   state_senate_prop_table,
   state_house_prop_table,
   attorney_general_prop_table,
@@ -1121,7 +1111,7 @@ collapse_proportion_table <- function(df) {
 }
 
 collapsed_merged_prop_table <- collapse_proportion_table(merged_prop_tables)
-merged_prop_tables_combined <- bind_rows(collapsed_merged_prop_table, house_prop_table)
+merged_prop_tables_combined <- bind_rows(collapsed_merged_prop_table, house_prop_table, senate_prop_table)
 ```
 
 ## Create Candidate-Level Election Return Prop Tables
