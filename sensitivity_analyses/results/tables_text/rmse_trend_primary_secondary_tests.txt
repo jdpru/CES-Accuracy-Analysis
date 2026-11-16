@@ -2,64 +2,64 @@
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.113 & 0.066 & 0.089 & 0.131 & 6 & 2006--2022
-Matching + weighting & -0.016 & 0.040 & 0.701 & 0.755 & 6 & 2006--2022
+Matching only & 0.111 & 0.066 & 0.095 & 0.134 & 6 & 2006--2022
+Matching + weighting & -0.019 & 0.040 & 0.630 & 0.684 & 6 & 2006--2022
 
 ===== A1_list_mismatch: Drop 4 retained CES/ballot list mismatches
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.113 & 0.066 & 0.090 & 0.131 & 6 & 2006--2022
-Matching + weighting & -0.016 & 0.040 & 0.700 & 0.755 & 6 & 2006--2022
+Matching only & 0.111 & 0.066 & 0.095 & 0.135 & 6 & 2006--2022
+Matching + weighting & -0.019 & 0.040 & 0.630 & 0.684 & 6 & 2006--2022
 
 ===== A1_nominee_bench: Drop 8 contests benchmarked to a nominee
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.113 & 0.066 & 0.089 & 0.131 & 6 & 2006--2022
-Matching + weighting & -0.016 & 0.040 & 0.701 & 0.755 & 6 & 2006--2022
+Matching only & 0.111 & 0.066 & 0.095 & 0.134 & 6 & 2006--2022
+Matching + weighting & -0.019 & 0.040 & 0.630 & 0.684 & 6 & 2006--2022
 
 ===== A1_fusion: Drop contests with fusion-line aggregation
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.111 & 0.066 & 0.093 & 0.142 & 6 & 2006--2022
-Matching + weighting & -0.017 & 0.041 & 0.674 & 0.736 & 6 & 2006--2022
+Matching only & 0.109 & 0.066 & 0.100 & 0.147 & 6 & 2006--2022
+Matching + weighting & -0.020 & 0.041 & 0.621 & 0.678 & 6 & 2006--2022
 
 ===== A1_special: Drop contests benchmarked to a special election
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.113 & 0.067 & 0.092 & 0.129 & 6 & 2006--2022
-Matching + weighting & -0.015 & 0.041 & 0.716 & 0.754 & 6 & 2006--2022
+Matching only & 0.111 & 0.066 & 0.093 & 0.133 & 6 & 2006--2022
+Matching + weighting & -0.019 & 0.040 & 0.640 & 0.692 & 6 & 2006--2022
 
 ===== A1_hand_fixes: Drop contests with hand-corrected CES or returns data
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.112 & 0.066 & 0.090 & 0.134 & 6 & 2006--2022
-Matching + weighting & -0.016 & 0.040 & 0.687 & 0.743 & 6 & 2006--2022
+Matching only & 0.110 & 0.066 & 0.096 & 0.137 & 6 & 2006--2022
+Matching + weighting & -0.020 & 0.040 & 0.616 & 0.673 & 6 & 2006--2022
 
 ===== U_gt90: Drop races with winner > 90%
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.116 & 0.068 & 0.088 & 0.114 & 6 & 2006--2022
-Matching + weighting & -0.011 & 0.042 & 0.787 & 0.807 & 6 & 2006--2022
+Matching only & 0.115 & 0.067 & 0.090 & 0.118 & 6 & 2006--2022
+Matching + weighting & -0.015 & 0.041 & 0.716 & 0.740 & 6 & 2006--2022
 
 ===== A1_all: Drop every Supplement C / hand-fix flag above
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.111 & 0.067 & 0.097 & 0.142 & 6 & 2006--2022
-Matching + weighting & -0.017 & 0.042 & 0.677 & 0.726 & 6 & 2006--2022
+Matching only & 0.109 & 0.066 & 0.099 & 0.147 & 6 & 2006--2022
+Matching + weighting & -0.020 & 0.041 & 0.618 & 0.677 & 6 & 2006--2022
 
 ===== A1_all_plus_gt90: A1_all plus races with winner > 90%
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.114 & 0.068 & 0.094 & 0.127 & 6 & 2006--2022
-Matching + weighting & -0.014 & 0.042 & 0.739 & 0.766 & 6 & 2006--2022
+Matching only & 0.112 & 0.067 & 0.096 & 0.132 & 6 & 2006--2022
+Matching + weighting & -0.017 & 0.041 & 0.685 & 0.719 & 6 & 2006--2022
 
 ===== A2_named_only: Keep only items that named candidates (drops all state legislative)
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
@@ -72,13 +72,13 @@ Matching + weighting & 0.023 & 0.041 & 0.572 & 0.457 & 3 & 2006--2022
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.127 & 0.077 & 0.099 & 0.106 & 5 & 2006--2022
-Matching + weighting & -0.003 & 0.047 & 0.947 & 0.950 & 5 & 2006--2022
+Matching only & 0.125 & 0.077 & 0.106 & 0.105 & 5 & 2006--2022
+Matching + weighting & -0.008 & 0.046 & 0.869 & 0.868 & 5 & 2006--2022
 
 ===== A2_generic_AG_SoS: Drop AG/SoS items with generic 'Democratic/Republican candidate' options (2006-2016)
 Estimate & \beta & SE & p-value & Perm. p & N_{\text{vars}} & Years
 Matching only & -0.006 & 0.122 & 0.958 & 0.956 & 3 & 2008--2022
 Matching + weighting & -0.120 & 0.072 & 0.094 & 0.082 & 3 & 2008--2022
-Matching only & 0.113 & 0.066 & 0.089 & 0.131 & 6 & 2006--2022
-Matching + weighting & -0.016 & 0.040 & 0.701 & 0.755 & 6 & 2006--2022
+Matching only & 0.111 & 0.066 & 0.095 & 0.134 & 6 & 2006--2022
+Matching + weighting & -0.019 & 0.040 & 0.630 & 0.684 & 6 & 2006--2022
 

@@ -111,7 +111,7 @@ Once the environment is set up, run the pipeline in this order:
 
 10. **`figuresHQ.ipynb`** (in `tables_and_figures/`) can then be run from top to bottom. It reads from `input_tables/` and writes the paper's tables, figures, and in-text number macros to `tables_and_figures/output/` (`main/`, `supplementary/`, and `prose_numbers.tex`). Running it creates the `output/` subfolders. `output/` is git-ignored, so it will not appear in a fresh clone.
 
-11. Optional: **`droppedFiguresHQ.ipynb`** (in `tables_and_figures/`) is for reference only. Its first cell runs `figuresHQ.ipynb`, so the requirements for step 10 apply. It then writes everything to `tables_and_figures/output/additional/`. Nothing in the paper loads these files.
+11. Optional: **`droppedFiguresHQ.ipynb`** (in `tables_and_figures/`) is for reference only. Its first cell runs `figuresHQ.ipynb`, so the requirements for step 10 apply. It then writes everything to `tables_and_figures/output/dropped/`. Nothing in the paper loads these files.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -133,7 +133,7 @@ To compile (for example on Overleaf), the project root needs:
 - `process_diagram/process_diagram.pdf`
 - `guide_evidence/`
 
-In the repo, `output/`, `process_diagram/`, and `guide_evidence/` live under `tables_and_figures/`. Copy them to the root of the compile directory. `output/additional/` is not needed.
+In the repo, `output/`, `process_diagram/`, and `guide_evidence/` live under `tables_and_figures/`. Copy them to the root of the compile directory. `output/dropped/` is not needed.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

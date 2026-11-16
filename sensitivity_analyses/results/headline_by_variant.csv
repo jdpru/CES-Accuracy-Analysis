@@ -1,23 +1,23 @@
 macro,label,base,A1_list_mismatch,A1_nominee_bench,A1_fusion,A1_special,A1_hand_fixes,U_gt90,A1_all,A1_all_plus_gt90,A2_named_only,A2_named_statewide,A2_generic_AG_SoS
-NObsCandidate,Candidate-choice estimates (N),"5,654","5,650","5,646","5,318","5,644","5,642","5,442","5,287","5,111","4,185","4,945","5,454"
-NeitherMeanBefore,Neither matching nor weighting: matching-only mean RMSE (Table 8),9.5,9.5,9.5,9.5,9.5,9.5,9.3,9.5,9.3,9.5,9.5,9.5
-NeitherMeanAfter,Neither: CES-weighted mean RMSE (Table 8),8.2,8.2,8.2,8.2,8.1,8.2,7.9,8.2,8.0,8.0,7.9,7.9
-NeitherCellsImproved,Neither: cell pairs improved by weights,61,61,61,62,61,61,60,62,60,39,53,54
+NObsCandidate,Candidate-choice estimates (N),"5,643","5,639","5,635","5,314","5,634","5,631","5,432","5,284","5,108","4,185","4,934","5,443"
+NeitherMeanBefore,Neither matching nor weighting: matching-only mean RMSE (Table 8),9.5,9.5,9.4,9.5,9.5,9.5,9.3,9.5,9.3,9.5,9.5,9.5
+NeitherMeanAfter,Neither: CES-weighted mean RMSE (Table 8),8.1,8.1,8.1,8.1,8.1,8.1,7.9,8.2,7.9,8.0,7.8,7.8
+NeitherCellsImproved,Neither: cell pairs improved by weights,62,62,62,62,62,62,61,62,61,39,54,55
 NeitherCellsWorse,Neither: cell pairs worsened by weights,32,32,32,32,32,32,33,32,33,30,31,31
 UsedMeanBefore,Used: matching-only mean RMSE (Table 9),10.7,10.7,10.7,10.7,10.7,10.7,10.7,10.7,10.7,10.7,10.7,10.7
 UsedMeanAfter,Used: CES-weighted mean RMSE (Table 9),8.1,8.1,8.0,8.0,8.1,8.1,8.1,8.0,8.0,8.1,8.1,8.1
-TrendSecMatchBeta,"Trend, secondary, matching: beta/yr",0.113,0.113,0.113,0.111,0.113,0.112,0.116,0.111,0.114,-0.030,0.127,0.113
-TrendSecMatchP,"Trend, secondary, matching: p",0.089,0.090,0.089,0.093,0.092,0.090,0.088,0.097,0.094,0.699,0.099,0.089
-TrendSecWtdBeta,"Trend, secondary, weighted: beta/yr",-0.016,-0.016,-0.016,-0.017,-0.015,-0.016,-0.011,-0.017,-0.014,0.023,-0.003,-0.016
-TrendSecWtdP,"Trend, secondary, weighted: p",0.701,0.700,0.701,0.674,0.716,0.687,0.787,0.677,0.739,0.572,0.947,0.701
+TrendSecMatchBeta,"Trend, secondary, matching: beta/yr",0.111,0.111,0.111,0.109,0.111,0.110,0.115,0.109,0.112,-0.030,0.125,0.111
+TrendSecMatchP,"Trend, secondary, matching: p",0.095,0.095,0.095,0.100,0.093,0.096,0.090,0.099,0.096,0.699,0.106,0.095
+TrendSecWtdBeta,"Trend, secondary, weighted: beta/yr",-0.019,-0.019,-0.019,-0.020,-0.019,-0.020,-0.015,-0.020,-0.017,0.023,-0.008,-0.019
+TrendSecWtdP,"Trend, secondary, weighted: p",0.630,0.630,0.630,0.621,0.640,0.616,0.716,0.618,0.685,0.572,0.869,0.630
 TrendPrimMatchP,"Trend, primary, matching: p",0.958,0.958,0.958,0.958,0.958,0.958,0.958,0.958,0.958,0.958,0.958,0.958
 TrendPrimWtdP,"Trend, primary, weighted: p",0.094,0.094,0.094,0.094,0.094,0.094,0.094,0.094,0.094,0.094,0.094,0.094
-CesThreeVarReduction,"CES weights: RMSE reduction, 4 unweighted vars (Table 13)",1.1,1.1,1.1,1.1,1.1,1.1,1.1,1.2,1.2,0.4,1.5,1.1
-AnesThreeVarIncrease,"anesrake: RMSE increase, 4 unweighted vars (Table 13)",0.3,0.3,0.3,0.2,0.3,0.3,0.3,0.3,0.3,0.0,0.1,0.3
-AnesHighestYears,Years anesrake worst of three (Figure 5),seven,seven,seven,six,seven,seven,seven,seven,seven,two,five,seven
-ErrMeanMatching,"Mean |error|, matching (Figure 2)",7.42,7.42,7.42,7.46,7.42,7.43,7.37,7.46,7.41,7.43,7.44,7.44
-ErrMeanWeighted,"Mean |error|, weighted (Figure 2)",6.80,6.79,6.80,6.79,6.79,6.80,6.75,6.79,6.75,6.97,6.81,6.81
-ErrMedianWeighted,"Median |error|, weighted (Figure 2)",4.72,4.72,4.72,4.69,4.72,4.72,4.70,4.70,4.68,4.82,4.73,4.73
-ErrBeyondTwentyWeighted,"Share |error| > 20, weighted (Figure 2)",4.93 percent,4.94 percent,4.94 percent,4.97 percent,4.92 percent,4.94 percent,4.78 percent,4.97 percent,4.85 percent,5.34 percent,4.93 percent,4.92 percent
-AnchorRmse,RMSE in smallest-n bin (Figure 4),11.1,11.1,11.1,11.1,11.1,11.1,11.2,11.1,11.3,10.7,10.7,11.3
-GuideGapOverall,Our RMSE minus CES guide RMSE (Table 12),1.2,1.2,1.1,1.2,1.2,1.1,0.3,1.1,0.2,0.5,0.5,0.7
+CesThreeVarReduction,"CES weights: RMSE reduction, 4 unweighted vars (Table 13)",1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,0.4,1.6,1.2
+AnesThreeVarIncrease,"anesrake: RMSE increase, 4 unweighted vars (Table 13)",0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.0,0.2,0.3
+AnesHighestYears,Years anesrake worst of three (Figure 5),seven,seven,seven,seven,seven,seven,seven,seven,seven,two,five,seven
+ErrMeanMatching,"Mean |error|, matching (Figure 2)",7.43,7.43,7.43,7.47,7.43,7.44,7.39,7.47,7.42,7.45,7.45,7.45
+ErrMeanWeighted,"Mean |error|, weighted (Figure 2)",6.80,6.80,6.80,6.79,6.80,6.81,6.77,6.80,6.76,6.99,6.82,6.81
+ErrMedianWeighted,"Median |error|, weighted (Figure 2)",4.72,4.72,4.72,4.69,4.72,4.72,4.71,4.69,4.68,4.82,4.74,4.73
+ErrBeyondTwentyWeighted,"Share |error| > 20, weighted (Figure 2)",4.98 percent,4.98 percent,4.98 percent,5.01 percent,4.98 percent,4.99 percent,4.85 percent,5.02 percent,4.91 percent,5.40 percent,4.98 percent,4.97 percent
+AnchorRmse,RMSE in smallest-n bin (Figure 4),11.5,11.5,11.5,11.4,11.5,11.5,11.6,11.4,11.7,11.1,11.0,11.6
+GuideGapOverall,Our RMSE minus CES guide RMSE (Table 12),1.3,1.3,1.3,1.3,1.3,1.3,0.5,1.2,0.4,0.5,0.5,0.7

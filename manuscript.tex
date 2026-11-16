@@ -524,14 +524,14 @@ Table~\ref{tab:used_by_year_paired} reports the same comparison for variables in
 
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\linewidth]{output/additional/primary_secondary_matching_vs_weighting.png}
+%     \includegraphics[width=\linewidth]{output/dropped/primary_secondary_matching_vs_weighting.png}
 %     \caption{Effect of CES Post-Stratification on Primary and Secondary Variable Error}
 %     \caption*{\footnotesize
 %     Bars show mean RMSE for matching-only and matching + post-stratification estimates by year. Panel A includes Primary variables used to construct the CES weights; Panel B includes Secondary variables not used to construct the weights. Labels report $\Delta$ RMSE, calculated as post-stratified RMSE minus matching-only RMSE, so negative values indicate improved accuracy after weighting. Only variables consistently classified as Primary or Secondary and present in every CES wave from 2008 through 2022 are included.}
 %     \label{fig:primary_secondary_weighting_comparison}
 % \end{figure}
 
-% \input{output/additional/primary_secondary_weighting_comparison}
+% \input{output/dropped/primary_secondary_weighting_comparison}
 
 
 % Illustrated in Figure~\ref{fig:primary_secondary_weighting_comparison}, post-stratification reduced average primary-variable error from 6.9 to 3.7 percentage points on average, a 46 percent reduction, and it did so in every year. Average error on secondary variables fell from 7.7 to 7.0 points, a 10 percent reduction, and in six of eight years the improvement was less than a single percentage point. Averaged across years, weighting improved primary variables by 3.2 points and secondary variables by 0.8 — a fourfold difference (Table~\ref{tab:primary_secondary_weighting_comparison}). The benefits of post-stratification  did not extend to variables outside the weighting scheme, consistent with other types of nonprobability sampling. Before post-stratification, primary and secondary variables were estimated with comparable accuracy; afterward, error for the variables used to construct the weights was roughly half the error for those that were not — 3.7 percent versus 7.0.
@@ -547,17 +547,17 @@ Table~\ref{tab:used_by_year_paired} reports the same comparison for variables in
 
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\linewidth]{output/additional/primary_vs_secondary_consistent_excl_2006.png}
+%     \includegraphics[width=\linewidth]{output/dropped/primary_vs_secondary_consistent_excl_2006.png}
 %     \caption{Primary vs. Secondary Variable RMSE}\label{fig:primary_vs_secondary_consistent_excl_2006}
 %      \caption*{\footnotesize Primary variables (3): Age Group, Education, Sex. Secondary variables (8): Family Income, Employment Status, State Representative, State Senator, U.S. House, Union Membership, Veteran Status, and Voting Method. Only variables consistently classified as Primary or Secondary across all years and present in every CES wave are included. 2006 is excluded because the CES does not report post-stratification variables for that year.   
 %     }
 % \end{figure}
 
-% \input{output/additional/primary_secondary_rmse_by_year.tex}
+% \input{output/dropped/primary_secondary_rmse_by_year.tex}
 
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\linewidth]{output/additional/primary_vs_secondary_delta_by_year.png}
+%     \includegraphics[width=\linewidth]{output/dropped/primary_vs_secondary_delta_by_year.png}
 %     \caption{Difference between Primary and Secondary by Year} 
 %     \caption*{\footnotesize Positive values indicate Secondary variables had higher RMSE than Primary variables.}
 %     \label{fig:primary_vs_secondary_delta_by_year}
@@ -606,7 +606,7 @@ For the secondary variables, matching-only RMSE increased by \TrendSecMatchBeta{
 
 % This specification evaluates whether CES error follows the rate implied by ordinary probability-sample sampling error. Under that benchmark, error should increase approximately linearly with $1/\sqrt{N}$: estimates based on fewer respondents should have larger errors.
 
-% \input{output/additional/respondent_count_error_by_variable.tex}
+% \input{output/dropped/respondent_count_error_by_variable.tex}
 
 % The results show that respondent count matters, but unevenly. The clearest relationships appear for candidate-choice variables, especially offices whose estimates are built from small geographic or contest-specific respondent pools. U.S. House and State Representative estimates show statistically significant respondent-count gradients under both specifications, and several other candidate-choice offices have coefficients in the expected direction. Demographic variables, by contrast, show weak, inconsistent, and generally insignificant relationships with respondent count. 
 
@@ -649,7 +649,7 @@ RMSE was \AnchorRmse{} percentage points in the smallest bin. Under probability 
 
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\linewidth]{output/additional/us_house_error_density_combined.png}
+%     \includegraphics[width=\linewidth]{output/dropped/us_house_error_density_combined.png}
 %     \caption{U.S. House Mean Absolute Error and Respondent Density by District}
 %     \label{fig:us_house_error_density_combined}
 % \end{figure}
@@ -660,7 +660,7 @@ Table~\ref{tab:office_rmse_less_competitive_races} displays each office's RMSE a
 
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\linewidth]{output/additional/rmse_by_competitiveness_histogram.png}
+%     \includegraphics[width=\linewidth]{output/dropped/rmse_by_competitiveness_histogram.png}
 %     \caption{RMSE Across Different Bins of Race Competitiveness, All Races}
 %     \caption*{\footnotesize
 %     Competitiveness refers to the distance from the winning candidate receiving 50\% of the vote. Results are matching + CES post-stratification. Includes all races: President(n=204), U.S. Senate (n=303), U.S. House (n=2,888), Governor (n=225), Attorney General (n=175), Secretary of State (n=146), State Rep. (n=397), State Senator (n=367)}  
